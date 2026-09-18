@@ -59,6 +59,11 @@ export function initHeroAnimation() {
 export function initStoryAnimation() {
     const storyElements = gsap.utils.toArray('.story-element');
     if (storyElements.length === 0) return;
+    if (storyElements[0].offsetWidth === 0 || storyElements[0].offsetParent === null) return;
+
+    ScrollTrigger.getAll().forEach(t => {
+        if (storyElements.includes(t.trigger)) t.kill();
+    });
 
     storyElements.forEach((el) => {
         gsap.fromTo(el, 
@@ -82,6 +87,11 @@ export function initStoryAnimation() {
 export function initFeatureStack() {
     const cards = gsap.utils.toArray('.feature-card-wrapper');
     if (cards.length === 0) return;
+    if (cards[0].offsetWidth === 0 || cards[0].offsetParent === null) return;
+
+    ScrollTrigger.getAll().forEach(t => {
+        if (cards.includes(t.trigger)) t.kill();
+    });
 
     cards.forEach((card, index) => {
         if (index === cards.length - 1) return;
@@ -107,6 +117,11 @@ export function initWalkthrough() {
     const blocks = document.querySelectorAll('.walkthrough-text-block');
     const panels = document.querySelectorAll('.walkthrough-visual-panel');
     if (!section || blocks.length === 0 || panels.length === 0) return;
+
+    // Safety check: Never pin or calculate triggers if section is hidden or unrendered
+    if (section.offsetWidth === 0 || section.offsetHeight === 0 || section.offsetParent === null) {
+        return;
+    }
 
     let activeIndex = -1;
 
@@ -162,25 +177,33 @@ export function initWalkthrough() {
     // Set initial step 1 active
     activateStepByIndex(0);
 
-    // Create GSAP ScrollTrigger Pinned Timeline for "#walkthrough"
-    // Pins "#walkthrough" while scrolling through the 3 steps
-    const st = ScrollTrigger.create({
-        trigger: section,
-        start: 'top top+=80px',
-        end: '+=180%',
-        pin: true,
-        pinSpacing: true,
-        onUpdate: (self) => {
-            const progress = self.progress;
-            if (progress < 0.33) {
-                activateStepByIndex(0);
-            } else if (progress < 0.66) {
-                activateStepByIndex(1);
-            } else {
-                activateStepByIndex(2);
-            }
-        }
+    // Clean up any existing trigger on this section first
+    ScrollTrigger.getAll().forEach(t => {
+        if (t.trigger === section) t.kill(true);
     });
+
+    // Create GSAP ScrollTrigger Pinned Timeline for "#walkthrough" on desktop screens
+    // On screens >= 1024px, the 2-column layout fits comfortably in the viewport
+    let st = null;
+    if (window.innerWidth >= 1024) {
+        st = ScrollTrigger.create({
+            trigger: section,
+            start: 'top top+=80px',
+            end: '+=180%',
+            pin: true,
+            pinSpacing: true,
+            onUpdate: (self) => {
+                const progress = self.progress;
+                if (progress < 0.33) {
+                    activateStepByIndex(0);
+                } else if (progress < 0.66) {
+                    activateStepByIndex(1);
+                } else {
+                    activateStepByIndex(2);
+                }
+            }
+        });
+    }
 
     // Add click listeners for step blocks
     blocks.forEach((block, idx) => {
@@ -229,11 +252,11 @@ export function initNavbarEffects() {
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            navbar.classList.add('backdrop-blur-md', 'bg-[#070a13]/85', 'border-b', 'py-3');
-            navbar.classList.remove('py-5', 'bg-transparent');
+            navbar.classList.add('backdrop-blur-md', 'bg-[#070a13]/85', 'border-b', 'border-slate-800/80', 'py-3');
+            navbar.classList.remove('py-5', 'bg-transparent', 'border-transparent');
         } else {
-            navbar.classList.remove('backdrop-blur-md', 'bg-[#070a13]/85', 'border-b', 'py-3');
-            navbar.classList.add('py-5', 'bg-transparent');
+            navbar.classList.remove('backdrop-blur-md', 'bg-[#070a13]/85', 'border-slate-800/80', 'py-3');
+            navbar.classList.add('py-5', 'bg-transparent', 'border-transparent');
         }
     });
 }

@@ -1,7 +1,7 @@
-import * as api from '../api.js';
 import * as state from '../state.js';
 import { checkAuthStatus } from '../auth.js';
 import { showError, validatePassword } from '../utils.js';
+import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../firebase-init.js?v=5';
 
 let initialized = false;
 
@@ -28,7 +28,7 @@ export function initSignupPage() {
         validatePassword(signupPasswordInput.value, passwordConstraints);
     });
 
-    // Signup Submit
+    // Signup Submit via Firebase Auth
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = signupEmailInput.value.trim();
@@ -45,16 +45,35 @@ export function initSignupPage() {
         authErrorMsg.classList.add('hidden');
 
         try {
-            await api.signup(email, password);
+            // 1. Create user in Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            
+            // 2. Dispatch verification email immediately
+            try {
+                await sendEmailVerification(userCredential.user);
+            } catch (verErr) {
+                console.warn("Could not dispatch initial email verification:", verErr);
+            }
 
-            // Auto-login on successful registration
-            const data = await api.login(email, password);
-            state.setToken(data.access_token);
+            // 3. Set token in state and trigger auth status routing
+            const idToken = await userCredential.user.getIdToken();
+            state.setToken(idToken);
             signupForm.reset();
             Object.values(passwordConstraints).forEach(c => { if (c) c.className = ''; });
+
+            // checkAuthStatus() will detect that emailVerified is false and render the verification modal
             await checkAuthStatus();
         } catch (error) {
-            showError(authErrorMsg, "Sign Up failed: " + error.message);
+            console.error("Firebase signup failed:", error);
+            let message = error.message || "Registration failed. Please try again.";
+            if (error.code === "auth/email-already-in-use") {
+                message = "An account already exists with this email address.";
+            } else if (error.code === "auth/weak-password") {
+                message = "The password is too weak. Please use a stronger password.";
+            } else if (error.code === "auth/invalid-email") {
+                message = "Please enter a valid email address.";
+            }
+            showError(authErrorMsg, message);
             emailSignupBtn.disabled = false;
         } finally {
             btnText.textContent = "Sign Up";

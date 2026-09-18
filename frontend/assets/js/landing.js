@@ -5,18 +5,64 @@ import {
     initWalkthrough,
     initCounters,
     initNavbarEffects
-} from './animations.js';
+} from './animations.js?v=7';
+
+// Prevent browser scroll restoration from skewing initial ScrollTrigger layout calculations
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
+export function initAllLandingAnimations() {
+    const landingContainer = document.getElementById('landing-container');
+    if (!landingContainer || landingContainer.classList.contains('hidden') || landingContainer.offsetWidth === 0) {
+        return;
+    }
+
+    initHeroAnimation();
+    initStoryAnimation();
+    initFeatureStack();
+    initWalkthrough();
+    initCounters();
+    initNavbarEffects();
+
+    if (window.ScrollTrigger) {
+        ScrollTrigger.refresh();
+    }
+}
+window.initAllLandingAnimations = initAllLandingAnimations;
 
 document.addEventListener('DOMContentLoaded', () => {
     const pathname = window.location.pathname;
     if (pathname.endsWith('index.html') || pathname === '/') {
-        // 1. Initialize animations
-        initHeroAnimation();
-        initStoryAnimation();
-        initFeatureStack();
-        initWalkthrough();
-        initCounters();
-        initNavbarEffects();
+        window.scrollTo(0, 0);
+
+        // Ensure landing container is rendered and unhidden
+        const landingContainer = document.getElementById('landing-container');
+        if (landingContainer) {
+            landingContainer.classList.remove('hidden');
+
+            // Initialize animations on next animation frame after browser layout calculation
+            requestAnimationFrame(() => {
+                initAllLandingAnimations();
+            });
+
+            // React whenever landing container visibility or layout changes
+            const observer = new MutationObserver(() => {
+                if (!landingContainer.classList.contains('hidden') && landingContainer.offsetWidth > 0) {
+                    requestAnimationFrame(() => {
+                        initAllLandingAnimations();
+                    });
+                }
+            });
+            observer.observe(landingContainer, { attributes: true, attributeFilter: ['class', 'style'] });
+        }
+
+        // Refresh ScrollTrigger when webfonts and external assets finish loading
+        window.addEventListener('load', () => {
+            if (window.ScrollTrigger) {
+                ScrollTrigger.refresh();
+            }
+        });
 
         // 2. Simple Scroll Fade-In Observer for Sections
         const fadeObserver = new IntersectionObserver((entries) => {

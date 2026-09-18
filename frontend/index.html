@@ -4,22 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
     <!-- Preload critical font weight so the browser loads it immediately without FOUT -->
     <link rel="preload" href="assets/fonts/Outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Self-hosted Outfit font declarations with font-display: block -->
-    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=5">
-    <link rel="stylesheet" href="assets/css/fonts.css?v=5">
-    <link rel="stylesheet" href="assets/css/design-tokens.css?v=5">
-    <link rel="stylesheet" href="assets/css/base.css?v=5">
-    <link rel="stylesheet" href="assets/css/ats.css?v=5">
-    <link rel="stylesheet" href="assets/css/auth.css?v=5">
-    <link rel="stylesheet" href="assets/css/onboarding.css?v=5">
-    <link rel="stylesheet" href="assets/css/components.css?v=5">
-    <link rel="stylesheet" href="assets/css/recruiter.css?v=5">
-    <link rel="stylesheet" href="assets/css/landing.css?v=5">
+    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=7">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=7">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=7">
+    <link rel="stylesheet" href="assets/css/base.css?v=7">
+    <link rel="stylesheet" href="assets/css/ats.css?v=7">
+    <link rel="stylesheet" href="assets/css/auth.css?v=7">
+    <link rel="stylesheet" href="assets/css/onboarding.css?v=7">
+    <link rel="stylesheet" href="assets/css/components.css?v=7">
+    <link rel="stylesheet" href="assets/css/recruiter.css?v=7">
+    <link rel="stylesheet" href="assets/css/landing.css?v=7">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -30,7 +33,7 @@
 
 <body>
     <!-- Public Landing Page Container -->
-    <div id="landing-container" class="bg-[#070a13] min-h-screen text-white relative hidden">
+    <div id="landing-container" class="bg-[#070a13] min-h-screen text-white relative overflow-x-hidden">
         <!-- Sticky glass navbar -->
         <header id="navbar-landing"
             class="fixed top-0 left-0 right-0 z-50 py-5 transition-all duration-300 bg-transparent border-transparent">
@@ -520,7 +523,7 @@
         </footer>
     </div>
 
-    <div class="container hidden" id="app-container">
+    <div class="container hidden" id="app-container" style="display: none !important;">
         <header>
             <div class="header-top">
                 <div class="header-titles">
@@ -789,8 +792,8 @@
     </div>
 
 
-    <script type="module" src="assets/js/app.js?v=5"></script>
-    <script type="module" src="assets/js/landing.js?v=5"></script>
+    <script type="module" src="assets/js/app.js?v=7"></script>
+    <script type="module" src="assets/js/landing.js?v=7"></script>
 </body>
 
 </html>

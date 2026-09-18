@@ -1,10 +1,16 @@
-import * as api from '../api.js';
 import * as state from '../state.js';
 import { checkAuthStatus } from '../auth.js';
 import { showError, hideError, validatePassword } from '../utils.js';
 import { MESSAGES } from '../constants.js';
-import { signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { auth, googleProvider } from '../firebase-init.js?v=5';
+import { 
+    auth, 
+    googleProvider, 
+    signInWithEmailAndPassword, 
+    signInWithPopup, 
+    sendPasswordResetEmail,
+    verifyPasswordResetCode,
+    confirmPasswordReset 
+} from '../firebase-init.js?v=5';
 
 let initialized = false;
 
@@ -65,9 +71,9 @@ export function showForgotPasswordView() {
 }
 
 /**
- * Shows the Reset Password view inside the Auth Modal.
+ * Shows the Reset Password view inside the Auth Modal and verifies the Firebase action code.
  */
-export function showResetPasswordView(token = "") {
+export async function showResetPasswordView(actionCode = "") {
     const tabsContainer = document.getElementById('auth-tabs-container');
     const divider = document.getElementById('auth-modal-divider');
     const googleBtn = document.getElementById('google-login-btn');
@@ -97,14 +103,29 @@ export function showResetPasswordView(token = "") {
         resetFeedback.textContent = '';
     }
     if (resetTokenInput) {
-        resetTokenInput.value = token || "";
+        resetTokenInput.value = actionCode || "";
     }
 
-    if (!token) {
-        if (authErrorMsg) showError(authErrorMsg, "Invalid or missing reset token. Please request a new password reset link.");
+    if (!actionCode) {
+        if (authErrorMsg) showError(authErrorMsg, "Invalid or missing password reset link. Please request a new reset link.");
         if (resetSubmitBtn) resetSubmitBtn.disabled = true;
-    } else if (resetSubmitBtn) {
-        resetSubmitBtn.disabled = false;
+        return;
+    }
+
+    // Verify Firebase Action Code upfront
+    try {
+        if (resetSubmitBtn) resetSubmitBtn.disabled = true;
+        const email = await verifyPasswordResetCode(auth, actionCode);
+        if (authErrorMsg) hideError(authErrorMsg);
+        if (resetFeedback) {
+            resetFeedback.textContent = `Resetting password for: ${email}`;
+            resetFeedback.classList.remove('hidden');
+        }
+        if (resetSubmitBtn) resetSubmitBtn.disabled = false;
+    } catch (codeErr) {
+        console.error("Action code verification failed:", codeErr);
+        if (authErrorMsg) showError(authErrorMsg, "This password reset link is invalid or has expired. Please request a new one.");
+        if (resetSubmitBtn) resetSubmitBtn.disabled = true;
     }
 }
 
@@ -160,7 +181,7 @@ export function initLoginPage() {
 
             const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
             inputElement.setAttribute('type', type);
-            iconElement.textContent = type === 'password' ? '\uD83D\uDC41\uFE0F' : '\uD83D\uDE48';
+            iconElement.textContent = type === 'password' ? '👁️' : '🙈';
         });
     });
 
@@ -180,7 +201,7 @@ export function initLoginPage() {
         });
     });
 
-    // Login Submit
+    // Firebase Email/Password Login Submit
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = loginEmailInput.value.trim();
@@ -192,19 +213,27 @@ export function initLoginPage() {
         authErrorMsg.classList.add('hidden');
 
         try {
-            const data = await api.login(email, password);
-            state.setToken(data.access_token);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const idToken = await userCredential.user.getIdToken();
+            state.setToken(idToken);
             loginForm.reset();
             await checkAuthStatus();
         } catch (error) {
-            showError(authErrorMsg, "Login failed: " + error.message);
+            console.error("Firebase email login failed:", error);
+            let message = error.message || "Invalid email or password.";
+            if (error.code === "auth/invalid-credential" || error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+                message = "Incorrect email or password.";
+            } else if (error.code === "auth/too-many-requests") {
+                message = "Too many failed login attempts. Please try again in a few minutes.";
+            }
+            showError(authErrorMsg, message);
             emailLoginBtn.disabled = false;
         } finally {
             btnText.textContent = "Sign In";
         }
     });
 
-    // Forgot Password Form Handling
+    // Firebase Forgot Password Form Handling
     const forgotForm = document.getElementById('forgot-password-form');
     const forgotEmailInput = document.getElementById('forgot-email');
     const forgotSubmitBtn = document.getElementById('forgot-submit-btn');
@@ -222,14 +251,20 @@ export function initLoginPage() {
             if (forgotFeedback) forgotFeedback.classList.add('hidden');
 
             try {
-                const data = await api.forgotPassword(email);
+                await sendPasswordResetEmail(auth, email);
                 if (forgotFeedback) {
-                    forgotFeedback.textContent = data.message || MESSAGES.PASSWORD_RESET_SENT;
+                    forgotFeedback.textContent = MESSAGES.PASSWORD_RESET_SENT || "If an account exists for this email, a password reset link has been sent.";
                     forgotFeedback.classList.remove('hidden');
                 }
                 forgotForm.reset();
             } catch (error) {
-                showError(authErrorMsg, "Unable to request password reset: " + error.message);
+                console.error("Password reset request error:", error);
+                // Don't leak whether email exists
+                if (forgotFeedback) {
+                    forgotFeedback.textContent = MESSAGES.PASSWORD_RESET_SENT || "If an account exists for this email, a password reset link has been sent.";
+                    forgotFeedback.classList.remove('hidden');
+                }
+                forgotForm.reset();
             } finally {
                 btnText.textContent = "Send Reset Link";
                 forgotSubmitBtn.disabled = false;
@@ -237,7 +272,7 @@ export function initLoginPage() {
         });
     }
 
-    // Reset Password Form Handling
+    // Firebase Reset Password Form Handling (Action Code)
     const resetForm = document.getElementById('reset-password-form');
     const resetNewPasswordInput = document.getElementById('reset-new-password');
     const resetConfirmPasswordInput = document.getElementById('reset-confirm-password');
@@ -260,12 +295,12 @@ export function initLoginPage() {
     if (resetForm) {
         resetForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const token = resetTokenInput ? resetTokenInput.value.trim() : "";
+            const actionCode = resetTokenInput ? resetTokenInput.value.trim() : "";
             const newPassword = resetNewPasswordInput.value;
             const confirmPassword = resetConfirmPasswordInput.value;
 
-            if (!token) {
-                showError(authErrorMsg, "Invalid or missing reset token.");
+            if (!actionCode) {
+                showError(authErrorMsg, "Invalid or missing password reset link.");
                 return;
             }
 
@@ -285,20 +320,21 @@ export function initLoginPage() {
             if (authErrorMsg) hideError(authErrorMsg);
 
             try {
-                const data = await api.resetPassword(token, newPassword);
+                await confirmPasswordReset(auth, actionCode, newPassword);
                 if (resetFeedback) {
-                    resetFeedback.textContent = data.message || MESSAGES.PASSWORD_RESET_SUCCESS;
+                    resetFeedback.textContent = MESSAGES.PASSWORD_RESET_SUCCESS || "Your password has been successfully reset. Please log in with your new password.";
                     resetFeedback.classList.remove('hidden');
                 }
                 resetForm.reset();
                 Object.values(resetConstraints).forEach(c => { if (c) c.className = ''; });
 
-                // Redirect to login after a brief pause so user can read confirmation
+                // Redirect to login after confirmation
                 setTimeout(() => {
                     window.location.hash = '#/login';
-                }, 2500);
+                }, 2000);
             } catch (error) {
-                showError(authErrorMsg, "Reset failed: " + error.message);
+                console.error("Password reset confirmation failed:", error);
+                showError(authErrorMsg, "Reset failed: " + (error.message || "Invalid or expired reset code."));
                 resetSubmitBtn.disabled = false;
             } finally {
                 btnText.textContent = "Update Password";
@@ -321,14 +357,12 @@ export function initLoginPage() {
                 const result = await signInWithPopup(auth, googleProvider);
                 // Retrieve Firebase ID Token
                 const idToken = await result.user.getIdToken();
-                // Call backend custom google login route
-                const data = await api.googleLogin(idToken);
-                state.setToken(data.access_token);
+                state.setToken(idToken);
                 // Trigger route authentication routing checks
                 await checkAuthStatus();
             } catch (error) {
-                console.error("Google authentication failed: ", error);
-                showError(authErrorMsg, "Google authentication failed: " + error.message);
+                console.error("Google authentication failed:", error);
+                showError(authErrorMsg, "Google authentication failed: " + (error.message || "Popup closed or cancelled."));
                 googleLoginBtn.disabled = false;
                 if (btnText) btnText.textContent = originalText;
             }
@@ -362,4 +396,3 @@ export function initializeLoginPage() {
         signupPlane.classList.remove('active-plane');
     }
 }
-

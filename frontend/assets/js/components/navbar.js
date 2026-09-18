@@ -1,7 +1,23 @@
 import * as state from '../state.js';
 import { clearRecruiterWorkspaceState } from '../pages/recruiter.js';
 import { clearCandidateWorkspaceState } from '../pages/candidate.js';
-import { ROUTES } from '../constants.js';
+import { auth, signOut } from '../firebase-init.js?v=5';
+
+/**
+ * Helper to execute complete Firebase and client-side sign out.
+ */
+async function handleLogout(clearWorkspaceCallback) {
+    state.clearState();
+    if (clearWorkspaceCallback) {
+        clearWorkspaceCallback();
+    }
+    try {
+        await signOut(auth);
+    } catch (err) {
+        console.warn("Firebase sign out error:", err);
+    }
+    window.location.href = 'index.html#/login';
+}
 
 /**
  * Initializes the profile nav drop-down controls and logs.
@@ -31,29 +47,21 @@ export function initNavbar(clearCandidateStateCallback) {
     // Candidate Legacy View Sign Out Handler
     if (signOutBtn) {
         signOutBtn.addEventListener('click', () => {
-            state.clearState();
-            if (clearCandidateStateCallback) {
-                clearCandidateStateCallback();
-            }
-            window.location.href = 'index.html#/login';
+            handleLogout(clearCandidateStateCallback);
         });
     }
 
     // Recruiter workspace sign out link
     if (recSignOutBtn) {
         recSignOutBtn.addEventListener('click', () => {
-            state.clearState();
-            clearRecruiterWorkspaceState();
-            window.location.href = 'index.html#/login';
+            handleLogout(clearRecruiterWorkspaceState);
         });
     }
 
     // Candidate workspace sign out link
     if (candSignOutBtn) {
         candSignOutBtn.addEventListener('click', () => {
-            state.clearState();
-            clearCandidateWorkspaceState();
-            window.location.href = 'index.html#/login';
+            handleLogout(clearCandidateWorkspaceState);
         });
     }
 

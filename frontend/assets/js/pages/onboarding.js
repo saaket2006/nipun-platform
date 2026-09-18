@@ -179,8 +179,15 @@ async function submitOnboarding() {
         }
         await api.submitOnboarding(payload);
         
+        // Invalidate stale frontend state and mark onboarding completed
+        state.setOnboardingStatus(true);
+        state.setProfile(null);
+        state.setCandidateStats(null);
+        state.setCandidateResumes(null);
+        state.setRecruiterStats(null);
+
         onboardingModal.classList.add('hidden');
-        window.location.href = selectedRole === ROLES.RECRUITER ? 'recruiter.html' : 'candidate.html';
+        window.location.replace(selectedRole === ROLES.RECRUITER ? 'recruiter.html' : 'candidate.html');
     } catch (error) {
         showObError(error.message);
         nextSpan.textContent = originalText;

@@ -177,10 +177,22 @@ export async function initializeCandidateDashboard() {
 
     if (!statsContainer) return;
 
+    // 1. Loading state indicators to prevent permanent "..."
+    if (dashCandName && dashCandName.textContent === "...") dashCandName.textContent = "Loading...";
+    if (dashCandStatus && dashCandStatus.textContent === "...") dashCandStatus.textContent = "Loading...";
+    if (dashCandField && dashCandField.textContent === "...") dashCandField.textContent = "Loading...";
+    if (dashCandDomain && dashCandDomain.textContent === "...") dashCandDomain.textContent = "Loading...";
+    if (statsContainer && (!statsContainer.innerHTML.trim() || statsContainer.querySelector('.loader'))) {
+        statsContainer.innerHTML = `<div style="text-align: center; padding: 2.5rem; color: var(--text-secondary);"><div class="loader" style="margin: 0 auto 0.75rem;"></div>Loading your dashboard data...</div>`;
+    }
+
     try {
-        // Fetch candidate details
-        const profile = await api.getProfile();
-        state.setProfile(profile);
+        // 2. Fetch or retrieve cached candidate profile
+        let profile = state.getProfile();
+        if (!profile) {
+            profile = await api.getProfile();
+            state.setProfile(profile);
+        }
 
         const candName = profile.email.split('@')[0];
         const statusVal = profile.candidate_profile?.current_status || "N/A";
@@ -193,9 +205,20 @@ export async function initializeCandidateDashboard() {
         if (dashCandDomain) dashCandDomain.textContent = domainVal;
         if (candTopUserName) candTopUserName.textContent = candName;
 
-        // Fetch candidate stats & history
-        const stats = await api.getCandidateStats();
-        const historyList = await api.getCandidateResumes();
+        // 3. Fetch or retrieve cached stats & history in parallel
+        let stats = state.getCandidateStats();
+        let historyList = state.getCandidateResumes();
+
+        if (!stats || !historyList) {
+            const [fetchedStats, fetchedHistory] = await Promise.all([
+                stats ? Promise.resolve(stats) : api.getCandidateStats(),
+                historyList ? Promise.resolve(historyList) : api.getCandidateResumes()
+            ]);
+            stats = fetchedStats;
+            historyList = fetchedHistory;
+            state.setCandidateStats(stats);
+            state.setCandidateResumes(historyList);
+        }
         
         if (stats.latest_ats_score !== null && stats.latest_ats_score !== undefined) {
             let formattedDate = "N/A";
@@ -336,7 +359,23 @@ export async function initializeCandidateDashboard() {
         renderTimelineList(historyList);
 
     } catch (err) {
-        console.error("Error loading candidate dashboard stats:", err);
+        console.error("Error loading candidate dashboard data:", err);
+        const user = state.getUser();
+        if (dashCandName && (dashCandName.textContent === "..." || dashCandName.textContent === "Loading...")) {
+            dashCandName.textContent = user?.email?.split('@')[0] || "Candidate";
+        }
+        if (dashCandStatus && (dashCandStatus.textContent === "..." || dashCandStatus.textContent === "Loading...")) {
+            dashCandStatus.textContent = "Unavailable";
+        }
+        if (dashCandField && (dashCandField.textContent === "..." || dashCandField.textContent === "Loading...")) {
+            dashCandField.textContent = "Unavailable";
+        }
+        if (dashCandDomain && (dashCandDomain.textContent === "..." || dashCandDomain.textContent === "Loading...")) {
+            dashCandDomain.textContent = "Unavailable";
+        }
+        if (statsContainer && (!statsContainer.innerHTML.trim() || statsContainer.querySelector('.loader'))) {
+            statsContainer.innerHTML = getEmptyStateHTML("Could not load dashboard statistics. Please refresh the page.");
+        }
     }
 }
 
@@ -755,6 +794,8 @@ window.deleteCandidateAnalysis = async (resumeId) => {
     }
     try {
         await api.deleteCandidateResume(resumeId);
+        state.setCandidateStats(null);
+        state.setCandidateResumes(null);
         await initializeCandidateDashboard();
     } catch (err) {
         alert("Failed to delete resume version: " + err.message);
@@ -771,6 +812,7 @@ window.renameCandidateAnalysis = async (resumeId, currentLabel) => {
     }
     try {
         await api.updateCandidateResumeLabel(resumeId, trimmed);
+        state.setCandidateResumes(null);
         await initializeCandidateDashboard();
     } catch (err) {
         alert("Failed to update label: " + err.message);
@@ -786,6 +828,7 @@ export function initializeCandidateScreen() {
 
 /**
  * Page view initializer for Candidate Profile view.
+ * Reuses shared profile state from Dashboard if already fetched.
  */
 export async function initializeCandidateProfile() {
     const profileCandName = document.getElementById('profile-cand-name');
@@ -796,8 +839,11 @@ export async function initializeCandidateProfile() {
     const profileCandJoined = document.getElementById('profile-cand-joined');
 
     try {
-        const profile = await api.getProfile();
-        state.setProfile(profile);
+        let profile = state.getProfile();
+        if (!profile) {
+            profile = await api.getProfile();
+            state.setProfile(profile);
+        }
 
         const candName = profile.email.split('@')[0];
         if (profileCandName) profileCandName.textContent = candName;

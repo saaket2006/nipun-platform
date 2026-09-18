@@ -1,12 +1,55 @@
 import { API_BASE, API_ENDPOINTS } from './constants.js';
 import * as state from './state.js';
+import { auth, signOut } from './firebase-init.js?v=5';
 
 /**
- * Shared HTTP request helper with timeout, auth token injection, and global error handling.
+ * Shared HTTP request helper with dynamic Firebase ID token resolution,
+ * single-attempt non-recursive 401 token refresh retry, and global error handling.
  */
-async function request(endpoint, options = {}) {
-    const token = state.getToken();
+// In-flight GET request deduplication cache to prevent duplicate concurrent network calls
+const inflightGetRequests = new Map();
+
+async function request(endpoint, options = {}, isRetry = false) {
+    const method = (options.method || "GET").toUpperCase();
+    
+    // Non-GET requests and retry attempts bypass in-flight cache
+    if (method !== "GET" || isRetry) {
+        return _executeRequest(endpoint, options, isRetry);
+    }
+
+    const currentToken = state.getToken() || (auth.currentUser ? auth.currentUser.uid : '');
+    const cacheKey = `${endpoint}:${currentToken}`;
+    if (inflightGetRequests.has(cacheKey)) {
+        return inflightGetRequests.get(cacheKey);
+    }
+
+    const promise = (async () => {
+        try {
+            return await _executeRequest(endpoint, options, isRetry);
+        } finally {
+            inflightGetRequests.delete(cacheKey);
+        }
+    })();
+
+    inflightGetRequests.set(cacheKey, promise);
+    return promise;
+}
+
+async function _executeRequest(endpoint, options = {}, isRetry = false) {
     const headers = { ...options.headers };
+
+    // Dynamically retrieve fresh Firebase ID token if user is signed in
+    let token = null;
+    if (auth.currentUser) {
+        try {
+            token = await auth.currentUser.getIdToken(isRetry);
+        } catch (tokenErr) {
+            console.warn("Failed to dynamically fetch Firebase ID token:", tokenErr);
+        }
+    }
+    if (!token) {
+        token = state.getToken();
+    }
 
     // Auto-inject auth header
     if (token && !headers["Authorization"]) {
@@ -34,10 +77,32 @@ async function request(endpoint, options = {}) {
         const response = await fetch(url, config);
         clearTimeout(timerId);
 
-        // Global session expiration handler (401 Unauthorized)
+        // Controlled 401 Token Refresh & Retry Handling (Single Controlled Attempt, No Recursion)
         if (response.status === 401) {
+            if (!isRetry && auth.currentUser) {
+                try {
+                    // Force refresh token from Firebase server
+                    const freshToken = await auth.currentUser.getIdToken(true);
+                    state.setToken(freshToken);
+                    return await request(endpoint, options, true);
+                } catch (refreshErr) {
+                    console.error("Firebase token force-refresh failed on 401:", refreshErr);
+                }
+            }
+
+            // Persistent failure or no user session: clear local state and sign out
             state.clearState();
-            window.location.hash = "#/login";
+            try {
+                await signOut(auth);
+            } catch (signOutErr) {
+                console.warn("Sign out on 401 failed:", signOutErr);
+            }
+            const currentPath = window.location.pathname.toLowerCase();
+            if (!currentPath.endsWith('index.html') && currentPath !== '/' && currentPath !== '') {
+                window.location.href = 'index.html#/login';
+            } else {
+                window.location.hash = "#/login";
+            }
             throw new Error("Session expired. Please log in again.");
         }
 

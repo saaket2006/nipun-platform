@@ -47,11 +47,16 @@ class Settings:
     # Database Settings
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
     
-    # JWT Authentication Settings
-    JWT_SECRET: str = os.environ.get("JWT_SECRET")
+    # JWT Authentication Settings (Legacy fallback)
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "")
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_EXPIRY_MINUTES: int = int(os.getenv("JWT_EXPIRY_MINUTES", "1440")) # Default 24 hours
-    FIREBASE_PROJECT_ID: str = os.getenv("VITE_FIREBASE_PROJECT_ID", os.getenv("FIREBASE_PROJECT_ID", "nipun-platform"))
+    
+    # Firebase Authentication & Admin Settings
+    FIREBASE_PROJECT_ID: str = os.getenv("FIREBASE_PROJECT_ID", os.getenv("VITE_FIREBASE_PROJECT_ID", "nipun-platform"))
+    FIREBASE_CREDENTIALS_JSON: str = os.getenv("FIREBASE_CREDENTIALS_JSON", "")
+    FIREBASE_SERVICE_ACCOUNT_KEY: str = os.getenv("FIREBASE_SERVICE_ACCOUNT_KEY", "")
+    FIREBASE_SERVICE_ACCOUNT_KEY_PATH: str = os.getenv("FIREBASE_SERVICE_ACCOUNT_KEY_PATH", "")
     
     # Email & SMTP Settings
     EMAIL_USER: str = os.getenv("EMAIL_USER", "")
@@ -69,5 +74,3 @@ class Settings:
 
 settings = Settings()
 
-if not settings.JWT_SECRET:
-    raise ValueError("JWT_SECRET environment variable is not set. It is required for security.")

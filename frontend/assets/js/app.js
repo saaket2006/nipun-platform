@@ -1,4 +1,4 @@
-import { checkAuthStatus } from './auth.js';
+import { checkAuthStatus, initAuthListener } from './auth.js';
 import { initLoginPage, initializeLoginPage } from './pages/login.js';
 import { initSignupPage, initializeSignupPage } from './pages/signup.js';
 import { initOnboarding, showOnboardingWizard } from './pages/onboarding.js';
@@ -52,10 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         initRecruiterPage();
         initRouter();
         initNavbar(clearCandidateState);
+        handleRouting();
     } else if (isCandidatePage) {
         initCandidatePage();
         initRouter();
         initNavbar(clearCandidateState);
+        handleRouting();
     }
 
     initModals();
@@ -243,6 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resumesDropdownHeader) resumesDropdownHeader.classList.add('hidden');
     }
 
-    // 3. Kick off auth status checking immediately on load
-    checkAuthStatus();
+    // 3. Kick off auth state listening (onAuthStateChanged triggers checkAuthStatus when ready)
+    initAuthListener();
 });

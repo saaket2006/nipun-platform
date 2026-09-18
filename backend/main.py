@@ -15,27 +15,17 @@ setup_logging(settings.LOG_LEVEL)
 
 logger = logging.getLogger("resume_screener")
 
-# Startup configuration and environment variable validation
-required_configs = [
-    ("JWT_SECRET", settings.JWT_SECRET),
-    ("JWT_ALGORITHM", settings.JWT_ALGORITHM),
-    ("JWT_EXPIRY_MINUTES", settings.JWT_EXPIRY_MINUTES),
-]
+# Startup configuration validation
+if not settings.FIREBASE_PROJECT_ID:
+    logger.warning("Startup Configuration Warning: FIREBASE_PROJECT_ID is not configured.")
 
-for name, val in required_configs:
-    if not val:
-        logger.critical(
-            "Startup Configuration Warning: Required configuration/environment variable %s is not set.",
-            name,
-        )
-
+# Initialize Firebase Admin SDK (lazy singleton)
 try:
-    int(settings.JWT_EXPIRY_MINUTES)
-except ValueError:
-    logger.critical(
-        "Startup Configuration Failed: JWT_EXPIRY_MINUTES must be a valid integer."
-    )
-    raise RuntimeError("JWT_EXPIRY_MINUTES must be a valid integer.")
+    from backend.core.firebase import get_firebase_admin_app
+    get_firebase_admin_app()
+except Exception as fb_err:
+    logger.critical("Firebase Admin initialization encountered an error at startup: %s", fb_err)
+
 
 # Initialize Rate Limiter
 from backend.limiter import limiter

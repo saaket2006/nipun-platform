@@ -86,33 +86,60 @@ export function handleCandidateRouting(hash) {
 }
 
 /**
- * Parses a hash string into its route path and URLSearchParams query parameters.
- * Conceptually: '#/reset-password?token=abc123' -> { route: '#/reset-password', params: URLSearchParams }
+ * Parses a hash string and window query string into its route path and combined URLSearchParams.
+ * Conceptually: Supports both '#/reset-password?oobCode=XYZ' and '?mode=resetPassword&oobCode=XYZ#/reset-password'
  */
 export function parseHash(hash = window.location.hash) {
-    if (!hash) return { route: '', params: new URLSearchParams() };
+    const windowParams = new URLSearchParams(window.location.search);
+    if (!hash) {
+        return { route: '', params: windowParams };
+    }
     const [routePart, queryPart] = hash.split('?');
+    const hashParams = new URLSearchParams(queryPart || '');
+
+    // Merge window and hash query parameters
+    const combinedParams = new URLSearchParams();
+    for (const [key, val] of windowParams.entries()) {
+        combinedParams.set(key, val);
+    }
+    for (const [key, val] of hashParams.entries()) {
+        combinedParams.set(key, val);
+    }
+
     return {
         route: routePart || '',
-        params: new URLSearchParams(queryPart || '')
+        params: combinedParams
     };
 }
 
+let lastHandledRoute = null;
+let routerInitialized = false;
+
 /**
  * Central routing router entry point. Enforces role-based route access limits.
+ * @param {boolean} force - Whether to bypass duplicate route checking and force handler execution.
  */
-export function handleRouting() {
+export function handleRouting(force = false) {
     const user = state.getUser();
     const { route, params } = parseHash(window.location.hash);
     const pathname = window.location.pathname.toLowerCase();
 
-    // 1. Password Reset: #/reset-password?token=<TOKEN>
-    if (route === ROUTES.RESET_PASSWORD) {
+    // Prevent duplicate routing execution for the exact same route state unless forced
+    const fullRouteKey = `${pathname}:${window.location.hash}:${user ? (user.id || user.firebase_uid) : 'anon'}`;
+    if (!force && lastHandledRoute === fullRouteKey) {
+        return;
+    }
+    lastHandledRoute = fullRouteKey;
+
+    // 1. Password Reset Action Code Handling (supports Firebase mode=resetPassword or #/reset-password with oobCode/token)
+    const mode = params.get('mode');
+    const oobCode = params.get('oobCode') || params.get('code') || params.get('token') || '';
+
+    if (mode === 'resetPassword' || route === ROUTES.RESET_PASSWORD || oobCode) {
         const authModal = document.getElementById('auth-modal');
         if (authModal) {
             authModal.classList.remove('hidden');
-            const token = params.get('token') || '';
-            showResetPasswordView(token);
+            showResetPasswordView(oobCode);
         }
         return;
     }
@@ -129,10 +156,12 @@ export function handleRouting() {
 
     // 3. Unauthenticated User Routes (Login / Sign Up)
     if (!user) {
-        if (route === ROUTES.LOGIN || route === ROUTES.SIGNUP) {
+        if (route === ROUTES.LOGIN || route === ROUTES.SIGNUP || route === '') {
             const authModal = document.getElementById('auth-modal');
             if (authModal) {
-                authModal.classList.remove('hidden');
+                if (route === ROUTES.LOGIN || route === ROUTES.SIGNUP) {
+                    authModal.classList.remove('hidden');
+                }
                 resetAuthModalToTabs();
                 const isLogin = route === ROUTES.LOGIN;
                 const tabLogin = document.getElementById('tab-login');
@@ -173,10 +202,17 @@ export function handleRouting() {
 }
 
 /**
- * Registers hashchange routing event triggers.
+ * Registers hashchange and popstate routing event triggers with single registration guard.
  */
 export function initRouter() {
+    if (routerInitialized) return;
+    routerInitialized = true;
+
     window.addEventListener('hashchange', () => {
         handleRouting();
     });
+    window.addEventListener('popstate', () => {
+        handleRouting();
+    });
 }
+

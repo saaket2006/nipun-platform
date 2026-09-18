@@ -110,6 +110,7 @@ export function initRecruiterPage() {
 
             try {
                 const data = await api.screenResumesRecruiter(formData);
+                state.setRecruiterStats(null);
                 renderRecruiterResults(data.results);
             } catch (err) {
                 alert(err.message);
@@ -288,12 +289,31 @@ function renderRecFileList() {
  * Initializer for Recruiter Dashboard view.
  */
 export async function initializeRecruiterDashboard() {
+    const dashRecName = document.getElementById('dash-rec-name');
+    const dashCompName = document.getElementById('dash-comp-name');
+    const dashCompType = document.getElementById('dash-comp-type');
+    const dashHiringDomain = document.getElementById('dash-hiring-domain');
+
+    // Loading state indicators
+    if (dashRecName && dashRecName.textContent === "...") dashRecName.textContent = "Loading...";
+    if (dashCompName && dashCompName.textContent === "...") dashCompName.textContent = "Loading...";
+    if (dashCompType && dashCompType.textContent === "...") dashCompType.textContent = "Loading...";
+    if (dashHiringDomain && dashHiringDomain.textContent === "...") dashHiringDomain.textContent = "Loading...";
+
     try {
-        const profile = await api.getProfile();
-        state.setProfile(profile);
+        let profile = state.getProfile();
+        if (!profile) {
+            profile = await api.getProfile();
+            state.setProfile(profile);
+        }
         populateRecruiterProfileUI(profile);
         
-        const stats = await api.getRecruiterStats();
+        let stats = state.getRecruiterStats();
+        if (!stats) {
+            stats = await api.getRecruiterStats();
+            state.setRecruiterStats(stats);
+        }
+
         updateStatisticCard("stat-total-screened", stats.total_candidates_screened);
         updateStatisticCard("stat-avg-score", `${stats.average_ats_score.toFixed(1)}%`);
         updateStatisticCard("stat-avg-experience", `${stats.average_experience_tenure.toFixed(1)} yrs`);
@@ -324,17 +344,34 @@ export async function initializeRecruiterDashboard() {
         }
     } catch (err) {
         console.error("Error loading recruiter dashboard:", err);
+        const user = state.getUser();
+        if (dashRecName && (dashRecName.textContent === "..." || dashRecName.textContent === "Loading...")) {
+            dashRecName.textContent = user?.email?.split('@')[0] || "Recruiter";
+        }
+        if (dashCompName && (dashCompName.textContent === "..." || dashCompName.textContent === "Loading...")) {
+            dashCompName.textContent = "Unavailable";
+        }
+        if (dashCompType && (dashCompType.textContent === "..." || dashCompType.textContent === "Loading...")) {
+            dashCompType.textContent = "Unavailable";
+        }
+        if (dashHiringDomain && (dashHiringDomain.textContent === "..." || dashHiringDomain.textContent === "Loading...")) {
+            dashHiringDomain.textContent = "Unavailable";
+        }
     }
 }
 
 
 /**
  * Initializer for Recruiter Profile view.
+ * Reuses shared profile state from Dashboard if already fetched.
  */
 export async function initializeRecruiterProfile() {
     try {
-        const profile = await api.getProfile();
-        state.setProfile(profile);
+        let profile = state.getProfile();
+        if (!profile) {
+            profile = await api.getProfile();
+            state.setProfile(profile);
+        }
         populateRecruiterProfileUI(profile);
     } catch (err) {
         console.error("Error loading recruiter profile:", err);
