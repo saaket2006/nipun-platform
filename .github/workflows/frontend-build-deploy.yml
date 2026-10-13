@@ -37,3 +37,18 @@ jobs:
 
       - name: Verify generated CSS
         run: test -s frontend/assets/css/tailwind.min.css
+
+        
+      - name: Authenticate with Google Cloud
+        if: github.ref == 'refs/heads/main'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+
+      - name: Set up Firebase CLI
+        if: github.ref == 'refs/heads/main'
+        run: npm install --global firebase-tools
+
+      - name: Deploy to Firebase Hosting
+        if: github.ref == 'refs/heads/main'
+        run: firebase deploy --only hosting --project nipun-platform
