@@ -340,8 +340,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/app.js": {
-    "mtime": 1789548677.6554906,
-    "ast_hash": "c638f6653b334594d6c29ee1bd718454",
+    "mtime": 1791910109.6164534,
+    "ast_hash": "e7f64d7043f4c2609db0656ff4c57deb",
     "semantic_hash": ""
   },
   "frontend/assets/js/auth.js": {
@@ -350,8 +350,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/components/candidateCard.js": {
-    "mtime": 1788945874.004544,
-    "ast_hash": "1fb063788479b58a6f66a774c5f538a8",
+    "mtime": 1791910131.434616,
+    "ast_hash": "a1807bedf2a2ce748e663003370470be",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/emptyState.js": {
@@ -370,8 +370,8 @@
     "semantic_hash": "2a0f796621d85c80ee27de358037e291"
   },
   "frontend/assets/js/components/navbar.js": {
-    "mtime": 1789465600.9875526,
-    "ast_hash": "47d351eea7970610b863d83a09f08329",
+    "mtime": 1791910098.497498,
+    "ast_hash": "45ac608a6944095b9cb2fee94e88d9c7",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/profileSection.js": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/recruiter.js": {
-    "mtime": 1789794138.2866402,
-    "ast_hash": "cf7a1e85dcbd21f937e69a3714a37dc9",
+    "mtime": 1791910306.696647,
+    "ast_hash": "80eec73a8236999d5cb7cdc12b1c180d",
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/signup.js": {
@@ -605,13 +605,13 @@
     "semantic_hash": ""
   },
   "frontend/candidate.html": {
-    "mtime": 1791880055.6119666,
-    "ast_hash": "c2827dffd975af9a7edde79ee381e6a0",
+    "mtime": 1791910056.014597,
+    "ast_hash": "b306f9414a5db50c63dbe4fba03a09a8",
     "semantic_hash": ""
   },
   "frontend/index.html": {
-    "mtime": 1789794047.1622787,
-    "ast_hash": "49ac5d2d23b390bdaa3b59770c71eed5",
+    "mtime": 1791910066.9093733,
+    "ast_hash": "27ca2f5a2acea9c0cd951985147a8392",
     "semantic_hash": ""
   },
   "frontend/onboarding.html": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "frontend/recruiter.html": {
-    "mtime": 1791880024.3904617,
-    "ast_hash": "897091d4863b6d716999ceabae0d8482",
+    "mtime": 1791910022.6670434,
+    "ast_hash": "5cd48c5fcb54fb8be11d8dfde9381554",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -740,8 +740,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/frontend-build-deploy.yml": {
-    "mtime": 1791881475.6262589,
-    "ast_hash": "5b65eed9995f10a2213710adf44c6a4f",
+    "mtime": 1791885420.2795153,
+    "ast_hash": "2745c032c91df1425234904364493a84",
     "semantic_hash": ""
   },
   "frontend/assets/js/firebase-config.js": {
@@ -755,8 +755,8 @@
     "semantic_hash": ""
   },
   "tests/test_frontend_assets.py": {
-    "mtime": 1791884914.7423897,
-    "ast_hash": "697c2e3ebd4d3de442bf32d8a3c838cb",
+    "mtime": 1791910348.516335,
+    "ast_hash": "9af0f8baa2e50f232937595b2546e0f4",
     "semantic_hash": ""
   }
 }

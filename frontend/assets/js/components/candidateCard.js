@@ -130,29 +130,31 @@ export function getCandidateDetailRowHTML(cand) {
 /**
  * Returns candidate card HTML string for the Recruiter Workspace.
  */
-export function getRecruiterCandidateCardHTML(cand) {
-    const isTopRank = cand.rank <= 3 ? 'top-rank' : '';
+export function getRecruiterCandidateCardHTML(cand, index = null) {
+    if (!cand) return '';
+    const isTopRank = (cand.rank && cand.rank <= 3) ? 'top-rank' : '';
     
     let scoreClass = 'low-score';
-    if (cand.similarity_score >= 70) {
+    const score = typeof cand.similarity_score === 'number' ? cand.similarity_score : 0;
+    if (score >= 70) {
         scoreClass = 'high-score';
-    } else if (cand.similarity_score >= 40) {
+    } else if (score >= 40) {
         scoreClass = 'med-score';
     }
 
-    const matchedTags = cand.matched_skills.slice(0, 5).map(s => `<span class="skill-tag matched">${escapeHTML(s)}</span>`).join('');
-    const missingTags = cand.missing_skills.slice(0, 5).map(s => `<span class="skill-tag missing">${escapeHTML(s)}</span>`).join('');
+    const matchedList = Array.isArray(cand.matched_skills) ? cand.matched_skills : [];
+    const missingList = Array.isArray(cand.missing_skills) ? cand.missing_skills : [];
 
-    // candString is safely escaped by JSON.stringify but could be risky if directly injected in onclick attribute
-    // replacing quotes with &quot; instead of &apos; is better practice or just escaping appropriately.
-    // However, stringifying it replaces single quotes with &apos; which was already there. We should properly escape HTML quotes.
-    const candString = escapeHTML(JSON.stringify(cand));
+    const matchedTags = matchedList.slice(0, 5).map(s => `<span class="skill-tag matched">${escapeHTML(s)}</span>`).join('');
+    const missingTags = missingList.slice(0, 5).map(s => `<span class="skill-tag missing">${escapeHTML(s)}</span>`).join('');
+
+    const indexAttr = (index !== null && index !== undefined) ? ` data-candidate-index="${index}"` : '';
 
     return `
         <div class="cand-left">
-            <div class="cand-rank ${isTopRank}">#${cand.rank}</div>
+            <div class="cand-rank ${isTopRank}">#${cand.rank || ''}</div>
             <div class="cand-info">
-                <h4 class="cand-name">${escapeHTML(cand.name)}</h4>
+                <h4 class="cand-name">${escapeHTML(cand.name || 'Unnamed Candidate')}</h4>
                 <div class="cand-skills-summary">
                     <div class="skills-row">
                         <span class="skills-row-label matched">Matched:</span>
@@ -167,9 +169,9 @@ export function getRecruiterCandidateCardHTML(cand) {
         </div>
         <div class="cand-right">
             <div class="score-block">
-                <span class="score-badge ${scoreClass}">${cand.similarity_score}%</span>
+                <span class="score-badge ${scoreClass}">${score}%</span>
             </div>
-            <button class="quick-view-btn" onclick='showCandidateQuickView(${candString})'>Quick View</button>
+            <button type="button" class="quick-view-btn"${indexAttr}>Quick View</button>
         </div>
     `;
 }

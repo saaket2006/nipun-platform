@@ -93,3 +93,82 @@ def test_javascript_relative_imports_resolve():
             clean_specifier = specifier.split("?")[0]
             resolved_path = os.path.normpath(os.path.join(os.path.dirname(js_file), clean_specifier))
             assert os.path.exists(resolved_path), f"Import '{specifier}' in {os.path.relpath(js_file, ROOT_DIR)} failed to resolve to {resolved_path}"
+
+
+def test_logo_elements_and_navbar_navigation():
+    """Verify logo elements exist in recruiter.html, candidate.html, index.html and navbar.js wires navigation."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+    index_html = os.path.join(FRONTEND_DIR, "index.html")
+    navbar_js = os.path.join(FRONTEND_DIR, "assets", "js", "components", "navbar.js")
+
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_content = f.read()
+    assert 'id="recruiter-sidebar-logo"' in rec_content, "recruiter.html must have id='recruiter-sidebar-logo'"
+
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        cand_content = f.read()
+    assert 'id="candidate-sidebar-logo"' in cand_content, "candidate.html must have id='candidate-sidebar-logo'"
+
+    with open(index_html, "r", encoding="utf-8") as f:
+        index_content = f.read()
+    assert 'id="landing-logo"' in index_content, "index.html must have id='landing-logo'"
+
+    with open(navbar_js, "r", encoding="utf-8") as f:
+        nav_content = f.read()
+    assert "handleLogoNavigation" in nav_content, "navbar.js must implement handleLogoNavigation"
+    assert "recruiter-sidebar-logo" in nav_content
+    assert "candidate-sidebar-logo" in nav_content
+    assert "landing-logo" in nav_content
+
+
+def test_recruiter_quick_view_modal_dom_structure():
+    """Verify recruiter.html contains the full quick view modal and candidate.html does not duplicate it."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_content = f.read()
+
+    required_ids = [
+        "rec-quick-view-modal",
+        "close-quick-view-btn",
+        "qv-cand-name",
+        "qv-cand-score-badge",
+        "qv-cand-email",
+        "qv-cand-phone",
+        "qv-cand-linkedin",
+        "qv-cand-github",
+        "qv-xai-container",
+        "qv-recommendations-container",
+        "qv-cand-extracted-skills",
+        "qv-cand-matched-skills",
+        "qv-cand-missing-skills",
+    ]
+
+    for req_id in required_ids:
+        assert f'id="{req_id}"' in rec_content, f"recruiter.html must contain id='{req_id}'"
+
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        cand_content = f.read()
+    assert 'id="rec-quick-view-modal"' not in cand_content, "candidate.html must not contain duplicate rec-quick-view-modal"
+    assert 'id="cand-analysis-view-modal"' in cand_content, "candidate.html must retain cand-analysis-view-modal"
+
+
+def test_candidate_card_and_recruiter_quick_view_integration():
+    """Verify candidate card renders quick view button with data attributes and recruiter.js binds them."""
+    card_js = os.path.join(FRONTEND_DIR, "assets", "js", "components", "candidateCard.js")
+    recruiter_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "recruiter.js")
+
+    with open(card_js, "r", encoding="utf-8") as f:
+        card_content = f.read()
+    assert "quick-view-btn" in card_content
+    assert "data-candidate-index" in card_content
+    assert "getRecruiterCandidateCardHTML(cand, index" in card_content
+
+    with open(recruiter_js, "r", encoding="utf-8") as f:
+        rec_content = f.read()
+    assert "showCandidateQuickView" in rec_content
+    assert "window.showCandidateQuickView = showCandidateQuickView" in rec_content
+    assert "renderRecruiterResults" in rec_content
+    assert "closeQuickViewBtn" in rec_content

@@ -2,6 +2,69 @@ import * as state from '../state.js';
 import { clearRecruiterWorkspaceState } from '../pages/recruiter.js';
 import { clearCandidateWorkspaceState } from '../pages/candidate.js';
 import { auth, signOut } from '../firebase-init.js?v=5';
+import { handleRouting } from '../router.js';
+import { ROLES, ROUTES } from '../constants.js';
+
+/**
+ * Handles logo navigation across authenticated and unauthenticated states.
+ */
+export function handleLogoNavigation(e) {
+    if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
+    }
+    const user = state.getUser();
+    const fbUser = auth ? auth.currentUser : null;
+    const isAuthenticated = !!(user || fbUser);
+    const pathname = window.location.pathname.toLowerCase();
+    const isRecruiterPage = pathname.includes('recruiter');
+    const isCandidatePage = pathname.includes('candidate');
+    const isLandingPage = pathname === '/' || pathname.endsWith('index.html') || pathname === '';
+
+    if (isAuthenticated) {
+        const role = user ? user.role : (isRecruiterPage ? ROLES.RECRUITER : (isCandidatePage ? ROLES.CANDIDATE : null));
+
+        if (role === ROLES.RECRUITER || (!role && isRecruiterPage)) {
+            if (isRecruiterPage) {
+                if (window.location.hash === ROUTES.DASHBOARD) {
+                    handleRouting(true);
+                } else {
+                    window.location.hash = ROUTES.DASHBOARD;
+                }
+            } else {
+                window.location.href = `recruiter.html${ROUTES.DASHBOARD}`;
+            }
+            return;
+        }
+
+        if (role === ROLES.CANDIDATE || (!role && isCandidatePage)) {
+            if (isCandidatePage) {
+                if (window.location.hash === ROUTES.CANDIDATE_DASHBOARD) {
+                    handleRouting(true);
+                } else {
+                    window.location.hash = ROUTES.CANDIDATE_DASHBOARD;
+                }
+            } else {
+                window.location.href = `candidate.html${ROUTES.CANDIDATE_DASHBOARD}`;
+            }
+            return;
+        }
+
+        if (isLandingPage && !role) {
+            window.location.href = 'index.html';
+            return;
+        }
+    }
+
+    // Unauthenticated user
+    if (isLandingPage) {
+        if (window.location.hash) {
+            window.location.hash = '';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        window.location.href = 'index.html';
+    }
+}
 
 /**
  * Helper to execute complete Firebase and client-side sign out.
@@ -20,7 +83,7 @@ async function handleLogout(clearWorkspaceCallback) {
 }
 
 /**
- * Initializes the profile nav drop-down controls and logs.
+ * Initializes the profile nav drop-down controls, logos, and logout actions.
  * @param {Function} clearCandidateStateCallback - Callback to clear candidate view variables
  */
 export function initNavbar(clearCandidateStateCallback) {
@@ -65,18 +128,27 @@ export function initNavbar(clearCandidateStateCallback) {
         });
     }
 
-    // Sidebar Logo: navigate back to landing page
+    // Sidebar Logo and Landing Logo navigation
     const recSidebarLogo = document.getElementById('recruiter-sidebar-logo');
     if (recSidebarLogo) {
-        recSidebarLogo.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
+        recSidebarLogo.addEventListener('click', handleLogoNavigation);
     }
 
     const candSidebarLogo = document.getElementById('candidate-sidebar-logo');
     if (candSidebarLogo) {
-        candSidebarLogo.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
+        candSidebarLogo.addEventListener('click', handleLogoNavigation);
     }
+
+    const landingLogo = document.getElementById('landing-logo');
+    if (landingLogo) {
+        landingLogo.addEventListener('click', handleLogoNavigation);
+    }
+
+    // Fallback: any other element with class .sidebar-logo
+    const genericLogos = document.querySelectorAll('.sidebar-logo');
+    genericLogos.forEach(logoEl => {
+        if (logoEl !== recSidebarLogo && logoEl !== candSidebarLogo) {
+            logoEl.addEventListener('click', handleLogoNavigation);
+        }
+    });
 }

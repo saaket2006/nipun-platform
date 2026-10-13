@@ -190,6 +190,22 @@ export function initRecruiterPage() {
         });
     }
 
+    const recResultsList = document.getElementById('rec-results-list');
+    if (recResultsList) {
+        recResultsList.addEventListener('click', (e) => {
+            const qvBtn = e.target.closest('.quick-view-btn');
+            if (qvBtn) {
+                const idxStr = qvBtn.dataset.candidateIndex;
+                if (idxStr !== undefined && idxStr !== '') {
+                    const idx = parseInt(idxStr, 10);
+                    if (window.currentRecruiterResults && window.currentRecruiterResults[idx]) {
+                        showCandidateQuickView(window.currentRecruiterResults[idx]);
+                    }
+                }
+            }
+        });
+    }
+
     const recQuickViewModal = document.getElementById('rec-quick-view-modal');
     const closeQuickViewBtn = document.getElementById('close-quick-view-btn');
 
@@ -200,6 +216,12 @@ export function initRecruiterPage() {
         
         recQuickViewModal.addEventListener('click', (e) => {
             if (e.target === recQuickViewModal) {
+                recQuickViewModal.classList.add('hidden');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !recQuickViewModal.classList.contains('hidden')) {
                 recQuickViewModal.classList.add('hidden');
             }
         });
@@ -505,26 +527,43 @@ function showRecruiterProfileFeedback(message, isSuccess) {
     feedbackEl.textContent = message;
 }
 
-function renderRecruiterResults(results) {
+export function renderRecruiterResults(results) {
+    window.currentRecruiterResults = results;
     const recResultsList = document.getElementById('rec-results-list');
     const recResultsContainer = document.getElementById('rec-results-container');
     if (!recResultsList) return;
     recResultsList.innerHTML = '';
 
-    results.forEach(cand => {
+    const candidateList = Array.isArray(results) ? results : [];
+
+    candidateList.forEach((cand, index) => {
         const card = document.createElement('div');
         card.className = 'candidate-card';
-        card.innerHTML = getRecruiterCandidateCardHTML(cand);
+        card.innerHTML = getRecruiterCandidateCardHTML(cand, index);
+
+        const qvBtn = card.querySelector('.quick-view-btn');
+        if (qvBtn) {
+            qvBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showCandidateQuickView(cand);
+            });
+        }
+
         recResultsList.appendChild(card);
     });
 
-    recResultsContainer.classList.remove('hidden');
-    recResultsContainer.scrollIntoView({ behavior: 'smooth' });
+    if (recResultsContainer) {
+        recResultsContainer.classList.remove('hidden');
+        recResultsContainer.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 
-// Modal quick view details mapping, bound to window
-window.showCandidateQuickView = (cand) => {
+// Modal quick view details mapping, exported and bound to window
+export function showCandidateQuickView(cand) {
+    if (!cand) return;
     const recQuickViewModal = document.getElementById('rec-quick-view-modal');
+    if (!recQuickViewModal) return;
+
     const qvCandName = document.getElementById('qv-cand-name');
     const qvCandScoreBadge = document.getElementById('qv-cand-score-badge');
     const qvCandEmail = document.getElementById('qv-cand-email');
@@ -534,20 +573,23 @@ window.showCandidateQuickView = (cand) => {
     const qvCandExtractedSkills = document.getElementById('qv-cand-extracted-skills');
     const qvCandMatchedSkills = document.getElementById('qv-cand-matched-skills');
     const qvCandMissingSkills = document.getElementById('qv-cand-missing-skills');
-
-    if (!recQuickViewModal) return;
     
-    qvCandName.textContent = cand.name;
+    if (qvCandName) {
+        qvCandName.textContent = cand.name || 'Unnamed Candidate';
+    }
     
+    const score = typeof cand.similarity_score === 'number' ? cand.similarity_score : 0;
     let scoreClass = 'low-score';
-    if (cand.similarity_score >= 70) {
+    if (score >= 70) {
         scoreClass = 'high-score';
-    } else if (cand.similarity_score >= 40) {
+    } else if (score >= 40) {
         scoreClass = 'med-score';
     }
     
-    qvCandScoreBadge.className = `score-badge ${scoreClass}`;
-    qvCandScoreBadge.textContent = `${cand.similarity_score}% Match`;
+    if (qvCandScoreBadge) {
+        qvCandScoreBadge.className = `score-badge ${scoreClass}`;
+        qvCandScoreBadge.textContent = `${score}% Match`;
+    }
     
     const qvCtxProfile = document.getElementById('qv-ctx-profile');
     const qvCtxJd = document.getElementById('qv-ctx-jd');
@@ -558,47 +600,57 @@ window.showCandidateQuickView = (cand) => {
         const engineVer = cand.analysis_metadata?.engine_version || "v1.0.0";
         qvCtxProfile.textContent = `${profileName} (v${profileVer})`;
         qvCtxJd.textContent = cand.job_description_title || "Selected JD";
-        const cleanEngine = engineVer.replace(/^v/, '');
+        const cleanEngine = String(engineVer).replace(/^v/, '');
         qvCtxEngine.textContent = `Nipun Engine v${cleanEngine}`;
     }
     
-    qvCandEmail.textContent = cand.email !== 'Not Provided' ? cand.email : 'N/A';
-    qvCandPhone.textContent = cand.phone !== 'Not Provided' ? cand.phone : 'N/A';
-    
-    if (cand.linkedin !== 'Not Provided') {
-        const url = sanitizeUrl(cand.linkedin);
-        if (url !== '#') {
-            const a = document.createElement('a');
-            a.href = url;
-            a.target = '_blank';
-            a.style.color = '#6366f1';
-            a.style.textDecoration = 'none';
-            a.textContent = cand.linkedin;
-            qvCandLinkedin.innerHTML = '';
-            qvCandLinkedin.appendChild(a);
-        } else {
-            qvCandLinkedin.textContent = cand.linkedin;
-        }
-    } else {
-        qvCandLinkedin.textContent = 'N/A';
+    if (qvCandEmail) {
+        qvCandEmail.textContent = (cand.email && cand.email !== 'Not Provided') ? cand.email : 'N/A';
+    }
+    if (qvCandPhone) {
+        qvCandPhone.textContent = (cand.phone && cand.phone !== 'Not Provided') ? cand.phone : 'N/A';
     }
     
-    if (cand.github !== 'Not Provided') {
-        const url = sanitizeUrl(cand.github);
-        if (url !== '#') {
-            const a = document.createElement('a');
-            a.href = url;
-            a.target = '_blank';
-            a.style.color = '#6366f1';
-            a.style.textDecoration = 'none';
-            a.textContent = cand.github;
-            qvCandGithub.innerHTML = '';
-            qvCandGithub.appendChild(a);
+    if (qvCandLinkedin) {
+        if (cand.linkedin && cand.linkedin !== 'Not Provided') {
+            const url = sanitizeUrl(cand.linkedin);
+            if (url !== '#') {
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                a.style.color = '#6366f1';
+                a.style.textDecoration = 'none';
+                a.textContent = cand.linkedin;
+                qvCandLinkedin.innerHTML = '';
+                qvCandLinkedin.appendChild(a);
+            } else {
+                qvCandLinkedin.textContent = cand.linkedin;
+            }
         } else {
-            qvCandGithub.textContent = cand.github;
+            qvCandLinkedin.textContent = 'N/A';
         }
-    } else {
-        qvCandGithub.textContent = 'N/A';
+    }
+    
+    if (qvCandGithub) {
+        if (cand.github && cand.github !== 'Not Provided') {
+            const url = sanitizeUrl(cand.github);
+            if (url !== '#') {
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                a.style.color = '#6366f1';
+                a.style.textDecoration = 'none';
+                a.textContent = cand.github;
+                qvCandGithub.innerHTML = '';
+                qvCandGithub.appendChild(a);
+            } else {
+                qvCandGithub.textContent = cand.github;
+            }
+        } else {
+            qvCandGithub.textContent = 'N/A';
+        }
     }
     
     // Render XAI details
@@ -613,7 +665,10 @@ window.showCandidateQuickView = (cand) => {
         recsContainer.innerHTML = renderRecommendations(cand.analysis_metadata?.recommendations);
     }
     
-    const allExtracted = cand.matched_skills.concat(cand.missing_skills);
+    const matchedSkills = Array.isArray(cand.matched_skills) ? cand.matched_skills : [];
+    const missingSkills = Array.isArray(cand.missing_skills) ? cand.missing_skills : [];
+    const extractedSkills = Array.isArray(cand.extracted_skills) ? cand.extracted_skills : matchedSkills.concat(missingSkills);
+
     // Sanitize skills via textContent assignment by creating elements
     const createSkillTags = (skills, className) => {
         if (!skills || skills.length === 0) return '<span style="color:#666">None</span>';
@@ -627,12 +682,14 @@ window.showCandidateQuickView = (cand) => {
         return container.innerHTML; // Safe because we just set textContent
     };
 
-    qvCandExtractedSkills.innerHTML = createSkillTags(allExtracted, 'skill-tag');
-    qvCandMatchedSkills.innerHTML = createSkillTags(cand.matched_skills, 'skill-tag matched');
-    qvCandMissingSkills.innerHTML = createSkillTags(cand.missing_skills, 'skill-tag missing');
+    if (qvCandExtractedSkills) qvCandExtractedSkills.innerHTML = createSkillTags(extractedSkills, 'skill-tag');
+    if (qvCandMatchedSkills) qvCandMatchedSkills.innerHTML = createSkillTags(matchedSkills, 'skill-tag matched');
+    if (qvCandMissingSkills) qvCandMissingSkills.innerHTML = createSkillTags(missingSkills, 'skill-tag missing');
     
     recQuickViewModal.classList.remove('hidden');
-};
+}
+
+window.showCandidateQuickView = showCandidateQuickView;
 
 export function renderXaiContent(xaiData) {
     if (!xaiData || !xaiData.enabled) {

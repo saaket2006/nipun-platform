@@ -33,7 +33,7 @@
     <div class="rec-layout hidden" id="candidate-container">
         <!-- Sidebar -->
         <aside class="rec-sidebar">
-            <div class="sidebar-logo flex items-center gap-2">
+            <div class="sidebar-logo flex items-center gap-2" id="candidate-sidebar-logo">
                 <img src="assets/nipun_logo.svg" alt="Nipun Logo" style="height: 32px; width: auto;">
                 <span class="logo-text">Nipun</span>
             </div>
@@ -217,69 +217,6 @@
                     </div>
                 </section>
             </main>
-        </div>
-    </div>
-
-
-<!-- Candidate Quick View Modal -->
-    <div id="rec-quick-view-modal" class="auth-modal-overlay hidden">
-        <div class="glass-card quick-view-card">
-            <div class="quick-view-header">
-                <h2>Candidate Details</h2>
-                <button id="close-quick-view-btn" class="close-modal-btn">✕</button>
-            </div>
-
-            <div class="quick-view-body">
-                <div class="qv-profile-summary">
-                    <div class="qv-avatar">📄</div>
-                    <div class="qv-meta">
-                        <h3 id="qv-cand-name">Marcus Johnson</h3>
-                        <p id="qv-cand-score-badge" class="score-badge">85.5% Match</p>
-                        <div id="qv-context-card" style="margin-top: 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4; text-align: left;">
-                            <span style="color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 0.25rem;">Scored Relative To:</span>
-                            <div style="color: #cbd5e1;">🎯 Profile: <strong id="qv-ctx-profile" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">📋 Job Description: <strong id="qv-ctx-jd" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">⚙️ Engine: <strong id="qv-ctx-engine" style="color: #fff;">Nipun Engine v1.0</strong></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="qv-section">
-                    <h4>Contact Info</h4>
-                    <div class="qv-info-grid">
-                        <div>📧 <span id="qv-cand-email">...</span></div>
-                        <div>📞 <span id="qv-cand-phone">...</span></div>
-                        <div>🔗 <span id="qv-cand-linkedin">...</span></div>
-                        <div>💻 <span id="qv-cand-github">...</span></div>
-                    </div>
-                </div>
-
-                <div class="qv-section" id="qv-xai-section">
-                    <h4>Explainable AI (XAI) Breakdown</h4>
-                    <div id="qv-xai-container"></div>
-                </div>
-
-                <div class="qv-section" id="qv-recommendations-section">
-                    <h4>Resume Improvement Recommendations</h4>
-                    <div id="qv-recommendations-container"></div>
-                </div>
-
-                <div class="qv-section">
-                    <h4>Skills Overview</h4>
-                    <div class="skills-block">
-                        <h5>Extracted Skills</h5>
-                        <div id="qv-cand-extracted-skills" class="skills-tags-container">...</div>
-                    </div>
-                    <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>✅ Matched Skills</h5>
-                        <div id="qv-cand-matched-skills" class="skills-tags-container">...</div>
-                    </div>
-                    <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>❌ Missing Skills</h5>
-                        <div id="qv-cand-missing-skills" class="skills-tags-container">...</div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

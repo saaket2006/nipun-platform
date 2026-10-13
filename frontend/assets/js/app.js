@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeLoginPage();
         initializeSignupPage();
         initRouter();
+        initNavbar();
         handleRouting();
 
         // Bind navbar and landing buttons to navigate to auth hashes
