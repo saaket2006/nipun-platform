@@ -325,9 +325,9 @@
     "semantic_hash": "b58114e300aac1280c5f1ad4483c7b66"
   },
   "firebase.json": {
-    "mtime": 1774783511.0187454,
-    "ast_hash": "4f438193a58267f689dba8fb60c533c7",
-    "semantic_hash": "4f438193a58267f689dba8fb60c533c7"
+    "mtime": 1791884865.502504,
+    "ast_hash": "8f5d7ec19a57e4357becac6d935230a8",
+    "semantic_hash": ""
   },
   "frontend/assets/js/animations.js": {
     "mtime": 1789623073.394991,
@@ -345,8 +345,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/auth.js": {
-    "mtime": 1789623095.708378,
-    "ast_hash": "9dc1eb49acf758462bffee7a70c26ffd",
+    "mtime": 1791884068.987889,
+    "ast_hash": "96d04a279f5ae1bfd93fa2fa689c18ab",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/candidateCard.js": {
@@ -737,6 +737,26 @@
   ".agents/skills/ui-ux-designer/SKILL.md": {
     "mtime": 1789888262.4510858,
     "ast_hash": "023e246d52082c81fbcc64b5481fbfca",
+    "semantic_hash": ""
+  },
+  ".github/workflows/frontend-build-deploy.yml": {
+    "mtime": 1791881475.6262589,
+    "ast_hash": "5b65eed9995f10a2213710adf44c6a4f",
+    "semantic_hash": ""
+  },
+  "frontend/assets/js/firebase-config.js": {
+    "mtime": 1791884823.658844,
+    "ast_hash": "dfaa0ab7f7e1f56eff27b718f39d6a83",
+    "semantic_hash": ""
+  },
+  "frontend/firebase-config.js": {
+    "mtime": 1787645881.824321,
+    "ast_hash": "eb1ae2ff83a35aa57512352182027fea",
+    "semantic_hash": ""
+  },
+  "tests/test_frontend_assets.py": {
+    "mtime": 1791884914.7423897,
+    "ast_hash": "697c2e3ebd4d3de442bf32d8a3c838cb",
     "semantic_hash": ""
   }
 }

@@ -6,9 +6,20 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "headers": [
+      {
+        "source": "**/*.@(js|html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      }
+    ],
     "rewrites": [
       {
-        "source": "**",
+        "source": "!**/*.@(js|css|json|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|map)",
         "destination": "/index.html"
       }
     ]

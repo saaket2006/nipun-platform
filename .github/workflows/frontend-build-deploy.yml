@@ -51,4 +51,4 @@ jobs:
 
       - name: Deploy to Firebase Hosting
         if: github.ref == 'refs/heads/main'
-        run: firebase deploy --only hosting --project nipun-platform
+        run: firebase deploy --only hosting

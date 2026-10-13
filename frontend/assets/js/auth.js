@@ -258,6 +258,13 @@ async function _doCheckAuthStatus() {
         state.setOnboardingStatus(user.profile_completed);
         console.log(`[GUARD] /me resolved: role=${user.role}, profile_completed=${user.profile_completed}`);
 
+        // Immediately update topbar display name across views
+        const resolvedName = user?.display_name || (user?.email ? user.email.split('@')[0] : '');
+        const recTopName = document.getElementById('rec-top-user-name');
+        if (recTopName && resolvedName) recTopName.textContent = resolvedName;
+        const candTopName = document.getElementById('cand-top-user-name');
+        if (candTopName && resolvedName) candTopName.textContent = resolvedName;
+
         if (user.profile_completed === false) {
             if (!isOnboardingPage) {
                 console.log("[GUARD] Profile incomplete -> navigating to onboarding.html");

@@ -439,8 +439,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_config",
-      "community": 79,
-      "community_name": "backend/config.py",
+      "community": 48,
+      "community_name": "auth.py",
       "norm_label": "backend/config.py"
     },
     {
@@ -450,8 +450,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "backend_config_settings",
-      "community": 79,
-      "community_name": "backend/config.py",
+      "community": 48,
+      "community_name": "auth.py",
       "norm_label": "settings"
     },
     {
@@ -461,8 +461,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_core_firebase",
-      "community": 79,
-      "community_name": "backend/config.py",
+      "community": 68,
+      "community_name": "verify_firebase_id_token",
       "norm_label": "firebase.py"
     },
     {
@@ -472,8 +472,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "backend_core_firebase_get_firebase_admin_app",
-      "community": 79,
-      "community_name": "backend/config.py",
+      "community": 68,
+      "community_name": "verify_firebase_id_token",
       "norm_label": "get_firebase_admin_app()"
     },
     {
@@ -483,8 +483,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "app",
-      "community": 79,
-      "community_name": "backend/config.py",
+      "community": 68,
+      "community_name": "verify_firebase_id_token",
       "norm_label": "app"
     },
     {
@@ -495,7 +495,7 @@
       "_origin": "ast",
       "id": "backend_core_firebase_verify_firebase_id_token",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verify_firebase_id_token()"
     },
     {
@@ -506,7 +506,7 @@
       "_origin": "ast",
       "id": "backend_core_firebase_py_any",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "any"
     },
     {
@@ -516,8 +516,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_core_firebase_rationale_20",
-      "community": 79,
-      "community_name": "backend/config.py",
+      "community": 68,
+      "community_name": "verify_firebase_id_token",
       "norm_label": "lazily initializes and returns the singleton firebase admin app. supports: 1...."
     },
     {
@@ -528,7 +528,7 @@
       "_origin": "ast",
       "id": "backend_core_firebase_rationale_105",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies a firebase id token using the firebase admin sdk. extracts trusted..."
     },
     {
@@ -560,8 +560,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "backend_database_database_check_db_connection",
-      "community": 69,
-      "community_name": "seed_default_profiles",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "check_db_connection()"
     },
     {
@@ -582,8 +582,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "backend_database_database_rationale_32",
-      "community": 69,
-      "community_name": "seed_default_profiles",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "tests connection to the configured database on demand (e.g. startup or health..."
     },
     {
@@ -615,8 +615,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_get_current_user",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "get_current_user()"
     },
     {
@@ -626,8 +626,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_py_session",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "session"
     },
     {
@@ -637,8 +637,8 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_require_recruiter",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "require_recruiter()"
     },
     {
@@ -648,8 +648,8 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_require_candidate",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "require_candidate()"
     },
     {
@@ -659,8 +659,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_rationale_21",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "validates the incoming firebase id token using firebase admin sdk, extracts the..."
     },
     {
@@ -670,8 +670,8 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_rationale_105",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "restricts route access to users registered with the recruiter role in..."
     },
     {
@@ -681,8 +681,8 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_rationale_120",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "restricts route access to users registered with the candidate role in..."
     },
     {
@@ -692,8 +692,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_dependencies_auth_utils",
-      "community": 74,
-      "community_name": "get_password_hash",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "auth_utils.py"
     },
     {
@@ -714,8 +714,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "backend_dependencies_auth_utils_get_password_hash",
-      "community": 74,
-      "community_name": "get_password_hash",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "get_password_hash()"
     },
     {
@@ -758,8 +758,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "backend_dependencies_auth_utils_rationale_22",
-      "community": 74,
-      "community_name": "get_password_hash",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "hashes a plain text password using bcrypt."
     },
     {
@@ -902,7 +902,7 @@
       "_origin": "ast",
       "id": "backend_main_py_post",
       "community": 36,
-      "community_name": "process_resumes",
+      "community_name": "legacy_process_resumes",
       "norm_label": "post"
     },
     {
@@ -913,7 +913,7 @@
       "_origin": "ast",
       "id": "backend_main_py_limit",
       "community": 36,
-      "community_name": "process_resumes",
+      "community_name": "legacy_process_resumes",
       "norm_label": "limit"
     },
     {
@@ -924,7 +924,7 @@
       "_origin": "ast",
       "id": "backend_main_legacy_process_resumes",
       "community": 36,
-      "community_name": "process_resumes",
+      "community_name": "legacy_process_resumes",
       "norm_label": "legacy_process_resumes()"
     },
     {
@@ -935,7 +935,7 @@
       "_origin": "ast",
       "id": "backend_main_py_request",
       "community": 36,
-      "community_name": "process_resumes",
+      "community_name": "legacy_process_resumes",
       "norm_label": "request"
     },
     {
@@ -946,7 +946,7 @@
       "_origin": "ast",
       "id": "backend_main_py_uploadfile",
       "community": 36,
-      "community_name": "process_resumes",
+      "community_name": "legacy_process_resumes",
       "norm_label": "uploadfile"
     },
     {
@@ -957,7 +957,7 @@
       "_origin": "ast",
       "id": "backend_main_py_session",
       "community": 36,
-      "community_name": "process_resumes",
+      "community_name": "legacy_process_resumes",
       "norm_label": "session"
     },
     {
@@ -990,7 +990,7 @@
       "_origin": "ast",
       "id": "backend_main_rationale_125",
       "community": 36,
-      "community_name": "process_resumes",
+      "community_name": "legacy_process_resumes",
       "norm_label": "legacy endpoint delegating to recruiter process_resumes. requires recruiter..."
     },
     {
@@ -1077,7 +1077,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "backend_models_models_user",
-      "community": 68,
+      "community": 6,
       "community_name": "User",
       "norm_label": "user"
     },
@@ -1309,7 +1309,7 @@
       "_origin": "ast",
       "id": "backend_routers_auth_fetch_google_certs",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "fetch_google_certs()"
     },
     {
@@ -1748,8 +1748,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_routers_onboarding_py_get",
-      "community": 83,
-      "community_name": "get_onboarding_status",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "get"
     },
     {
@@ -1759,8 +1759,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "backend_routers_onboarding_get_onboarding_status",
-      "community": 83,
-      "community_name": "get_onboarding_status",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "get_onboarding_status()"
     },
     {
@@ -1803,8 +1803,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "backend_routers_onboarding_rationale_17",
-      "community": 83,
-      "community_name": "get_onboarding_status",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "returns the user's onboarding completion status and role."
     },
     {
@@ -1836,8 +1836,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_post",
-      "community": 36,
-      "community_name": "process_resumes",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "post"
     },
     {
@@ -1847,8 +1847,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_limit",
-      "community": 36,
-      "community_name": "process_resumes",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "limit"
     },
     {
@@ -1858,8 +1858,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_routers_recruiter_process_resumes",
-      "community": 36,
-      "community_name": "process_resumes",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "process_resumes()"
     },
     {
@@ -1869,8 +1869,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_request",
-      "community": 36,
-      "community_name": "process_resumes",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "request"
     },
     {
@@ -1880,8 +1880,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_uploadfile",
-      "community": 36,
-      "community_name": "process_resumes",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "uploadfile"
     },
     {
@@ -1892,7 +1892,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_session",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "session"
     },
     {
@@ -1903,7 +1903,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_get",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "get"
     },
     {
@@ -1914,7 +1914,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_get_scoring_profiles",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "get_scoring_profiles()"
     },
     {
@@ -1925,7 +1925,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_list_job_descriptions",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "list_job_descriptions()"
     },
     {
@@ -1935,8 +1935,8 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "backend_routers_recruiter_create_job_description",
-      "community": 9,
-      "community_name": "candidate.py",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "create_job_description()"
     },
     {
@@ -1947,7 +1947,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_put",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "put"
     },
     {
@@ -1958,7 +1958,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_update_job_description",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "update_job_description()"
     },
     {
@@ -1969,7 +1969,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_delete",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "delete"
     },
     {
@@ -1980,7 +1980,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_archive_job_description",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "archive_job_description()"
     },
     {
@@ -1991,7 +1991,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_delete_job_description",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "delete_job_description()"
     },
     {
@@ -2002,7 +2002,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_get_recruiter_stats",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "get_recruiter_stats()"
     },
     {
@@ -2013,7 +2013,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_patch",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "patch"
     },
     {
@@ -2024,7 +2024,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_update_recruiter_profile",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "update_recruiter_profile()"
     },
     {
@@ -2034,8 +2034,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_32",
-      "community": 36,
-      "community_name": "process_resumes",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "screens uploaded resume files against a job description. enforces..."
     },
     {
@@ -2046,7 +2046,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_146",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "returns all configured and seeded scoring profiles."
     },
     {
@@ -2057,7 +2057,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_175",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "retrieves all job descriptions created by the recruiter."
     },
     {
@@ -2067,8 +2067,8 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_206",
-      "community": 9,
-      "community_name": "candidate.py",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "adds a new job description to the recruiter's library."
     },
     {
@@ -2079,7 +2079,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_232",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "edits an existing job description in the recruiter's library."
     },
     {
@@ -2090,7 +2090,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_253",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "soft-deletes (archives) a job description."
     },
     {
@@ -2101,7 +2101,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_270",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "permanently deletes a job description and its scan results."
     },
     {
@@ -2112,7 +2112,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_290",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "retrieves dashboard statistics and aggregates recruiter intelligence statistics."
     },
     {
@@ -2123,7 +2123,7 @@
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_402",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "update recruiter's profile information and display name. strictly scoped to..."
     },
     {
@@ -2265,8 +2265,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "field_validator",
-      "community": 75,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": "field_validator"
     },
     {
@@ -2276,8 +2276,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "backend_schemas_schemas_candidateprofileupdate_validate_and_strip",
-      "community": 75,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": ".validate_and_strip()"
     },
     {
@@ -2287,8 +2287,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "backend_schemas_schemas_recruiterprofileupdate",
-      "community": 75,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": "recruiterprofileupdate"
     },
     {
@@ -2298,8 +2298,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "backend_schemas_schemas_recruiterprofileupdate_validate_and_strip",
-      "community": 75,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": ".validate_and_strip()"
     },
     {
@@ -2309,8 +2309,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "backend_schemas_schemas_recruiterprofileupdate_validate_company_type",
-      "community": 75,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": ".validate_company_type()"
     },
     {
@@ -2760,8 +2760,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_services_nlp_service",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "nlp_service.py"
     },
     {
@@ -2771,8 +2771,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "backend_services_nlp_service_preprocess_text",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "preprocess_text()"
     },
     {
@@ -2782,8 +2782,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "backend_services_nlp_service_rationale_16",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "cleans text by: - lowercasing - removing punctuation - removing stopwords -..."
     },
     {
@@ -3256,7 +3256,7 @@
       "_origin": "ast",
       "id": "exception",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "exception"
     },
     {
@@ -4190,8 +4190,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_services_scoring_service",
-      "community": 5,
-      "community_name": "test_remediation.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "scoring_service.py"
     },
     {
@@ -4201,8 +4201,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "backend_services_scoring_service_get_tfidf_model",
-      "community": 5,
-      "community_name": "test_remediation.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "_get_tfidf_model()"
     },
     {
@@ -4212,8 +4212,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_services_scoring_service_rank_candidates",
-      "community": 5,
-      "community_name": "test_remediation.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "rank_candidates()"
     },
     {
@@ -4223,8 +4223,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "backend_services_scoring_service_rationale_11",
-      "community": 5,
-      "community_name": "test_remediation.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "caches the tf-idf vectorizer and jd matrix for a given set of jd skills...."
     },
     {
@@ -4234,8 +4234,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "backend_services_scoring_service_rationale_21",
-      "community": 5,
-      "community_name": "test_remediation.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "ranks resumes against a job description using tf-idf and cosine similarity. to..."
     },
     {
@@ -4245,8 +4245,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_services_screening_service",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "screening_service.py"
     },
     {
@@ -4256,8 +4256,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "backend_services_screening_service_screen_resumes",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "screen_resumes()"
     },
     {
@@ -4267,8 +4267,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_services_screening_service_py_session",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "session"
     },
     {
@@ -4278,8 +4278,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "backend_services_screening_service_rationale_21",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "core business logic to screen and rank candidate resumes against a job..."
     },
     {
@@ -4454,8 +4454,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_services_semantic_scorer",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "scorer.py"
     },
     {
@@ -4564,8 +4564,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_services_skill_extractor",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "skill_extractor.py"
     },
     {
@@ -4575,8 +4575,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "backend_services_skill_extractor_load_tech_skills",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "load_tech_skills()"
     },
     {
@@ -4597,8 +4597,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "backend_services_skill_extractor_extract_skills",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "extract_skills()"
     },
     {
@@ -4608,8 +4608,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "backend_services_skill_extractor_rationale_16",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "loads the raw tech skills from a json file."
     },
     {
@@ -4630,8 +4630,8 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "backend_services_skill_extractor_rationale_72",
-      "community": 0,
-      "community_name": "stages.py",
+      "community": 3,
+      "community_name": "Skill",
       "norm_label": "extracts key skills and technical terms and returns them as structured skill..."
     },
     {
@@ -5665,7 +5665,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "routers/test_auth.py"
     },
     {
@@ -5676,7 +5676,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_login_success",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_login_success()"
     },
     {
@@ -5687,7 +5687,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_login_invalid_password",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_login_invalid_password()"
     },
     {
@@ -5698,7 +5698,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_login_nonexistent_user",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_login_nonexistent_user()"
     },
     {
@@ -5709,7 +5709,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_fetch_google_certs_error",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_fetch_google_certs_error()"
     },
     {
@@ -5720,7 +5720,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_fetch_google_certs_timeout",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_fetch_google_certs_timeout()"
     },
     {
@@ -5731,7 +5731,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_fetch_google_certs_success",
       "community": 74,
-      "community_name": "get_password_hash",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_fetch_google_certs_success()"
     },
     {
@@ -6181,8 +6181,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "parametrize",
-      "community": 30,
-      "community_name": "test_profile_editing.py",
+      "community": 83,
+      "community_name": "test_candidate_patch_rejects_forbidden_fields",
       "norm_label": "parametrize"
     },
     {
@@ -6192,8 +6192,8 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "backend_tests_routers_test_profile_editing_test_candidate_patch_rejects_forbidden_fields",
-      "community": 30,
-      "community_name": "test_profile_editing.py",
+      "community": 83,
+      "community_name": "test_candidate_patch_rejects_forbidden_fields",
       "norm_label": "test_candidate_patch_rejects_forbidden_fields()"
     },
     {
@@ -6203,8 +6203,8 @@
       "source_location": "L278",
       "_origin": "ast",
       "id": "backend_tests_routers_test_profile_editing_test_recruiter_patch_rejects_forbidden_fields",
-      "community": 30,
-      "community_name": "test_profile_editing.py",
+      "community": 83,
+      "community_name": "test_candidate_patch_rejects_forbidden_fields",
       "norm_label": "test_recruiter_patch_rejects_forbidden_fields()"
     },
     {
@@ -6423,8 +6423,8 @@
       "source_location": "L256",
       "_origin": "ast",
       "id": "backend_tests_routers_test_profile_editing_rationale_256",
-      "community": 30,
-      "community_name": "test_profile_editing.py",
+      "community": 83,
+      "community_name": "test_candidate_patch_rejects_forbidden_fields",
       "norm_label": "patch endpoint rejects unknown/forbidden fields with 422 unprocessable entity."
     },
     {
@@ -6434,8 +6434,8 @@
       "source_location": "L279",
       "_origin": "ast",
       "id": "backend_tests_routers_test_profile_editing_rationale_279",
-      "community": 30,
-      "community_name": "test_profile_editing.py",
+      "community": 83,
+      "community_name": "test_candidate_patch_rejects_forbidden_fields",
       "norm_label": "patch endpoint rejects unknown/forbidden fields with 422 unprocessable entity."
     },
     {
@@ -7149,8 +7149,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_test_auth",
-      "community": 74,
-      "community_name": "get_password_hash",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "tests/test_auth.py"
     },
     {
@@ -7160,8 +7160,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "backend_tests_test_auth_test_signup_success",
-      "community": 74,
-      "community_name": "get_password_hash",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "test_signup_success()"
     },
     {
@@ -7171,8 +7171,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_tests_test_auth_test_signup_existing_email",
-      "community": 74,
-      "community_name": "get_password_hash",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "test_signup_existing_email()"
     },
     {
@@ -7182,8 +7182,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "test_firebase_auth.py"
     },
     {
@@ -7193,8 +7193,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_existing_firebase_uid",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "test_get_current_user_existing_firebase_uid()"
     },
     {
@@ -7204,8 +7204,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_dev_transition_linking",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "test_get_current_user_dev_transition_linking()"
     },
     {
@@ -7215,8 +7215,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_no_email_claim_does_not_link",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "test_get_current_user_no_email_claim_does_not_link()"
     },
     {
@@ -7226,8 +7226,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_jit_provisioning",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "test_get_current_user_jit_provisioning()"
     },
     {
@@ -7237,8 +7237,8 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_missing_uid_claim",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "test_get_current_user_missing_uid_claim()"
     },
     {
@@ -7248,8 +7248,8 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_require_recruiter_guard",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "test_require_recruiter_guard()"
     },
     {
@@ -7259,8 +7259,8 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_require_candidate_guard",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "test_require_candidate_guard()"
     },
     {
@@ -7270,7 +7270,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_api_me_endpoint",
-      "community": 68,
+      "community": 6,
       "community_name": "User",
       "norm_label": "test_api_me_endpoint()"
     },
@@ -7282,7 +7282,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_verify_firebase_id_token_empty",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "test_verify_firebase_id_token_empty()"
     },
     {
@@ -7293,7 +7293,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_verify_firebase_id_token_uninitialized_service",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "test_verify_firebase_id_token_uninitialized_service()"
     },
     {
@@ -7303,8 +7303,8 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_firebase_admin_app_base64_decoding",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "test_get_firebase_admin_app_base64_decoding()"
     },
     {
@@ -7315,7 +7315,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_verify_firebase_id_token_passes_clock_skew",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "test_verify_firebase_id_token_passes_clock_skew()"
     },
     {
@@ -7326,7 +7326,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_verify_firebase_id_token_custom_clock_skew",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "test_verify_firebase_id_token_custom_clock_skew()"
     },
     {
@@ -7337,7 +7337,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_verify_firebase_id_token_token_used_too_early_error",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "test_verify_firebase_id_token_token_used_too_early_error()"
     },
     {
@@ -7348,7 +7348,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_verify_firebase_id_token_expired_error",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "test_verify_firebase_id_token_expired_error()"
     },
     {
@@ -7359,7 +7359,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_verify_firebase_id_token_revoked_error",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "test_verify_firebase_id_token_revoked_error()"
     },
     {
@@ -7369,8 +7369,8 @@
       "source_location": "L268",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_google_auth_jwt_clock_skew_tolerance",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "test_google_auth_jwt_clock_skew_tolerance()"
     },
     {
@@ -7380,8 +7380,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_13",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "verifies that a user with an existing firebase_uid is resolved directly."
     },
     {
@@ -7391,8 +7391,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_35",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "verifies that an existing dev user matching email is linked to the firebase uid."
     },
     {
@@ -7402,8 +7402,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_57",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "verifies that if the token lacks an email claim, it does not link to existing..."
     },
     {
@@ -7413,8 +7413,8 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_80",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "verifies that a new firebase user is automatically jit-provisioned in..."
     },
     {
@@ -7424,8 +7424,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_95",
-      "community": 68,
-      "community_name": "User",
+      "community": 75,
+      "community_name": "get_current_user",
       "norm_label": "verifies that a token without a uid claim is rejected with http 401."
     },
     {
@@ -7435,8 +7435,8 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_104",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "verifies that require_recruiter accepts recruiters and rejects non-recruiters..."
     },
     {
@@ -7446,8 +7446,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_121",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "verifies that require_candidate accepts candidates and rejects non-candidates..."
     },
     {
@@ -7457,7 +7457,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_133",
-      "community": 68,
+      "community": 6,
       "community_name": "User",
       "norm_label": "verifies get /api/auth/me returns postgresql user info when authenticated via..."
     },
@@ -7469,7 +7469,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_158",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies that an empty or non-string token raises http 401."
     },
     {
@@ -7480,7 +7480,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_167",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies that if firebase admin fails to initialize, verify_id_token raises..."
     },
     {
@@ -7490,8 +7490,8 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_175",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "verifies that base64-encoded credentials json is successfully decoded."
     },
     {
@@ -7502,7 +7502,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_211",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies that verify_firebase_id_token forwards clock_skew_seconds=5 to..."
     },
     {
@@ -7513,7 +7513,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_222",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies that verify_firebase_id_token allows custom clock_skew_seconds..."
     },
     {
@@ -7524,7 +7524,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_233",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies that auth.invalididtokenerror for future timestamp outside tolerance..."
     },
     {
@@ -7535,7 +7535,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_245",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies that auth.expiredidtokenerror raises http 401."
     },
     {
@@ -7546,7 +7546,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_257",
       "community": 68,
-      "community_name": "User",
+      "community_name": "verify_firebase_id_token",
       "norm_label": "verifies that auth.revokedidtokenerror raises http 401."
     },
     {
@@ -7556,8 +7556,8 @@
       "source_location": "L269",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_269",
-      "community": 68,
-      "community_name": "User",
+      "community": 9,
+      "community_name": "candidate.py",
       "norm_label": "directly verifies google auth jwt validation with clock_skew_in_seconds=5."
     },
     {
@@ -7710,8 +7710,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_test_recruiter",
-      "community": 9,
-      "community_name": "candidate.py",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "backend/tests/test_recruiter.py"
     },
     {
@@ -7721,8 +7721,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "backend_tests_test_recruiter_test_create_job_description_success",
-      "community": 9,
-      "community_name": "candidate.py",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "test_create_job_description_success()"
     },
     {
@@ -7732,8 +7732,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "backend_tests_test_recruiter_test_create_job_description_minimal",
-      "community": 9,
-      "community_name": "candidate.py",
+      "community": 6,
+      "community_name": "User",
       "norm_label": "test_create_job_description_minimal()"
     },
     {
@@ -7744,7 +7744,7 @@
       "_origin": "ast",
       "id": "backend_tests_test_recruiter_test_get_recruiter_stats_malformed_experience",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "test_get_recruiter_stats_malformed_experience()"
     },
     {
@@ -8488,7 +8488,7 @@
       "label": "initAuthListener()",
       "file_type": "code",
       "source_file": "frontend/assets/js/auth.js",
-      "source_location": "L317",
+      "source_location": "L324",
       "_origin": "ast",
       "id": "frontend_assets_js_auth_initauthlistener",
       "community": 21,
@@ -8815,6 +8815,17 @@
       "norm_label": "messages"
     },
     {
+      "label": "js/firebase-config.js",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/firebase-config.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_assets_js_firebase_config",
+      "community": 84,
+      "community_name": "firebaseConfig",
+      "norm_label": "js/firebase-config.js"
+    },
+    {
       "label": "firebase-init.js",
       "file_type": "code",
       "source_file": "frontend/assets/js/firebase-init.js",
@@ -9096,8 +9107,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_login_showforgotpasswordview",
-      "community": 20,
-      "community_name": "state.js",
+      "community": 21,
+      "community_name": "login.js",
       "norm_label": "showforgotpasswordview()"
     },
     {
@@ -9437,8 +9448,8 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_signup_initializesignuppage",
-      "community": 73,
-      "community_name": "app.js",
+      "community": 21,
+      "community_name": "login.js",
       "norm_label": "initializesignuppage()"
     },
     {
@@ -9778,8 +9789,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "frontend_assets_js_utils_sanitizeurl",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 21,
+      "community_name": "login.js",
       "norm_label": "sanitizeurl()"
     },
     {
@@ -11862,6 +11873,28 @@
       "norm_label": "firebaseconfig"
     },
     {
+      "label": "frontend/firebase-config.js",
+      "file_type": "code",
+      "source_file": "frontend/firebase-config.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_firebase_config",
+      "community": 84,
+      "community_name": "firebaseConfig",
+      "norm_label": "frontend/firebase-config.js"
+    },
+    {
+      "label": "firebaseConfig",
+      "file_type": "code",
+      "source_file": "frontend/firebase-config.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_firebase_config_firebaseconfig",
+      "community": 84,
+      "community_name": "firebaseConfig",
+      "norm_label": "firebaseconfig"
+    },
+    {
       "label": "package.json",
       "file_type": "code",
       "source_file": "package.json",
@@ -12049,6 +12082,127 @@
       "norm_label": "tailwind.config.js"
     },
     {
+      "label": "test_frontend_assets.py",
+      "file_type": "code",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "test_frontend_assets.py"
+    },
+    {
+      "label": "test_firebase_config_exists_and_valid()",
+      "file_type": "code",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_test_firebase_config_exists_and_valid",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "test_firebase_config_exists_and_valid()"
+    },
+    {
+      "label": "test_firebase_config_not_ignored_in_gitignore()",
+      "file_type": "code",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_test_firebase_config_not_ignored_in_gitignore",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "test_firebase_config_not_ignored_in_gitignore()"
+    },
+    {
+      "label": "test_firebase_json_configuration()",
+      "file_type": "code",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_test_firebase_json_configuration",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "test_firebase_json_configuration()"
+    },
+    {
+      "label": "test_html_entrypoints_reference_existing_scripts()",
+      "file_type": "code",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_test_html_entrypoints_reference_existing_scripts",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "test_html_entrypoints_reference_existing_scripts()"
+    },
+    {
+      "label": "test_javascript_relative_imports_resolve()",
+      "file_type": "code",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_test_javascript_relative_imports_resolve",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "test_javascript_relative_imports_resolve()"
+    },
+    {
+      "label": "Verify frontend/firebase-config.js exists and is valid JavaScript exporting\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_rationale_10",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "verify frontend/firebase-config.js exists and is valid javascript exporting..."
+    },
+    {
+      "label": "Verify that frontend/firebase-config.js is not ignored by .gitignore.",
+      "file_type": "rationale",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_rationale_24",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "verify that frontend/firebase-config.js is not ignored by .gitignore."
+    },
+    {
+      "label": "Verify firebase.json hosting settings, headers, and rewrite safety.",
+      "file_type": "rationale",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_rationale_32",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "verify firebase.json hosting settings, headers, and rewrite safety."
+    },
+    {
+      "label": "Verify that all script tags in HTML files reference files that exist on disk.",
+      "file_type": "rationale",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_rationale_53",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "verify that all script tags in html files reference files that exist on disk."
+    },
+    {
+      "label": "Verify that static relative imports in local frontend JS files resolve to\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "tests_test_frontend_assets_rationale_76",
+      "community": 79,
+      "community_name": "test_frontend_assets.py",
+      "norm_label": "verify that static relative imports in local frontend js files resolve to..."
+    },
+    {
       "label": "tests/test_recruiter.py",
       "file_type": "code",
       "source_file": "tests/test_recruiter.py",
@@ -12056,7 +12210,7 @@
       "_origin": "ast",
       "id": "tests_test_recruiter",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "tests/test_recruiter.py"
     },
     {
@@ -12067,7 +12221,7 @@
       "_origin": "ast",
       "id": "tests_test_recruiter_test_get_recruiter_stats_empty_scans",
       "community": 6,
-      "community_name": "get_recruiter_stats",
+      "community_name": "User",
       "norm_label": "test_get_recruiter_stats_empty_scans()"
     },
     {
@@ -35791,7 +35945,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/auth.js",
-      "source_location": "L317",
+      "source_location": "L324",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_auth",
@@ -36029,7 +36183,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/auth.js",
-      "source_location": "L333",
+      "source_location": "L340",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_auth_initauthlistener",
@@ -36101,7 +36255,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/auth.js",
-      "source_location": "L282",
+      "source_location": "L289",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_auth_docheckauthstatus",
@@ -36114,7 +36268,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/auth.js",
-      "source_location": "L298",
+      "source_location": "L305",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_auth_docheckauthstatus",
@@ -36150,7 +36304,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/auth.js",
-      "source_location": "L331",
+      "source_location": "L338",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_auth_initauthlistener",
@@ -36162,7 +36316,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/auth.js",
-      "source_location": "L326",
+      "source_location": "L333",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_auth_initauthlistener",
@@ -37049,6 +37203,30 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/firebase-config.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_assets_js_firebase_config",
+      "target": "frontend_firebase_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/firebase-config.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_assets_js_firebase_config",
+      "target": "frontend_firebase_config_firebaseconfig",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/firebase-init.js",
@@ -37079,6 +37257,18 @@
       "_origin": "ast",
       "source": "frontend_assets_js_firebase_init",
       "target": "frontend_assets_js_firebase_init_googleprovider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/firebase-init.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_assets_js_firebase_init",
+      "target": "frontend_firebase_config_firebaseconfig",
       "confidence_score": 1.0
     },
     {
@@ -43365,6 +43555,17 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/firebase-config.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_firebase_config",
+      "target": "frontend_firebase_config_firebaseconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "package.json",
       "source_location": "L3",
       "weight": 1.0,
@@ -43530,6 +43731,116 @@
       "_origin": "ast",
       "source": "package_devdependencies_tailwindcss",
       "target": "tailwindcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets",
+      "target": "tests_test_frontend_assets_test_firebase_config_exists_and_valid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets",
+      "target": "tests_test_frontend_assets_test_firebase_config_not_ignored_in_gitignore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets",
+      "target": "tests_test_frontend_assets_test_firebase_json_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets",
+      "target": "tests_test_frontend_assets_test_html_entrypoints_reference_existing_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets",
+      "target": "tests_test_frontend_assets_test_javascript_relative_imports_resolve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets_rationale_10",
+      "target": "tests_test_frontend_assets_test_firebase_config_exists_and_valid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets_rationale_24",
+      "target": "tests_test_frontend_assets_test_firebase_config_not_ignored_in_gitignore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets_rationale_32",
+      "target": "tests_test_frontend_assets_test_firebase_json_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets_rationale_53",
+      "target": "tests_test_frontend_assets_test_html_entrypoints_reference_existing_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_frontend_assets.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_frontend_assets_rationale_76",
+      "target": "tests_test_frontend_assets_test_javascript_relative_imports_resolve",
       "confidence_score": 1.0
     },
     {
@@ -45642,5 +45953,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "852bfedd8eb9fb836c0321e6a1ad7a52b6eaec80"
+  "built_at_commit": "0743707dd056ae25d6ab7cec726de18b46ea6995"
 }
