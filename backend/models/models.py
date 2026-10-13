@@ -13,6 +13,7 @@ class User(Base):
     hashed_password = Column(String(255), nullable=True)
     role = Column(SQLEnum(UserRole, native_enum=False), nullable=True, default=UserRole.UNASSIGNED)
     profile_completed = Column(Boolean, default=False, nullable=False)
+    display_name = Column(String(255), nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
 
     # Relationships

@@ -61,7 +61,7 @@ async function _executeRequest(endpoint, options = {}, isRetry = false) {
         headers["Content-Type"] = "application/json";
     }
 
-    const timeout = options.timeout || 15000; // 15 seconds default timeout
+    const timeout = options.timeout || 30000; // 30 seconds default timeout
     const controller = new AbortController();
     const timerId = setTimeout(() => controller.abort(), timeout);
 
@@ -73,71 +73,83 @@ async function _executeRequest(endpoint, options = {}, isRetry = false) {
 
     const url = endpoint.startsWith("http") ? endpoint : `${API_BASE}${endpoint}`;
 
+    let response;
     try {
-        const response = await fetch(url, config);
+        response = await fetch(url, config);
         clearTimeout(timerId);
-
-        // Controlled 401 Token Refresh & Retry Handling (Single Controlled Attempt, No Recursion)
-        if (response.status === 401) {
-            if (!isRetry && auth.currentUser) {
-                try {
-                    // Force refresh token from Firebase server
-                    const freshToken = await auth.currentUser.getIdToken(true);
-                    state.setToken(freshToken);
-                    return await request(endpoint, options, true);
-                } catch (refreshErr) {
-                    console.error("Firebase token force-refresh failed on 401:", refreshErr);
-                }
-            }
-
-            // Persistent failure or no user session: clear local state and sign out
-            state.clearState();
-            try {
-                await signOut(auth);
-            } catch (signOutErr) {
-                console.warn("Sign out on 401 failed:", signOutErr);
-            }
-            const currentPath = window.location.pathname.toLowerCase();
-            if (!currentPath.endsWith('index.html') && currentPath !== '/' && currentPath !== '') {
-                window.location.href = 'index.html#/login';
-            } else {
-                window.location.hash = "#/login";
-            }
-            throw new Error("Session expired. Please log in again.");
-        }
-
-        if (!response.ok) {
-            // Handle HTTP errors (500, 502, 503, etc.)
-            if (response.status >= 500) {
-                showOfflineBanner("Database or Server is currently undergoing maintenance. Please try again later.");
-            }
-        } else {
-            hideOfflineBanner();
-        }
-
-        const contentType = response.headers.get("content-type");
-        let data;
-        if (contentType && contentType.includes("application/json")) {
-            data = await response.json();
-        } else {
-            data = await response.text();
-        }
-
-        if (!response.ok) {
-            const message = (data && data.detail) || data || "Request failed";
-            throw new Error(message);
-        }
-
-        return data;
     } catch (error) {
         clearTimeout(timerId);
         if (error.name === "AbortError") {
             throw new Error("Request timed out");
         }
-        // Handle network/connection failure
+        // Handle actual network/connection failure
         showOfflineBanner("Cannot connect to server. The backend may be starting up (cold start) or your connection is offline.");
         throw error;
     }
+
+    // Controlled 401 Token Refresh & Retry Handling (Single Controlled Attempt, No Recursion)
+    if (response.status === 401) {
+        if (!isRetry && auth.currentUser) {
+            try {
+                // Force refresh token from Firebase server
+                const freshToken = await auth.currentUser.getIdToken(true);
+                state.setToken(freshToken);
+                return await request(endpoint, options, true);
+            } catch (refreshErr) {
+                console.error("Firebase token force-refresh failed on 401:", refreshErr);
+            }
+        }
+
+        // Persistent failure or no user session: clear local state and sign out
+        state.clearState();
+        try {
+            await signOut(auth);
+        } catch (signOutErr) {
+            console.warn("Sign out on 401 failed:", signOutErr);
+        }
+        const currentPath = window.location.pathname.toLowerCase();
+        if (!currentPath.endsWith('index.html') && currentPath !== '/' && currentPath !== '') {
+            window.location.href = 'index.html#/login';
+        } else {
+            window.location.hash = "#/login";
+        }
+        throw new Error("Session expired. Please log in again.");
+    }
+
+    if (!response.ok) {
+        // Handle HTTP errors (500, 502, 503, etc.)
+        if (response.status >= 500) {
+            showOfflineBanner("Database or Server is currently undergoing maintenance. Please try again later.");
+        }
+    } else {
+        hideOfflineBanner();
+    }
+
+    const contentType = response.headers.get("content-type");
+    let data;
+    if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+    } else {
+        data = await response.text();
+    }
+
+    if (!response.ok) {
+        let message = "Request failed";
+        if (data && data.detail) {
+            if (typeof data.detail === "string") {
+                message = data.detail;
+            } else if (Array.isArray(data.detail)) {
+                message = data.detail.map(d => d.msg || JSON.stringify(d)).join(", ");
+            } else if (typeof data.detail === "object") {
+                message = JSON.stringify(data.detail);
+            }
+        } else if (typeof data === "string") {
+            message = data;
+        }
+        throw new Error(message);
+    }
+
+    return data;
 }
 
 /**
@@ -286,6 +298,26 @@ export async function getProfile() {
 }
 
 /**
+ * PATCH /api/candidate/profile
+ */
+export async function updateCandidateProfile(data) {
+    return request(API_ENDPOINTS.CANDIDATE_PROFILE, {
+        method: "PATCH",
+        body: JSON.stringify(data)
+    });
+}
+
+/**
+ * PATCH /api/recruiter/profile
+ */
+export async function updateRecruiterProfile(data) {
+    return request(API_ENDPOINTS.RECRUITER_PROFILE, {
+        method: "PATCH",
+        body: JSON.stringify(data)
+    });
+}
+
+/**
  * GET /api/recruiter/stats
  */
 export async function getRecruiterStats() {
@@ -314,7 +346,8 @@ export async function submitOnboarding(payload) {
 export async function screenResumes(formData) {
     return request(API_ENDPOINTS.PROCESS, {
         method: "POST",
-        body: formData
+        body: formData,
+        timeout: 120000 // 2 minutes timeout for AI resume parsing & scoring
     });
 }
 
@@ -324,7 +357,8 @@ export async function screenResumes(formData) {
 export async function screenResumesRecruiter(formData) {
     return request(API_ENDPOINTS.PROCESS_RECRUITER, {
         method: "POST",
-        body: formData
+        body: formData,
+        timeout: 180000 // 3 minutes timeout for batch recruiter resume screening & ranking
     });
 }
 
@@ -343,7 +377,8 @@ export async function getCandidateStats() {
 export async function screenResumeCandidate(formData) {
     return request(API_ENDPOINTS.CANDIDATE_PROCESS, {
         method: "POST",
-        body: formData
+        body: formData,
+        timeout: 120000 // 2 minutes timeout for candidate resume AI processing
     });
 }
 

@@ -1,3 +1,83 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Universal Dark Theme for Form Selects & Option Lists */
+select {
+  color-scheme: dark;
+}
+
+select option,
+select optgroup {
+  background-color: #0b0f19;
+  color: #f8fafc;
+}
+
+/* Recruiter screening workspace dropdowns */
+.rec-dropdown-select,
+#rec-profile-select,
+#rec-jd-select {
+  width: 100%;
+  padding: 0.85rem 2.5rem 0.85rem 1rem;
+  border-radius: 10px;
+  background-color: #0c101d;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px 16px;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color-scheme: dark;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rec-dropdown-select:hover,
+#rec-profile-select:hover,
+#rec-jd-select:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: #111728;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.rec-dropdown-select:focus,
+#rec-profile-select:focus,
+#rec-jd-select:focus {
+  border-color: #10b981;
+  background-color: #111728;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2), 0 4px 20px rgba(0, 0, 0, 0.4);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.rec-dropdown-select option,
+#rec-profile-select option,
+#rec-jd-select option {
+  background-color: #0b0f19 !important;
+  color: #f8fafc !important;
+  font-size: 0.92rem;
+  padding: 0.75rem 1rem;
+  font-weight: 400;
+}
+
+.rec-dropdown-select option:hover,
+.rec-dropdown-select option:focus,
+.rec-dropdown-select option:checked,
+#rec-profile-select option:hover,
+#rec-profile-select option:focus,
+#rec-profile-select option:checked,
+#rec-jd-select option:hover,
+#rec-jd-select option:focus,
+#rec-jd-select option:checked {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+

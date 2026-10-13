@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
 from typing import Optional
 from datetime import datetime
 from backend.models.enums import UserRole, CompanyType
@@ -23,6 +23,7 @@ class TokenData(BaseModel):
 class UserResponse(BaseModel):
     id: int
     email: EmailStr
+    display_name: Optional[str] = None
     role: Optional[UserRole] = None
     profile_completed: bool
     created_at: datetime
@@ -56,6 +57,7 @@ class CandidateProfileResponse(BaseModel):
 class UserProfileResponse(BaseModel):
     id: int
     email: EmailStr
+    display_name: Optional[str] = None
     role: Optional[UserRole] = None
     profile_completed: bool
     created_at: datetime
@@ -65,6 +67,53 @@ class UserProfileResponse(BaseModel):
     class Config:
         from_attributes = True
         orm_mode = True
+
+class CandidateProfileUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    display_name: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    current_status: Optional[str] = Field(default=None, min_length=1, max_length=100)
+    field_of_study: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    current_domain: Optional[str] = Field(default=None, min_length=1, max_length=255)
+
+    @field_validator("display_name", "current_status", "field_of_study", "current_domain", mode="before")
+    @classmethod
+    def validate_and_strip(cls, v, info):
+        if v is None:
+            raise ValueError(f"{info.field_name} cannot be null")
+        if isinstance(v, str):
+            stripped = v.strip()
+            if not stripped:
+                raise ValueError(f"{info.field_name} cannot be empty or contain only whitespace")
+            return stripped
+        return v
+
+class RecruiterProfileUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    display_name: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    company_name: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    company_type: Optional[CompanyType] = None
+    hiring_domain: Optional[str] = Field(default=None, min_length=1, max_length=100)
+
+    @field_validator("display_name", "company_name", "hiring_domain", mode="before")
+    @classmethod
+    def validate_and_strip(cls, v, info):
+        if v is None:
+            raise ValueError(f"{info.field_name} cannot be null")
+        if isinstance(v, str):
+            stripped = v.strip()
+            if not stripped:
+                raise ValueError(f"{info.field_name} cannot be empty or contain only whitespace")
+            return stripped
+        return v
+
+    @field_validator("company_type", mode="before")
+    @classmethod
+    def validate_company_type(cls, v):
+        if v is None:
+            raise ValueError("company_type cannot be null")
+        return v
 
 class OnboardingStatusResponse(BaseModel):
     profile_completed: bool

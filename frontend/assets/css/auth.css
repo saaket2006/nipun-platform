@@ -118,11 +118,17 @@
     font-size: 1rem;
     outline: none;
     transition: all 0.3s;
+    color-scheme: dark;
 }
 
 .auth-input:focus {
     border-color: var(--accent);
     background: rgba(255, 255, 255, 0.05);
+}
+
+select.auth-input option {
+    background-color: #0b0f19;
+    color: #f8fafc;
 }
 
 /* Chrome/Safari Autofill fix */

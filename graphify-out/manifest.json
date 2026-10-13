@@ -90,8 +90,8 @@
     "semantic_hash": "95c3103460cace0190f86e10029cdc55"
   },
   "backend/models/models.py": {
-    "mtime": 1789465397.404082,
-    "ast_hash": "fee1b27fab22a91a58a6bc5d1a90b06e",
+    "mtime": 1789793814.903239,
+    "ast_hash": "ee23fa318ca24c051aa8ba780e57ebe1",
     "semantic_hash": ""
   },
   "backend/routers/__init__.py": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "backend/routers/candidate.py": {
-    "mtime": 1789013154.438434,
-    "ast_hash": "da1f2c05f9fb5e60b70c34cd530fc65f",
+    "mtime": 1789793869.2958093,
+    "ast_hash": "4ce011fd6ff0c801d63bb5120b879808",
     "semantic_hash": ""
   },
   "backend/routers/onboarding.py": {
@@ -115,13 +115,13 @@
     "semantic_hash": "90710c426dad69a6f5672caee4d41eac"
   },
   "backend/routers/recruiter.py": {
-    "mtime": 1788945873.9928281,
-    "ast_hash": "e1580db615a98267cf4a5be01545e6b5",
+    "mtime": 1789793888.4984784,
+    "ast_hash": "457166e68bf74c10fc7f806a703e5705",
     "semantic_hash": ""
   },
   "backend/schemas/schemas.py": {
-    "mtime": 1789028085.1371233,
-    "ast_hash": "97c040009795c845883158a4bd48233e",
+    "mtime": 1789793847.1559587,
+    "ast_hash": "c5a52b9aa938db1118ec783bae7393f3",
     "semantic_hash": ""
   },
   "backend/services/__init__.py": {
@@ -335,8 +335,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/api.js": {
-    "mtime": 1789548522.3977659,
-    "ast_hash": "37b3bc77887fffde2690046eadbe8c9d",
+    "mtime": 1791879989.8692005,
+    "ast_hash": "bb78fa619b9d49fa4165c8723cc0427f",
     "semantic_hash": ""
   },
   "frontend/assets/js/app.js": {
@@ -375,9 +375,9 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/components/profileSection.js": {
-    "mtime": 1785194413.7514222,
-    "ast_hash": "d5d04003d4e465c620dc43a7f8b41e1f",
-    "semantic_hash": "d5d04003d4e465c620dc43a7f8b41e1f"
+    "mtime": 1789794014.1637192,
+    "ast_hash": "3be0f2ead3693280e354a340f2b8a916",
+    "semantic_hash": ""
   },
   "frontend/assets/js/components/sidebar.js": {
     "mtime": 1785194413.7514222,
@@ -390,8 +390,8 @@
     "semantic_hash": "bbba0e37468f8672e6e7adb9246226e9"
   },
   "frontend/assets/js/constants.js": {
-    "mtime": 1789028396.736189,
-    "ast_hash": "d514446de9b2a262eb520335e0e5a34d",
+    "mtime": 1789793983.2396364,
+    "ast_hash": "2396bd5482093e10c21ff0f0f40807bd",
     "semantic_hash": ""
   },
   "frontend/assets/js/landing.js": {
@@ -405,8 +405,8 @@
     "semantic_hash": "5ce9076f5cceaa3f0455596f152ccdf8"
   },
   "frontend/assets/js/pages/candidate.js": {
-    "mtime": 1789548601.8399587,
-    "ast_hash": "a0f347e1d9e573c770eed8c9b83528e5",
+    "mtime": 1789794114.133661,
+    "ast_hash": "4aaff5daec04dd12b9f761eaacd22dc8",
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/login.js": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/recruiter.js": {
-    "mtime": 1789548637.954806,
-    "ast_hash": "158386b2940ef3dd68a49bef668d571c",
+    "mtime": 1789794138.2866402,
+    "ast_hash": "cf7a1e85dcbd21f937e69a3714a37dc9",
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/signup.js": {
@@ -605,13 +605,13 @@
     "semantic_hash": ""
   },
   "frontend/candidate.html": {
-    "mtime": 1789017190.1839669,
-    "ast_hash": "f84100a5f7d4cb171dece66e0e26ec81",
+    "mtime": 1791880055.6119666,
+    "ast_hash": "c2827dffd975af9a7edde79ee381e6a0",
     "semantic_hash": ""
   },
   "frontend/index.html": {
-    "mtime": 1789623109.5261347,
-    "ast_hash": "3f2308521e9ac97780ab19603ae7f145",
+    "mtime": 1789794047.1622787,
+    "ast_hash": "49ac5d2d23b390bdaa3b59770c71eed5",
     "semantic_hash": ""
   },
   "frontend/onboarding.html": {
@@ -620,13 +620,8 @@
     "semantic_hash": ""
   },
   "frontend/recruiter.html": {
-    "mtime": 1789017184.8295877,
-    "ast_hash": "10a7a6df37fe759feb51c51278ba2a34",
-    "semantic_hash": ""
-  },
-  "report.md": {
-    "mtime": 1789013154.4518828,
-    "ast_hash": "3c4b42270f042739f6c5ea84c957656f",
+    "mtime": 1791880024.3904617,
+    "ast_hash": "897091d4863b6d716999ceabae0d8482",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -687,6 +682,61 @@
   "backend/tests/test_skill_extractor.py": {
     "mtime": 1789189486.7005196,
     "ast_hash": "36a3b2dba1475b861251385542e24588",
+    "semantic_hash": ""
+  },
+  "alembic/versions/84672722c881_add_display_name_to_users.py": {
+    "mtime": 1789793780.4879785,
+    "ast_hash": "039f2ca6fb4063c8dc9f8e5c6234fbdc",
+    "semantic_hash": ""
+  },
+  "backend/tests/routers/test_profile_editing.py": {
+    "mtime": 1789793951.5811622,
+    "ast_hash": "adede6c58435e90c6460476a5364531b",
+    "semantic_hash": ""
+  },
+  ".agents/rules/architecture-documentation.md": {
+    "mtime": 1789888686.372619,
+    "ast_hash": "3613ba1985dbb9cbbc2f3a35102ef670",
+    "semantic_hash": ""
+  },
+  ".agents/skills/api-design-principles/SKILL.md": {
+    "mtime": 1789888979.326885,
+    "ast_hash": "6af9fab969352c87343ab3e7fade135d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/api-design-principles/resources/implementation-playbook.md": {
+    "mtime": 1789886680.3423626,
+    "ast_hash": "55821e168de730f152abaf93ceaa15e5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/backend-architect/SKILL.md": {
+    "mtime": 1789889271.546354,
+    "ast_hash": "1704503fb44003f09dadf6ae1a163053",
+    "semantic_hash": ""
+  },
+  ".agents/skills/database-architect/SKILL.md": {
+    "mtime": 1789887796.213993,
+    "ast_hash": "286610bbe3294b934969672be7e02329",
+    "semantic_hash": ""
+  },
+  ".agents/skills/docs-architect/SKILL.md": {
+    "mtime": 1789887904.805199,
+    "ast_hash": "ae017ca35cb6f9d8e86679015795d527",
+    "semantic_hash": ""
+  },
+  ".agents/skills/frontend-developer/SKILL.md": {
+    "mtime": 1789888321.2058034,
+    "ast_hash": "63b1af10273e2baf496f32760b86fea0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/security_auditor/SKILL.md": {
+    "mtime": 1789889319.2738347,
+    "ast_hash": "c793acf063e1c49f8191a7b2e9fdcf28",
+    "semantic_hash": ""
+  },
+  ".agents/skills/ui-ux-designer/SKILL.md": {
+    "mtime": 1789888262.4510858,
+    "ast_hash": "023e246d52082c81fbcc64b5481fbfca",
     "semantic_hash": ""
   }
 }

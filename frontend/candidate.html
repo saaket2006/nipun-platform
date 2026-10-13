@@ -10,16 +10,16 @@
     <!-- Preload critical font weight so the browser loads it immediately without FOUT -->
     <link rel="preload" href="assets/fonts/Outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Self-hosted Outfit font declarations with font-display: block -->
-    <link rel="stylesheet" href="assets/css/tailwind.min.css">
-    <link rel="stylesheet" href="assets/css/fonts.css">
-    <link rel="stylesheet" href="assets/css/design-tokens.css">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/ats.css">
-    <link rel="stylesheet" href="assets/css/auth.css">
-    <link rel="stylesheet" href="assets/css/onboarding.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/recruiter.css">
-    <link rel="stylesheet" href="assets/css/landing.css">
+    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/base.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/ats.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/auth.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/onboarding.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/components.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/recruiter.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/landing.css?v=2.1">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -144,14 +144,22 @@
                 <!-- VIEW 3: MY PROFILE -->
                 <section id="cand-view-profile" class="rec-view hidden">
                     <div class="glass-card profile-details-card">
-                        <div class="profile-card-header">
-                            <div class="profile-avatar">👤</div>
-                            <div class="profile-meta">
-                                <h3 id="profile-cand-name">Candidate Name</h3>
-                                <p id="profile-cand-email">candidate@email.com</p>
+                        <div class="profile-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                <div class="profile-avatar">👤</div>
+                                <div class="profile-meta">
+                                    <h3 id="profile-cand-name">Candidate Name</h3>
+                                    <p id="profile-cand-email">candidate@email.com</p>
+                                </div>
                             </div>
+                            <button id="cand-edit-profile-btn" class="glow-btn secondary" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">Edit Profile</button>
                         </div>
-                        <div class="profile-info-grid">
+
+                        <!-- Feedback Message Banner -->
+                        <div id="cand-profile-feedback" class="hidden" style="margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500;"></div>
+
+                        <!-- Read-Only Profile Display -->
+                        <div id="cand-profile-display" class="profile-info-grid">
                             <div class="info-field">
                                 <span class="info-label">Current Role</span>
                                 <span class="info-value">Candidate</span>
@@ -173,6 +181,39 @@
                                 <span class="info-value" id="profile-cand-joined">N/A</span>
                             </div>
                         </div>
+
+                        <!-- Profile Edit Form -->
+                        <form id="cand-profile-edit-form" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div class="profile-info-grid">
+                                <div class="info-field">
+                                    <label for="cand-edit-display-name" class="info-label">Display Name</label>
+                                    <input type="text" id="cand-edit-display-name" class="auth-input" placeholder="Enter your display name" required maxlength="255">
+                                </div>
+                                <div class="info-field">
+                                    <label for="cand-edit-status" class="info-label">Current Status</label>
+                                    <select id="cand-edit-status" class="auth-input" required>
+                                        <option value="Student">Student</option>
+                                        <option value="Working Professional">Working Professional</option>
+                                        <option value="Career Switcher">Career Switcher</option>
+                                        <option value="Freelancer">Freelancer</option>
+                                        <option value="Job Seeker">Job Seeker</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="info-field">
+                                    <label for="cand-edit-field" class="info-label">Field of Study</label>
+                                    <input type="text" id="cand-edit-field" class="auth-input" placeholder="e.g. Computer Science" required maxlength="255">
+                                </div>
+                                <div class="info-field">
+                                    <label for="cand-edit-domain" class="info-label">Current Domain</label>
+                                    <input type="text" id="cand-edit-domain" class="auth-input" placeholder="e.g. Full Stack Development" required maxlength="255">
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 0.5rem;">
+                                <button type="button" id="cand-cancel-edit-btn" class="glow-btn secondary" style="padding: 0.6rem 1.5rem;">Cancel</button>
+                                <button type="submit" id="cand-save-profile-btn" class="glow-btn" style="padding: 0.6rem 1.5rem;">Save Changes</button>
+                            </div>
+                        </form>
                     </div>
                 </section>
             </main>
@@ -316,22 +357,7 @@
     </div>
 
 
-<!-- Name Change Modal -->
-    <div id="name-modal" class="auth-modal-overlay hidden">
-        <div class="glass-card auth-card">
-            <h2>Update Profile</h2>
-            <p>Set how your name appears in the system</p>
-            <form id="update-name-form">
-                <div class="form-group">
-                    <input type="text" id="new-display-name" required placeholder="Enter your name" class="auth-input">
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="glow-btn secondary" id="cancel-name-btn">Cancel</button>
-                    <button type="submit" class="glow-btn">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
+
 
 
 <!-- Contact Modal -->
@@ -353,8 +379,8 @@
     </div>
 
 
-<script type="module" src="assets/js/app.js"></script>
-    <script type="module" src="assets/js/landing.js"></script>
+    <script type="module" src="assets/js/app.js?v=2.1"></script>
+    <script type="module" src="assets/js/landing.js?v=2.1"></script>
 </body>
 
 </html>

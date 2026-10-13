@@ -346,7 +346,7 @@ export async function initializeRecruiterDashboard() {
         console.error("Error loading recruiter dashboard:", err);
         const user = state.getUser();
         if (dashRecName && (dashRecName.textContent === "..." || dashRecName.textContent === "Loading...")) {
-            dashRecName.textContent = user?.email?.split('@')[0] || "Recruiter";
+            dashRecName.textContent = user?.display_name || user?.email?.split('@')[0] || "Recruiter";
         }
         if (dashCompName && (dashCompName.textContent === "..." || dashCompName.textContent === "Loading...")) {
             dashCompName.textContent = "Unavailable";
@@ -361,11 +361,20 @@ export async function initializeRecruiterDashboard() {
 }
 
 
+let recProfileEventsBound = false;
+
 /**
  * Initializer for Recruiter Profile view.
  * Reuses shared profile state from Dashboard if already fetched.
  */
 export async function initializeRecruiterProfile() {
+    const feedbackEl = document.getElementById('rec-profile-feedback');
+    const displayContainer = document.getElementById('rec-profile-display');
+    const editForm = document.getElementById('rec-profile-edit-form');
+    const editBtn = document.getElementById('rec-edit-profile-btn');
+    const cancelBtn = document.getElementById('rec-cancel-edit-btn');
+    const saveBtn = document.getElementById('rec-save-profile-btn');
+
     try {
         let profile = state.getProfile();
         if (!profile) {
@@ -376,6 +385,124 @@ export async function initializeRecruiterProfile() {
     } catch (err) {
         console.error("Error loading recruiter profile:", err);
     }
+
+    if (!recProfileEventsBound) {
+        if (editBtn && displayContainer && editForm) {
+            editBtn.addEventListener('click', () => {
+                const currentProfile = state.getProfile();
+                populateRecruiterProfileUI(currentProfile);
+                if (feedbackEl) {
+                    feedbackEl.className = 'hidden';
+                    feedbackEl.textContent = '';
+                }
+                displayContainer.classList.add('hidden');
+                editForm.classList.remove('hidden');
+                editBtn.classList.add('hidden');
+                const nameInput = document.getElementById('rec-edit-display-name');
+                if (nameInput) nameInput.focus();
+            });
+        }
+
+        if (cancelBtn && displayContainer && editForm) {
+            cancelBtn.addEventListener('click', () => {
+                const currentProfile = state.getProfile();
+                populateRecruiterProfileUI(currentProfile);
+                if (feedbackEl) {
+                    feedbackEl.className = 'hidden';
+                    feedbackEl.textContent = '';
+                }
+                editForm.classList.add('hidden');
+                displayContainer.classList.remove('hidden');
+                if (editBtn) editBtn.classList.remove('hidden');
+            });
+        }
+
+        if (editForm) {
+            editForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const displayName = document.getElementById('rec-edit-display-name')?.value?.trim();
+                const compName = document.getElementById('rec-edit-comp-name')?.value?.trim();
+                const compType = document.getElementById('rec-edit-comp-type')?.value?.trim();
+                const hiringDomain = document.getElementById('rec-edit-hiring-domain')?.value?.trim();
+
+                if (!displayName) {
+                    showRecruiterProfileFeedback("Display name cannot be empty.", false);
+                    return;
+                }
+                if (!compName) {
+                    showRecruiterProfileFeedback("Company name cannot be empty.", false);
+                    return;
+                }
+                if (!compType) {
+                    showRecruiterProfileFeedback("Company type is required.", false);
+                    return;
+                }
+                if (!hiringDomain) {
+                    showRecruiterProfileFeedback("Hiring domain focus cannot be empty.", false);
+                    return;
+                }
+
+                if (saveBtn) {
+                    saveBtn.disabled = true;
+                    saveBtn.textContent = "Saving...";
+                }
+
+                try {
+                    const patchResponse = await api.updateRecruiterProfile({
+                        display_name: displayName,
+                        company_name: compName,
+                        company_type: compType,
+                        hiring_domain: hiringDomain
+                    });
+
+                    // Merge safely with existing profile state
+                    const existingProfile = state.getProfile() || {};
+                    const updatedProfile = {
+                        ...existingProfile,
+                        ...patchResponse,
+                        recruiter_profile: {
+                            ...(existingProfile.recruiter_profile || {}),
+                            ...(patchResponse.recruiter_profile || {})
+                        }
+                    };
+
+                    state.setProfile(updatedProfile);
+                    populateRecruiterProfileUI(updatedProfile);
+
+                    showRecruiterProfileFeedback("Profile updated successfully!", true);
+
+                    // Revert to display mode
+                    editForm.classList.add('hidden');
+                    displayContainer?.classList.remove('hidden');
+                    if (editBtn) editBtn.classList.remove('hidden');
+                } catch (err) {
+                    console.error("Error updating recruiter profile:", err);
+                    showRecruiterProfileFeedback(err.message || "Failed to update profile. Please try again.", false);
+                } finally {
+                    if (saveBtn) {
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = "Save Changes";
+                    }
+                }
+            });
+        }
+
+        recProfileEventsBound = true;
+    }
+}
+
+function showRecruiterProfileFeedback(message, isSuccess) {
+    const feedbackEl = document.getElementById('rec-profile-feedback');
+    if (!feedbackEl) return;
+
+    feedbackEl.className = '';
+    if (isSuccess) {
+        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80;";
+    } else {
+        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171;";
+    }
+    feedbackEl.textContent = message;
 }
 
 function renderRecruiterResults(results) {

@@ -36,7 +36,9 @@ export const API_ENDPOINTS = {
     PROFILES: "/api/recruiter/profiles",
     JOBS: "/api/recruiter/jobs",
     FORGOT_PASSWORD: "/api/auth/forgot-password",
-    RESET_PASSWORD: "/api/auth/reset-password"
+    RESET_PASSWORD: "/api/auth/reset-password",
+    CANDIDATE_PROFILE: "/api/candidate/profile",
+    RECRUITER_PROFILE: "/api/recruiter/profile"
 };
 
 export const COMPANY_TYPES = [

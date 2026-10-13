@@ -10,6 +10,7 @@ from backend.models.enums import ResumeStatus
 from backend.services.document_service import extract_text as parse_document_text
 from backend.services.screening_service import screen_resumes
 from backend.services.metadata_builder import build_analysis_metadata
+from backend.schemas.schemas import CandidateProfileUpdate, UserProfileResponse
 import time
 
 logger = logging.getLogger("resume_screener")
@@ -415,3 +416,52 @@ def update_recommendation_status(
     
     logger.info("Successfully updated recommendation '%s' status to %s", rec_id, status_upper)
     return {"message": "Recommendation status updated successfully", "recommendation": found_rec}
+
+
+@router.patch("/profile", response_model=UserProfileResponse)
+def update_candidate_profile(
+    payload: CandidateProfileUpdate,
+    current_user: User = Depends(require_candidate),
+    db: Session = Depends(get_db)
+):
+    """
+    Update candidate's profile information and display name.
+    Strictly scoped to current_user.id derived from the verified Firebase token.
+    Follows PATCH semantics: omitted fields remain unchanged.
+    """
+    logger.info("Candidate profile update requested for user: %s (id: %s)", current_user.email, current_user.id)
+
+    # 1. Update display_name on users table if provided
+    if payload.display_name is not None:
+        current_user.display_name = payload.display_name
+
+    # 2. Update CandidateProfile fields if any provided
+    candidate_profile_updates = {
+        k: v for k, v in [
+            ("current_status", payload.current_status),
+            ("field_of_study", payload.field_of_study),
+            ("current_domain", payload.current_domain),
+        ] if v is not None
+    }
+
+    if candidate_profile_updates:
+        profile = db.query(CandidateProfile).filter(CandidateProfile.user_id == current_user.id).first()
+        if not profile:
+            profile = CandidateProfile(
+                user_id=current_user.id,
+                current_status=payload.current_status or "Other",
+                field_of_study=payload.field_of_study or "N/A",
+                current_domain=payload.current_domain or "N/A"
+            )
+            db.add(profile)
+        else:
+            for field, val in candidate_profile_updates.items():
+                setattr(profile, field, val)
+
+    db.commit()
+    db.refresh(current_user)
+    if current_user.candidate_profile:
+        db.refresh(current_user.candidate_profile)
+
+    logger.info("Candidate profile updated successfully for user: %s", current_user.email)
+    return current_user

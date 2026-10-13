@@ -2,6 +2,7 @@ import * as api from '../api.js';
 import * as state from '../state.js';
 import { getEmptyStateHTML } from '../components/emptyState.js';
 import { toggleButtonLoading } from '../components/loadingSpinner.js';
+import { populateCandidateProfileUI } from '../components/profileSection.js';
 import { MESSAGES } from '../constants.js';
 
 let candUploadedFile = null;
@@ -194,7 +195,7 @@ export async function initializeCandidateDashboard() {
             state.setProfile(profile);
         }
 
-        const candName = profile.email.split('@')[0];
+        const candName = profile.display_name || profile.email.split('@')[0];
         const statusVal = profile.candidate_profile?.current_status || "N/A";
         const fieldVal = profile.candidate_profile?.field_of_study || "N/A";
         const domainVal = profile.candidate_profile?.current_domain || "N/A";
@@ -362,7 +363,7 @@ export async function initializeCandidateDashboard() {
         console.error("Error loading candidate dashboard data:", err);
         const user = state.getUser();
         if (dashCandName && (dashCandName.textContent === "..." || dashCandName.textContent === "Loading...")) {
-            dashCandName.textContent = user?.email?.split('@')[0] || "Candidate";
+            dashCandName.textContent = user?.display_name || user?.email?.split('@')[0] || "Candidate";
         }
         if (dashCandStatus && (dashCandStatus.textContent === "..." || dashCandStatus.textContent === "Loading...")) {
             dashCandStatus.textContent = "Unavailable";
@@ -826,17 +827,19 @@ export function initializeCandidateScreen() {
     // Screening workspace awaits input
 }
 
+let candProfileEventsBound = false;
+
 /**
  * Page view initializer for Candidate Profile view.
  * Reuses shared profile state from Dashboard if already fetched.
  */
 export async function initializeCandidateProfile() {
-    const profileCandName = document.getElementById('profile-cand-name');
-    const profileCandEmail = document.getElementById('profile-cand-email');
-    const profileCandStatus = document.getElementById('profile-cand-status');
-    const profileCandField = document.getElementById('profile-cand-field');
-    const profileCandDomain = document.getElementById('profile-cand-domain');
-    const profileCandJoined = document.getElementById('profile-cand-joined');
+    const feedbackEl = document.getElementById('cand-profile-feedback');
+    const displayContainer = document.getElementById('cand-profile-display');
+    const editForm = document.getElementById('cand-profile-edit-form');
+    const editBtn = document.getElementById('cand-edit-profile-btn');
+    const cancelBtn = document.getElementById('cand-cancel-edit-btn');
+    const saveBtn = document.getElementById('cand-save-profile-btn');
 
     try {
         let profile = state.getProfile();
@@ -845,27 +848,124 @@ export async function initializeCandidateProfile() {
             state.setProfile(profile);
         }
 
-        const candName = profile.email.split('@')[0];
-        if (profileCandName) profileCandName.textContent = candName;
-        if (profileCandEmail) profileCandEmail.textContent = profile.email;
-        if (profileCandStatus) profileCandStatus.textContent = profile.candidate_profile?.current_status || "N/A";
-        if (profileCandField) profileCandField.textContent = profile.candidate_profile?.field_of_study || "N/A";
-        if (profileCandDomain) profileCandDomain.textContent = profile.candidate_profile?.current_domain || "N/A";
-
-        if (profile.created_at) {
-            const joinDate = new Date(profile.created_at);
-            const formattedJoin = joinDate.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            if (profileCandJoined) profileCandJoined.textContent = formattedJoin;
-        } else {
-            if (profileCandJoined) profileCandJoined.textContent = "N/A";
-        }
+        populateCandidateProfileUI(profile);
     } catch (err) {
         console.error("Error loading candidate profile details:", err);
     }
+
+    if (!candProfileEventsBound) {
+        if (editBtn && displayContainer && editForm) {
+            editBtn.addEventListener('click', () => {
+                const currentProfile = state.getProfile();
+                populateCandidateProfileUI(currentProfile);
+                if (feedbackEl) {
+                    feedbackEl.className = 'hidden';
+                    feedbackEl.textContent = '';
+                }
+                displayContainer.classList.add('hidden');
+                editForm.classList.remove('hidden');
+                editBtn.classList.add('hidden');
+                const nameInput = document.getElementById('cand-edit-display-name');
+                if (nameInput) nameInput.focus();
+            });
+        }
+
+        if (cancelBtn && displayContainer && editForm) {
+            cancelBtn.addEventListener('click', () => {
+                const currentProfile = state.getProfile();
+                populateCandidateProfileUI(currentProfile);
+                if (feedbackEl) {
+                    feedbackEl.className = 'hidden';
+                    feedbackEl.textContent = '';
+                }
+                editForm.classList.add('hidden');
+                displayContainer.classList.remove('hidden');
+                if (editBtn) editBtn.classList.remove('hidden');
+            });
+        }
+
+        if (editForm) {
+            editForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const displayName = document.getElementById('cand-edit-display-name')?.value?.trim();
+                const currentStatus = document.getElementById('cand-edit-status')?.value?.trim();
+                const fieldOfStudy = document.getElementById('cand-edit-field')?.value?.trim();
+                const currentDomain = document.getElementById('cand-edit-domain')?.value?.trim();
+
+                if (!displayName) {
+                    showCandidateProfileFeedback("Display name cannot be empty.", false);
+                    return;
+                }
+                if (!fieldOfStudy) {
+                    showCandidateProfileFeedback("Field of study cannot be empty.", false);
+                    return;
+                }
+                if (!currentDomain) {
+                    showCandidateProfileFeedback("Current domain cannot be empty.", false);
+                    return;
+                }
+
+                if (saveBtn) {
+                    saveBtn.disabled = true;
+                    saveBtn.textContent = "Saving...";
+                }
+
+                try {
+                    const patchResponse = await api.updateCandidateProfile({
+                        display_name: displayName,
+                        current_status: currentStatus,
+                        field_of_study: fieldOfStudy,
+                        current_domain: currentDomain
+                    });
+
+                    // Merge safely with existing profile state
+                    const existingProfile = state.getProfile() || {};
+                    const updatedProfile = {
+                        ...existingProfile,
+                        ...patchResponse,
+                        candidate_profile: {
+                            ...(existingProfile.candidate_profile || {}),
+                            ...(patchResponse.candidate_profile || {})
+                        }
+                    };
+
+                    state.setProfile(updatedProfile);
+                    populateCandidateProfileUI(updatedProfile);
+
+                    showCandidateProfileFeedback("Profile updated successfully!", true);
+
+                    // Revert to display mode
+                    editForm.classList.add('hidden');
+                    displayContainer?.classList.remove('hidden');
+                    if (editBtn) editBtn.classList.remove('hidden');
+                } catch (err) {
+                    console.error("Error updating candidate profile:", err);
+                    showCandidateProfileFeedback(err.message || "Failed to update profile. Please try again.", false);
+                } finally {
+                    if (saveBtn) {
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = "Save Changes";
+                    }
+                }
+            });
+        }
+
+        candProfileEventsBound = true;
+    }
+}
+
+function showCandidateProfileFeedback(message, isSuccess) {
+    const feedbackEl = document.getElementById('cand-profile-feedback');
+    if (!feedbackEl) return;
+
+    feedbackEl.className = '';
+    if (isSuccess) {
+        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80;";
+    } else {
+        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171;";
+    }
+    feedbackEl.textContent = message;
 }
 
 function renderCandidateAnalysisResults(cand) {

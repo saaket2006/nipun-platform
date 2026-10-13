@@ -8,7 +8,9 @@ from backend.services.screening_service import screen_resumes
 from backend.limiter import limiter
 from backend.dependencies.auth_deps import require_recruiter
 from backend.database.database import get_db
-from backend.models.models import User, JobDescription, Resume, ScanResult
+from backend.models.models import User, JobDescription, Resume, ScanResult, RecruiterProfile
+from backend.models.enums import CompanyType
+from backend.schemas.schemas import RecruiterProfileUpdate, UserProfileResponse
 
 logger = logging.getLogger("resume_screener")
 
@@ -389,3 +391,52 @@ def get_recruiter_stats(
         "top_recommended_improvements": top_improvements,
         "education_breakdown": [{"level": k, "count": v} for k, v in education_counts.items()]
     }
+
+
+@router.patch("/profile", response_model=UserProfileResponse)
+def update_recruiter_profile(
+    payload: RecruiterProfileUpdate,
+    current_user: User = Depends(require_recruiter),
+    db: Session = Depends(get_db)
+):
+    """
+    Update recruiter's profile information and display name.
+    Strictly scoped to current_user.id derived from the verified Firebase token.
+    Follows PATCH semantics: omitted fields remain unchanged.
+    """
+    logger.info("Recruiter profile update requested for user: %s (id: %s)", current_user.email, current_user.id)
+
+    # 1. Update display_name on users table if provided
+    if payload.display_name is not None:
+        current_user.display_name = payload.display_name
+
+    # 2. Update RecruiterProfile fields if any provided
+    recruiter_profile_updates = {
+        k: v for k, v in [
+            ("company_name", payload.company_name),
+            ("company_type", payload.company_type),
+            ("hiring_domain", payload.hiring_domain),
+        ] if v is not None
+    }
+
+    if recruiter_profile_updates:
+        profile = db.query(RecruiterProfile).filter(RecruiterProfile.user_id == current_user.id).first()
+        if not profile:
+            profile = RecruiterProfile(
+                user_id=current_user.id,
+                company_name=payload.company_name or "N/A",
+                company_type=payload.company_type or CompanyType.OTHER,
+                hiring_domain=payload.hiring_domain or "N/A"
+            )
+            db.add(profile)
+        else:
+            for field, val in recruiter_profile_updates.items():
+                setattr(profile, field, val)
+
+    db.commit()
+    db.refresh(current_user)
+    if current_user.recruiter_profile:
+        db.refresh(current_user.recruiter_profile)
+
+    logger.info("Recruiter profile updated successfully for user: %s", current_user.email)
+    return current_user
