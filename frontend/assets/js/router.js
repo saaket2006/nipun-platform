@@ -4,7 +4,8 @@ import { updateSidebarActiveLink } from './components/sidebar.js';
 import { 
     initializeRecruiterDashboard, 
     initializeRecruiterScreen, 
-    initializeRecruiterProfile 
+    initializeRecruiterProfile,
+    initializeRecruiterHistoryDetail
 } from './pages/recruiter.js';
 import {
     initializeCandidateDashboard,
@@ -20,10 +21,11 @@ import {
 /**
  * Handles recruiter workspace routing sub-views.
  */
-export function handleRecruiterRouting(hash) {
+export function handleRecruiterRouting(hash, params = null) {
     const recViewDashboard = document.getElementById('rec-view-dashboard');
     const recViewScreen = document.getElementById('rec-view-screen');
     const recViewProfile = document.getElementById('rec-view-profile');
+    const recViewHistoryDetail = document.getElementById('rec-view-history-detail');
     const recPageTitle = document.getElementById('rec-page-title');
     
     if (!recViewDashboard || !recViewScreen || !recViewProfile || !recPageTitle) {
@@ -33,21 +35,34 @@ export function handleRecruiterRouting(hash) {
     recViewDashboard.classList.add('hidden');
     recViewScreen.classList.add('hidden');
     recViewProfile.classList.add('hidden');
+    if (recViewHistoryDetail) recViewHistoryDetail.classList.add('hidden');
     
-    updateSidebarActiveLink(hash);
-    
-    if (hash === ROUTES.DASHBOARD) {
-        recViewDashboard.classList.remove('hidden');
-        recPageTitle.textContent = "Dashboard";
-        initializeRecruiterDashboard();
-    } else if (hash === ROUTES.SCREEN) {
-        recViewScreen.classList.remove('hidden');
-        recPageTitle.textContent = "Resume Screening";
-        initializeRecruiterScreen();
-    } else if (hash === ROUTES.PROFILE) {
-        recViewProfile.classList.remove('hidden');
-        recPageTitle.textContent = "My Profile";
-        initializeRecruiterProfile();
+    if (hash === ROUTES.HISTORY || hash.startsWith('#/recruiter/history')) {
+        updateSidebarActiveLink(ROUTES.PROFILE);
+        if (recViewHistoryDetail) recViewHistoryDetail.classList.remove('hidden');
+        recPageTitle.textContent = "Screening Task Details";
+        let taskId = params ? params.get('id') : null;
+        if (!taskId) {
+            const taskIdMatch = window.location.hash.match(/(?:\?id=|\/)(\d+)/);
+            taskId = taskIdMatch ? taskIdMatch[1] : null;
+        }
+        initializeRecruiterHistoryDetail(taskId);
+    } else {
+        updateSidebarActiveLink(hash);
+        
+        if (hash === ROUTES.DASHBOARD) {
+            recViewDashboard.classList.remove('hidden');
+            recPageTitle.textContent = "Dashboard";
+            initializeRecruiterDashboard();
+        } else if (hash === ROUTES.SCREEN) {
+            recViewScreen.classList.remove('hidden');
+            recPageTitle.textContent = "Resume Screening";
+            initializeRecruiterScreen();
+        } else if (hash === ROUTES.PROFILE) {
+            recViewProfile.classList.remove('hidden');
+            recPageTitle.textContent = "My Profile";
+            initializeRecruiterProfile();
+        }
     }
 }
 
@@ -190,7 +205,7 @@ export function handleRouting(force = false) {
             window.location.hash = ROUTES.DASHBOARD;
             return;
         }
-        handleRecruiterRouting(currentHash);
+        handleRecruiterRouting(currentHash, params);
     } else if (pathname.includes('candidate')) {
         const currentHash = route || ROUTES.CANDIDATE_DASHBOARD;
         if (currentHash.startsWith("#/recruiter")) {

@@ -12,6 +12,7 @@ export const ROUTES = {
     DASHBOARD: "#/recruiter/dashboard",
     SCREEN: "#/recruiter/screen",
     PROFILE: "#/recruiter/profile",
+    HISTORY: "#/recruiter/history",
     CANDIDATE_DASHBOARD: "#/candidate/dashboard",
     CANDIDATE_SCREEN: "#/candidate/screen",
     CANDIDATE_PROFILE: "#/candidate/profile",
@@ -38,7 +39,8 @@ export const API_ENDPOINTS = {
     FORGOT_PASSWORD: "/api/auth/forgot-password",
     RESET_PASSWORD: "/api/auth/reset-password",
     CANDIDATE_PROFILE: "/api/candidate/profile",
-    RECRUITER_PROFILE: "/api/recruiter/profile"
+    RECRUITER_PROFILE: "/api/recruiter/profile",
+    RECRUITER_HISTORY: "/api/recruiter/history"
 };
 
 export const COMPANY_TYPES = [

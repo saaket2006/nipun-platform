@@ -22,6 +22,7 @@ class User(Base):
     recruiter_profile = relationship("RecruiterProfile", uselist=False, back_populates="user", cascade="all, delete-orphan")
     candidate_profile = relationship("CandidateProfile", uselist=False, back_populates="user", cascade="all, delete-orphan")
     password_reset_tokens = relationship("PasswordResetToken", back_populates="user", cascade="all, delete-orphan")
+    screening_tasks = relationship("ScreeningTask", back_populates="recruiter", cascade="all, delete-orphan")
 
 class RecruiterProfile(Base):
     __tablename__ = "recruiter_profiles"
@@ -127,3 +128,17 @@ class PasswordResetToken(Base):
 
     # Relationships
     user = relationship("User", back_populates="password_reset_tokens")
+
+class ScreeningTask(Base):
+    __tablename__ = "screening_tasks"
+
+    id = Column(Integer, primary_key=True, index=True)
+    recruiter_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    role = Column(String(255), nullable=False)
+    job_description = Column(Text, nullable=False)
+    resume_count = Column(Integer, nullable=False, default=0)
+    ranked_results = Column(JSON, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+
+    # Relationships
+    recruiter = relationship("User", back_populates="screening_tasks")

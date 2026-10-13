@@ -4,8 +4,8 @@ import { getRecruiterCandidateCardHTML } from '../components/candidateCard.js';
 import { updateStatisticCard } from '../components/statisticCard.js';
 import { populateRecruiterProfileUI } from '../components/profileSection.js';
 import { toggleButtonLoading } from '../components/loadingSpinner.js';
-import { MESSAGES } from '../constants.js';
-import { sanitizeUrl } from '../utils.js';
+import { MESSAGES, ROUTES } from '../constants.js';
+import { sanitizeUrl, escapeHTML } from '../utils.js';
 
 let recUploadedFiles = [];
 let initialized = false;
@@ -99,6 +99,12 @@ export function initRecruiterPage() {
             const jdSelect = document.getElementById('rec-jd-select');
             if (jdSelect && jdSelect.value) {
                 formData.append('jd_id', jdSelect.value);
+                if (window.recruiterJobsList) {
+                    const job = window.recruiterJobsList.find(j => j.id == jdSelect.value);
+                    if (job && job.title) {
+                        formData.append('role', job.title);
+                    }
+                }
             }
             
             recUploadedFiles.forEach(file => {
@@ -158,11 +164,14 @@ export function initRecruiterPage() {
                 if (selectedId) {
                     await api.updateJob(selectedId, formData);
                     alert("Job description updated successfully!");
+                    await loadJobDescriptionsDropdown(selectedId);
                 } else {
                     const res = await api.createJob(formData);
                     alert("Job description saved to library!");
+                    const savedId = res?.id;
+                    await loadJobDescriptionsDropdown(savedId);
+                    if (btnSaveJd) btnSaveJd.textContent = "💾 Update Library Item";
                 }
-                await loadJobDescriptionsDropdown();
             } catch (err) {
                 alert("Failed to save job description: " + err.message);
             }
@@ -251,7 +260,7 @@ async function loadScoringProfilesDropdown() {
     }
 }
 
-async function loadJobDescriptionsDropdown() {
+async function loadJobDescriptionsDropdown(selectedId = null) {
     const jdSelect = document.getElementById('rec-jd-select');
     if (!jdSelect) return;
     try {
@@ -262,6 +271,9 @@ async function loadJobDescriptionsDropdown() {
         ).join("");
         jdSelect.innerHTML = options;
         window.recruiterJobsList = jobs;
+        if (selectedId) {
+            jdSelect.value = String(selectedId);
+        }
     } catch (err) {
         console.error("Failed to load job descriptions:", err);
     }
@@ -408,6 +420,20 @@ export async function initializeRecruiterProfile() {
         console.error("Error loading recruiter profile:", err);
     }
 
+    loadRecruiterScreeningHistory();
+
+    const refreshHistoryBtn = document.getElementById('rec-refresh-history-btn');
+    if (refreshHistoryBtn && !refreshHistoryBtn.dataset.bound) {
+        refreshHistoryBtn.dataset.bound = "true";
+        refreshHistoryBtn.addEventListener('click', () => loadRecruiterScreeningHistory(true));
+    }
+
+    const retryHistoryBtn = document.getElementById('rec-history-retry-btn');
+    if (retryHistoryBtn && !retryHistoryBtn.dataset.bound) {
+        retryHistoryBtn.dataset.bound = "true";
+        retryHistoryBtn.addEventListener('click', () => loadRecruiterScreeningHistory(true));
+    }
+
     if (!recProfileEventsBound) {
         if (editBtn && displayContainer && editForm) {
             editBtn.addEventListener('click', () => {
@@ -525,6 +551,203 @@ function showRecruiterProfileFeedback(message, isSuccess) {
         feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171;";
     }
     feedbackEl.textContent = message;
+}
+
+/**
+ * Loads and displays the recruiter's past screening history tasks.
+ */
+export async function loadRecruiterScreeningHistory(force = false) {
+    const loadingEl = document.getElementById('rec-history-loading');
+    const errorEl = document.getElementById('rec-history-error');
+    const errorMsgEl = document.getElementById('rec-history-error-msg');
+    const emptyEl = document.getElementById('rec-history-empty');
+    const listEl = document.getElementById('rec-history-list');
+
+    if (!listEl) return;
+
+    if (loadingEl) loadingEl.classList.remove('hidden');
+    if (errorEl) errorEl.classList.add('hidden');
+    if (emptyEl) emptyEl.classList.add('hidden');
+    listEl.classList.add('hidden');
+
+    try {
+        const historyTasks = await api.getRecruiterHistory();
+        if (loadingEl) loadingEl.classList.add('hidden');
+
+        if (!Array.isArray(historyTasks) || historyTasks.length === 0) {
+            if (emptyEl) emptyEl.classList.remove('hidden');
+            return;
+        }
+
+        renderRecruiterHistoryList(historyTasks);
+    } catch (err) {
+        console.error("Error loading screening history:", err);
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) {
+            if (errorMsgEl) errorMsgEl.textContent = err.message || "Failed to load screening history.";
+            errorEl.classList.remove('hidden');
+        }
+    }
+}
+
+/**
+ * Renders screening history items.
+ * Each entry shows Date, Role, Resumes Scanned, and More Info button.
+ */
+function renderRecruiterHistoryList(tasks) {
+    const listEl = document.getElementById('rec-history-list');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    tasks.forEach(task => {
+        const item = document.createElement('div');
+        item.className = 'history-item-card';
+        item.style.cssText = 'background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease;';
+        
+        const dateStr = task.created_at ? new Date(task.created_at).toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }) : 'N/A';
+
+        item.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <h4 style="font-size: 1.05rem; font-weight: 600; color: #fff; margin: 0;">${escapeHTML(task.role || 'Screening Run')}</h4>
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.85rem;">
+                    <span style="color: var(--text-secondary); display: inline-flex; align-items: center; gap: 0.35rem;">📅 ${dateStr}</span>
+                    <span style="color: rgba(255,255,255,0.2);">•</span>
+                    <span style="color: #a5b4fc; font-weight: 500; display: inline-flex; align-items: center; gap: 0.35rem;">📄 ${task.resume_count} Resumes Scanned</span>
+                </div>
+            </div>
+            <div>
+                <button type="button" class="glow-btn secondary history-more-info-btn" data-task-id="${task.id}" style="padding: 0.5rem 1.15rem; font-size: 0.85rem; cursor: pointer;">
+                    More Info →
+                </button>
+            </div>
+        `;
+
+        const moreBtn = item.querySelector('.history-more-info-btn');
+        if (moreBtn) {
+            moreBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.location.hash = `#/recruiter/history?id=${task.id}`;
+            });
+        }
+
+        listEl.appendChild(item);
+    });
+
+    listEl.classList.remove('hidden');
+}
+
+/**
+ * Initializes and displays the detailed view of a specific screening task.
+ */
+export async function initializeRecruiterHistoryDetail(taskId) {
+    const loadingEl = document.getElementById('rec-task-detail-loading');
+    const errorEl = document.getElementById('rec-task-detail-error');
+    const errorMsgEl = document.getElementById('rec-task-detail-error-msg');
+    const contentEl = document.getElementById('rec-task-detail-content');
+    const backBtn = document.getElementById('btn-back-to-profile');
+    const retryBtn = document.getElementById('rec-task-detail-retry-btn');
+
+    if (backBtn && !backBtn.dataset.bound) {
+        backBtn.dataset.bound = "true";
+        backBtn.addEventListener('click', () => {
+            window.location.hash = ROUTES.PROFILE;
+        });
+    }
+
+    if (retryBtn && !retryBtn.dataset.bound) {
+        retryBtn.dataset.bound = "true";
+        retryBtn.addEventListener('click', () => {
+            initializeRecruiterHistoryDetail(taskId);
+        });
+    }
+
+    if (!taskId) {
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (contentEl) contentEl.classList.add('hidden');
+        if (errorEl) {
+            if (errorMsgEl) errorMsgEl.textContent = "No screening task ID specified.";
+            errorEl.classList.remove('hidden');
+        }
+        return;
+    }
+
+    if (loadingEl) loadingEl.classList.remove('hidden');
+    if (errorEl) errorEl.classList.add('hidden');
+    if (contentEl) contentEl.classList.add('hidden');
+
+    try {
+        const task = await api.getRecruiterHistoryTask(taskId);
+        if (loadingEl) loadingEl.classList.add('hidden');
+
+        // Populate Task Header and Overview
+        const roleEl = document.getElementById('task-detail-role');
+        const dateEl = document.getElementById('task-detail-date');
+        const resumesEl = document.getElementById('task-detail-resumes');
+        const jdEl = document.getElementById('task-detail-jd');
+        const candCountEl = document.getElementById('task-detail-candidate-count');
+        const candListEl = document.getElementById('task-detail-candidates-list');
+
+        if (roleEl) roleEl.textContent = task.role || "Screening Task";
+        
+        const dateStr = task.created_at ? new Date(task.created_at).toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }) : 'N/A';
+        if (dateEl) dateEl.textContent = dateStr;
+        if (resumesEl) resumesEl.textContent = `${task.resume_count} Resumes Scanned`;
+        if (jdEl) jdEl.textContent = task.job_description || "No job description text recorded.";
+
+        const candidates = Array.isArray(task.ranked_results) ? task.ranked_results : [];
+        if (candCountEl) candCountEl.textContent = `${candidates.length} candidate${candidates.length === 1 ? '' : 's'}`;
+
+        window.currentRecruiterResults = candidates;
+
+        if (candListEl) {
+            candListEl.innerHTML = '';
+            if (candidates.length === 0) {
+                candListEl.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        No ranked candidates available for this run.
+                    </div>
+                `;
+            } else {
+                candidates.forEach((cand, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'candidate-card';
+                    card.innerHTML = getRecruiterCandidateCardHTML(cand, index);
+
+                    const qvBtn = card.querySelector('.quick-view-btn');
+                    if (qvBtn) {
+                        qvBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            showCandidateQuickView(cand);
+                        });
+                    }
+
+                    candListEl.appendChild(card);
+                });
+            }
+        }
+
+        if (contentEl) contentEl.classList.remove('hidden');
+    } catch (err) {
+        console.error("Error loading task details:", err);
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (contentEl) contentEl.classList.add('hidden');
+        if (errorEl) {
+            if (errorMsgEl) errorMsgEl.textContent = err.message || "Screening task not found or unauthorized.";
+            errorEl.classList.remove('hidden');
+        }
+    }
 }
 
 export function renderRecruiterResults(results) {

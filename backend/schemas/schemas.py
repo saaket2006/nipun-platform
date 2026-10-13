@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
-from typing import Optional
+from typing import Optional, List, Any
 from datetime import datetime
 from backend.models.enums import UserRole, CompanyType
 
@@ -137,3 +137,23 @@ class ResetPasswordRequest(BaseModel):
 
 class ResetPasswordResponse(BaseModel):
     message: str
+
+class ScreeningTaskSummaryResponse(BaseModel):
+    id: int
+    role: str
+    resume_count: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class ScreeningTaskDetailResponse(BaseModel):
+    id: int
+    role: str
+    job_description: str
+    resume_count: int
+    ranked_results: List[Any]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

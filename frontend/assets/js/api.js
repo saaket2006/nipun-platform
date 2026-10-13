@@ -488,3 +488,22 @@ export async function deleteJob(jdId) {
         method: "DELETE"
     });
 }
+
+/**
+ * GET /api/recruiter/history
+ */
+export async function getRecruiterHistory() {
+    return request(API_ENDPOINTS.RECRUITER_HISTORY, {
+        method: "GET"
+    });
+}
+
+/**
+ * GET /api/recruiter/history/{task_id}
+ */
+export async function getRecruiterHistoryTask(taskId) {
+    return request(`${API_ENDPOINTS.RECRUITER_HISTORY}/${taskId}`, {
+        method: "GET"
+    });
+}
+

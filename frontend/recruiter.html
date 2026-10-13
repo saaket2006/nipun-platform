@@ -272,6 +272,107 @@
                             </div>
                         </form>
                     </div>
+
+                    <!-- Screening History Section -->
+                    <div class="glass-card screening-history-card" style="margin-top: 1.5rem;">
+                        <div class="screening-history-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                            <div>
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Screening History</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.25rem 0 0 0;">Past screening runs and candidate evaluations</p>
+                            </div>
+                            <button id="rec-refresh-history-btn" class="glow-btn secondary" style="padding: 0.45rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+                                <span>🔄</span> Refresh
+                            </button>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="rec-history-loading" class="hidden" style="text-align: center; padding: 3rem 1rem;">
+                            <div class="spinner" style="margin: 0 auto 0.75rem auto;"></div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Loading screening history...</p>
+                        </div>
+
+                        <!-- Error State -->
+                        <div id="rec-history-error" class="hidden" style="text-align: center; padding: 2rem 1.5rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px;">
+                            <p id="rec-history-error-msg" style="color: #fca5a5; font-size: 0.9rem; margin-bottom: 0.75rem;">Failed to load screening history.</p>
+                            <button id="rec-history-retry-btn" class="glow-btn secondary" style="padding: 0.4rem 1.2rem; font-size: 0.85rem;">Retry</button>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="rec-history-empty" class="hidden" style="text-align: center; padding: 3.5rem 1rem;">
+                            <span style="font-size: 2.5rem; display: block; margin-bottom: 0.75rem; opacity: 0.6;">📋</span>
+                            <h4 style="color: #fff; font-size: 1.05rem; font-weight: 600; margin: 0 0 0.35rem 0;">No Screening History Yet</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; max-width: 420px; margin: 0 auto 1.25rem auto;">Screen candidate resumes against a job description in Resume Screening to view saved screening tasks here.</p>
+                            <a href="#/recruiter/screen" class="glow-btn" style="display: inline-block; padding: 0.5rem 1.25rem; font-size: 0.85rem; text-decoration: none;">Go to Resume Screening</a>
+                        </div>
+
+                        <!-- History List Container -->
+                        <div id="rec-history-list" class="screening-history-list" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: SCREENING TASK DETAILS -->
+                <section id="rec-view-history-detail" class="rec-view hidden">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                        <button id="btn-back-to-profile" class="glow-btn secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.2rem; font-size: 0.9rem;">
+                            <span>←</span> Back to Profile
+                        </button>
+                    </div>
+
+                    <!-- Task Detail Loading State -->
+                    <div id="rec-task-detail-loading" class="glass-card hidden" style="text-align: center; padding: 3.5rem 1rem;">
+                        <div class="spinner" style="margin: 0 auto 0.75rem auto;"></div>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Loading screening task details...</p>
+                    </div>
+
+                    <!-- Task Detail Error State -->
+                    <div id="rec-task-detail-error" class="glass-card hidden" style="text-align: center; padding: 2.5rem 1.5rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);">
+                        <p id="rec-task-detail-error-msg" style="color: #fca5a5; font-size: 0.95rem; margin-bottom: 1rem;">Failed to load task details.</p>
+                        <button id="rec-task-detail-retry-btn" class="glow-btn secondary" style="padding: 0.45rem 1.25rem; font-size: 0.85rem;">Retry</button>
+                    </div>
+
+                    <!-- Task Detail Content Wrapper -->
+                    <div id="rec-task-detail-content" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <!-- Task Overview Card -->
+                        <div class="glass-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+                                <div>
+                                    <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-accent); display: block; margin-bottom: 0.35rem;">Screening Task</span>
+                                    <h2 id="task-detail-role" style="font-size: 1.5rem; font-weight: 700; color: #fff; margin: 0;">Job Role</h2>
+                                </div>
+                                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.4rem 0.85rem; font-size: 0.85rem; color: #cbd5e1; display: flex; align-items: center; gap: 0.4rem;">
+                                        <span>📅</span> <span id="task-detail-date">-</span>
+                                    </div>
+                                    <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 8px; padding: 0.4rem 0.85rem; font-size: 0.85rem; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem;">
+                                        <span>📄</span> <span id="task-detail-resumes">- Resumes Scanned</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Complete Job Description Section -->
+                            <div style="margin-top: 1rem;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">Complete Job Description</label>
+                                <div id="task-detail-jd" class="custom-scrollbar" style="max-height: 220px; overflow-y: auto; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 1rem; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; color: #cbd5e1;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Final Ranked Candidate List Section -->
+                        <div class="glass-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                                <div>
+                                    <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Final Ranked Candidates</h3>
+                                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.25rem 0 0 0;">Candidates ranked by matching score for this screening task</p>
+                                </div>
+                                <span id="task-detail-candidate-count" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">0 candidates</span>
+                            </div>
+
+                            <div id="task-detail-candidates-list" class="results-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- Candidate cards injected dynamically -->
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </main>
         </div>

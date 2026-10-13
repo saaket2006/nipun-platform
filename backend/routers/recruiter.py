@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Request, Depends
-from typing import List
+from typing import List, Optional
 import logging
+import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -8,21 +9,25 @@ from backend.services.screening_service import screen_resumes
 from backend.limiter import limiter
 from backend.dependencies.auth_deps import require_recruiter
 from backend.database.database import get_db
-from backend.models.models import User, JobDescription, Resume, ScanResult, RecruiterProfile
+from backend.models.models import User, JobDescription, Resume, ScanResult, RecruiterProfile, ScreeningTask
 from backend.models.enums import CompanyType
-from backend.schemas.schemas import RecruiterProfileUpdate, UserProfileResponse
+from backend.schemas.schemas import (
+    RecruiterProfileUpdate,
+    UserProfileResponse,
+    ScreeningTaskSummaryResponse,
+    ScreeningTaskDetailResponse
+)
 
 logger = logging.getLogger("resume_screener")
 
 router = APIRouter(prefix="/recruiter", tags=["recruiter"])
-
-from typing import Optional
 
 @router.post("/process")
 @limiter.limit("5/minute")
 async def process_resumes(
     request: Request,
     job_description: Optional[str] = Form(None),
+    role: Optional[str] = Form(None),
     jd_id: Optional[int] = Form(None),
     profile_id: Optional[int] = Form(None),
     resumes: List[UploadFile] = File(...),
@@ -56,18 +61,42 @@ async def process_resumes(
         if not jd_model:
             raise HTTPException(status_code=404, detail="Job description not found in your library")
         jd_text = jd_model.description
+        clean_text = jd_text.strip()
     else:
         if not job_description or not job_description.strip():
             raise HTTPException(status_code=400, detail="Job description text is required when no jd_id is provided")
         jd_text = job_description
-        # Save new Job Description into library
-        jd_model = JobDescription(
-            owner_id=current_user.id,
-            title=job_description[:50] + ("..." if len(job_description) > 50 else ""),
-            description=job_description
-        )
-        db.add(jd_model)
-        db.flush()  # Obtain jd_model.id
+        clean_text = job_description.strip()
+
+        # 1. Check if an active library JD already exists with the exact same description
+        existing_library_jd = db.query(JobDescription).filter(
+            JobDescription.owner_id == current_user.id,
+            JobDescription.is_archived == False,
+            JobDescription.description == clean_text
+        ).first()
+
+        if existing_library_jd:
+            jd_model = existing_library_jd
+        else:
+            # 2. Check if an ad-hoc unsaved screening JD already exists for this exact text
+            existing_adhoc_jd = db.query(JobDescription).filter(
+                JobDescription.owner_id == current_user.id,
+                JobDescription.is_archived == True,
+                JobDescription.description == clean_text
+            ).first()
+
+            if existing_adhoc_jd:
+                jd_model = existing_adhoc_jd
+            else:
+                # 3. Ad-hoc screening JD (not saved to library) - mark is_archived=True so it is excluded from library
+                jd_model = JobDescription(
+                    owner_id=current_user.id,
+                    title=clean_text[:50] + ("..." if len(clean_text) > 50 else ""),
+                    description=clean_text,
+                    is_archived=True
+                )
+                db.add(jd_model)
+                db.flush()  # Obtain jd_model.id
         
     if not resumes:
         raise HTTPException(status_code=400, detail="At least one resume must be uploaded")
@@ -124,6 +153,67 @@ async def process_resumes(
 
         db.commit()
         logger.info("Screening persisted successfully for job description ID %d", jd_model.id)
+
+        # Determine screening role title
+        if role and role.strip():
+            task_role = role.strip()
+        elif jd_model and jd_model.title and not jd_model.title.endswith("..."):
+            task_role = jd_model.title
+        else:
+            first_line = clean_text.splitlines()[0].strip() if clean_text.splitlines() else clean_text[:50]
+            task_role = first_line[:100] if first_line else "General Screening"
+
+        # Sanitize candidate results for history (strictly without raw text or file payloads)
+        clean_ranked_results = []
+        for cand in results.get("results", []):
+            clean_cand = {
+                "rank": cand.get("rank"),
+                "name": cand.get("name"),
+                "email": cand.get("email"),
+                "phone": cand.get("phone"),
+                "linkedin": cand.get("linkedin"),
+                "github": cand.get("github"),
+                "experience": cand.get("experience", 0),
+                "education": cand.get("education", "None"),
+                "projects": cand.get("projects", 0),
+                "similarity_score": cand.get("similarity_score", 0),
+                "skill_score": cand.get("skill_score", 0),
+                "experience_score": cand.get("experience_score", 0),
+                "education_score": cand.get("education_score", 0),
+                "projects_score": cand.get("projects_score", 0),
+                "matched_skills": cand.get("matched_skills", []),
+                "missing_skills": cand.get("missing_skills", []),
+                "extracted_skills": cand.get("extracted_skills", []),
+                "semantic_score": cand.get("semantic_score", 0.0),
+                "semantic_data": cand.get("semantic_data"),
+                "xai_explanations": cand.get("xai_explanations"),
+                "analysis_metadata": cand.get("analysis_metadata")
+            }
+            clean_ranked_results.append(clean_cand)
+
+        # Guard against duplicate records caused by rapid retries or repeated requests
+        recent_cutoff = datetime.datetime.utcnow() - datetime.timedelta(seconds=20)
+        recent_duplicate = db.query(ScreeningTask).filter(
+            ScreeningTask.recruiter_id == current_user.id,
+            ScreeningTask.job_description == jd_text,
+            ScreeningTask.resume_count == len(resumes_data),
+            ScreeningTask.created_at >= recent_cutoff
+        ).first()
+
+        if not recent_duplicate:
+            screening_task = ScreeningTask(
+                recruiter_id=current_user.id,
+                role=task_role,
+                job_description=jd_text,
+                resume_count=len(resumes_data),
+                ranked_results=clean_ranked_results,
+                created_at=datetime.datetime.utcnow()
+            )
+            db.add(screening_task)
+            db.commit()
+            logger.info("Screening task saved with ID %d for recruiter ID %d", screening_task.id, current_user.id)
+        else:
+            logger.info("Duplicate screening task detected within retry window; skipping history duplicate.")
         
         for cand in results.get("results", []):
             cand.pop("pipeline_event", None)
@@ -174,11 +264,34 @@ def list_job_descriptions(
 ):
     """
     Retrieves all job descriptions created by the recruiter.
+    Deduplicates identical descriptions and self-heals preexisting duplicates by archiving them.
     """
     query = db.query(JobDescription).filter(JobDescription.owner_id == current_user.id)
     if not include_archived:
         query = query.filter(JobDescription.is_archived == False)
     jds = query.order_by(JobDescription.created_at.desc()).all()
+
+    seen_descriptions = set()
+    unique_jds = []
+    has_duplicates = False
+
+    for j in jds:
+        norm_desc = (j.description or "").strip()
+        if norm_desc and norm_desc in seen_descriptions:
+            if not j.is_archived:
+                j.is_archived = True
+                has_duplicates = True
+            continue
+        if norm_desc:
+            seen_descriptions.add(norm_desc)
+        unique_jds.append(j)
+
+    if has_duplicates:
+        try:
+            db.commit()
+        except Exception:
+            db.rollback()
+
     return [
         {
             "id": j.id,
@@ -190,7 +303,7 @@ def list_job_descriptions(
             "is_archived": j.is_archived,
             "created_at": j.created_at.isoformat()
         }
-        for j in jds
+        for j in unique_jds
     ]
 
 @router.post("/jobs")
@@ -204,15 +317,55 @@ def create_job_description(
     db: Session = Depends(get_db)
 ):
     """
-    Adds a new job description to the recruiter's library.
+    Adds a new job description to the recruiter's library or promotes an ad-hoc JD.
+    Prevents duplicate entries with the same description.
     """
+    clean_desc = description.strip()
+
+    # 1. If an active library JD already exists with the same description, update and return it
+    existing_active = db.query(JobDescription).filter(
+        JobDescription.owner_id == current_user.id,
+        JobDescription.is_archived == False,
+        JobDescription.description == clean_desc
+    ).first()
+    if existing_active:
+        existing_active.title = title
+        if subtitle is not None:
+            existing_active.subtitle = subtitle
+        if company is not None:
+            existing_active.company = company
+        if optional_notes is not None:
+            existing_active.optional_notes = optional_notes
+        db.commit()
+        return {"message": "Job description updated in library successfully", "id": existing_active.id}
+
+    # 2. If an unsaved/ad-hoc JD exists with the same description, promote it into library
+    existing_adhoc = db.query(JobDescription).filter(
+        JobDescription.owner_id == current_user.id,
+        JobDescription.is_archived == True,
+        JobDescription.description == clean_desc
+    ).first()
+    if existing_adhoc:
+        existing_adhoc.is_archived = False
+        existing_adhoc.title = title
+        if subtitle is not None:
+            existing_adhoc.subtitle = subtitle
+        if company is not None:
+            existing_adhoc.company = company
+        if optional_notes is not None:
+            existing_adhoc.optional_notes = optional_notes
+        db.commit()
+        return {"message": "Job description saved to library successfully", "id": existing_adhoc.id}
+
+    # 3. Otherwise create brand new library JD
     jd = JobDescription(
         owner_id=current_user.id,
         title=title,
         subtitle=subtitle,
-        description=description,
+        description=clean_desc,
         company=company,
-        optional_notes=optional_notes
+        optional_notes=optional_notes,
+        is_archived=False
     )
     db.add(jd)
     db.commit()
@@ -440,3 +593,43 @@ def update_recruiter_profile(
 
     logger.info("Recruiter profile updated successfully for user: %s", current_user.email)
     return current_user
+
+# ==========================================
+# Screening History Endpoints
+# ==========================================
+
+@router.get("/history", response_model=List[ScreeningTaskSummaryResponse])
+def get_screening_history(
+    current_user: User = Depends(require_recruiter),
+    db: Session = Depends(get_db)
+):
+    """
+    Retrieves the screening history runs for the authenticated recruiter,
+    ordered by most recent first.
+    """
+    tasks = db.query(ScreeningTask).filter(
+        ScreeningTask.recruiter_id == current_user.id
+    ).order_by(ScreeningTask.created_at.desc()).all()
+    
+    return tasks
+
+
+@router.get("/history/{task_id}", response_model=ScreeningTaskDetailResponse)
+def get_screening_task_detail(
+    task_id: int,
+    current_user: User = Depends(require_recruiter),
+    db: Session = Depends(get_db)
+):
+    """
+    Retrieves complete details for a specific screening task owned by the authenticated recruiter.
+    Returns 404 if the task doesn't exist or doesn't belong to the recruiter.
+    """
+    task = db.query(ScreeningTask).filter(
+        ScreeningTask.id == task_id,
+        ScreeningTask.recruiter_id == current_user.id
+    ).first()
+    
+    if not task:
+        raise HTTPException(status_code=404, detail="Screening task not found")
+        
+    return task
