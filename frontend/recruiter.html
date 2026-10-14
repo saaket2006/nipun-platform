@@ -121,7 +121,7 @@
                                 <span class="stat-title" style="font-weight: 600; color: #fff;">Workspace Intelligence Summary</span>
                                 <span class="stat-icon">💡</span>
                             </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
                                 <div>
                                     <h4 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: #a5b4fc; font-weight: 600;">Common Missing Skills</h4>
                                     <ul id="stat-missing-skills-list" style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.4; color: #cbd5e1;"></ul>
@@ -130,10 +130,7 @@
                                     <h4 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: #a5b4fc; font-weight: 600;">Common Matched Skills</h4>
                                     <ul id="stat-matched-skills-list" style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.4; color: #cbd5e1;"></ul>
                                 </div>
-                                <div>
-                                    <h4 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: #a5b4fc; font-weight: 600;">Top Recommendations</h4>
-                                    <ul id="stat-improvements-list" style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.4; color: #cbd5e1;"></ul>
-                                </div>
+                                <ul id="stat-improvements-list" style="display: none;"></ul>
                             </div>
                         </div>
                     </div>
@@ -158,12 +155,142 @@
                                 </div>
                             </div>
 
+                            <!-- ADVANCED SCORING SETTINGS (OPTIONAL) -->
+                            <div id="advanced-scoring-container" class="advanced-scoring-box" style="margin-bottom: 1.5rem; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden; transition: all 0.3s ease;">
+                                <!-- Collapsible Header / Trigger -->
+                                <button type="button" id="btn-toggle-advanced-scoring" class="advanced-scoring-toggle" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.25rem; background: transparent; border: none; color: #f8fafc; cursor: pointer; text-align: left; font-size: 0.92rem; font-weight: 600;" aria-expanded="false" aria-controls="advanced-scoring-body">
+                                    <span style="display: flex; align-items: center; gap: 0.6rem;">
+                                        <span style="font-size: 1.1rem;">⚙️</span>
+                                        <span>Advanced Scoring Settings <span style="font-size: 0.78rem; font-weight: 500; color: #94a3b8; background: rgba(255, 255, 255, 0.07); padding: 2px 8px; border-radius: 9999px; margin-left: 0.35rem;">Optional</span></span>
+                                    </span>
+                                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <span id="custom-scoring-status-badge" style="font-size: 0.78rem; font-weight: 500; color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 2px 8px; border-radius: 4px;">Default Scoring Active</span>
+                                        <span id="advanced-scoring-icon" style="color: #94a3b8; transition: transform 0.2s ease;">▼</span>
+                                    </span>
+                                </button>
+
+                                <!-- Collapsible Body (collapsed by default) -->
+                                <div id="advanced-scoring-body" style="display: none; padding: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(11, 15, 25, 0.4);">
+                                    <!-- Mode Switch: Use Profile Defaults vs Customize for This Run -->
+                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+                                        <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem; color: #e2e8f0;">
+                                                <input type="radio" name="scoring-mode" id="scoring-mode-default" value="default" checked style="accent-color: #10b981; cursor: pointer;">
+                                                <span>Use Profile Defaults</span>
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem; color: #e2e8f0;">
+                                                <input type="radio" name="scoring-mode" id="scoring-mode-custom" value="custom" style="accent-color: #10b981; cursor: pointer;">
+                                                <span>Customize for This Run</span>
+                                            </label>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                            <button type="button" id="btn-reset-scoring-defaults" class="glow-btn secondary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;" title="Restore weights and thresholds from the selected scoring profile">🔄 Reset to Profile Defaults</button>
+                                            <button type="button" id="btn-autobalance-weights" class="glow-btn secondary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 6px; cursor: pointer; color: #a5b4fc;" title="Proportionally rebalance active weights to sum to exactly 100%">⚖️ Auto-Balance (100%)</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Custom Controls Panel (disabled in default mode) -->
+                                    <div id="custom-scoring-controls" style="opacity: 0.5; pointer-events: none; transition: opacity 0.2s ease;">
+                                        <!-- Criteria Weights -->
+                                        <div style="margin-bottom: 1.25rem;">
+                                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                                                <span style="font-size: 0.85rem; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em;">Scoring Criteria Weights</span>
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <span style="font-size: 0.82rem; color: #94a3b8;">Total Weight:</span>
+                                                    <span id="scoring-total-weight" style="font-size: 0.85rem; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px;">100%</span>
+                                                </div>
+                                            </div>
+
+                                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
+                                                <!-- Skills -->
+                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
+                                                            <input type="checkbox" id="crit-skills-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                            <span>Technical Skills</span>
+                                                        </label>
+                                                        <span id="crit-skills-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">50%</span>
+                                                    </div>
+                                                    <input type="range" id="crit-skills-weight" min="0" max="100" value="50" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">JD skill matches & semantic ontology overlap.</div>
+                                                </div>
+
+                                                <!-- Experience -->
+                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
+                                                            <input type="checkbox" id="crit-exp-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                            <span>Work Experience</span>
+                                                        </label>
+                                                        <span id="crit-exp-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">25%</span>
+                                                    </div>
+                                                    <input type="range" id="crit-exp-weight" min="0" max="100" value="25" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Tenure years and relevant internships.</div>
+                                                </div>
+
+                                                <!-- Education -->
+                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
+                                                            <input type="checkbox" id="crit-edu-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                            <span>Education Tier</span>
+                                                        </label>
+                                                        <span id="crit-edu-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">15%</span>
+                                                    </div>
+                                                    <input type="range" id="crit-edu-weight" min="0" max="100" value="15" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Highest degree (PhD, Master, Bachelor).</div>
+                                                </div>
+
+                                                <!-- Projects -->
+                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
+                                                            <input type="checkbox" id="crit-proj-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                            <span>Projects Count</span>
+                                                        </label>
+                                                        <span id="crit-proj-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">10%</span>
+                                                    </div>
+                                                    <input type="range" id="crit-proj-weight" min="0" max="100" value="10" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Scope of technical & academic projects.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Validation Alert Box -->
+                                        <div id="scoring-validation-msg" style="display: none; font-size: 0.82rem; padding: 0.6rem 0.85rem; border-radius: 6px; margin-bottom: 1.25rem;"></div>
+
+                                        <!-- Threshold Targets -->
+                                        <div>
+                                            <span style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Experience & Project Targets</span>
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                                <div>
+                                                    <label for="thresh-exp-years" style="font-size: 0.85rem; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">Target Experience for 100% (Years)</label>
+                                                    <input type="number" id="thresh-exp-years" min="1" max="30" value="10" step="1" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: 8px; background: #0c101d; border: 1px solid rgba(255,255,255,0.12); color: #f8fafc; font-size: 0.9rem;">
+                                                    <span style="font-size: 0.75rem; color: #94a3b8;">Years of tenure to achieve maximum experience score. Default is 10.</span>
+                                                </div>
+                                                <div>
+                                                    <label for="thresh-proj-count" style="font-size: 0.85rem; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">Target Project Count for 100%</label>
+                                                    <input type="number" id="thresh-proj-count" min="1" max="10" value="3" step="1" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: 8px; background: #0c101d; border: 1px solid rgba(255,255,255,0.12); color: #f8fafc; font-size: 0.9rem;">
+                                                    <span style="font-size: 0.75rem; color: #94a3b8;">Number of projects for maximum project score. Default is 3.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Engine Support Note (Transparency on Certifications) -->
+                                        <div style="margin-top: 1rem; padding: 0.6rem 0.85rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: 6px; font-size: 0.76rem; color: #93c5fd;">
+                                            ℹ️ <strong>Engine Transparency:</strong> The scoring engine directly evaluates Technical Skills, Experience, Education, and Projects. Certifications are not evaluated as a separate quantitative scoring variable by the parser.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label for="rec-job-description">Job Description</label>
                                 <textarea id="rec-job-description" placeholder="Paste target Job Description here..."></textarea>
                             </div>
 
                             <div class="form-group jd-library-actions" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: flex-end; flex-wrap: wrap;">
+                                <button type="button" id="btn-reset-screening" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;" title="Clear current inputs and start a fresh screening run">🔄 Start Fresh Run</button>
                                 <button type="button" id="btn-save-jd" class="glow-btn" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: 6px; cursor: pointer; color: #a5b4fc;">💾 Save to Library</button>
                                 <button type="button" id="btn-update-jd" class="glow-btn hidden" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 6px; cursor: pointer; color: #6ee7b7;">🔄 Update Saved JD</button>
                                 <button type="button" id="btn-archive-jd" class="glow-btn hidden" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; cursor: pointer; color: #fca5a5;">🗑️ Archive Selected</button>
@@ -192,11 +319,18 @@
 
                         <!-- Screening Results -->
                         <div class="results-section hidden" id="rec-results-container" style="margin-top: 2rem;">
-                            <h3>Ranked Candidates</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+                                <h3 style="margin: 0;">Ranked Candidates</h3>
+                                <button type="button" id="btn-new-screening" class="glow-btn secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); color: #c7d2fe; border-radius: 6px;">
+                                    <span>✨ Start New Screening</span>
+                                </button>
+                            </div>
+                            <div id="scoring-applied-banner" class="hidden" style="margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); color: #cbd5e1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                                <!-- Populated dynamically by renderRecruiterResults -->
+                            </div>
                             <div class="rec-results-list" id="rec-results-list">
                                 <!-- Candidate Cards go here -->
                             </div>
-                        </div>
                     </div>
                 </section>
 
@@ -455,8 +589,7 @@
                     <div id="qv-xai-container"></div>
                 </div>
 
-                <div class="qv-section" id="qv-recommendations-section">
-                    <h4>Resume Improvement Recommendations</h4>
+                <div class="qv-section hidden" id="qv-recommendations-section" style="display: none;">
                     <div id="qv-recommendations-container"></div>
                 </div>
 

@@ -115,8 +115,8 @@
     "semantic_hash": "90710c426dad69a6f5672caee4d41eac"
   },
   "backend/routers/recruiter.py": {
-    "mtime": 1791967835.0327997,
-    "ast_hash": "bcf8b61f47f2bbd3601732baf848d98f",
+    "mtime": 1791971386.387075,
+    "ast_hash": "3f0d659733c1b10f65400f8eccbe55a6",
     "semantic_hash": ""
   },
   "backend/schemas/schemas.py": {
@@ -150,9 +150,9 @@
     "semantic_hash": "c8c6857160090e0cd317be9e930a99ab"
   },
   "backend/services/policy/__init__.py": {
-    "mtime": 1785194413.716941,
-    "ast_hash": "9dcc698d65707cfa58fcee5c3514d736",
-    "semantic_hash": "9dcc698d65707cfa58fcee5c3514d736"
+    "mtime": 1791971136.1757152,
+    "ast_hash": "729bf2ae68e8ea9de295f4bc7a5df07a",
+    "semantic_hash": ""
   },
   "backend/services/policy/default_profiles.py": {
     "mtime": 1789013154.4434106,
@@ -175,9 +175,9 @@
     "semantic_hash": ""
   },
   "backend/services/policy/scoring_profile_policy.py": {
-    "mtime": 1785194413.7199717,
-    "ast_hash": "f1d7cb601f0f8d5acecdfe63c5db5e0d",
-    "semantic_hash": "f1d7cb601f0f8d5acecdfe63c5db5e0d"
+    "mtime": 1791971125.4293046,
+    "ast_hash": "64977115633cead0ab516c8b6e99f3ed",
+    "semantic_hash": ""
   },
   "backend/services/recommendations/__init__.py": {
     "mtime": 1785194413.7199717,
@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "backend/services/screening_service.py": {
-    "mtime": 1789013154.4444108,
-    "ast_hash": "39b16c545050408b56cec78b2f03bc07",
+    "mtime": 1791971332.992329,
+    "ast_hash": "bddd57b729903e78ec44d711638db185",
     "semantic_hash": ""
   },
   "backend/services/semantic/config.py": {
@@ -300,8 +300,8 @@
     "semantic_hash": "ee280310ae820dc6e4588da729c00f48"
   },
   "backend/services/xai/builder.py": {
-    "mtime": 1791965607.12235,
-    "ast_hash": "93e1d23ee475d4a67d5dab9a39d4edc6",
+    "mtime": 1791971218.000218,
+    "ast_hash": "c8da4c893161947e8acfb00c3254f5d3",
     "semantic_hash": ""
   },
   "backend/services/xai/engine.py": {
@@ -310,8 +310,8 @@
     "semantic_hash": "4ed10f44e8c56eece77d6aadaca75180"
   },
   "backend/services/xai/evidence.py": {
-    "mtime": 1791965586.0697374,
-    "ast_hash": "312f57847da67d4d0b1b8ba92f1acc23",
+    "mtime": 1791971200.725817,
+    "ast_hash": "15f19938d3a5055275b307b17fde5777",
     "semantic_hash": ""
   },
   "backend/services/xai/formatter.py": {
@@ -335,8 +335,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/api.js": {
-    "mtime": 1791911950.2170026,
-    "ast_hash": "106b0c17cd0c61dc84e722f04823b436",
+    "mtime": 1791969708.606789,
+    "ast_hash": "81f3c953d3bd9d131b4ea3e9fce071c7",
     "semantic_hash": ""
   },
   "frontend/assets/js/app.js": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/recruiter.js": {
-    "mtime": 1791967700.8870094,
-    "ast_hash": "3f09f1694d614b2758e70b4113578e17",
+    "mtime": 1791971784.101667,
+    "ast_hash": "e52fbe7c30757971411a074ff6878758",
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/signup.js": {
@@ -485,8 +485,8 @@
     "semantic_hash": ""
   },
   "backend/services/pipeline/events.py": {
-    "mtime": 1788945873.9965515,
-    "ast_hash": "caea9f50a638761f3dab6af38816a455",
+    "mtime": 1791971149.9372518,
+    "ast_hash": "1a35f55168692bbcda594de187a5ff27",
     "semantic_hash": ""
   },
   "backend/services/pipeline/orchestrator.py": {
@@ -495,8 +495,8 @@
     "semantic_hash": ""
   },
   "backend/services/pipeline/stages.py": {
-    "mtime": 1791965523.0159185,
-    "ast_hash": "850fd05a230e4f54bed381e476131824",
+    "mtime": 1791972207.7841256,
+    "ast_hash": "babd76754ec1a6cdfee92263066086bb",
     "semantic_hash": ""
   },
   "backend/tests/__init__.py": {
@@ -560,8 +560,8 @@
     "semantic_hash": ""
   },
   "backend/tests/test_recruiter.py": {
-    "mtime": 1791967736.2202353,
-    "ast_hash": "a76ab7fe571a1b533ad1cfe87437d621",
+    "mtime": 1791970279.0653715,
+    "ast_hash": "d898c891fb6569e6c2b5d03016e5d34f",
     "semantic_hash": ""
   },
   "backend/tests/test_remediation.py": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "frontend/recruiter.html": {
-    "mtime": 1791966535.1255558,
-    "ast_hash": "b10425f7b30c209f05ca4de425fffa4f",
+    "mtime": 1791971566.2223587,
+    "ast_hash": "1d4e116aa37378c5a1249ddb1d38885f",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -755,8 +755,8 @@
     "semantic_hash": ""
   },
   "tests/test_frontend_assets.py": {
-    "mtime": 1791944310.626441,
-    "ast_hash": "78c3a15a31f11f458de9156d294ceb27",
+    "mtime": 1791971833.3795054,
+    "ast_hash": "c0d8036f8e66e8d81dd6ff02008a51f1",
     "semantic_hash": ""
   },
   "alembic/versions/2d0cabfd21b5_add_screening_tasks_table.py": {
@@ -767,6 +767,11 @@
   "Architecture.md": {
     "mtime": 1791912472.2983027,
     "ast_hash": "04b7f65993d8bb5a0972f3d22b1e9139",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_custom_scoring.py": {
+    "mtime": 1791972109.5033295,
+    "ast_hash": "83ceecf877eb231bd7d6fb70204c4235",
     "semantic_hash": ""
   }
 }

@@ -75,7 +75,8 @@ def build_score_components(
     # 4. Projects Component
     proj_raw = scoring_event.projects_score
     proj_weight = weights.get("projects", 0.10)
-    proj_evidence = generate_projects_evidence(scoring_event.candidate_projects)
+    target_projects = getattr(profile, "project_target_count", default_scoring_policy.project_target_count) if profile else default_scoring_policy.project_target_count
+    proj_evidence = generate_projects_evidence(scoring_event.candidate_projects, target=target_projects)
     components.append(ScoreComponent(
         name="Projects",
         raw_score=proj_raw,
@@ -83,7 +84,7 @@ def build_score_components(
         weighted_score=proj_raw * proj_weight,
         max_score=100.0,
         status=_resolve_status(proj_raw, 100.0, 20.0),
-        details=f"Checks count of completed matching tech projects (ideal target is {default_scoring_policy.project_target_count}).",
+        details=f"Checks count of completed matching tech projects (ideal target is {target_projects}).",
         evidence=proj_evidence
     ))
     

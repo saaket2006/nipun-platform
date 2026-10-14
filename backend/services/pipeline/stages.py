@@ -278,6 +278,27 @@ class ScoringProfileResolutionStage(PipelineStage):
             output.profile_name = "General Software Engineer"
             output.weights = default_scoring_profile_policy.default_weights
 
+        # Check for per-run custom scoring configuration in analysis context
+        custom_config = None
+        if is_context and getattr(arg, "configuration", None):
+            custom_config = arg.configuration.get("custom_scoring")
+
+        if custom_config and custom_config.get("enabled"):
+            output.weights = {k: float(v) for k, v in custom_config["weights"].items()}
+            output.is_custom = True
+            output.profile_name = f"{output.profile_name} (Customized)"
+            thresholds = custom_config.get("thresholds", {})
+            raw_exp = thresholds.get("target_experience_years") or thresholds.get("max_experience_years") or default_scoring_policy.max_experience_years
+            raw_proj = thresholds.get("target_project_count") or thresholds.get("project_target_count") or default_scoring_policy.project_target_count
+            output.max_experience_years = float(raw_exp)
+            output.project_target_count = int(raw_proj)
+            output.custom_config = custom_config
+            logger.info(f"Applied per-run custom scoring: weights={output.weights}, exp_target={output.max_experience_years}y, proj_target={output.project_target_count}")
+        else:
+            output.is_custom = False
+            output.max_experience_years = default_scoring_policy.max_experience_years
+            output.project_target_count = default_scoring_policy.project_target_count
+
         if is_context:
             arg.event = output
             return arg
@@ -325,9 +346,10 @@ class ScoringStage(PipelineStage):
             output.semantic_score = matching_event.semantic_metadata_payload.get("semantic_score", 0.0)
             output.skill_score = output.semantic_score
 
-            # 1. Experience Score (Max years from policy)
+            # 1. Experience Score (Max years from event threshold or default policy)
+            max_exp = getattr(event, "max_experience_years", default_scoring_policy.max_experience_years)
             effective_exp_years = output.candidate_experience + (output.candidate_internships * 0.5)
-            output.experience_score = min((effective_exp_years / default_scoring_policy.max_experience_years) * 100, 100)
+            output.experience_score = min((effective_exp_years / max_exp) * 100, 100)
 
             # 2. Education Score
             education = output.candidate_education
@@ -340,8 +362,9 @@ class ScoringStage(PipelineStage):
             else:
                 output.education_score = 20
 
-            # 3. Projects Score (Target count from policy, capped at 100%)
-            output.projects_score = min(100.0, (output.candidate_projects / default_scoring_policy.project_target_count) * 100)
+            # 3. Projects Score (Target count from event threshold or default policy, capped at 100%)
+            target_proj = getattr(event, "project_target_count", default_scoring_policy.project_target_count)
+            output.projects_score = min(100.0, (output.candidate_projects / target_proj) * 100)
 
             # 4. Overall Similarity Score (Weights dynamically from resolved profile weights)
             skills_w = weights.get("skills", 0.50)
@@ -492,11 +515,18 @@ class ExplanationBuildingStage(PipelineStage):
                 output.analysis_metadata["profile_name"] = profile_resolved.profile_name
                 output.analysis_metadata["profile_version"] = profile_resolved.profile_version
                 output.analysis_metadata["component_weights"] = profile_resolved.weights
+                output.analysis_metadata["is_custom_scoring"] = getattr(profile_resolved, "is_custom", False)
+                if getattr(profile_resolved, "is_custom", False):
+                    output.analysis_metadata["scoring_thresholds"] = {
+                        "max_experience_years": getattr(profile_resolved, "max_experience_years", default_scoring_policy.max_experience_years),
+                        "project_target_count": getattr(profile_resolved, "project_target_count", default_scoring_policy.project_target_count)
+                    }
             else:
                 output.analysis_metadata["profile_id"] = None
                 output.analysis_metadata["profile_name"] = "General Software Engineer"
                 output.analysis_metadata["profile_version"] = "1.0.0"
                 output.analysis_metadata["component_weights"] = default_scoring_profile_policy.default_weights
+                output.analysis_metadata["is_custom_scoring"] = False
 
             output.analysis_metadata["engine_version"] = "v1.0.0"
 

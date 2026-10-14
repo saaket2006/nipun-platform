@@ -65,6 +65,14 @@ async function _executeRequest(endpoint, options = {}, isRetry = false) {
     const controller = new AbortController();
     const timerId = setTimeout(() => controller.abort(), timeout);
 
+    if (options.signal) {
+        if (options.signal.aborted) {
+            controller.abort();
+        } else {
+            options.signal.addEventListener("abort", () => controller.abort(), { once: true });
+        }
+    }
+
     const config = {
         ...options,
         headers,
@@ -80,6 +88,11 @@ async function _executeRequest(endpoint, options = {}, isRetry = false) {
     } catch (error) {
         clearTimeout(timerId);
         if (error.name === "AbortError") {
+            if (options.signal && options.signal.aborted) {
+                const abortErr = new Error("Request was cancelled");
+                abortErr.name = "AbortError";
+                throw abortErr;
+            }
             throw new Error("Request timed out");
         }
         // Handle actual network/connection failure
@@ -354,11 +367,12 @@ export async function screenResumes(formData) {
 /**
  * POST /api/recruiter/process
  */
-export async function screenResumesRecruiter(formData) {
+export async function screenResumesRecruiter(formData, options = {}) {
     return request(API_ENDPOINTS.PROCESS_RECRUITER, {
         method: "POST",
         body: formData,
-        timeout: 180000 // 3 minutes timeout for batch recruiter resume screening & ranking
+        timeout: 180000, // 3 minutes timeout for batch recruiter resume screening & ranking
+        ...options
     });
 }
 

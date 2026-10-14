@@ -16,7 +16,8 @@ async def screen_resumes(
     job_description: str,
     resumes: List[Dict],
     db: Optional[Session] = None,
-    profile_id: Optional[int] = None
+    profile_id: Optional[int] = None,
+    custom_scoring_config: Optional[Dict] = None
 ) -> Dict:
     """
     Core business logic to screen and rank candidate resumes against a job description.
@@ -43,6 +44,10 @@ async def screen_resumes(
     processed_resumes = []
     pipeline = AnalysisPipeline()
 
+    pipeline_config = {}
+    if custom_scoring_config:
+        pipeline_config["custom_scoring"] = custom_scoring_config
+
     for resume in resumes:
         filename = resume.get("filename", "unknown_file")
         contents = resume.get("content", b"")
@@ -52,7 +57,8 @@ async def screen_resumes(
         from backend.services.pipeline import AnalysisContext
         context = AnalysisContext(
             request_id=str(uuid.uuid4()),
-            profile_id=profile_id
+            profile_id=profile_id,
+            configuration=pipeline_config
         )
         recommendation_result = await pipeline.run_analysis(
             filename=filename,
@@ -156,7 +162,20 @@ async def screen_resumes(
     logger.info("Request completed in %.2fs", elapsed)
     logger.info("=" * 60)
 
+    applied_scoring_config = None
+    if final_response:
+        cand0 = final_response[0]
+        meta0 = cand0.get("analysis_metadata") or {}
+        applied_scoring_config = {
+            "is_custom": meta0.get("is_custom_scoring", False),
+            "profile_id": meta0.get("profile_id"),
+            "profile_name": meta0.get("profile_name", "General Software Engineer"),
+            "component_weights": meta0.get("component_weights", {"skills": 0.50, "experience": 0.25, "education": 0.15, "projects": 0.10}),
+            "scoring_thresholds": meta0.get("scoring_thresholds", {"max_experience_years": 10.0, "project_target_count": 3})
+        }
+
     return {
         "results": final_response,
-        "jd_skills": sorted(jd_skills)
+        "jd_skills": sorted(jd_skills),
+        "scoring_config": applied_scoring_config
     }

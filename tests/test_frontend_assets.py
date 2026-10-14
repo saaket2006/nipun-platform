@@ -263,3 +263,98 @@ def test_recruiter_screening_history_refresh_icon_btn():
     assert 'loadRecruiterScreeningHistory(true)' in js
 
 
+def test_recruiter_recommendations_restricted_and_hidden():
+    """Verify recruiter pages hide candidate recommendations while candidate views retain them."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+    recruiter_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "recruiter.js")
+    candidate_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "candidate.js")
+
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_html = f.read()
+
+    # Recruiter HTML: qv-recommendations-section must be hidden
+    assert 'id="qv-recommendations-section" style="display: none;"' in rec_html or 'class="qv-section hidden" id="qv-recommendations-section"' in rec_html
+    # Recruiter Dashboard: Top recommendations list header removed from 2-column grid
+    assert '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">' in rec_html
+
+    # Candidate HTML: retains recommendations section
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        cand_html = f.read()
+    assert 'id="cav-recommendations-section"' in cand_html
+    assert 'Resume Improvement Recommendations' in cand_html
+
+    # Candidate JS: preserves candidate recommendations rendering with action buttons
+    with open(candidate_js, "r", encoding="utf-8") as f:
+        cand_js = f.read()
+    assert 'renderRecommendations(details.recommendations' in cand_js
+    assert 'updateRecommendationStatus' in cand_js
+    assert 'COMPLETED' in cand_js
+    assert 'DISMISSED' in cand_js
+
+    # Recruiter JS: renderRecommendations returns empty string and quick view clears recommendations
+    with open(recruiter_js, "r", encoding="utf-8") as f:
+        rec_js = f.read()
+    assert 'export function renderRecommendations' in rec_js
+    assert 'qv-recommendations-section' in rec_js
+    assert 'recsSection.style.display = \'none\'' in rec_js
+
+
+def test_screening_workflow_state_reset_controls():
+    """Verify recruiter screening has explicit reset controls and state reset mechanism."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    recruiter_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "recruiter.js")
+
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_html = f.read()
+    assert 'id="btn-new-screening"' in rec_html
+    assert 'id="btn-reset-screening"' in rec_html
+    assert 'Start New Screening' in rec_html
+
+    with open(recruiter_js, "r", encoding="utf-8") as f:
+        rec_js = f.read()
+    assert 'resetScreeningWorkflowState' in rec_js
+    assert 'recResumesInput.value = \'\'' in rec_js
+    assert 'activeScreeningRunId++' in rec_js
+    assert 'btnNewScreening' in rec_js
+    assert 'btnResetScreening' in rec_js
+
+
+def test_advanced_scoring_customization_controls():
+    """Verify recruiter screening includes optional advanced customizable scoring controls."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    recruiter_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "recruiter.js")
+
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_html = f.read()
+
+    # Structural UI controls
+    assert 'id="advanced-scoring-container"' in rec_html
+    assert 'id="btn-toggle-advanced-scoring"' in rec_html
+    assert 'id="scoring-mode-default"' in rec_html
+    assert 'id="scoring-mode-custom"' in rec_html
+    assert 'id="btn-reset-scoring-defaults"' in rec_html
+    assert 'id="btn-autobalance-weights"' in rec_html
+    assert 'id="crit-skills-weight"' in rec_html
+    assert 'id="crit-exp-weight"' in rec_html
+    assert 'id="crit-edu-weight"' in rec_html
+    assert 'id="crit-proj-weight"' in rec_html
+    assert 'id="thresh-exp-years"' in rec_html
+    assert 'id="thresh-proj-count"' in rec_html
+    assert 'id="scoring-applied-banner"' in rec_html
+    assert 'id="custom-scoring-status-badge"' in rec_html
+
+    with open(recruiter_js, "r", encoding="utf-8") as f:
+        rec_js = f.read()
+
+    # Client-side validation and state management
+    assert 'initAdvancedScoringControls' in rec_js
+    assert 'getCustomScoringPayload' in rec_js
+    assert 'resetAdvancedScoringState' in rec_js
+    assert 'syncScoringControlsWithSelectedProfile' in rec_js
+    assert 'autoBalanceActiveWeights' in rec_js
+    assert 'custom_scoring_config' in rec_js
+    assert 'scoring-applied-banner' in rec_js
+
+
+

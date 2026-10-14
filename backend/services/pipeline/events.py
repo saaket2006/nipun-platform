@@ -47,6 +47,10 @@ class ProfileResolvedEvent(PipelineEvent):
         self.profile_name: str = "General Software Engineer"
         self.profile_version: str = "1.0.0"
         self.weights: Dict[str, float] = {"skills": 0.50, "experience": 0.25, "education": 0.15, "projects": 0.10}
+        self.is_custom: bool = False
+        self.max_experience_years: float = 10.0
+        self.project_target_count: int = 3
+        self.custom_config: Optional[Dict[str, Any]] = None
         self.status = matching.status
         self.error_message = matching.error_message
 

@@ -30,6 +30,7 @@ async def process_resumes(
     role: Optional[str] = Form(None),
     jd_id: Optional[int] = Form(None),
     profile_id: Optional[int] = Form(None),
+    custom_scoring_config: Optional[str] = Form(None),
     resumes: List[UploadFile] = File(...),
     current_user: User = Depends(require_recruiter),
     db: Session = Depends(get_db)
@@ -38,10 +39,13 @@ async def process_resumes(
     Screens uploaded resume files against a job description.
     Enforces authentication and recruiter role verification.
     Persists screening results inside the database for dashboard statistics.
+    Supports optional per-run custom scoring criteria configuration.
     """
     logger.info("Recruiter endpoint called by user: %s", current_user.email)
     
     # Resolve Form default objects if called directly
+    clean_role = role.strip() if isinstance(role, str) else ""
+
     if not isinstance(jd_id, int):
         try:
             jd_id = int(jd_id)
@@ -53,6 +57,25 @@ async def process_resumes(
             profile_id = int(profile_id)
         except (TypeError, ValueError):
             profile_id = None
+
+    # Resolve base profile weights if profile_id provided
+    base_weights = None
+    if profile_id:
+        from backend.models.models import ScoringProfile
+        p_obj = db.query(ScoringProfile).filter(ScoringProfile.id == profile_id).first()
+        if p_obj and p_obj.weights:
+            w = p_obj.weights
+            if isinstance(w, str):
+                import json
+                w = json.loads(w)
+            base_weights = {k: float(v) for k, v in w.items()}
+
+    # Validate and normalize per-run custom scoring configuration
+    from backend.services.policy.scoring_profile_policy import validate_and_normalize_scoring_config
+    try:
+        validated_custom_config = validate_and_normalize_scoring_config(custom_scoring_config, base_weights=base_weights)
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
     if jd_id:
         jd_model = db.query(JobDescription).filter(
             JobDescription.id == jd_id,
@@ -119,7 +142,13 @@ async def process_resumes(
             logger.error("Failed to read uploaded resume file '%s': %s", filename, e)
             
     try:
-        results = await screen_resumes(jd_text, resumes_data, db=db, profile_id=profile_id)
+        results = await screen_resumes(
+            jd_text,
+            resumes_data,
+            db=db,
+            profile_id=profile_id,
+            custom_scoring_config=validated_custom_config
+        )
         
         # Save each parsed candidate resume and scan result
         from backend.services.pipeline import PersistenceStage
@@ -155,20 +184,25 @@ async def process_resumes(
                     raise HTTPException(status_code=500, detail=event.error_message)
 
         db.commit()
-        logger.info("Screening persisted successfully for job description ID %d", jd_model.id)
+        logger.info("Screening persisted successfully for job description ID %s", getattr(jd_model, "id", None))
 
         # Determine screening role title
-        if role and role.strip():
-            task_role = role.strip()
+        if clean_role:
+            task_role = clean_role
         elif jd_model and jd_model.title and not jd_model.title.endswith("..."):
             task_role = jd_model.title
         else:
             first_line = clean_text.splitlines()[0].strip() if clean_text.splitlines() else clean_text[:50]
             task_role = first_line[:100] if first_line else "General Screening"
 
-        # Sanitize candidate results for history (strictly without raw text or file payloads)
+        # Sanitize candidate results for history and recruiter response (strictly without candidate recommendations or raw text or file payloads)
         clean_ranked_results = []
         for cand in results.get("results", []):
+            meta = cand.get("analysis_metadata")
+            if isinstance(meta, dict):
+                meta = {k: v for k, v in meta.items() if k != "recommendations"}
+                cand["analysis_metadata"] = meta
+
             clean_cand = {
                 "rank": cand.get("rank"),
                 "name": cand.get("name"),
@@ -190,7 +224,7 @@ async def process_resumes(
                 "semantic_score": cand.get("semantic_score", 0.0),
                 "semantic_data": cand.get("semantic_data"),
                 "xai_explanations": cand.get("xai_explanations"),
-                "analysis_metadata": cand.get("analysis_metadata")
+                "analysis_metadata": meta
             }
             clean_ranked_results.append(clean_cand)
 
@@ -221,6 +255,8 @@ async def process_resumes(
         for cand in results.get("results", []):
             cand.pop("pipeline_event", None)
             cand.pop("pipeline_context", None)
+            if isinstance(cand.get("analysis_metadata"), dict):
+                cand["analysis_metadata"] = {k: v for k, v in cand["analysis_metadata"].items() if k != "recommendations"}
             
         return results
     except ValueError as e:
@@ -569,13 +605,6 @@ def get_recruiter_stats(
             if skill_lower:
                 matched_skills_counts[skill_lower] = matched_skills_counts.get(skill_lower, 0) + 1
                 
-        # 5. Recommended improvements
-        recs = meta.get("recommendations", {}).get("list", [])
-        for r in recs:
-            title = r.get("title")
-            if title:
-                improvement_counts[title] = improvement_counts.get(title, 0) + 1
-                
     # Format and sort aggregates
     avg_experience = round(experience_sum / experience_count, 1) if experience_count > 0 else 0.0
     
@@ -591,12 +620,6 @@ def get_recruiter_stats(
         reverse=True
     )[:5]
     
-    top_improvements = sorted(
-        [{"recommendation": k, "count": v} for k, v in improvement_counts.items()],
-        key=lambda x: x["count"],
-        reverse=True
-    )[:5]
-    
     most_common_edu = "None"
     if education_counts:
         most_common_edu = max(education_counts, key=education_counts.get)
@@ -608,7 +631,7 @@ def get_recruiter_stats(
         "most_common_education_level": most_common_edu,
         "most_common_missing_skills": common_missing,
         "most_common_matched_skills": common_matched,
-        "top_recommended_improvements": top_improvements,
+        "top_recommended_improvements": [],  # Candidate resume improvements are strictly candidate-only
         "education_breakdown": [{"level": k, "count": v} for k, v in education_counts.items()]
     }
 
@@ -699,4 +722,14 @@ def get_screening_task_detail(
     if not task:
         raise HTTPException(status_code=404, detail="Screening task not found")
         
+    sanitized_results = []
+    for cand in (task.ranked_results or []):
+        cand_copy = dict(cand) if isinstance(cand, dict) else cand
+        if isinstance(cand_copy, dict):
+            meta = cand_copy.get("analysis_metadata")
+            if isinstance(meta, dict) and "recommendations" in meta:
+                cand_copy["analysis_metadata"] = {k: v for k, v in meta.items() if k != "recommendations"}
+        sanitized_results.append(cand_copy)
+
+    task.ranked_results = sanitized_results
     return task

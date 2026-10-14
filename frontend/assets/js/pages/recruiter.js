@@ -9,6 +9,9 @@ import { sanitizeUrl, escapeHTML } from '../utils.js';
 
 let recUploadedFiles = [];
 let initialized = false;
+let activeScreeningRunId = 0;
+let isScreeningActive = false;
+let currentScreeningAbortController = null;
 
 // JD Library State
 let currentSelectedJdId = null;
@@ -130,6 +133,8 @@ export function initRecruiterPage() {
 
     if (recProcessBtn) {
         recProcessBtn.addEventListener('click', async () => {
+            if (isScreeningActive) return; // Prevent duplicate concurrent submissions
+
             const jd = recJobDescription.value.trim();
             if (!jd) {
                 alert(MESSAGES.ENTER_JD);
@@ -140,7 +145,14 @@ export function initRecruiterPage() {
                 return;
             }
 
-            recResultsContainer.classList.add('hidden');
+            // Immediately clear any previous run's results while new screening processes
+            if (recResultsContainer) recResultsContainer.classList.add('hidden');
+            const recResultsList = document.getElementById('rec-results-list');
+            if (recResultsList) recResultsList.innerHTML = '';
+            window.currentRecruiterResults = [];
+
+            const recQuickViewModal = document.getElementById('rec-quick-view-modal');
+            if (recQuickViewModal) recQuickViewModal.classList.add('hidden');
 
             recDropZone.classList.add('collapsed');
             recDropZone.classList.remove('active');
@@ -153,6 +165,17 @@ export function initRecruiterPage() {
             const profileSelect = document.getElementById('rec-profile-select');
             if (profileSelect && profileSelect.value) {
                 formData.append('profile_id', profileSelect.value);
+            }
+
+            // Check for optional custom scoring configuration
+            try {
+                const customConfig = getCustomScoringPayload();
+                if (customConfig) {
+                    formData.append('custom_scoring_config', JSON.stringify(customConfig));
+                }
+            } catch (configErr) {
+                alert(configErr.message);
+                return;
             }
             
             const jdSelect = document.getElementById('rec-jd-select');
@@ -170,19 +193,51 @@ export function initRecruiterPage() {
                 formData.append('resumes', file);
             });
 
+            isScreeningActive = true;
+            const thisRunId = ++activeScreeningRunId;
+            currentScreeningAbortController = new AbortController();
+
             toggleButtonLoading(recProcessBtn, true, "Processing...", "Run Match Screening");
             if (window.loadingOverlay) window.loadingOverlay.show();
 
             try {
-                const data = await api.screenResumesRecruiter(formData);
+                const data = await api.screenResumesRecruiter(formData, { signal: currentScreeningAbortController.signal });
+                // Check if run was superseded or reset while in flight
+                if (thisRunId !== activeScreeningRunId) {
+                    return;
+                }
                 state.setRecruiterStats(null);
-                renderRecruiterResults(data.results);
+                renderRecruiterResults(data.results, data.scoring_config);
             } catch (err) {
+                if (thisRunId !== activeScreeningRunId || err.name === 'AbortError') {
+                    return;
+                }
                 alert(err.message);
             } finally {
-                if (window.loadingOverlay) window.loadingOverlay.hide();
-                toggleButtonLoading(recProcessBtn, false, "Processing...", "Run Match Screening");
+                if (thisRunId === activeScreeningRunId) {
+                    isScreeningActive = false;
+                    currentScreeningAbortController = null;
+                    if (window.loadingOverlay) window.loadingOverlay.hide();
+                    toggleButtonLoading(recProcessBtn, false, "Processing...", "Run Match Screening");
+                }
             }
+        });
+    }
+
+    // Bind Start New Screening and Clear / Start Fresh buttons
+    const btnNewScreening = document.getElementById('btn-new-screening');
+    if (btnNewScreening) {
+        btnNewScreening.addEventListener('click', () => {
+            resetScreeningWorkflowState({ resetJd: false });
+            const screenWorkspace = document.querySelector('.screening-workspace');
+            if (screenWorkspace) screenWorkspace.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+
+    const btnResetScreening = document.getElementById('btn-reset-screening');
+    if (btnResetScreening) {
+        btnResetScreening.addEventListener('click', () => {
+            resetScreeningWorkflowState({ resetJd: true });
         });
     }
 
@@ -551,8 +606,13 @@ export function initRecruiterPage() {
  * Initializer for Recruiter Resume Screening view.
  */
 export async function initializeRecruiterScreen() {
+    // Reset transient screening results and state when navigating to screen view fresh
+    if (!isScreeningActive) {
+        resetScreeningWorkflowState({ resetJd: false });
+    }
     await loadScoringProfilesDropdown();
     await loadJobDescriptionsDropdown();
+    initAdvancedScoringControls();
 }
 
 async function loadScoringProfilesDropdown() {
@@ -560,9 +620,18 @@ async function loadScoringProfilesDropdown() {
     if (!profileSelect) return;
     try {
         const profiles = await api.getScoringProfiles();
+        window.recruiterScoringProfiles = profiles || [];
         profileSelect.innerHTML = profiles.map(p => 
             `<option value="${p.id}" ${p.is_default ? "selected" : ""}>${p.name} (Skills: ${parseInt(p.weights.skills*100)}%, Exp: ${parseInt(p.weights.experience*100)}%)</option>`
         ).join("");
+
+        if (!profileSelect.dataset.listenerBound) {
+            profileSelect.dataset.listenerBound = "true";
+            profileSelect.addEventListener('change', () => {
+                syncScoringControlsWithSelectedProfile();
+            });
+        }
+        syncScoringControlsWithSelectedProfile(true);
     } catch (err) {
         console.error("Failed to load scoring profiles:", err);
     }
@@ -606,23 +675,70 @@ async function loadJobDescriptionsDropdown(selectedId = null) {
 }
 
 /**
- * Clears Recruiter workspace input state.
+ * Unified reset mechanism for transient recruiter screening state.
+ * Resets uploaded resumes, file inputs, previous results, quick view modal,
+ * and aborts/supersedes any in-flight screening requests.
  */
-export function clearRecruiterWorkspaceState() {
-    const recJobDescription = document.getElementById('rec-job-description');
+export function resetScreeningWorkflowState(options = { resetJd: false }) {
+    // 1. Invalidate and abort any in-flight asynchronous screening run
+    activeScreeningRunId++;
+    if (currentScreeningAbortController) {
+        try {
+            currentScreeningAbortController.abort();
+        } catch (_) {}
+        currentScreeningAbortController = null;
+    }
+    isScreeningActive = false;
+
+    // 2. Clear in-memory resume files and reset file input element value
+    recUploadedFiles = [];
+    const recResumesInput = document.getElementById('rec-resumes');
+    if (recResumesInput) {
+        recResumesInput.value = ''; // Clears input so selecting the same files fires change event
+    }
+    renderRecFileList();
+    updateRecResumeCountDisplay();
+
+    // 3. Reset Dropzone visual state
     const recDropZone = document.getElementById('rec-drop-zone');
     const recResumesHeader = document.getElementById('rec-resumes-header');
+    if (recDropZone) recDropZone.classList.remove('collapsed', 'active', 'drag-over');
+    if (recResumesHeader) recResumesHeader.classList.add('hidden');
+
+    // 4. Reset Results, Candidate Cards, and cached results
     const recResultsContainer = document.getElementById('rec-results-container');
     const recResultsList = document.getElementById('rec-results-list');
-
-    if (recJobDescription) recJobDescription.value = '';
-    applyJdSelection(null);
-    recUploadedFiles = [];
-    renderRecFileList();
-    if (recDropZone) recDropZone.classList.remove('collapsed', 'active');
-    if (recResumesHeader) recResumesHeader.classList.add('hidden');
     if (recResultsContainer) recResultsContainer.classList.add('hidden');
     if (recResultsList) recResultsList.innerHTML = '';
+    window.currentRecruiterResults = [];
+
+    // 5. Reset Quick View modal if open
+    const recQuickViewModal = document.getElementById('rec-quick-view-modal');
+    if (recQuickViewModal) recQuickViewModal.classList.add('hidden');
+
+    // 6. Reset loading spinners and overlays
+    const recProcessBtn = document.getElementById('rec-process-btn');
+    if (recProcessBtn) {
+        toggleButtonLoading(recProcessBtn, false, "Processing...", "Run Match Screening");
+    }
+    if (window.loadingOverlay) window.loadingOverlay.hide();
+
+    // 7. Reset per-run advanced scoring settings and results transparency banner
+    resetAdvancedScoringState();
+
+    // 8. Optional JD reset
+    if (options && options.resetJd) {
+        const recJobDescription = document.getElementById('rec-job-description');
+        if (recJobDescription) recJobDescription.value = '';
+        applyJdSelection(null);
+    }
+}
+
+/**
+ * Clears Recruiter workspace input state (called on logout or full clear).
+ */
+export function clearRecruiterWorkspaceState() {
+    resetScreeningWorkflowState({ resetJd: true });
 }
 
 function updateRecResumeCountDisplay() {
@@ -696,12 +812,10 @@ export async function initializeRecruiterDashboard() {
                 : "<li style='list-style:none; color:gray;'>No matched skills recorded yet</li>";
         }
         
-        // Render top improvements list
+        // Improvements list is candidate-only; clear and do not render on recruiter dashboard
         const improvementsList = document.getElementById("stat-improvements-list");
         if (improvementsList) {
-            improvementsList.innerHTML = stats.top_recommended_improvements.length > 0
-                ? stats.top_recommended_improvements.map(r => `<li>${r.recommendation} (found ${r.count} times)</li>`).join("")
-                : "<li style='list-style:none; color:gray;'>No improvements generated yet</li>";
+            improvementsList.innerHTML = '';
         }
     } catch (err) {
         console.error("Error loading recruiter dashboard:", err);
@@ -1106,12 +1220,50 @@ export async function initializeRecruiterHistoryDetail(taskId) {
     }
 }
 
-export function renderRecruiterResults(results) {
+export function renderRecruiterResults(results, scoringConfig = null) {
     window.currentRecruiterResults = results;
     const recResultsList = document.getElementById('rec-results-list');
     const recResultsContainer = document.getElementById('rec-results-container');
+    const banner = document.getElementById('scoring-applied-banner');
+
     if (!recResultsList) return;
     recResultsList.innerHTML = '';
+
+    // Render Scoring Configuration Transparency Banner
+    if (banner) {
+        if (scoringConfig) {
+            const isCustom = scoringConfig.is_custom;
+            const profileName = scoringConfig.profile_name || "General Software Engineer";
+            const w = scoringConfig.component_weights || {};
+            const skillsPct = Math.round((w.skills || 0) * 100);
+            const expPct = Math.round((w.experience || 0) * 100);
+            const eduPct = Math.round((w.education || 0) * 100);
+            const projPct = Math.round((w.projects || 0) * 100);
+            const thresh = scoringConfig.scoring_thresholds || {};
+
+            banner.className = 'scoring-applied-banner';
+            banner.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span style="font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; ${isCustom ? 'background: rgba(99, 102, 241, 0.2); color: #c7d2fe; border: 1px solid rgba(99, 102, 241, 0.4);' : 'background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4);'}">
+                        ${isCustom ? '⚙️ Custom Scoring Applied' : '✓ Profile Defaults Applied'}
+                    </span>
+                    <span style="font-weight: 600; color: #f8fafc;">${escapeHTML(profileName)}</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <span>Skills: <strong style="color: #cbd5e1;">${skillsPct}%</strong></span>
+                    <span>Exp: <strong style="color: #cbd5e1;">${expPct}%</strong></span>
+                    <span>Edu: <strong style="color: #cbd5e1;">${eduPct}%</strong></span>
+                    <span>Projects: <strong style="color: #cbd5e1;">${projPct}%</strong></span>
+                    ${isCustom && thresh.max_experience_years ? `<span style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 0.5rem;">Exp Target: <strong style="color: #cbd5e1;">${thresh.max_experience_years}y</strong></span>` : ''}
+                    ${isCustom && thresh.project_target_count ? `<span>Proj Target: <strong style="color: #cbd5e1;">${thresh.project_target_count}</strong></span>` : ''}
+                </div>
+            `;
+            banner.classList.remove('hidden');
+        } else {
+            banner.innerHTML = '';
+            banner.classList.add('hidden');
+        }
+    }
 
     const candidateList = Array.isArray(results) ? results : [];
 
@@ -1238,10 +1390,15 @@ export function showCandidateQuickView(cand) {
         xaiContainer.innerHTML = renderXaiContent(cand.analysis_metadata?.xai);
     }
     
-    // Render Resume Improvement Recommendations
+    // Resume Improvement Recommendations are strictly for candidates; completely hidden and cleared for recruiters
+    const recsSection = document.getElementById('qv-recommendations-section');
+    if (recsSection) {
+        recsSection.style.display = 'none';
+        recsSection.classList.add('hidden');
+    }
     const recsContainer = document.getElementById('qv-recommendations-container');
     if (recsContainer) {
-        recsContainer.innerHTML = renderRecommendations(cand.analysis_metadata?.recommendations);
+        recsContainer.innerHTML = '';
     }
     
     const matchedSkills = Array.isArray(cand.matched_skills) ? cand.matched_skills : [];
@@ -1390,84 +1547,375 @@ window.toggleRecCard = (headerEl) => {
 };
 
 export function renderRecommendations(recsData) {
-    if (!recsData || !recsData.list || recsData.list.length === 0) {
-        return `
-            <div style="background: rgba(255, 255, 255, 0.02); border-left: 4px solid #ef4444; padding: 1rem; border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.95rem; color: #fca5a5;">This analysis was created before Resume Improvement Recommendations were available.</p>
-            </div>
-        `;
+    // Resume Improvement Recommendations are strictly for candidates and must never be rendered in recruiter context
+    return '';
+}
+
+// ==========================================
+// Advanced Scoring Settings Controls (Optional Per-Run Customization)
+// ==========================================
+
+let advancedScoringInitialized = false;
+
+export function initAdvancedScoringControls() {
+    const toggleBtn = document.getElementById('btn-toggle-advanced-scoring');
+    const body = document.getElementById('advanced-scoring-body');
+    const icon = document.getElementById('advanced-scoring-icon');
+    const modeDefault = document.getElementById('scoring-mode-default');
+    const modeCustom = document.getElementById('scoring-mode-custom');
+    const controlsPanel = document.getElementById('custom-scoring-controls');
+    const statusBadge = document.getElementById('custom-scoring-status-badge');
+    const btnResetDefaults = document.getElementById('btn-reset-scoring-defaults');
+    const btnAutobalance = document.getElementById('btn-autobalance-weights');
+
+    if (!toggleBtn || !body) return;
+
+    if (!advancedScoringInitialized) {
+        advancedScoringInitialized = true;
+
+        // 1. Collapsible Section Toggle
+        toggleBtn.addEventListener('click', () => {
+            const isCollapsed = body.style.display === 'none' || !body.style.display;
+            body.style.display = isCollapsed ? 'block' : 'none';
+            toggleBtn.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
+            if (icon) {
+                icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        });
+
+        // 2. Mode Radio Switch
+        const handleModeChange = () => {
+            const isCustom = modeCustom && modeCustom.checked;
+            if (controlsPanel) {
+                controlsPanel.style.opacity = isCustom ? '1' : '0.5';
+                controlsPanel.style.pointerEvents = isCustom ? 'auto' : 'none';
+            }
+            if (statusBadge) {
+                if (isCustom) {
+                    statusBadge.textContent = 'Custom Scoring Active';
+                    statusBadge.style.color = '#a5b4fc';
+                    statusBadge.style.background = 'rgba(99, 102, 241, 0.15)';
+                    statusBadge.style.borderColor = 'rgba(99, 102, 241, 0.3)';
+                } else {
+                    statusBadge.textContent = 'Default Scoring Active';
+                    statusBadge.style.color = '#10b981';
+                    statusBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+                    statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+                    // Re-sync with profile defaults when returning to default mode
+                    syncScoringControlsWithSelectedProfile(true);
+                }
+            }
+            updateTotalWeightsDisplay();
+        };
+
+        if (modeDefault) modeDefault.addEventListener('change', handleModeChange);
+        if (modeCustom) modeCustom.addEventListener('change', handleModeChange);
+
+        // 3. Slider and Checkbox Events
+        const criteria = ['skills', 'exp', 'edu', 'proj'];
+        criteria.forEach(crit => {
+            const slider = document.getElementById(`crit-${crit}-weight`);
+            const enable = document.getElementById(`crit-${crit}-enable`);
+            const pct = document.getElementById(`crit-${crit}-pct`);
+
+            if (slider) {
+                slider.addEventListener('input', () => {
+                    if (pct) pct.textContent = `${slider.value}%`;
+                    updateTotalWeightsDisplay();
+                });
+            }
+
+            if (enable) {
+                enable.addEventListener('change', () => {
+                    if (!enable.checked) {
+                        if (slider) {
+                            slider.disabled = true;
+                            slider.dataset.prevVal = slider.value;
+                            slider.value = 0;
+                        }
+                        if (pct) pct.textContent = '0% (Disabled)';
+                        autoBalanceActiveWeights();
+                    } else {
+                        if (slider) {
+                            slider.disabled = false;
+                            slider.value = slider.dataset.prevVal && Number(slider.dataset.prevVal) > 0 ? slider.dataset.prevVal : 25;
+                        }
+                        if (pct) pct.textContent = `${slider.value}%`;
+                        autoBalanceActiveWeights();
+                    }
+                    updateTotalWeightsDisplay();
+                });
+            }
+        });
+
+        // 4. Threshold inputs validation display
+        const threshExp = document.getElementById('thresh-exp-years');
+        const threshProj = document.getElementById('thresh-proj-count');
+        [threshExp, threshProj].forEach(input => {
+            if (input) {
+                input.addEventListener('input', updateTotalWeightsDisplay);
+            }
+        });
+
+        // 5. Reset & Auto-Balance Buttons
+        if (btnResetDefaults) {
+            btnResetDefaults.addEventListener('click', () => {
+                resetToSelectedProfileDefaults();
+            });
+        }
+
+        if (btnAutobalance) {
+            btnAutobalance.addEventListener('click', () => {
+                autoBalanceActiveWeights();
+                updateTotalWeightsDisplay();
+            });
+        }
     }
+}
 
-    let html = `<div style="display: flex; flex-direction: column; gap: 0.75rem;">`;
-
-    recsData.list.forEach((rec) => {
-        let priColor = "#ef4444"; // red
-        if (rec.priority === "HIGH") priColor = "#f59e0b"; // orange
-        else if (rec.priority === "MEDIUM") priColor = "#eab308"; // yellow
-        else if (rec.priority === "LOW") priColor = "#3b82f6"; // blue
-        
-        let statusColor = "#3b82f6"; // blue for active
-        const statusUpper = (rec.status || "ACTIVE").toUpperCase();
-        if (statusUpper === "COMPLETED") statusColor = "#10b981"; // green
-        else if (statusUpper === "DISMISSED") statusColor = "#6b7280"; // gray
-        else if (statusUpper === "EXPIRED") statusColor = "#ef4444"; // red
-
-        const priBadge = `<span style="background: ${priColor}15; color: ${priColor}; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase;">${rec.priority}</span>`;
-        const statusBadge = `<span style="background: ${statusColor}15; color: ${statusColor}; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase; margin-right: 0.5rem;">${statusUpper}</span>`;
-        const gainBadge = `<span style="background: rgba(16, 185, 129, 0.1); color: #10b981; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px;">+${rec.estimated_score_gain.toFixed(1)} Match pts</span>`;
-
-        html += `
-            <div class="rec-card" style="border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.01);">
-                <div class="rec-header" onclick="toggleRecCard(this)" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; cursor: pointer; transition: background 0.2s;">
-                    <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
-                        <span class="rec-chevron" style="font-size: 0.75rem; color: var(--text-secondary); transition: transform 0.2s; display: inline-block;">&#x25B6;</span>
-                        <strong style="color: #fff; font-size: 0.95rem;">${rec.title}</strong>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        ${statusBadge}
-                        ${priBadge}
-                        ${gainBadge}
-                    </div>
-                </div>
-                
-                <div class="rec-content hidden" style="padding: 1rem; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.15); display: none;">
-                    <div style="margin-bottom: 0.75rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #cbd5e1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x1F4A1; Actionable Advice</h5>
-                        <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #e2e8f0;">${rec.description}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 0.75rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x2753; Why We Recommend This</h5>
-                        <p style="margin: 0; font-size: 0.85rem; line-height: 1.4; color: var(--text-secondary);">${rec.reason}</p>
-                    </div>
-        `;
-
-        if (rec.related_skills && rec.related_skills.length > 0) {
-            const skillTags = rec.related_skills.map(s => `<span class="skill-tag" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); color: #a5b4fc; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 4px; display: inline-block; margin-right: 0.25rem; margin-top: 0.25rem;">${s}</span>`).join('');
-            html += `
-                    <div style="margin-top: 0.5rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #6366f1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x1F3F7;&#xFE0F; Related Skill(s)</h5>
-                        <div style="display: flex; flex-wrap: wrap;">${skillTags}</div>
-                    </div>
-            `;
+export function getSelectedProfileWeights() {
+    const profileSelect = document.getElementById('rec-profile-select');
+    const selectedId = profileSelect ? profileSelect.value : null;
+    const profiles = window.recruiterScoringProfiles || [];
+    const profile = profiles.find(p => String(p.id) === String(selectedId)) || profiles.find(p => p.is_default) || profiles[0];
+    if (profile && profile.weights) {
+        let w = profile.weights;
+        if (typeof w === 'string') {
+            try { w = JSON.parse(w); } catch (_) {}
         }
+        return {
+            skills: Number(w.skills) || 0.50,
+            experience: Number(w.experience) || 0.25,
+            education: Number(w.education) || 0.15,
+            projects: Number(w.projects) || 0.10
+        };
+    }
+    return { skills: 0.50, experience: 0.25, education: 0.15, projects: 0.10 };
+}
 
-        if (statusUpper !== "ACTIVE") {
-            const dateStr = rec.resolved_at ? new Date(rec.resolved_at).toLocaleDateString() : '';
-            html += `
-                <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
-                    <span>Status: <strong>${statusUpper}</strong></span>
-                    ${dateStr ? `<span>Resolved on: ${dateStr}</span>` : ''}
-                </div>
-            `;
+export function syncScoringControlsWithSelectedProfile(force = false) {
+    const modeCustom = document.getElementById('scoring-mode-custom');
+    // If custom mode is active and not forcing reset, leave user's custom edits untouched
+    if (modeCustom && modeCustom.checked && !force) {
+        return;
+    }
+    resetToSelectedProfileDefaults();
+}
+
+export function resetToSelectedProfileDefaults() {
+    const w = getSelectedProfileWeights();
+    const map = {
+        skills: Math.round(w.skills * 100),
+        exp: Math.round(w.experience * 100),
+        edu: Math.round(w.education * 100),
+        proj: Math.round(w.projects * 100)
+    };
+
+    ['skills', 'exp', 'edu', 'proj'].forEach(crit => {
+        const slider = document.getElementById(`crit-${crit}-weight`);
+        const enable = document.getElementById(`crit-${crit}-enable`);
+        const pct = document.getElementById(`crit-${crit}-pct`);
+
+        if (enable) enable.checked = true;
+        if (slider) {
+            slider.disabled = false;
+            slider.value = map[crit] ?? 25;
         }
-
-        html += `
-                </div>
-            </div>
-        `;
+        if (pct) pct.textContent = `${map[crit] ?? 25}%`;
     });
 
-    html += `</div>`;
-    return html;
+    const threshExp = document.getElementById('thresh-exp-years');
+    const threshProj = document.getElementById('thresh-proj-count');
+    if (threshExp) threshExp.value = 10;
+    if (threshProj) threshProj.value = 3;
+
+    updateTotalWeightsDisplay();
+}
+
+function autoBalanceActiveWeights() {
+    const criteria = ['skills', 'exp', 'edu', 'proj'];
+    const active = [];
+
+    criteria.forEach(crit => {
+        const enable = document.getElementById(`crit-${crit}-enable`);
+        const slider = document.getElementById(`crit-${crit}-weight`);
+        if (enable && enable.checked && slider) {
+            active.push({ crit, slider, val: Number(slider.value) || 0 });
+        }
+    });
+
+    if (active.length === 0) return;
+
+    const currentSum = active.reduce((acc, item) => acc + item.val, 0);
+    let distributed = 0;
+
+    active.forEach((item, idx) => {
+        let newShare;
+        if (idx === active.length - 1) {
+            newShare = Math.max(0, 100 - distributed);
+        } else {
+            newShare = currentSum > 0 ? Math.round((item.val / currentSum) * 100) : Math.round(100 / active.length);
+            distributed += newShare;
+        }
+        item.slider.value = Math.max(0, newShare);
+        const pct = document.getElementById(`crit-${item.crit}-pct`);
+        if (pct) pct.textContent = `${item.slider.value}%`;
+    });
+}
+
+function updateTotalWeightsDisplay() {
+    const criteria = ['skills', 'exp', 'edu', 'proj'];
+    let total = 0;
+    let anyEnabled = false;
+
+    criteria.forEach(crit => {
+        const enable = document.getElementById(`crit-${crit}-enable`);
+        const slider = document.getElementById(`crit-${crit}-weight`);
+        if (enable && enable.checked && slider) {
+            total += Number(slider.value) || 0;
+            anyEnabled = true;
+        }
+    });
+
+    const badge = document.getElementById('scoring-total-weight');
+    const msg = document.getElementById('scoring-validation-msg');
+    const modeCustom = document.getElementById('scoring-mode-custom');
+    const isCustom = modeCustom && modeCustom.checked;
+
+    if (badge) {
+        badge.textContent = `${total}%`;
+        if (total === 100 && anyEnabled) {
+            badge.style.color = '#10b981';
+            badge.style.background = 'rgba(16, 185, 129, 0.1)';
+        } else {
+            badge.style.color = '#f59e0b';
+            badge.style.background = 'rgba(245, 158, 11, 0.15)';
+        }
+    }
+
+    if (msg) {
+        if (!isCustom) {
+            msg.style.display = 'none';
+        } else if (!anyEnabled) {
+            msg.style.display = 'block';
+            msg.style.background = 'rgba(239, 68, 68, 0.15)';
+            msg.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+            msg.style.color = '#fca5a5';
+            msg.textContent = '❌ At least one scoring criterion must be enabled.';
+        } else if (total !== 100) {
+            msg.style.display = 'block';
+            msg.style.background = 'rgba(245, 158, 11, 0.15)';
+            msg.style.border = '1px solid rgba(245, 158, 11, 0.3)';
+            msg.style.color = '#fde68a';
+            msg.innerHTML = `⚠️ Active weights sum to <strong>${total}%</strong>. Adjust sliders or click Auto-Balance to sum to exactly 100%.`;
+        } else {
+            msg.style.display = 'none';
+        }
+    }
+}
+
+export function getCustomScoringPayload() {
+    const modeCustom = document.getElementById('scoring-mode-custom');
+    if (!modeCustom || !modeCustom.checked) {
+        return null; // Use profile defaults
+    }
+
+    const disabledList = [];
+    const weights = {};
+    const criteriaMap = {
+        skills: 'skills',
+        exp: 'experience',
+        edu: 'education',
+        proj: 'projects'
+    };
+
+    let anyEnabled = false;
+    let totalPct = 0;
+    for (const [key, prop] of Object.entries(criteriaMap)) {
+        const enable = document.getElementById(`crit-${key}-enable`);
+        const slider = document.getElementById(`crit-${key}-weight`);
+        if (enable && !enable.checked) {
+            disabledList.push(prop);
+            weights[prop] = 0.0;
+        } else {
+            anyEnabled = true;
+            const val = slider ? Number(slider.value) : 0;
+            totalPct += val;
+            weights[prop] = val / 100.0;
+        }
+    }
+
+    if (!anyEnabled) {
+        throw new Error('At least one scoring criterion must be enabled with a positive weight.');
+    }
+
+    // If total differs from 100%, auto-balance before dispatching
+    if (totalPct !== 100) {
+        autoBalanceActiveWeights();
+        for (const [key, prop] of Object.entries(criteriaMap)) {
+            const enable = document.getElementById(`crit-${key}-enable`);
+            const slider = document.getElementById(`crit-${key}-weight`);
+            if (enable && enable.checked && slider) {
+                weights[prop] = Number(slider.value) / 100.0;
+            }
+        }
+    }
+
+    const threshExp = document.getElementById('thresh-exp-years');
+    const threshProj = document.getElementById('thresh-proj-count');
+    const targetExp = threshExp ? Number(threshExp.value) : 10;
+    const targetProj = threshProj ? Number(threshProj.value) : 3;
+
+    if (isNaN(targetExp) || targetExp < 1 || targetExp > 30) {
+        throw new Error('Target experience years must be between 1 and 30.');
+    }
+    if (isNaN(targetProj) || targetProj < 1 || targetProj > 10) {
+        throw new Error('Target project count must be between 1 and 10.');
+    }
+
+    return {
+        enabled: true,
+        weights: weights,
+        thresholds: {
+            target_experience_years: targetExp,
+            target_project_count: targetProj,
+            max_experience_years: targetExp,
+            project_target_count: targetProj
+        },
+        disabled_criteria: disabledList
+    };
+}
+
+export function resetAdvancedScoringState() {
+    const modeDefault = document.getElementById('scoring-mode-default');
+    if (modeDefault) modeDefault.checked = true;
+
+    const statusBadge = document.getElementById('custom-scoring-status-badge');
+    if (statusBadge) {
+        statusBadge.textContent = 'Default Scoring Active';
+        statusBadge.style.color = '#10b981';
+        statusBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+        statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+    }
+
+    const controlsPanel = document.getElementById('custom-scoring-controls');
+    if (controlsPanel) {
+        controlsPanel.style.opacity = '0.5';
+        controlsPanel.style.pointerEvents = 'none';
+    }
+
+    const body = document.getElementById('advanced-scoring-body');
+    const icon = document.getElementById('advanced-scoring-icon');
+    const toggleBtn = document.getElementById('btn-toggle-advanced-scoring');
+    if (body) body.style.display = 'none';
+    if (icon) icon.style.transform = 'rotate(0deg)';
+    if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+
+    const banner = document.getElementById('scoring-applied-banner');
+    if (banner) {
+        banner.innerHTML = '';
+        banner.classList.add('hidden');
+    }
+
+    resetToSelectedProfileDefaults();
 }

@@ -113,10 +113,11 @@ def generate_education_evidence(education: str) -> List[Evidence]:
         )
     ]
 
-def generate_projects_evidence(count: int) -> List[Evidence]:
+def generate_projects_evidence(count: int, target: Optional[int] = None) -> List[Evidence]:
     """Generates Evidence for technical projects."""
     from backend.services.policy.scoring_policy import default_scoring_policy
-    target = default_scoring_policy.project_target_count
+    if target is None:
+        target = default_scoring_policy.project_target_count
     desc = f"Candidate has completed {count} technical projects."
     if count >= target:
         desc += f" This exceeds or meets the ideal target threshold of {target} projects."

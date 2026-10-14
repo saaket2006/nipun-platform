@@ -643,3 +643,231 @@ def test_live_schema_verification_job_descriptions():
     assert "is_archived" in columns, "Column 'is_archived' must exist in job_descriptions"
 
 
+def test_get_screening_task_detail_omits_candidate_recommendations():
+    """Verify get_screening_task_detail strips recommendations from candidate analysis_metadata."""
+    from backend.routers.recruiter import get_screening_task_detail
+    from backend.models.models import ScreeningTask
+
+    mock_db = MagicMock(spec=Session)
+    mock_user = MagicMock(spec=User)
+    mock_user.id = 42
+
+    task = MagicMock(spec=ScreeningTask)
+    task.id = 99
+    task.recruiter_id = 42
+    task.role = "Backend Engineer"
+    task.job_description = "Python and FastAPI"
+    task.resume_count = 1
+    task.ranked_results = [
+        {
+            "rank": 1,
+            "name": "Alex Candidate",
+            "similarity_score": 88.0,
+            "matched_skills": ["Python", "FastAPI"],
+            "missing_skills": ["Docker"],
+            "analysis_metadata": {
+                "profile_name": "General Software Engineer",
+                "score_breakdown": {"skills": 90},
+                "xai": {"summary": "Strong match"},
+                "recommendations": {
+                    "list": [
+                        {
+                            "id": "rec-1",
+                            "title": "Highlight Professional Experience",
+                            "priority": "HIGH"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+    task.created_at = datetime.datetime.utcnow()
+
+    mock_query = MagicMock()
+    mock_db.query.return_value = mock_query
+    mock_query.filter.return_value = mock_query
+    mock_query.first.return_value = task
+
+    result = get_screening_task_detail(task_id=99, current_user=mock_user, db=mock_db)
+
+    assert result.id == 99
+    assert len(result.ranked_results) == 1
+    cand_meta = result.ranked_results[0]["analysis_metadata"]
+    # Candidate recommendations must be completely omitted
+    assert "recommendations" not in cand_meta
+    # Other recruiter analysis data must be preserved
+    assert cand_meta["profile_name"] == "General Software Engineer"
+    assert cand_meta["score_breakdown"]["skills"] == 90
+    assert cand_meta["xai"]["summary"] == "Strong match"
+
+
+def test_get_recruiter_stats_omits_candidate_recommendations():
+    """Verify get_recruiter_stats returns empty top_recommended_improvements even if scans have recs."""
+    from backend.routers.recruiter import get_recruiter_stats
+    from backend.models.models import ScanResult
+
+    mock_db = MagicMock(spec=Session)
+    mock_user = MagicMock(spec=User)
+    mock_user.id = 10
+
+    scan = MagicMock(spec=ScanResult)
+    scan.ats_score = 85.0
+    scan.analysis_metadata = {
+        "candidate": {"experience": 3.0, "education": "Bachelor"},
+        "skills": {"matched": ["Python"], "missing": ["Rust"]},
+        "recommendations": {
+            "list": [
+                {"title": "Showcase Skill: Rust"},
+                {"title": "Highlight Professional Experience"}
+            ]
+        }
+    }
+
+    mock_db.query.return_value.join.return_value.filter.return_value.first.return_value = (1, 85.0)
+    mock_db.query.return_value.join.return_value.filter.return_value.all.return_value = [
+        (scan.analysis_metadata,)
+    ]
+
+    stats = get_recruiter_stats(current_user=mock_user, db=mock_db)
+    assert stats["total_candidates_screened"] == 1
+    assert stats["average_ats_score"] == 85.0
+    # top_recommended_improvements must be strictly empty for recruiters
+    assert stats["top_recommended_improvements"] == []
+    assert len(stats["most_common_matched_skills"]) == 1
+    assert len(stats["most_common_missing_skills"]) == 1
+
+
+@pytest.mark.anyio
+async def test_process_resumes_omits_candidate_recommendations_for_recruiter(monkeypatch):
+    """Verify process_resumes response strips candidate recommendations from analysis_metadata."""
+    from backend.routers.recruiter import process_resumes
+    from fastapi import UploadFile
+    import io
+
+    mock_db = MagicMock(spec=Session)
+    mock_user = MagicMock(spec=User)
+    mock_user.id = 5
+
+    mock_db.query.return_value.filter.return_value.first.return_value = None
+
+    # Mock screen_resumes to return a candidate with recommendations in analysis_metadata
+    async def mock_screen_resumes(*args, **kwargs):
+        return {
+            "results": [
+                {
+                    "filename": "resume.pdf",
+                    "name": "John Doe",
+                    "email": "john@example.com",
+                    "phone": "1234567890",
+                    "linkedin": "https://linkedin.com/in/johndoe",
+                    "github": "https://github.com/johndoe",
+                    "experience": 4,
+                    "education": "Master",
+                    "projects": 3,
+                    "similarity_score": 88.5,
+                    "skill_score": 90.0,
+                    "experience_score": 85.0,
+                    "education_score": 90.0,
+                    "projects_score": 80.0,
+                    "rank": 1,
+                    "matched_skills": ["Python", "SQL"],
+                    "missing_skills": ["Kubernetes"],
+                    "extracted_skills": ["Python", "SQL"],
+                    "semantic_score": 87.0,
+                    "semantic_data": None,
+                    "xai_explanations": {"reasoning": "Good fit"},
+                    "analysis_metadata": {
+                        "profile_name": "General Software Engineer",
+                        "recommendations": {
+                            "list": [
+                                {"title": "Highlight Professional Experience", "priority": "HIGH"},
+                                {"title": "Add Certifications or Academic Gaps", "priority": "MEDIUM"}
+                            ]
+                        }
+                    },
+                    "pipeline_context": MagicMock()
+                }
+            ]
+        }
+
+    monkeypatch.setattr("backend.routers.recruiter.screen_resumes", mock_screen_resumes)
+
+    # Mock PersistenceStage
+    mock_stage = MagicMock()
+    mock_res = MagicMock()
+    mock_res.status = "success"
+    mock_res.event = MagicMock(status="success")
+    mock_stage.execute_batch.return_value = [mock_res]
+    monkeypatch.setattr("backend.services.pipeline.PersistenceStage", lambda db: mock_stage)
+
+    fake_file = UploadFile(filename="resume.pdf", file=io.BytesIO(b"%PDF-1.4 dummy content"))
+    from starlette.requests import Request
+    scope = {
+        "type": "http",
+        "method": "POST",
+        "path": "/api/recruiter/process",
+        "headers": [(b"host", b"testserver")],
+        "client": ("127.0.0.1", 12345)
+    }
+    mock_request = Request(scope)
+
+    result = await process_resumes(
+        request=mock_request,
+        job_description="Seeking software engineer",
+        resumes=[fake_file],
+        current_user=mock_user,
+        db=mock_db
+    )
+
+    assert "results" in result
+    assert len(result["results"]) == 1
+    cand = result["results"][0]
+    assert cand["name"] == "John Doe"
+    assert cand["similarity_score"] == 88.5
+    assert "recommendations" not in cand["analysis_metadata"]
+    assert cand["analysis_metadata"]["profile_name"] == "General Software Engineer"
+
+
+def test_candidate_resume_details_preserves_recommendations():
+    """Verify get_candidate_resume_details still returns recommendations for candidate users."""
+    from backend.routers.candidate import get_candidate_resume_details
+    from backend.models.models import Resume, ScanResult, ResumeStatus
+
+    mock_db = MagicMock(spec=Session)
+    mock_user = MagicMock(spec=User)
+    mock_user.id = 100
+    mock_user.email = "candidate@example.com"
+
+    mock_resume = MagicMock(spec=Resume)
+    mock_resume.id = 12
+    mock_resume.version = 1
+    mock_resume.label = "Initial Resume"
+    mock_resume.original_filename = "my_resume.pdf"
+    mock_resume.file_type = "pdf"
+    mock_resume.uploaded_at = datetime.datetime.utcnow()
+    mock_resume.status = ResumeStatus.ACTIVE
+
+    mock_scan = MagicMock(spec=ScanResult)
+    mock_scan.ats_score = 82.0
+    mock_scan.job_description = None
+    mock_scan.analysis_metadata = {
+        "candidate": {"name": "Candidate User", "email": "candidate@example.com"},
+        "recommendations": {
+            "list": [
+                {"id": "rec-1", "title": "Highlight Professional Experience", "priority": "HIGH"}
+            ]
+        }
+    }
+    mock_resume.scan_results = [mock_scan]
+
+    mock_db.query.return_value.filter.return_value.first.return_value = mock_resume
+
+    cand_result = get_candidate_resume_details(resume_id=12, current_user=mock_user, db=mock_db)
+
+    assert cand_result["id"] == 12
+    # Candidate user MUST receive recommendations
+    assert cand_result["recommendations"] is not None
+    assert len(cand_result["recommendations"]["list"]) == 1
+    assert cand_result["recommendations"]["list"][0]["title"] == "Highlight Professional Experience"
+
+
