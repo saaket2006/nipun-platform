@@ -553,39 +553,68 @@ function showRecruiterProfileFeedback(message, isSuccess) {
     feedbackEl.textContent = message;
 }
 
+let isRefreshingHistory = false;
+
 /**
  * Loads and displays the recruiter's past screening history tasks.
  */
 export async function loadRecruiterScreeningHistory(force = false) {
+    if (isRefreshingHistory) return;
+
     const loadingEl = document.getElementById('rec-history-loading');
     const errorEl = document.getElementById('rec-history-error');
     const errorMsgEl = document.getElementById('rec-history-error-msg');
     const emptyEl = document.getElementById('rec-history-empty');
     const listEl = document.getElementById('rec-history-list');
+    const refreshBtn = document.getElementById('rec-refresh-history-btn');
 
     if (!listEl) return;
 
-    if (loadingEl) loadingEl.classList.remove('hidden');
+    isRefreshingHistory = true;
+    if (refreshBtn) {
+        refreshBtn.classList.add('is-refreshing');
+        refreshBtn.disabled = true;
+        refreshBtn.setAttribute('aria-busy', 'true');
+    }
+
+    const hasExistingItems = listEl.children.length > 0;
+
+    if (!hasExistingItems) {
+        if (loadingEl) loadingEl.classList.remove('hidden');
+        listEl.classList.add('hidden');
+    }
     if (errorEl) errorEl.classList.add('hidden');
     if (emptyEl) emptyEl.classList.add('hidden');
-    listEl.classList.add('hidden');
 
     try {
         const historyTasks = await api.getRecruiterHistory();
         if (loadingEl) loadingEl.classList.add('hidden');
 
         if (!Array.isArray(historyTasks) || historyTasks.length === 0) {
+            listEl.innerHTML = '';
+            listEl.classList.add('hidden');
             if (emptyEl) emptyEl.classList.remove('hidden');
             return;
         }
 
         renderRecruiterHistoryList(historyTasks);
+        listEl.classList.remove('hidden');
     } catch (err) {
         console.error("Error loading screening history:", err);
         if (loadingEl) loadingEl.classList.add('hidden');
         if (errorEl) {
             if (errorMsgEl) errorMsgEl.textContent = err.message || "Failed to load screening history.";
             errorEl.classList.remove('hidden');
+        }
+        if (!hasExistingItems) {
+            listEl.classList.add('hidden');
+        }
+    } finally {
+        isRefreshingHistory = false;
+        if (refreshBtn) {
+            refreshBtn.classList.remove('is-refreshing');
+            refreshBtn.disabled = false;
+            refreshBtn.removeAttribute('aria-busy');
         }
     }
 }

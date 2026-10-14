@@ -201,43 +201,66 @@
 
                 <!-- VIEW 3: PROFILE -->
                 <section id="rec-view-profile" class="rec-view hidden">
-                    <div class="glass-card profile-details-card">
-                        <div class="profile-card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                                <div class="profile-avatar">👤</div>
-                                <div class="profile-meta">
-                                    <h3 id="profile-rec-name">Recruiter Name</h3>
-                                    <p id="profile-rec-email">recruiter@company.com</p>
-                                </div>
-                            </div>
-                            <button id="rec-edit-profile-btn" class="glow-btn secondary" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">Edit Profile</button>
-                        </div>
+                    <div class="glass-card profile-details-card recruiter-profile-card">
+                        <!-- Top-Right Pencil Edit Button -->
+                        <button 
+                            type="button" 
+                            id="rec-edit-profile-btn" 
+                            class="profile-edit-icon-btn" 
+                            aria-label="Edit Profile" 
+                            title="Edit Profile"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                <path d="m15 5 4 4"/>
+                            </svg>
+                        </button>
 
                         <!-- Feedback Message Banner -->
                         <div id="rec-profile-feedback" class="hidden" style="margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500;"></div>
 
-                        <!-- Read-Only Profile Display -->
-                        <div id="rec-profile-display" class="profile-info-grid">
-                            <div class="info-field">
-                                <span class="info-label">Current Role</span>
-                                <span class="info-value">Recruiter</span>
+                        <!-- Read-Only Profile Display (Horizontal Side-by-Side Layout) -->
+                        <div id="rec-profile-display" class="rec-profile-layout">
+                            <!-- Left Section: Avatar, Display Name, Email -->
+                            <div class="rec-profile-identity">
+                                <div class="profile-avatar rec-profile-avatar">👤</div>
+                                <div class="profile-meta rec-profile-meta">
+                                    <h3 id="profile-rec-name">Recruiter Name</h3>
+                                    <p id="profile-rec-email">recruiter@company.com</p>
+                                </div>
                             </div>
-                            <div class="info-field">
-                                <span class="info-label">Company Name</span>
-                                <span class="info-value" id="profile-comp-name">Acme Corp</span>
-                            </div>
-                            <div class="info-field">
-                                <span class="info-label">Company Type</span>
-                                <span class="info-value" id="profile-comp-type">Enterprise</span>
-                            </div>
-                            <div class="info-field">
-                                <span class="info-label">Hiring Domain Focus</span>
-                                <span class="info-value" id="profile-hiring-domain">Software & IT</span>
+
+                            <!-- Divider (Vertical on desktop, horizontal on stacked mobile) -->
+                            <div class="rec-profile-divider"></div>
+
+                            <!-- Right Section: Profile Details Grid -->
+                            <div class="rec-profile-details">
+                                <div class="rec-profile-grid">
+                                    <div class="info-field">
+                                        <span class="info-label">Current Role</span>
+                                        <span class="info-value">Recruiter</span>
+                                    </div>
+                                    <div class="info-field">
+                                        <span class="info-label">Company Name</span>
+                                        <span class="info-value" id="profile-comp-name">Acme Corp</span>
+                                    </div>
+                                    <div class="info-field">
+                                        <span class="info-label">Company Type</span>
+                                        <span class="info-value" id="profile-comp-type">Enterprise</span>
+                                    </div>
+                                    <div class="info-field">
+                                        <span class="info-label">Hiring Domain Focus</span>
+                                        <span class="info-value" id="profile-hiring-domain">Software & IT</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Profile Edit Form -->
                         <form id="rec-profile-edit-form" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.75rem;">
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Edit Profile</h3>
+                            </div>
                             <div class="profile-info-grid">
                                 <div class="info-field">
                                     <label for="rec-edit-display-name" class="info-label">Display Name</label>
@@ -280,8 +303,19 @@
                                 <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Screening History</h3>
                                 <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.25rem 0 0 0;">Past screening runs and candidate evaluations</p>
                             </div>
-                            <button id="rec-refresh-history-btn" class="glow-btn secondary" style="padding: 0.45rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
-                                <span>🔄</span> Refresh
+                            <button 
+                                type="button" 
+                                id="rec-refresh-history-btn" 
+                                class="history-refresh-icon-btn" 
+                                aria-label="Refresh screening history" 
+                                title="Refresh screening history"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="refresh-icon" aria-hidden="true">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                                    <path d="M21 3v5h-5"/>
+                                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                                    <path d="M8 16H3v5"/>
+                                </svg>
                             </button>
                         </div>
 

@@ -172,3 +172,94 @@ def test_candidate_card_and_recruiter_quick_view_integration():
     assert "window.showCandidateQuickView = showCandidateQuickView" in rec_content
     assert "renderRecruiterResults" in rec_content
     assert "closeQuickViewBtn" in rec_content
+
+
+def test_recruiter_profile_card_horizontal_layout_and_pencil_btn():
+    """Verify recruiter profile has horizontal side-by-side layout, pencil icon button, and candidate profile is unchanged."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+    recruiter_css = os.path.join(FRONTEND_DIR, "assets", "css", "recruiter.css")
+
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_content = f.read()
+
+    # Recruiter Profile DOM checks
+    assert 'class="glass-card profile-details-card recruiter-profile-card"' in rec_content
+    assert 'id="rec-edit-profile-btn"' in rec_content
+    assert 'class="profile-edit-icon-btn"' in rec_content
+    assert 'aria-label="Edit Profile"' in rec_content
+    assert 'title="Edit Profile"' in rec_content
+    assert 'class="rec-profile-layout"' in rec_content
+    assert 'class="rec-profile-identity"' in rec_content
+    assert 'class="rec-profile-divider"' in rec_content
+    assert 'class="rec-profile-details"' in rec_content
+    assert 'class="rec-profile-grid"' in rec_content
+    assert 'id="profile-rec-name"' in rec_content
+    assert 'id="profile-rec-email"' in rec_content
+    assert 'id="profile-comp-name"' in rec_content
+    assert 'id="profile-comp-type"' in rec_content
+    assert 'id="profile-hiring-domain"' in rec_content
+    assert 'id="rec-profile-edit-form"' in rec_content
+
+    # Candidate Profile isolation checks (must remain unchanged)
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        cand_content = f.read()
+
+    assert 'id="cand-edit-profile-btn"' in cand_content
+    assert 'id="cand-profile-display"' in cand_content
+    assert 'rec-profile-layout' not in cand_content
+    assert 'profile-edit-icon-btn' not in cand_content
+
+    # Recruiter CSS rules check
+    with open(recruiter_css, "r", encoding="utf-8") as f:
+        css_content = f.read()
+
+    assert ".recruiter-profile-card" in css_content
+    assert ".profile-edit-icon-btn" in css_content
+    assert ".rec-profile-layout" in css_content
+    assert ".rec-profile-identity" in css_content
+    assert ".rec-profile-meta h3#profile-rec-name" in css_content
+    assert ".rec-profile-meta p#profile-rec-email" in css_content
+
+
+def test_recruiter_screening_history_refresh_icon_btn():
+    """Verify recruiter screening history has a compact icon-only refresh button with tooltip, aria-label, spinning animation, and concurrency protection."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+    recruiter_css = os.path.join(FRONTEND_DIR, "assets", "css", "recruiter.css")
+    recruiter_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "recruiter.js")
+
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_html = f.read()
+
+    # Recruiter HTML checks
+    assert 'id="rec-refresh-history-btn"' in rec_html
+    assert 'class="history-refresh-icon-btn"' in rec_html
+    assert 'aria-label="Refresh screening history"' in rec_html
+    assert 'title="Refresh screening history"' in rec_html
+    assert 'class="refresh-icon"' in rec_html
+    assert '🔄 Refresh' not in rec_html
+
+    # Candidate profile isolation check
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        cand_html = f.read()
+    assert 'history-refresh-icon-btn' not in cand_html
+
+    # Recruiter CSS checks
+    with open(recruiter_css, "r", encoding="utf-8") as f:
+        css = f.read()
+    assert '.history-refresh-icon-btn' in css
+    assert '.history-refresh-icon-btn:hover' in css
+    assert '.history-refresh-icon-btn:focus-visible' in css
+    assert '.history-refresh-icon-btn.is-refreshing .refresh-icon' in css
+    assert '@keyframes spin-refresh' in css
+
+    # Recruiter JS checks
+    with open(recruiter_js, "r", encoding="utf-8") as f:
+        js = f.read()
+    assert 'isRefreshingHistory' in js
+    assert 'refreshBtn.classList.add(\'is-refreshing\')' in js
+    assert 'aria-busy' in js
+    assert 'loadRecruiterScreeningHistory(true)' in js
+
+

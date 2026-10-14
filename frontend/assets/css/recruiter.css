@@ -347,6 +347,239 @@
     font-weight: 500;
 }
 
+/* ========================================================
+   Recruiter Profile Card — Horizontal Layout & Redesign
+   ======================================================== */
+.recruiter-profile-card {
+    position: relative;
+    padding: 2.25rem 2.5rem;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Small Pencil Icon Button (Top-Right Corner) */
+.profile-edit-icon-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+    padding: 0;
+}
+
+.profile-edit-icon-btn:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.5);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+.profile-edit-icon-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-color: #6366f1;
+    color: #ffffff;
+}
+
+.profile-edit-icon-btn:active {
+    transform: translateY(0);
+}
+
+/* Horizontal Side-by-Side Layout */
+.rec-profile-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2.5rem;
+    width: 100%;
+}
+
+/* Left Section: Identity */
+.rec-profile-identity {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 0 0 auto;
+    min-width: 260px;
+    max-width: 380px;
+}
+
+.rec-profile-avatar {
+    font-size: 3rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.rec-profile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* Typography Hierarchy */
+.rec-profile-meta h3#profile-rec-name {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+}
+
+.rec-profile-meta p#profile-rec-email {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #94a3b8;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+/* Vertical Divider */
+.rec-profile-divider {
+    width: 1px;
+    align-self: stretch;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.08) 20%,
+        rgba(255, 255, 255, 0.08) 80%,
+        rgba(255, 255, 255, 0.02)
+    );
+    flex-shrink: 0;
+}
+
+/* Right Section: Details Grid */
+.rec-profile-details {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+}
+
+.rec-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 1.5rem 2rem;
+}
+
+#rec-view-profile .rec-profile-grid .info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+#rec-view-profile .rec-profile-grid .info-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+}
+
+#rec-view-profile .rec-profile-grid .info-value {
+    font-size: 1rem;
+    color: #f1f5f9;
+    font-weight: 500;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+    .rec-profile-layout {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.75rem;
+    }
+
+    .rec-profile-identity {
+        min-width: 0;
+        max-width: 100%;
+        padding-right: 3.5rem; /* Space to prevent collision with top-right pencil button */
+    }
+
+    .rec-profile-divider {
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .rec-profile-grid {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+        gap: 1.25rem 1.5rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .recruiter-profile-card {
+        padding: 1.5rem !important;
+    }
+
+    .profile-edit-icon-btn {
+        top: 1.25rem;
+        right: 1.25rem;
+        width: 34px;
+        height: 34px;
+    }
+
+    .history-refresh-icon-btn {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+    }
+
+    .rec-profile-identity {
+        gap: 1rem;
+        padding-right: 2.75rem;
+    }
+
+    .rec-profile-avatar {
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        font-size: 2.25rem;
+    }
+
+    .rec-profile-meta h3#profile-rec-name {
+        font-size: 1.4rem;
+    }
+
+    .rec-profile-meta p#profile-rec-email {
+        font-size: 0.95rem;
+    }
+
+    .rec-profile-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+
 /* Screening results cards */
 .rec-results-list {
     display: flex;
@@ -706,4 +939,65 @@
     background: rgba(99, 102, 241, 0.2);
     color: #fff;
 }
+
+/* Screening History Refresh Icon Button */
+.history-refresh-icon-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.history-refresh-icon-btn:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.5);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+.history-refresh-icon-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-color: #6366f1;
+    color: #ffffff;
+}
+
+.history-refresh-icon-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.history-refresh-icon-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.history-refresh-icon-btn .refresh-icon {
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.history-refresh-icon-btn.is-refreshing .refresh-icon {
+    animation: spin-refresh 0.85s linear infinite;
+}
+
+@keyframes spin-refresh {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 
