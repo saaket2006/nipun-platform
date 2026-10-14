@@ -10,6 +10,65 @@ import { sanitizeUrl, escapeHTML } from '../utils.js';
 let recUploadedFiles = [];
 let initialized = false;
 
+// JD Library State
+let currentSelectedJdId = null;
+let currentSelectedJdText = "";
+let pendingNavigationTargetId = null;
+
+function hasUnsavedJdChanges() {
+    const recJobDescription = document.getElementById('rec-job-description');
+    if (!recJobDescription) return false;
+    const currentVal = recJobDescription.value.trim();
+    if (currentSelectedJdId) {
+        return currentVal !== (currentSelectedJdText || "").trim();
+    } else {
+        return currentVal.length > 0;
+    }
+}
+
+function updateJdActionButtons() {
+    const btnSaveJd = document.getElementById('btn-save-jd');
+    const btnUpdateJd = document.getElementById('btn-update-jd');
+    const btnArchiveJd = document.getElementById('btn-archive-jd');
+
+    if (currentSelectedJdId) {
+        if (btnSaveJd) {
+            btnSaveJd.textContent = "💾 Save as New";
+            btnSaveJd.title = "Save current text as a new named job description";
+        }
+        if (btnUpdateJd) btnUpdateJd.classList.remove('hidden');
+        if (btnArchiveJd) btnArchiveJd.classList.remove('hidden');
+    } else {
+        if (btnSaveJd) {
+            btnSaveJd.textContent = "💾 Save to Library";
+            btnSaveJd.title = "Save this job description to library with a name";
+        }
+        if (btnUpdateJd) btnUpdateJd.classList.add('hidden');
+        if (btnArchiveJd) btnArchiveJd.classList.add('hidden');
+    }
+}
+
+function applyJdSelection(targetId) {
+    const jdSelect = document.getElementById('rec-jd-select');
+    const recJobDescription = document.getElementById('rec-job-description');
+
+    if (targetId && window.recruiterJobsList) {
+        const job = window.recruiterJobsList.find(j => String(j.id) === String(targetId));
+        if (job) {
+            currentSelectedJdId = String(job.id);
+            currentSelectedJdText = job.description || "";
+            if (recJobDescription) recJobDescription.value = job.description || "";
+            if (jdSelect) jdSelect.value = String(job.id);
+        }
+    } else {
+        currentSelectedJdId = null;
+        currentSelectedJdText = "";
+        if (recJobDescription) recJobDescription.value = "";
+        if (jdSelect) jdSelect.value = "";
+    }
+    updateJdActionButtons();
+}
+
 /**
  * Binds event listeners for recruiter workspace (runs once on startup).
  */
@@ -127,77 +186,326 @@ export function initRecruiterPage() {
         });
     }
 
+    // ==========================================
+    // JD Library Controls & Modals
+    // ==========================================
     const jdSelect = document.getElementById('rec-jd-select');
     const btnSaveJd = document.getElementById('btn-save-jd');
+    const btnUpdateJd = document.getElementById('btn-update-jd');
     const btnArchiveJd = document.getElementById('btn-archive-jd');
 
+    // Modals
+    const saveJdModal = document.getElementById('save-jd-modal');
+    const closeSaveJdBtn = document.getElementById('close-save-jd-btn');
+    const btnCancelSaveJd = document.getElementById('btn-cancel-save-jd');
+    const btnConfirmSaveJd = document.getElementById('btn-confirm-save-jd');
+    const saveJdNameInput = document.getElementById('save-jd-name-input');
+    const saveJdNameWarning = document.getElementById('save-jd-name-warning');
+    const saveJdNameError = document.getElementById('save-jd-name-error');
+    const saveJdPreview = document.getElementById('save-jd-preview');
+
+    const updateJdModal = document.getElementById('update-jd-modal');
+    const closeUpdateJdBtn = document.getElementById('close-update-jd-btn');
+    const btnCancelUpdateJd = document.getElementById('btn-cancel-update-jd');
+    const btnConfirmUpdateJd = document.getElementById('btn-confirm-update-jd');
+    const updateJdNameInput = document.getElementById('update-jd-name-input');
+    const updateJdError = document.getElementById('update-jd-error');
+
+    const unsavedModal = document.getElementById('unsaved-changes-modal');
+    const btnKeepEditing = document.getElementById('btn-keep-editing');
+    const btnDiscardChanges = document.getElementById('btn-discard-changes');
+    const closeUnsavedBtn = document.getElementById('close-unsaved-changes-btn');
+
+    // 1. Dropdown Selection with Unsaved Changes Guard
     if (jdSelect) {
         jdSelect.addEventListener('change', () => {
-            const selectedId = jdSelect.value;
-            if (selectedId && window.recruiterJobsList) {
-                const job = window.recruiterJobsList.find(j => j.id == selectedId);
-                if (job) {
-                    recJobDescription.value = job.description;
-                    if (btnSaveJd) btnSaveJd.textContent = "💾 Update Library Item";
-                }
+            const targetId = jdSelect.value;
+            if (hasUnsavedJdChanges()) {
+                pendingNavigationTargetId = targetId;
+                // Revert visual selection until user decides
+                jdSelect.value = currentSelectedJdId || "";
+                if (unsavedModal) unsavedModal.classList.remove('hidden');
             } else {
-                recJobDescription.value = '';
-                if (btnSaveJd) btnSaveJd.textContent = "💾 Save to Library";
+                applyJdSelection(targetId);
             }
         });
     }
 
+    // Unsaved Changes Modal Actions
+    const closeUnsavedModal = () => {
+        if (unsavedModal) unsavedModal.classList.add('hidden');
+        pendingNavigationTargetId = null;
+    };
+
+    if (btnKeepEditing) {
+        btnKeepEditing.addEventListener('click', closeUnsavedModal);
+    }
+    if (closeUnsavedBtn) {
+        closeUnsavedBtn.addEventListener('click', closeUnsavedModal);
+    }
+    if (btnDiscardChanges) {
+        btnDiscardChanges.addEventListener('click', () => {
+            const target = pendingNavigationTargetId;
+            closeUnsavedModal();
+            applyJdSelection(target);
+        });
+    }
+
+    // 2. Save JD Modal Actions
+    const openSaveJdModal = () => {
+        const jdText = (recJobDescription?.value || "").trim();
+        if (!jdText) {
+            alert("Please enter a job description to save.");
+            return;
+        }
+        if (saveJdPreview) {
+            saveJdPreview.textContent = jdText.substring(0, 160) + (jdText.length > 160 ? "..." : "");
+        }
+        if (saveJdNameInput) {
+            saveJdNameInput.value = "";
+        }
+        if (saveJdNameWarning) saveJdNameWarning.classList.add('hidden');
+        if (saveJdNameError) {
+            saveJdNameError.textContent = "";
+            saveJdNameError.classList.add('hidden');
+        }
+        if (saveJdModal) {
+            saveJdModal.classList.remove('hidden');
+            setTimeout(() => saveJdNameInput?.focus(), 60);
+        }
+    };
+
+    const closeSaveJdModal = () => {
+        if (saveJdModal) saveJdModal.classList.add('hidden');
+    };
+
     if (btnSaveJd) {
-        btnSaveJd.addEventListener('click', async () => {
-            const jdText = recJobDescription.value.trim();
+        btnSaveJd.addEventListener('click', openSaveJdModal);
+    }
+    if (closeSaveJdBtn) {
+        closeSaveJdBtn.addEventListener('click', closeSaveJdModal);
+    }
+    if (btnCancelSaveJd) {
+        btnCancelSaveJd.addEventListener('click', closeSaveJdModal);
+    }
+
+    if (saveJdNameInput) {
+        saveJdNameInput.addEventListener('input', () => {
+            const val = saveJdNameInput.value.trim().toLowerCase();
+            if (saveJdNameError) saveJdNameError.classList.add('hidden');
+            if (val && window.recruiterJobsList) {
+                const isDup = window.recruiterJobsList.some(j => (j.name || j.title || "").trim().toLowerCase() === val);
+                if (isDup) {
+                    if (saveJdNameWarning) saveJdNameWarning.classList.remove('hidden');
+                } else {
+                    if (saveJdNameWarning) saveJdNameWarning.classList.add('hidden');
+                }
+            } else {
+                if (saveJdNameWarning) saveJdNameWarning.classList.add('hidden');
+            }
+        });
+
+        saveJdNameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                btnConfirmSaveJd?.click();
+            }
+        });
+    }
+
+    if (btnConfirmSaveJd) {
+        btnConfirmSaveJd.addEventListener('click', async () => {
+            const name = (saveJdNameInput?.value || "").trim();
+            const jdText = (recJobDescription?.value || "").trim();
+
+            if (!name) {
+                if (saveJdNameError) {
+                    saveJdNameError.textContent = "Please enter a recognizable name for this job description.";
+                    saveJdNameError.classList.remove('hidden');
+                }
+                saveJdNameInput?.focus();
+                return;
+            }
+
             if (!jdText) {
+                closeSaveJdModal();
                 alert("Please enter a job description to save.");
                 return;
             }
-            const selectedId = jdSelect ? jdSelect.value : "";
+
+            toggleButtonLoading(btnConfirmSaveJd, true, "Saving...", "Save JD");
+            btnConfirmSaveJd.disabled = true;
+
             try {
-                const title = jdText.substring(0, 50) + (jdText.length > 50 ? "..." : "");
                 const formData = new FormData();
-                formData.append('title', title);
+                formData.append('title', name);
+                formData.append('name', name);
                 formData.append('description', jdText);
-                
-                if (selectedId) {
-                    await api.updateJob(selectedId, formData);
-                    alert("Job description updated successfully!");
-                    await loadJobDescriptionsDropdown(selectedId);
-                } else {
-                    const res = await api.createJob(formData);
-                    alert("Job description saved to library!");
-                    const savedId = res?.id;
-                    await loadJobDescriptionsDropdown(savedId);
-                    if (btnSaveJd) btnSaveJd.textContent = "💾 Update Library Item";
-                }
+
+                const res = await api.createJob(formData);
+                closeSaveJdModal();
+                alert("Job description saved to library successfully!");
+
+                const savedId = res?.id;
+                await loadJobDescriptionsDropdown(savedId);
+                applyJdSelection(savedId);
             } catch (err) {
-                alert("Failed to save job description: " + err.message);
+                if (saveJdNameError) {
+                    saveJdNameError.textContent = err.message || "Failed to save job description.";
+                    saveJdNameError.classList.remove('hidden');
+                } else {
+                    alert("Failed to save job description: " + err.message);
+                }
+            } finally {
+                toggleButtonLoading(btnConfirmSaveJd, false, "Saving...", "Save JD");
+                btnConfirmSaveJd.disabled = false;
             }
         });
     }
 
+    // 3. Update Saved JD Modal Actions
+    const openUpdateJdModal = () => {
+        if (!currentSelectedJdId) return;
+        const jdText = (recJobDescription?.value || "").trim();
+        if (!jdText) {
+            alert("Please enter a job description.");
+            return;
+        }
+        const job = window.recruiterJobsList?.find(j => String(j.id) === String(currentSelectedJdId));
+        if (updateJdNameInput) {
+            updateJdNameInput.value = job ? (job.name || job.title) : "";
+        }
+        if (updateJdError) {
+            updateJdError.textContent = "";
+            updateJdError.classList.add('hidden');
+        }
+        if (updateJdModal) {
+            updateJdModal.classList.remove('hidden');
+            setTimeout(() => updateJdNameInput?.focus(), 60);
+        }
+    };
+
+    const closeUpdateJdModal = () => {
+        if (updateJdModal) updateJdModal.classList.add('hidden');
+    };
+
+    if (btnUpdateJd) {
+        btnUpdateJd.addEventListener('click', openUpdateJdModal);
+    }
+    if (closeUpdateJdBtn) {
+        closeUpdateJdBtn.addEventListener('click', closeUpdateJdModal);
+    }
+    if (btnCancelUpdateJd) {
+        btnCancelUpdateJd.addEventListener('click', closeUpdateJdModal);
+    }
+
+    if (updateJdNameInput) {
+        updateJdNameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                btnConfirmUpdateJd?.click();
+            }
+        });
+    }
+
+    if (btnConfirmUpdateJd) {
+        btnConfirmUpdateJd.addEventListener('click', async () => {
+            if (!currentSelectedJdId) return;
+            const name = (updateJdNameInput?.value || "").trim();
+            const jdText = (recJobDescription?.value || "").trim();
+
+            if (!name) {
+                if (updateJdError) {
+                    updateJdError.textContent = "Job description name cannot be empty.";
+                    updateJdError.classList.remove('hidden');
+                }
+                updateJdNameInput?.focus();
+                return;
+            }
+
+            if (!jdText) {
+                closeUpdateJdModal();
+                alert("Job description text cannot be empty.");
+                return;
+            }
+
+            toggleButtonLoading(btnConfirmUpdateJd, true, "Updating...", "Update JD");
+            btnConfirmUpdateJd.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('title', name);
+                formData.append('name', name);
+                formData.append('description', jdText);
+
+                await api.updateJob(currentSelectedJdId, formData);
+                closeUpdateJdModal();
+                alert("Job description updated successfully!");
+
+                currentSelectedJdText = jdText;
+                await loadJobDescriptionsDropdown(currentSelectedJdId);
+                applyJdSelection(currentSelectedJdId);
+            } catch (err) {
+                if (updateJdError) {
+                    updateJdError.textContent = err.message || "Failed to update job description.";
+                    updateJdError.classList.remove('hidden');
+                } else {
+                    alert("Failed to update job description: " + err.message);
+                }
+            } finally {
+                toggleButtonLoading(btnConfirmUpdateJd, false, "Updating...", "Update JD");
+                btnConfirmUpdateJd.disabled = false;
+            }
+        });
+    }
+
+    // 4. Archive Selected Action
     if (btnArchiveJd) {
         btnArchiveJd.addEventListener('click', async () => {
-            const selectedId = jdSelect ? jdSelect.value : "";
-            if (!selectedId) {
+            if (!currentSelectedJdId) {
                 alert("Please select a job description from the library to archive.");
                 return;
             }
-            if (confirm("Are you sure you want to archive this job description?")) {
+            const job = window.recruiterJobsList?.find(j => String(j.id) === String(currentSelectedJdId));
+            const jdName = job ? (job.name || job.title) : null;
+            const name = jdName ? `"${jdName}"` : "this job description";
+
+            if (confirm(`Are you sure you want to archive ${name}? It will be removed from your active library.`)) {
                 try {
-                    await api.archiveJob(selectedId);
+                    await api.archiveJob(currentSelectedJdId);
                     alert("Job description archived successfully.");
-                    recJobDescription.value = "";
-                    await loadJobDescriptionsDropdown();
-                    if (btnSaveJd) btnSaveJd.textContent = "💾 Save to Library";
+                    applyJdSelection(null);
+                    await loadJobDescriptionsDropdown(null);
                 } catch (err) {
                     alert("Failed to archive job description: " + err.message);
                 }
             }
         });
     }
+
+    // 5. Global Esc key & backdrop click for JD Modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (unsavedModal && !unsavedModal.classList.contains('hidden')) {
+                closeUnsavedModal();
+            } else if (saveJdModal && !saveJdModal.classList.contains('hidden')) {
+                closeSaveJdModal();
+            } else if (updateJdModal && !updateJdModal.classList.contains('hidden')) {
+                closeUpdateJdModal();
+            }
+        }
+    });
+
+    [saveJdModal, updateJdModal, unsavedModal].forEach(modal => {
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    if (modal === unsavedModal) pendingNavigationTargetId = null;
+                }
+            });
+        }
+    });
 
     const recResultsList = document.getElementById('rec-results-list');
     if (recResultsList) {
@@ -264,18 +572,36 @@ async function loadJobDescriptionsDropdown(selectedId = null) {
     const jdSelect = document.getElementById('rec-jd-select');
     if (!jdSelect) return;
     try {
+        jdSelect.innerHTML = '<option value="">Loading saved job descriptions...</option>';
         const jobs = await api.getJobs();
-        let options = '<option value="">-- Create New (No Library Item Selected) --</option>';
-        options += jobs.map(j => 
-            `<option value="${j.id}">${j.title} ${j.company ? " | " + j.company : ""}</option>`
-        ).join("");
+        window.recruiterJobsList = jobs || [];
+
+        let options = '';
+        if (!jobs || jobs.length === 0) {
+            options = '<option value="">-- Create New (No saved JDs in library) --</option>';
+        } else {
+            options = '<option value="">-- Create New (No Library Item Selected) --</option>';
+            options += jobs.map(j => {
+                const label = j.name || j.title || "Untitled JD";
+                return `<option value="${j.id}">${escapeHTML(label)}${j.company ? " | " + escapeHTML(j.company) : ""}</option>`;
+            }).join("");
+        }
         jdSelect.innerHTML = options;
-        window.recruiterJobsList = jobs;
+
         if (selectedId) {
-            jdSelect.value = String(selectedId);
+            const exists = (jobs || []).some(j => String(j.id) === String(selectedId));
+            if (exists) {
+                applyJdSelection(selectedId);
+            } else {
+                applyJdSelection(null);
+            }
+        } else {
+            applyJdSelection(null);
         }
     } catch (err) {
         console.error("Failed to load job descriptions:", err);
+        jdSelect.innerHTML = '<option value="">-- Create New (Failed to load library) --</option>';
+        applyJdSelection(null);
     }
 }
 
@@ -290,6 +616,7 @@ export function clearRecruiterWorkspaceState() {
     const recResultsList = document.getElementById('rec-results-list');
 
     if (recJobDescription) recJobDescription.value = '';
+    applyJdSelection(null);
     recUploadedFiles = [];
     renderRecFileList();
     if (recDropZone) recDropZone.classList.remove('collapsed', 'active');

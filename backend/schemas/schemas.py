@@ -157,3 +157,33 @@ class ScreeningTaskDetailResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class JobDescriptionResponse(BaseModel):
+    id: int
+    title: str
+    name: str
+    subtitle: Optional[str] = None
+    description: str
+    company: Optional[str] = None
+    optional_notes: Optional[str] = None
+    is_archived: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+class JobDescriptionCreate(BaseModel):
+    name: Optional[str] = Field(default=None, max_length=255)
+    title: Optional[str] = Field(default=None, max_length=255)
+    description: str
+    subtitle: Optional[str] = None
+    company: Optional[str] = None
+    optional_notes: Optional[str] = None
+
+class JobDescriptionUpdate(BaseModel):
+    name: Optional[str] = Field(default=None, max_length=255)
+    title: Optional[str] = Field(default=None, max_length=255)
+    description: str
+    subtitle: Optional[str] = None
+    company: Optional[str] = None
+    optional_notes: Optional[str] = None

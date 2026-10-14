@@ -60,7 +60,10 @@ async def process_resumes(
         ).first()
         if not jd_model:
             raise HTTPException(status_code=404, detail="Job description not found in your library")
-        jd_text = jd_model.description
+        if job_description and job_description.strip():
+            jd_text = job_description
+        else:
+            jd_text = jd_model.description
         clean_text = jd_text.strip()
     else:
         if not job_description or not job_description.strip():
@@ -296,19 +299,22 @@ def list_job_descriptions(
         {
             "id": j.id,
             "title": j.title,
+            "name": j.title,
             "subtitle": j.subtitle,
             "description": j.description,
             "company": j.company,
             "optional_notes": j.optional_notes,
             "is_archived": j.is_archived,
-            "created_at": j.created_at.isoformat()
+            "created_at": j.created_at.isoformat() if j.created_at else None,
+            "updated_at": j.updated_at.isoformat() if j.updated_at else None
         }
         for j in unique_jds
     ]
 
 @router.post("/jobs")
 def create_job_description(
-    title: str = Form(...),
+    title: Optional[str] = Form(None),
+    name: Optional[str] = Form(None),
     subtitle: Optional[str] = Form(None),
     description: str = Form(...),
     company: Optional[str] = Form(None),
@@ -318,9 +324,23 @@ def create_job_description(
 ):
     """
     Adds a new job description to the recruiter's library or promotes an ad-hoc JD.
-    Prevents duplicate entries with the same description.
+    Accepts recruiter-provided JD name via either 'name' or 'title'.
     """
-    clean_desc = description.strip()
+    # Safely extract string values to support both HTTP Form bodies and direct function calls in unit tests
+    name_str = name if isinstance(name, str) else None
+    title_str = title if isinstance(title, str) else None
+    raw_name = name_str if name_str is not None else title_str
+    clean_title = raw_name.strip() if raw_name else ""
+    if not clean_title:
+        raise HTTPException(status_code=400, detail="Job description name cannot be empty")
+        
+    clean_desc = description.strip() if isinstance(description, str) else ""
+    if not clean_desc:
+        raise HTTPException(status_code=400, detail="Job description text cannot be empty")
+
+    clean_sub = subtitle if isinstance(subtitle, str) else None
+    clean_comp = company if isinstance(company, str) else None
+    clean_notes = optional_notes if isinstance(optional_notes, str) else None
 
     # 1. If an active library JD already exists with the same description, update and return it
     existing_active = db.query(JobDescription).filter(
@@ -329,15 +349,21 @@ def create_job_description(
         JobDescription.description == clean_desc
     ).first()
     if existing_active:
-        existing_active.title = title
-        if subtitle is not None:
-            existing_active.subtitle = subtitle
-        if company is not None:
-            existing_active.company = company
-        if optional_notes is not None:
-            existing_active.optional_notes = optional_notes
+        existing_active.title = clean_title
+        if clean_sub is not None:
+            existing_active.subtitle = clean_sub
+        if clean_comp is not None:
+            existing_active.company = clean_comp
+        if clean_notes is not None:
+            existing_active.optional_notes = clean_notes
+        existing_active.updated_at = datetime.datetime.utcnow()
         db.commit()
-        return {"message": "Job description updated in library successfully", "id": existing_active.id}
+        return {
+            "message": "Job description updated in library successfully",
+            "id": existing_active.id,
+            "title": existing_active.title,
+            "name": existing_active.title
+        }
 
     # 2. If an unsaved/ad-hoc JD exists with the same description, promote it into library
     existing_adhoc = db.query(JobDescription).filter(
@@ -347,34 +373,49 @@ def create_job_description(
     ).first()
     if existing_adhoc:
         existing_adhoc.is_archived = False
-        existing_adhoc.title = title
-        if subtitle is not None:
-            existing_adhoc.subtitle = subtitle
-        if company is not None:
-            existing_adhoc.company = company
-        if optional_notes is not None:
-            existing_adhoc.optional_notes = optional_notes
+        existing_adhoc.title = clean_title
+        if clean_sub is not None:
+            existing_adhoc.subtitle = clean_sub
+        if clean_comp is not None:
+            existing_adhoc.company = clean_comp
+        if clean_notes is not None:
+            existing_adhoc.optional_notes = clean_notes
+        existing_adhoc.updated_at = datetime.datetime.utcnow()
         db.commit()
-        return {"message": "Job description saved to library successfully", "id": existing_adhoc.id}
+        return {
+            "message": "Job description saved to library successfully",
+            "id": existing_adhoc.id,
+            "title": existing_adhoc.title,
+            "name": existing_adhoc.title
+        }
 
     # 3. Otherwise create brand new library JD
     jd = JobDescription(
         owner_id=current_user.id,
-        title=title,
-        subtitle=subtitle,
+        title=clean_title,
+        subtitle=clean_sub,
         description=clean_desc,
-        company=company,
-        optional_notes=optional_notes,
-        is_archived=False
+        company=clean_comp,
+        optional_notes=clean_notes,
+        is_archived=False,
+        created_at=datetime.datetime.utcnow(),
+        updated_at=datetime.datetime.utcnow()
     )
     db.add(jd)
     db.commit()
-    return {"message": "Job description created successfully", "id": jd.id}
+    db.refresh(jd)
+    return {
+        "message": "Job description created successfully",
+        "id": jd.id,
+        "title": jd.title,
+        "name": jd.title
+    }
 
 @router.put("/jobs/{jd_id}")
 def update_job_description(
     jd_id: int,
-    title: str = Form(...),
+    title: Optional[str] = Form(None),
+    name: Optional[str] = Form(None),
     subtitle: Optional[str] = Form(None),
     description: str = Form(...),
     company: Optional[str] = Form(None),
@@ -384,18 +425,44 @@ def update_job_description(
 ):
     """
     Edits an existing job description in the recruiter's library.
+    Accepts updated JD name via either 'name' or 'title'.
     """
+    name_str = name if isinstance(name, str) else None
+    title_str = title if isinstance(title, str) else None
+    raw_name = name_str if name_str is not None else title_str
+    clean_title = raw_name.strip() if raw_name else ""
+    if not clean_title:
+        raise HTTPException(status_code=400, detail="Job description name cannot be empty")
+        
+    clean_desc = description.strip() if isinstance(description, str) else ""
+    if not clean_desc:
+        raise HTTPException(status_code=400, detail="Job description text cannot be empty")
+
+    clean_sub = subtitle if isinstance(subtitle, str) else None
+    clean_comp = company if isinstance(company, str) else None
+    clean_notes = optional_notes if isinstance(optional_notes, str) else None
+
     jd = db.query(JobDescription).filter(JobDescription.id == jd_id, JobDescription.owner_id == current_user.id).first()
     if not jd:
         raise HTTPException(status_code=404, detail="Job description not found")
         
-    jd.title = title
-    jd.subtitle = subtitle
-    jd.description = description
-    jd.company = company
-    jd.optional_notes = optional_notes
+    jd.title = clean_title
+    if clean_sub is not None:
+        jd.subtitle = clean_sub
+    jd.description = clean_desc
+    if clean_comp is not None:
+        jd.company = clean_comp
+    if clean_notes is not None:
+        jd.optional_notes = clean_notes
+    jd.updated_at = datetime.datetime.utcnow()
     db.commit()
-    return {"message": "Job description updated successfully"}
+    db.refresh(jd)
+    return {
+        "message": "Job description updated successfully",
+        "id": jd.id,
+        "title": jd.title,
+        "name": jd.title
+    }
 
 @router.delete("/jobs/{jd_id}")
 def archive_job_description(

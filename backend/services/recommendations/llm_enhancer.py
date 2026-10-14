@@ -65,7 +65,8 @@ async def enhance_recommendations_with_llm(recommendations: List[Recommendation]
     return recommendations
 
 async def _call_gemini_api(prompt: str, api_key: str) -> List[dict]:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={api_key}"
+    model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
     data = {
         "contents": [
             {

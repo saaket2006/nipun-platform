@@ -7,6 +7,7 @@ from backend.services.xai.evidence import (
     generate_projects_evidence,
     generate_document_similarity_evidence
 )
+from backend.services.policy.scoring_policy import default_scoring_policy
 
 def build_score_components(
     scoring_event: Any,
@@ -82,7 +83,7 @@ def build_score_components(
         weighted_score=proj_raw * proj_weight,
         max_score=100.0,
         status=_resolve_status(proj_raw, 100.0, 20.0),
-        details="Checks count of completed matching tech projects (ideal target is 5).",
+        details=f"Checks count of completed matching tech projects (ideal target is {default_scoring_policy.project_target_count}).",
         evidence=proj_evidence
     ))
     

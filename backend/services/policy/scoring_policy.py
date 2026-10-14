@@ -10,7 +10,7 @@ class ScoringPolicy:
         education_weight: float = 0.15,
         projects_weight: float = 0.10,
         max_experience_years: float = 10.0,
-        project_target_count: int = 5
+        project_target_count: int = 3
     ):
         self.skills_weight = skills_weight
         self.experience_weight = experience_weight

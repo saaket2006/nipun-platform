@@ -2,6 +2,7 @@ import re
 from typing import List, Any
 from backend.services.recommendations.models import Recommendation
 from backend.services.policy.recommendation_policy import default_recommendation_policy
+from backend.services.policy.scoring_policy import default_scoring_policy
 from backend.services.recommendations.estimator import (
     estimate_missing_skill_gain,
     estimate_experience_gain,
@@ -111,7 +112,8 @@ def generate_heuristics_recommendations(scoring_event: Any) -> List[Recommendati
         
     # 4. Project Count Gap
     proj_count = scoring_event.candidate_projects
-    if proj_count < 5:
+    target_projects = default_scoring_policy.project_target_count
+    if proj_count < target_projects:
         priority = "HIGH" if proj_count < 2 else "MEDIUM"
         gain = estimate_project_gain(proj_count, weights)
         
@@ -121,7 +123,7 @@ def generate_heuristics_recommendations(scoring_event: Any) -> List[Recommendati
             description="List 1-2 more hands-on technical projects on your resume that feature the requested technologies (e.g. build open-source or portfolio work).",
             priority=priority,
             category="Projects",
-            reason=f"Only {proj_count} project(s) matching tech requirements were identified, which is below the target threshold of 5 projects.",
+            reason=f"Only {proj_count} project(s) matching tech requirements were identified, which is below the target threshold of {target_projects} projects.",
             source="RULE",
             estimated_score_gain=gain,
             confidence=1.0

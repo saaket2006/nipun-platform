@@ -1,6 +1,6 @@
 import datetime
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Float, Boolean, Enum as SQLEnum, JSON
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, synonym
 from backend.database.database import Base
 from backend.models.enums import UserRole, CompanyType, ResumeStatus
 
@@ -90,6 +90,7 @@ class JobDescription(Base):
     id = Column(Integer, primary_key=True, index=True)
     owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     title = Column(String(255), nullable=False)
+    name = synonym("title")
     subtitle = Column(String(255), nullable=True)
     description = Column(Text, nullable=False)
     company = Column(String(255), nullable=True)

@@ -1007,7 +1007,7 @@ function renderCandidateAnalysisResults(cand) {
                     </div>
                     <div class="info-field">
                         <span class="info-label" style="font-size: 0.75rem; color: #94a3b8;">Projects Match</span>
-                        <span class="info-value" style="color: #fff; font-weight: 500;">${cand.projects ? `${cand.projects} out of 5 projects` : '0 projects'}</span>
+                        <span class="info-value" style="color: #fff; font-weight: 500;">${cand.projects ? `${cand.projects} out of 3 projects` : '0 projects'}</span>
                     </div>
                 </div>
             </div>

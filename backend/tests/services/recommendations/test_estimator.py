@@ -83,21 +83,21 @@ def test_estimate_education_gain_custom_weights():
     assert result == 4.0
 
 def test_estimate_project_gain_below_target():
-    # target = 5, default_projects_weight = 0.10
-    # gain = (1.0 / 5) * 0.10 * 100.0 = 2.0
+    # target = 3, default_projects_weight = 0.10
+    # gain = (1.0 / 3) * 0.10 * 100.0 = 3.333... -> 3.3
     result = estimate_project_gain(current_count=2)
-    assert result == 2.0
+    assert result == 3.3
 
 def test_estimate_project_gain_at_target():
-    result = estimate_project_gain(current_count=5)
+    result = estimate_project_gain(current_count=3)
     assert result == 0.0
 
 def test_estimate_project_gain_above_target():
-    result = estimate_project_gain(current_count=7)
+    result = estimate_project_gain(current_count=5)
     assert result == 0.0
 
 def test_estimate_project_gain_custom_weights():
     custom_weights = {"projects": 0.20}
-    # gain = (1.0 / 5) * 0.20 * 100.0 = 4.0
+    # gain = (1.0 / 3) * 0.20 * 100.0 = 6.666... -> 6.7
     result = estimate_project_gain(current_count=2, weights=custom_weights)
-    assert result == 4.0
+    assert result == 6.7

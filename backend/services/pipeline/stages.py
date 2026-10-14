@@ -340,8 +340,8 @@ class ScoringStage(PipelineStage):
             else:
                 output.education_score = 20
 
-            # 3. Projects Score (Target count from policy)
-            output.projects_score = (output.candidate_projects / default_scoring_policy.project_target_count) * 100
+            # 3. Projects Score (Target count from policy, capped at 100%)
+            output.projects_score = min(100.0, (output.candidate_projects / default_scoring_policy.project_target_count) * 100)
 
             # 4. Overall Similarity Score (Weights dynamically from resolved profile weights)
             skills_w = weights.get("skills", 0.50)

@@ -115,11 +115,13 @@ def generate_education_evidence(education: str) -> List[Evidence]:
 
 def generate_projects_evidence(count: int) -> List[Evidence]:
     """Generates Evidence for technical projects."""
+    from backend.services.policy.scoring_policy import default_scoring_policy
+    target = default_scoring_policy.project_target_count
     desc = f"Candidate has completed {count} technical projects."
-    if count >= 5:
-        desc += " This exceeds or meets the ideal target threshold of 5 projects."
+    if count >= target:
+        desc += f" This exceeds or meets the ideal target threshold of {target} projects."
     elif count > 0:
-        desc += " This partially satisfies the preferred threshold of 5 projects."
+        desc += f" This partially satisfies the preferred threshold of {target} projects."
         
     return [
         Evidence(

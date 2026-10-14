@@ -45,3 +45,10 @@ def test_generate_experience_evidence_junior():
     evidence = generate_experience_evidence(years=1, internships=1)
     assert len(evidence) == 1
     assert "totaling 1.5 years (Junior Level)." in evidence[0].description
+
+def test_generate_projects_evidence():
+    from backend.services.xai.evidence import generate_projects_evidence
+    ev_below = generate_projects_evidence(count=2)
+    assert "partially satisfies the preferred threshold of 3 projects" in ev_below[0].description
+    ev_meet = generate_projects_evidence(count=3)
+    assert "exceeds or meets the ideal target threshold of 3 projects" in ev_meet[0].description

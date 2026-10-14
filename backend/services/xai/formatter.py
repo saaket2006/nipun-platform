@@ -100,19 +100,22 @@ def format_projects_explanation(raw_score: float, count: int, level: str) -> tup
     """
     Returns (why_awarded, why_deducted) for Projects component.
     """
+    from backend.services.policy.scoring_policy import default_scoring_policy
+    target = default_scoring_policy.project_target_count
+
     if level == "SUMMARY":
         why_awarded = f"Completed {count} technical project(s)."
-        why_deducted = "Projects count is below the preferred target of 3 projects." if count < 3 else "Satisfies project experience standards."
+        why_deducted = f"Projects count is below the preferred target of {target} projects." if count < target else "Satisfies project experience standards."
         return why_awarded, why_deducted
         
     elif level == "DETAILED":
         why_awarded = f"Awarded {raw_score:.1f}% project score contribution for completing {count} matching project(s) parsed in resume."
-        why_deducted = f"Deduction applied because candidate project count ({count}) is below target threshold of 3 projects." if count < 3 else "No deductions applied. Adequate project volume."
+        why_deducted = f"Deduction applied because candidate project count ({count}) is below target threshold of {target} projects." if count < target else "No deductions applied. Adequate project volume."
         return why_awarded, why_deducted
         
     else:  # TECHNICAL
-        why_awarded = f"Project metric score = (count ({count}) / 3.0) * 100 = {raw_score:.1f}%."
-        why_deducted = f"Project gap penalty applied: {max(0, 3 - count)} project(s) remaining for maximum category score."
+        why_awarded = f"Project metric score = (count ({count}) / {target}.0) * 100 = {raw_score:.1f}%."
+        why_deducted = f"Project gap penalty applied: {max(0, target - count)} project(s) remaining for maximum category score."
         return why_awarded, why_deducted
 
 def format_document_similarity_explanation(raw_score: float, level: str) -> tuple:

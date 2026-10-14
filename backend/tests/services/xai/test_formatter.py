@@ -23,3 +23,12 @@ def test_format_overall_explanation_other():
     assert "65.0%" in awarded
     assert "skill_score * 0.50" in awarded
     assert "linear combination" in deducted
+
+def test_format_projects_explanation():
+    from backend.services.xai.formatter import format_projects_explanation
+    # Below target
+    awarded, deducted = format_projects_explanation(66.7, 2, "SUMMARY")
+    assert "below the preferred target of 3 projects" in deducted
+    # At target
+    awarded, deducted = format_projects_explanation(100.0, 3, "SUMMARY")
+    assert "Satisfies project experience standards." in deducted

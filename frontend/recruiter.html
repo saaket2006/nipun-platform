@@ -163,9 +163,10 @@
                                 <textarea id="rec-job-description" placeholder="Paste target Job Description here..."></textarea>
                             </div>
 
-                            <div class="form-group jd-library-actions" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: flex-end;">
-                                <button id="btn-save-jd" class="glow-btn" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: 6px; cursor: pointer; color: #a5b4fc;">💾 Save to Library</button>
-                                <button id="btn-archive-jd" class="glow-btn" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; cursor: pointer; color: #fca5a5;">🗑️ Archive Selected</button>
+                            <div class="form-group jd-library-actions" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: flex-end; flex-wrap: wrap;">
+                                <button type="button" id="btn-save-jd" class="glow-btn" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: 6px; cursor: pointer; color: #a5b4fc;">💾 Save to Library</button>
+                                <button type="button" id="btn-update-jd" class="glow-btn hidden" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 6px; cursor: pointer; color: #6ee7b7;">🔄 Update Saved JD</button>
+                                <button type="button" id="btn-archive-jd" class="glow-btn hidden" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; cursor: pointer; color: #fca5a5;">🗑️ Archive Selected</button>
                             </div>
 
                             <div class="form-group file-upload-wrapper">
@@ -492,6 +493,99 @@
                 <a href="mailto:nipun.platform@gmail.com"
                     style="font-size: 1.3rem; color: #6366f1; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
                     target="_blank">nipun.platform@gmail.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save JD Modal -->
+    <div id="save-jd-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="save-jd-modal-title">
+        <div class="glass-card" style="width: 90%; max-width: 480px; margin: 0; padding: 1.75rem; text-align: left; position: relative;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h3 id="save-jd-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>💾</span> Save Job Description
+                </h3>
+                <button type="button" id="close-save-jd-btn" class="close-modal-btn" aria-label="Close save dialog">✕</button>
+            </div>
+            <p class="modal-subtitle" style="font-size: 0.85rem; color: #94a3b8; margin: 0 0 1.25rem 0; line-height: 1.4;">
+                Provide a recognizable name to easily identify, select, and reuse this job description from your library.
+            </p>
+
+            <form id="save-jd-form" onsubmit="return false;">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="save-jd-name-input" style="display: block; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; margin-bottom: 0.4rem;">
+                        Job Description Name <span style="color: #f87171;">*</span>
+                    </label>
+                    <input type="text" id="save-jd-name-input" class="auth-input" placeholder="e.g. Backend Software Engineer, Junior GenAI Developer" maxlength="100" autocomplete="off" style="width: 100%; padding: 0.65rem 0.85rem; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; font-size: 0.9rem;">
+                    <div id="save-jd-name-warning" class="hidden" style="font-size: 0.8rem; color: #fbbf24; margin-top: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+                        <span>⚠️</span> <span>A saved JD with this name already exists. A separate entry with its own ID will be created.</span>
+                    </div>
+                    <div id="save-jd-name-error" class="hidden" style="font-size: 0.8rem; color: #f87171; margin-top: 0.4rem;"></div>
+                </div>
+
+                <div style="margin-bottom: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 0.75rem;">
+                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; display: block; margin-bottom: 0.35rem;">JD Preview Snippet</span>
+                    <p id="save-jd-preview" style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.4; max-height: 4.2rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;"></p>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                    <button type="button" id="btn-cancel-save-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;">Cancel</button>
+                    <button type="button" id="btn-confirm-save-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.25rem; background: #6366f1; border: 1px solid #6366f1; border-radius: 6px; cursor: pointer; color: #fff; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <span>Save JD</span>
+                        <div class="loader hidden" style="width: 14px; height: 14px; border-width: 2px;"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update JD Modal -->
+    <div id="update-jd-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="update-jd-modal-title">
+        <div class="glass-card" style="width: 90%; max-width: 480px; margin: 0; padding: 1.75rem; text-align: left; position: relative;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h3 id="update-jd-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🔄</span> Update Saved Job Description
+                </h3>
+                <button type="button" id="close-update-jd-btn" class="close-modal-btn" aria-label="Close update dialog">✕</button>
+            </div>
+            <p class="modal-subtitle" style="font-size: 0.85rem; color: #94a3b8; margin: 0 0 1.25rem 0; line-height: 1.4;">
+                This will overwrite the stored text for this library item with your current edits. Completed screening history records will remain unchanged.
+            </p>
+
+            <form id="update-jd-form" onsubmit="return false;">
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label for="update-jd-name-input" style="display: block; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; margin-bottom: 0.4rem;">
+                        Job Description Name <span style="color: #f87171;">*</span>
+                    </label>
+                    <input type="text" id="update-jd-name-input" class="auth-input" placeholder="e.g. Backend Software Engineer" maxlength="100" autocomplete="off" style="width: 100%; padding: 0.65rem 0.85rem; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; font-size: 0.9rem;">
+                    <div id="update-jd-error" class="hidden" style="font-size: 0.8rem; color: #f87171; margin-top: 0.4rem;"></div>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                    <button type="button" id="btn-cancel-update-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;">Cancel</button>
+                    <button type="button" id="btn-confirm-update-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.25rem; background: #10b981; border: 1px solid #10b981; border-radius: 6px; cursor: pointer; color: #fff; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <span>Update JD</span>
+                        <div class="loader hidden" style="width: 14px; height: 14px; border-width: 2px;"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Unsaved Changes Modal -->
+    <div id="unsaved-changes-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="unsaved-changes-title">
+        <div class="glass-card" style="width: 90%; max-width: 440px; margin: 0; padding: 1.75rem; text-align: left; position: relative;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h3 id="unsaved-changes-title" style="margin: 0; font-size: 1.2rem; font-weight: 600; color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>⚠️</span> Unsaved Changes
+                </h3>
+                <button type="button" id="close-unsaved-changes-btn" class="close-modal-btn" aria-label="Cancel navigation">✕</button>
+            </div>
+            <p style="font-size: 0.875rem; color: #cbd5e1; margin: 0 0 1.25rem 0; line-height: 1.5;">
+                You have modified the job description text. Switching will discard your unsaved edits. What would you like to do?
+            </p>
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" id="btn-keep-editing" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;">Keep Editing</button>
+                <button type="button" id="btn-discard-changes" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 6px; cursor: pointer; color: #fca5a5;">Discard Changes</button>
             </div>
         </div>
     </div>
