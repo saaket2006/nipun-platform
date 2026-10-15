@@ -571,8 +571,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_database_database",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "database.py"
     },
     {
@@ -582,8 +582,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "backend_database_database_create_db_engine",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "create_db_engine()"
     },
     {
@@ -593,8 +593,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "backend_database_database_check_db_connection",
-      "community": 69,
-      "community_name": "seed_default_profiles",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "check_db_connection()"
     },
     {
@@ -604,8 +604,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "backend_database_database_get_db",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "get_db()"
     },
     {
@@ -615,8 +615,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "backend_database_database_rationale_32",
-      "community": 69,
-      "community_name": "seed_default_profiles",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "tests connection to the configured database on demand (e.g. startup or health..."
     },
     {
@@ -626,8 +626,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "backend_database_database_rationale_47",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "fastapi dependency to yield a database session."
     },
     {
@@ -1781,8 +1781,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_routers_onboarding",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "onboarding.py"
     },
     {
@@ -1792,8 +1792,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_routers_onboarding_py_get",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "get"
     },
     {
@@ -1803,8 +1803,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "backend_routers_onboarding_get_onboarding_status",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "get_onboarding_status()"
     },
     {
@@ -1847,8 +1847,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "backend_routers_onboarding_rationale_17",
-      "community": 6,
-      "community_name": "recruiter.py",
+      "community": 68,
+      "community_name": "User",
       "norm_label": "returns the user's onboarding completion status and role."
     },
     {
@@ -2056,8 +2056,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_routers_recruiter_py_patch",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 6,
+      "community_name": "recruiter.py",
       "norm_label": "patch"
     },
     {
@@ -2067,8 +2067,8 @@
       "source_location": "L640",
       "_origin": "ast",
       "id": "backend_routers_recruiter_update_recruiter_profile",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 6,
+      "community_name": "recruiter.py",
       "norm_label": "update_recruiter_profile()"
     },
     {
@@ -2188,8 +2188,8 @@
       "source_location": "L645",
       "_origin": "ast",
       "id": "backend_routers_recruiter_rationale_645",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 6,
+      "community_name": "recruiter.py",
       "norm_label": "update recruiter's profile information and display name. strictly scoped to..."
     },
     {
@@ -2353,8 +2353,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "field_validator",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": "field_validator"
     },
     {
@@ -2364,8 +2364,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "backend_schemas_schemas_candidateprofileupdate_validate_and_strip",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": ".validate_and_strip()"
     },
     {
@@ -2375,8 +2375,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "backend_schemas_schemas_recruiterprofileupdate",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": "recruiterprofileupdate"
     },
     {
@@ -2386,8 +2386,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "backend_schemas_schemas_recruiterprofileupdate_validate_and_strip",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": ".validate_and_strip()"
     },
     {
@@ -2397,8 +2397,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "backend_schemas_schemas_recruiterprofileupdate_validate_company_type",
-      "community": 95,
-      "community_name": "RecruiterProfileUpdate",
+      "community": 14,
+      "community_name": "UserRole",
       "norm_label": ".validate_company_type()"
     },
     {
@@ -13724,7 +13724,7 @@
       "label": "test_candidate_analysis_snapshot_modal_backdrop_close_and_router_navigation()",
       "file_type": "code",
       "source_file": "tests/test_frontend_assets.py",
-      "source_location": "L505",
+      "source_location": "L507",
       "_origin": "ast",
       "id": "tests_test_frontend_assets_test_candidate_analysis_snapshot_modal_backdrop_close_and_router_navigation",
       "community": 79,
@@ -13911,9 +13911,9 @@
       "label": "Verify candidate analysis snapshot modal: 1. Clicking backdrop outside card\u2026",
       "file_type": "rationale",
       "source_file": "tests/test_frontend_assets.py",
-      "source_location": "L506",
+      "source_location": "L508",
       "_origin": "ast",
-      "id": "tests_test_frontend_assets_rationale_506",
+      "id": "tests_test_frontend_assets_rationale_508",
       "community": 79,
       "community_name": "test_frontend_assets.py",
       "norm_label": "verify candidate analysis snapshot modal: 1. clicking backdrop outside card..."
@@ -49550,7 +49550,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_frontend_assets.py",
-      "source_location": "L505",
+      "source_location": "L507",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_frontend_assets",
@@ -49891,10 +49891,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_frontend_assets.py",
-      "source_location": "L506",
+      "source_location": "L508",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_frontend_assets_rationale_506",
+      "source": "tests_test_frontend_assets_rationale_508",
       "target": "tests_test_frontend_assets_test_candidate_analysis_snapshot_modal_backdrop_close_and_router_navigation",
       "confidence_score": 1.0
     },
@@ -52074,5 +52074,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "2b790055ea6c5cfcbb8c81cb498fece453352d50"
+  "built_at_commit": "a3d3eb22c80007e87a4dbc049307bd6ed9d3b716"
 }

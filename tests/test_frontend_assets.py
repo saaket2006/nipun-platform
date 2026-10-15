@@ -474,11 +474,11 @@ def test_candidate_analysis_snapshot_jd_display_and_wrapping():
         html_content = f.read()
 
     assert 'class="qv-section cav-jd-section"' in html_content
-    assert 'class="cav-jd-card"' in html_content
+    assert 'cav-jd-card' in html_content
     assert 'id="cav-jd-title"' in html_content
     assert 'class="cav-jd-title"' in html_content
     assert 'id="cav-jd-description"' in html_content
-    assert 'class="cav-jd-body"' in html_content
+    assert 'cav-jd-body' in html_content
     # Confirm old nested scrollbar max-height is eliminated
     assert "max-height: 150px" not in html_content
     assert "overflow-y: auto; background: rgba(0,0,0,0.2)" not in html_content
@@ -489,6 +489,8 @@ def test_candidate_analysis_snapshot_jd_display_and_wrapping():
     assert ".cav-jd-card" in css_content
     assert ".cav-jd-title" in css_content
     assert ".cav-jd-body" in css_content
+    assert "max-height: 180px;" in css_content
+    assert "overflow-y: auto;" in css_content
     assert "white-space: pre-wrap;" in css_content
     assert "overflow-wrap: break-word;" in css_content
     assert "word-break: break-word;" in css_content

@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "frontend/candidate.html": {
-    "mtime": 1792044244.9584017,
-    "ast_hash": "2cab959c0d0b2b0056e1baf766d5c02a",
+    "mtime": 1792045455.0267494,
+    "ast_hash": "9710f83d25a12b513721bf6da092893c",
     "semantic_hash": ""
   },
   "frontend/index.html": {
@@ -755,8 +755,8 @@
     "semantic_hash": ""
   },
   "tests/test_frontend_assets.py": {
-    "mtime": 1792044477.5887246,
-    "ast_hash": "5cbcd982a02dc0a901b76ddfb023578e",
+    "mtime": 1792045517.8331082,
+    "ast_hash": "20fe817f3add9847fad20f41d4e5a141",
     "semantic_hash": ""
   },
   "alembic/versions/2d0cabfd21b5_add_screening_tasks_table.py": {

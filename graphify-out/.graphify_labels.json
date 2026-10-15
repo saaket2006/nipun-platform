@@ -89,6 +89,5 @@
   "90": "list_job_descriptions",
   "91": "test_candidate_resume_details_preserves_recommendations",
   "92": "generate_grounded_xai_insights",
-  "93": "test_candidate_xai_dashboard.py",
-  "95": "RecruiterProfileUpdate"
+  "93": "test_candidate_xai_dashboard.py"
 }

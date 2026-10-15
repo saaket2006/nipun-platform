@@ -1,16 +1,16 @@
 # Graph Report - nipun-platform  (2026-10-15)
 
 ## Corpus Check
-- 150 files · ~161,088 words
+- 150 files · ~161,096 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1479 nodes · 3114 edges · 92 communities (85 shown, 7 thin omitted)
+- 1479 nodes · 3114 edges · 91 communities (84 shown, 7 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 313 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2b790055`
+- Built from commit: `a3d3eb22`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -84,7 +84,6 @@
 - test_candidate_resume_details_preserves_recommendations
 - generate_grounded_xai_insights
 - test_candidate_xai_dashboard.py
-- RecruiterProfileUpdate
 
 ## God Nodes (most connected - your core abstractions)
 1. `User` - 67 edges
@@ -113,7 +112,7 @@
 ## Import Cycles
 - 3-file cycle: `frontend/assets/js/auth.js -> frontend/assets/js/router.js -> frontend/assets/js/pages/login.js -> frontend/assets/js/auth.js`
 
-## Communities (92 total, 7 thin omitted)
+## Communities (91 total, 7 thin omitted)
 
 ### Community 0 - "stages.py"
 Cohesion: 0.07
@@ -141,7 +140,7 @@ Nodes (17): getStepsForRole(), hideObError(), initializeOnboardingPage, initOnbo
 
 ### Community 6 - "recruiter.py"
 Cohesion: 0.06
-Nodes (51): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online(), get_db(), FastAPI Dependency to yield a database session., CandidateProfile, JobDescription (+43 more)
+Nodes (49): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online(), CandidateProfile, JobDescription, RecruiterProfile, ScreeningTask (+41 more)
 
 ### Community 7 - "gsap.min.js"
 Cohesion: 0.06
@@ -172,8 +171,8 @@ Cohesion: 0.11
 Nodes (34): archiveJob(), createJob(), deleteCandidateResume(), deleteJob(), _executeRequest(), forgotPassword(), getCandidateResumeDetails(), getCandidateResumes() (+26 more)
 
 ### Community 14 - "UserRole"
-Cohesion: 0.26
-Nodes (28): CompanyType, UserRole, GoogleLoginRequest, BaseModel, CandidateProfileResponse, CandidateProfileUpdate, Config, ForgotPasswordRequest (+20 more)
+Cohesion: 0.21
+Nodes (30): CompanyType, UserRole, GoogleLoginRequest, BaseModel, CandidateProfileResponse, CandidateProfileUpdate, Config, ForgotPasswordRequest (+22 more)
 
 ### Community 15 - "candidate.js"
 Cohesion: 0.16
@@ -289,11 +288,11 @@ Nodes (17): create_job_description(), Adds a new job description to the recruite
 
 ### Community 68 - "User"
 Cohesion: 0.05
-Nodes (56): api_route, App, Settings, get_firebase_admin_app(), Any, Verifies a Firebase ID token using the Firebase Admin SDK. Extracts trusted…, Lazily initializes and returns the singleton Firebase Admin App. Supports: 1.…, verify_firebase_id_token() (+48 more)
+Nodes (63): api_route, App, Settings, get_firebase_admin_app(), Any, Verifies a Firebase ID token using the Firebase Admin SDK. Extracts trusted…, Lazily initializes and returns the singleton Firebase Admin App. Supports: 1.…, verify_firebase_id_token() (+55 more)
 
 ### Community 69 - "seed_default_profiles"
-Cohesion: 0.22
-Nodes (8): check_db_connection(), Tests connection to the configured database on demand (e.g. startup or health…, Startup event handler: verify database connectivity and seed default profiles., startup_event(), Session, Checks if scoring profiles exist in the database; if not, seeds missing default…, seed_default_profiles(), on_event
+Cohesion: 0.29
+Nodes (6): Startup event handler: verify database connectivity and seed default profiles., startup_event(), Session, Checks if scoring profiles exist in the database; if not, seeds missing default…, seed_default_profiles(), on_event
 
 ### Community 71 - "Core Principles"
 Cohesion: 0.08
@@ -363,10 +362,6 @@ Nodes (17): _build_deterministic_fallback(), _call_gemini_content(), generate_gr
 Cohesion: 0.09
 Nodes (24): get_password_hash(), Hashes a plain text password using bcrypt., anyio_backend(), client(), db_session(), fixture, Create a new database session for a test., Create a test client using the test database. (+16 more)
 
-### Community 95 - "RecruiterProfileUpdate"
-Cohesion: 0.29
-Nodes (5): patch, Update recruiter's profile information and display name. Strictly scoped to…, update_recruiter_profile(), RecruiterProfileUpdate, field_validator
-
 ## Knowledge Gaps
 - **196 isolated node(s):** `Settings`, `inflightGetRequests`, `uploadedFiles`, `sidebarLinkIds`, `COMPANY_TYPES` (+191 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -375,7 +370,7 @@ Nodes (5): patch, Update recruiter's profile information and display name. Stric
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `User` connect `User` to `stages.py`, `test_custom_scoring.py`, `backend/tests/test_recruiter.py`, `recruiter.py`, `process_resumes`, `test_password_reset.py`, `UserRole`, `google_login`, `routers/test_auth.py`, `Session`, `legacy_process_resumes`, `update_job_description`, `get_screening_task_detail`, `list_job_descriptions`, `get_screening_history`, `test_candidate_xai_dashboard.py`, `test_profile_editing.py`, `RecruiterProfileUpdate`?**
+- **Why does `User` connect `User` to `stages.py`, `test_custom_scoring.py`, `backend/tests/test_recruiter.py`, `recruiter.py`, `process_resumes`, `test_password_reset.py`, `UserRole`, `google_login`, `routers/test_auth.py`, `Session`, `legacy_process_resumes`, `update_job_description`, `get_screening_task_detail`, `list_job_descriptions`, `get_screening_history`, `test_candidate_xai_dashboard.py`, `test_profile_editing.py`?**
   _High betweenness centrality (0.076) - this node is a cross-community bridge._
 - **Why does `s()` connect `s` to `bf`, `gsap.min.js`, `recruiter.js`, `Tween`, `cb`?**
   _High betweenness centrality (0.022) - this node is a cross-community bridge._
