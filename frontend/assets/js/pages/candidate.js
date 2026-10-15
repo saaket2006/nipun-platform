@@ -105,6 +105,9 @@ export function initCandidatePage() {
 
             try {
                 const results = await api.screenResumeCandidate(formData);
+                // Invalidate cached candidate stats and resumes so dashboard shows fresh data on navigation
+                state.setCandidateStats(null);
+                state.setCandidateResumes(null);
                 renderCandidateAnalysisResults(results.results[0]);
                 if (labelInput) {
                     labelInput.value = '';
@@ -165,8 +168,12 @@ export function clearCandidateWorkspaceState() {
     if (candResultsContainer) candResultsContainer.classList.add('hidden');
 }
 
+let currentDashboardReqId = 0;
+
 /**
  * Page view initializer for Candidate Dashboard.
+ * Always fetches fresh, authoritative statistics and analysis history,
+ * guarding against race conditions and stale response overwrites.
  */
 export async function initializeCandidateDashboard() {
     const dashCandName = document.getElementById('dash-cand-name');
@@ -175,25 +182,44 @@ export async function initializeCandidateDashboard() {
     const dashCandDomain = document.getElementById('dash-cand-domain');
     const candTopUserName = document.getElementById('cand-top-user-name');
     const statsContainer = document.getElementById('cand-stats-container');
+    const timelineContainer = document.getElementById('candidate-timeline-list');
 
     if (!statsContainer) return;
 
-    // 1. Loading state indicators to prevent permanent "..."
-    if (dashCandName && dashCandName.textContent === "...") dashCandName.textContent = "Loading...";
-    if (dashCandStatus && dashCandStatus.textContent === "...") dashCandStatus.textContent = "Loading...";
-    if (dashCandField && dashCandField.textContent === "...") dashCandField.textContent = "Loading...";
-    if (dashCandDomain && dashCandDomain.textContent === "...") dashCandDomain.textContent = "Loading...";
-    if (statsContainer && (!statsContainer.innerHTML.trim() || statsContainer.querySelector('.loader'))) {
-        statsContainer.innerHTML = `<div style="text-align: center; padding: 2.5rem; color: var(--text-secondary);"><div class="loader" style="margin: 0 auto 0.75rem;"></div>Loading your dashboard data...</div>`;
+    // Track request sequence to prevent delayed responses from overwriting newer state
+    const reqId = ++currentDashboardReqId;
+
+    // 1. Loading state indicators to prevent permanent "..." and avoid false empty states
+    if (dashCandName && (dashCandName.textContent === "..." || !dashCandName.textContent)) dashCandName.textContent = "Loading...";
+    if (dashCandStatus && (dashCandStatus.textContent === "..." || !dashCandStatus.textContent)) dashCandStatus.textContent = "Loading...";
+    if (dashCandField && (dashCandField.textContent === "..." || !dashCandField.textContent)) dashCandField.textContent = "Loading...";
+    if (dashCandDomain && (dashCandDomain.textContent === "..." || !dashCandDomain.textContent)) dashCandDomain.textContent = "Loading...";
+
+    statsContainer.innerHTML = `
+        <div class="dashboard-loading" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
+            <div class="loader" style="margin: 0 auto 0.75rem;"></div>
+            Loading your dashboard data...
+        </div>
+    `;
+
+    if (timelineContainer) {
+        timelineContainer.innerHTML = `
+            <div class="timeline-loading" style="text-align: center; padding: 2rem; color: var(--text-secondary); background: rgba(255,255,255,0.01); border-radius: 8px;">
+                <div class="loader" style="margin: 0 auto 0.75rem;"></div>
+                Loading analysis history...
+            </div>
+        `;
     }
 
     try {
-        // 2. Fetch or retrieve cached candidate profile
+        // 2. Fetch or retrieve candidate profile
         let profile = state.getProfile();
         if (!profile) {
             profile = await api.getProfile();
             state.setProfile(profile);
         }
+
+        if (reqId !== currentDashboardReqId) return;
 
         const candName = profile.display_name || profile.email.split('@')[0];
         const statusVal = profile.candidate_profile?.current_status || "N/A";
@@ -206,22 +232,19 @@ export async function initializeCandidateDashboard() {
         if (dashCandDomain) dashCandDomain.textContent = domainVal;
         if (candTopUserName) candTopUserName.textContent = candName;
 
-        // 3. Fetch or retrieve cached stats & history in parallel
-        let stats = state.getCandidateStats();
-        let historyList = state.getCandidateResumes();
+        // 3. Always fetch fresh authoritative stats and history in parallel
+        const [stats, historyList] = await Promise.all([
+            api.getCandidateStats(),
+            api.getCandidateResumes()
+        ]);
 
-        if (!stats || !historyList) {
-            const [fetchedStats, fetchedHistory] = await Promise.all([
-                stats ? Promise.resolve(stats) : api.getCandidateStats(),
-                historyList ? Promise.resolve(historyList) : api.getCandidateResumes()
-            ]);
-            stats = fetchedStats;
-            historyList = fetchedHistory;
-            state.setCandidateStats(stats);
-            state.setCandidateResumes(historyList);
-        }
+        if (reqId !== currentDashboardReqId) return;
+
+        // Synchronize in-memory shared client state
+        state.setCandidateStats(stats);
+        state.setCandidateResumes(historyList);
         
-        if (stats.latest_ats_score !== null && stats.latest_ats_score !== undefined) {
+        if (stats && stats.latest_ats_score !== null && stats.latest_ats_score !== undefined) {
             let formattedDate = "N/A";
             if (stats.last_analysis_date) {
                 const dateObj = new Date(stats.last_analysis_date);
@@ -233,7 +256,8 @@ export async function initializeCandidateDashboard() {
             }
             
             // Generate Career Progress Timeline
-            const chronologicalList = [...historyList].reverse();
+            const safeHistoryList = Array.isArray(historyList) ? historyList : [];
+            const chronologicalList = [...safeHistoryList].reverse();
             let progressTimelineHTML = "";
             if (chronologicalList.length > 0) {
                 const timelineSteps = chronologicalList.map(item => `
@@ -360,6 +384,7 @@ export async function initializeCandidateDashboard() {
         renderTimelineList(historyList);
 
     } catch (err) {
+        if (reqId !== currentDashboardReqId) return;
         console.error("Error loading candidate dashboard data:", err);
         const user = state.getUser();
         if (dashCandName && (dashCandName.textContent === "..." || dashCandName.textContent === "Loading...")) {
@@ -374,11 +399,26 @@ export async function initializeCandidateDashboard() {
         if (dashCandDomain && (dashCandDomain.textContent === "..." || dashCandDomain.textContent === "Loading...")) {
             dashCandDomain.textContent = "Unavailable";
         }
-        if (statsContainer && (!statsContainer.innerHTML.trim() || statsContainer.querySelector('.loader'))) {
-            statsContainer.innerHTML = getEmptyStateHTML("Could not load dashboard statistics. Please refresh the page.");
+        if (statsContainer) {
+            statsContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #f87171; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                    <p style="margin: 0 0 0.5rem 0; font-weight: 600;">Could not load dashboard statistics.</p>
+                    <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--text-secondary);">${err.message || "An unexpected error occurred."}</p>
+                    <button onclick="initializeCandidateDashboard()" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">Retry</button>
+                </div>
+            `;
+        }
+        if (timelineContainer) {
+            timelineContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #f87171; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                    <p style="margin: 0 0 0.5rem 0; font-weight: 600;">Could not load analysis history.</p>
+                    <button onclick="initializeCandidateDashboard()" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">Retry</button>
+                </div>
+            `;
         }
     }
 }
+window.initializeCandidateDashboard = initializeCandidateDashboard;
 
 function renderTimelineList(historyList) {
     const container = document.getElementById('candidate-timeline-list');
@@ -537,8 +577,13 @@ window.toggleRecCard = (headerEl) => {
 window.updateRecommendationStatus = async (resumeId, recId, status) => {
     try {
         await api.updateRecommendationStatus(resumeId, recId, status);
+        state.setCandidateStats(null);
+        state.setCandidateResumes(null);
         await initializeCandidateDashboard();
-        await window.viewCandidateAnalysis(resumeId);
+        const modal = document.getElementById('cand-analysis-view-modal');
+        if (modal && !modal.classList.contains('hidden')) {
+            await window.viewCandidateAnalysis(resumeId);
+        }
     } catch (err) {
         alert("Failed to update recommendation status: " + err.message);
     }
@@ -699,8 +744,73 @@ export function renderXaiContent(xaiData) {
 
     const components = xaiData.components || [];
     const explanations = xaiData.explanations || {};
-    
+    const strengths = xaiData.strengths || [];
+    const skillGaps = xaiData.skill_gaps || [];
+    const isAiSuccess = xaiData.status === "SUCCESS" && xaiData.source === "GEMINI";
+
+    // AI Status / Provider indicator
+    let statusHeaderHTML = "";
+    if (isAiSuccess) {
+        statusHeaderHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); padding: 0.6rem 1rem; border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1rem;">✨</span>
+                    <strong style="color: #a5b4fc; font-size: 0.85rem;">Grounded AI Insights (Gemini${xaiData.model ? ` • ${xaiData.model}` : ''})</strong>
+                </div>
+                <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; text-transform: uppercase;">Active</span>
+            </div>
+        `;
+    } else {
+        const fallbackMsg = xaiData.status_message || "AI-generated insights are temporarily unavailable. Displaying deterministic keyword and experience matching.";
+        statusHeaderHTML = `
+            <div style="margin-bottom: 1rem; background: rgba(245, 158, 11, 0.08); border-left: 4px solid #f59e0b; padding: 0.75rem 1rem; border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <span style="font-size: 0.95rem;">⚠️</span>
+                    <strong style="color: #fbbf24; font-size: 0.85rem;">Deterministic Matching (Rule-Based Fallback)</strong>
+                </div>
+                <p style="margin: 0; font-size: 0.8rem; color: #cbd5e1; line-height: 1.4;">${fallbackMsg}</p>
+            </div>
+        `;
+    }
+
+    // Strengths and Gaps section
+    let strengthsGapsHTML = "";
+    if (strengths.length > 0 || skillGaps.length > 0) {
+        const strengthsList = strengths.map(s => `
+            <li style="margin-bottom: 0.35rem; display: flex; align-items: flex-start; gap: 0.4rem;">
+                <span style="color: #10b981; font-weight: bold;">&#x2713;</span>
+                <span style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.4;">${s}</span>
+            </li>
+        `).join('') || '<li style="color: #94a3b8; font-size: 0.85rem;">None identified.</li>';
+
+        const gapsList = skillGaps.map(g => `
+            <li style="margin-bottom: 0.35rem; display: flex; align-items: flex-start; gap: 0.4rem;">
+                <span style="color: #ef4444; font-weight: bold;">&#x2717;</span>
+                <span style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.4;">${g}</span>
+            </li>
+        `).join('') || '<li style="color: #94a3b8; font-size: 0.85rem;">None identified.</li>';
+
+        strengthsGapsHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 8px; padding: 1rem;">
+                    <h5 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #34d399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
+                        <span>&#x2705;</span> Key Strengths
+                    </h5>
+                    <ul style="margin: 0; padding-left: 0.5rem; list-style: none;">${strengthsList}</ul>
+                </div>
+                <div style="background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 8px; padding: 1rem;">
+                    <h5 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #f87171; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
+                        <span>&#x26A0;&#xFE0F;</span> Skill Gaps &amp; Missing Qualifications
+                    </h5>
+                    <ul style="margin: 0; padding-left: 0.5rem; list-style: none;">${gapsList}</ul>
+                </div>
+            </div>
+        `;
+    }
+
     let html = `
+        ${statusHeaderHTML}
+
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: rgba(255,255,255,0.02); padding: 0.5rem 1rem; border-radius: 8px;">
             <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Explanation Level:</span>
             <div style="display: flex; gap: 0.5rem;">
@@ -710,9 +820,11 @@ export function renderXaiContent(xaiData) {
         </div>
 
         <div style="background: rgba(99, 102, 241, 0.05); border-left: 4px solid #6366f1; padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
-            <h4 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: #fff;">&#x1F4A1; Overall Summary</h4>
+            <h4 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: #fff;">&#x1F4A1; Overall Alignment Summary</h4>
             <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: #cbd5e1;">${xaiData.overall_summary}</p>
         </div>
+
+        ${strengthsGapsHTML}
 
         <div class="xai-accordion-group" style="display: flex; flex-direction: column; gap: 0.75rem;">
     `;
@@ -980,15 +1092,19 @@ function renderCandidateAnalysisResults(cand) {
         scoreClass = 'med-score';
     }
 
-    const matchedTags = cand.matched_skills.map(s => `<span class="skill-tag matched">${s}</span>`).join('') || '<span style="color:#666">None</span>';
-    const missingTags = cand.missing_skills.map(s => `<span class="skill-tag missing">${s}</span>`).join('') || '<span style="color:#666">None</span>';
-    const extractedTags = cand.matched_skills.concat(cand.missing_skills).map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:#666">None</span>';
+    const matchedTags = (cand.matched_skills || []).map(s => `<span class="skill-tag matched">${s}</span>`).join('') || '<span style="color:#666">None</span>';
+    const missingTags = (cand.missing_skills || []).map(s => `<span class="skill-tag missing">${s}</span>`).join('') || '<span style="color:#666">None</span>';
+    const extractedTags = (cand.matched_skills || []).concat(cand.missing_skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:#666">None</span>';
+
+    const xaiData = cand.xai || cand.analysis_metadata?.xai;
+    const recsData = cand.recommendations || cand.analysis_metadata?.recommendations;
+    const resumeId = cand.resume_id || cand.id;
 
     resultsDetails.innerHTML = `
         <div class="qv-profile-summary" style="display: flex; align-items: center; gap: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem;">
             <div class="qv-avatar" style="font-size: 3rem; background: rgba(255,255,255,0.02); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&#x1F4C4;</div>
             <div class="qv-meta">
-                <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem 0;">${cand.name}</h2>
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem 0;">${cand.name || 'Candidate Resume'}</h2>
                 <p class="score-badge ${scoreClass}" style="font-size: 1.25rem; font-weight: bold; margin: 0;">${cand.similarity_score}% Match</p>
             </div>
         </div>
@@ -1028,6 +1144,30 @@ function renderCandidateAnalysisResults(cand) {
                         <div class="skills-tags-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${missingTags}</div>
                     </div>
                 </div>
+            </div>
+
+            <div id="cand-results-xai-section">
+                <h4 style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+                    Explainable AI (XAI) Breakdown
+                </h4>
+                <div id="cand-inline-xai-container">
+                    ${renderXaiContent(xaiData)}
+                </div>
+            </div>
+
+            <div id="cand-results-recs-section">
+                <h4 style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+                    Resume Improvement Recommendations
+                </h4>
+                <div id="cand-inline-recs-container">
+                    ${renderRecommendations(recsData, resumeId)}
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                <a href="#/candidate/dashboard" class="glow-btn" style="text-decoration: none; font-size: 0.85rem; padding: 0.5rem 1.25rem;">
+                    <span>View in Dashboard History &#x2192;</span>
+                </a>
             </div>
         </div>
     `;

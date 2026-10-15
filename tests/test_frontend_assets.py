@@ -357,4 +357,106 @@ def test_advanced_scoring_customization_controls():
     assert 'scoring-applied-banner' in rec_js
 
 
+def test_sidebar_toggle_button_and_collapsible_rail():
+    """Verify shared recruiter and candidate layouts include the sidebar toggle button and collapsible rail styles."""
+    recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+    sidebar_js = os.path.join(FRONTEND_DIR, "assets", "js", "components", "sidebar.js")
+    recruiter_css = os.path.join(FRONTEND_DIR, "assets", "css", "recruiter.css")
+
+    for html_path, page_name in [(recruiter_html, "recruiter.html"), (candidate_html, "candidate.html")]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Sidebar header wrapper and toggle button
+        assert 'class="sidebar-header"' in content, f"{page_name} must contain .sidebar-header wrapper"
+        assert 'id="sidebar-toggle-btn"' in content, f"{page_name} must contain #sidebar-toggle-btn"
+        assert 'aria-label="Toggle sidebar"' in content or 'aria-label="Collapse sidebar"' in content, f"{page_name} toggle must have accessible aria-label"
+        assert 'title="Toggle sidebar"' in content or 'title="Collapse sidebar"' in content, f"{page_name} toggle must have title tooltip"
+        assert 'aria-expanded="true"' in content, f"{page_name} toggle must default to aria-expanded='true'"
+
+        # SVG icon geometry
+        assert 'class="sidebar-toggle-icon"' in content, f"{page_name} must contain .sidebar-toggle-icon"
+        assert 'toggle-icon-collapse' in content, f"{page_name} must contain collapse icon state"
+        assert 'toggle-icon-expand' in content, f"{page_name} must contain expand icon state"
+
+        # Early restoration script to prevent layout jumps/FOUC
+        assert 'sidebar-pref-collapsed' in content, f"{page_name} must have early restoration script"
+
+    # JS Component exports & state logic
+    with open(sidebar_js, "r", encoding="utf-8") as f:
+        js_content = f.read()
+
+    assert "export function initSidebar" in js_content
+    assert "export function toggleSidebar" in js_content
+    assert "export function setSidebarCollapsed" in js_content
+    assert "export function isSidebarCollapsed" in js_content
+    assert "nipun_sidebar_collapsed" in js_content
+    assert "sidebar-collapsed" in js_content
+    assert "sidebar-pref-collapsed" in js_content
+
+    # CSS styles and transitions
+    with open(recruiter_css, "r", encoding="utf-8") as f:
+        css_content = f.read()
+
+    assert ".sidebar-header" in css_content
+    assert ".sidebar-toggle-btn" in css_content
+    assert ".sidebar-collapsed" in css_content
+    assert ".sidebar-pref-collapsed" in css_content
+    assert "margin-left: 68px" in css_content
+    assert "width: 68px" in css_content
+    assert "@media (max-width: 800px)" in css_content
+    assert ".sidebar-toggle-btn" in css_content
+
+
+def test_candidate_xai_and_dashboard_frontend_lifecycle():
+    """Verify that candidate frontend JS and HTML implement XAI breakdown, status badges, and cache-safe dashboard refresh."""
+    candidate_js_path = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "candidate.js")
+    candidate_html_path = os.path.join(FRONTEND_DIR, "candidate.html")
+
+    assert os.path.exists(candidate_js_path), "candidate.js must exist"
+    assert os.path.exists(candidate_html_path), "candidate.html must exist"
+
+    with open(candidate_js_path, "r", encoding="utf-8") as f:
+        cand_js = f.read()
+
+    with open(candidate_html_path, "r", encoding="utf-8") as f:
+        cand_html = f.read()
+
+    # 1. HTML containers for dashboard and analysis
+    assert 'id="cand-stats-container"' in cand_html
+    assert 'id="candidate-timeline-list"' in cand_html
+    assert 'id="cand-results-container"' in cand_html
+    assert 'id="cand-results-details"' in cand_html
+
+    # 2. Cache invalidation upon candidate analysis completion
+    assert "state.setCandidateStats(null)" in cand_js
+    assert "state.setCandidateResumes(null)" in cand_js
+
+    # 3. Monotonic request ID guarding against stale response overwrites in dashboard
+    assert "currentDashboardReqId" in cand_js
+    assert "reqId !== currentDashboardReqId" in cand_js
+
+    # 4. Distinct dashboard loading indicators avoiding premature empty states
+    assert "Loading your dashboard data..." in cand_js
+    assert "Loading analysis history..." in cand_js
+
+    # 5. Dashboard error states with retry functionality
+    assert "Could not load dashboard statistics." in cand_js
+    assert "Could not load analysis history." in cand_js
+    assert 'onclick="initializeCandidateDashboard()"' in cand_js
+
+    # 6. Inline XAI Breakdown and Recommendations rendering in results
+    assert 'cand-results-xai-section' in cand_js
+    assert 'cand-results-recs-section' in cand_js
+    assert 'renderXaiContent(xaiData)' in cand_js
+    assert 'renderRecommendations(recsData' in cand_js
+
+    # 7. Grounded AI vs Rule Fallback badges and strengths/gaps cards in renderXaiContent
+    assert "Grounded AI Insights (Gemini" in cand_js
+    assert "Deterministic Matching (Rule-Based Fallback)" in cand_js
+    assert "Key Strengths" in cand_js
+    assert "Skill Gaps &amp; Missing Qualifications" in cand_js
+
+
 

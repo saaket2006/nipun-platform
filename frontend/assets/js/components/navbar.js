@@ -4,6 +4,7 @@ import { clearCandidateWorkspaceState } from '../pages/candidate.js';
 import { auth, signOut } from '../firebase-init.js?v=5';
 import { handleRouting } from '../router.js';
 import { ROLES, ROUTES } from '../constants.js';
+import { initSidebar } from './sidebar.js';
 
 /**
  * Handles logo navigation across authenticated and unauthenticated states.
@@ -151,4 +152,7 @@ export function initNavbar(clearCandidateStateCallback) {
             logoEl.addEventListener('click', handleLogoNavigation);
         }
     });
+
+    // Initialize sidebar toggle state & event listeners
+    initSidebar();
 }

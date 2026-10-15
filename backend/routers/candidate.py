@@ -124,11 +124,14 @@ async def process_candidate_resume(
 
         logger.info("Candidate resume analysis persisted successfully for ScanResult ID %d", persistence_result.scan_result_id)
         
-        # Include resume versioning details in the return result
+        # Include resume versioning details and top-level xai/recommendations in the return result
         candidate_result["version"] = version
         candidate_result["label"] = label_val
         candidate_result["resume_id"] = resume_id_val
         candidate_result["uploaded_at"] = uploaded_at_val
+        meta = candidate_result.get("analysis_metadata") or {}
+        candidate_result["xai"] = meta.get("xai")
+        candidate_result["recommendations"] = meta.get("recommendations")
 
         # Clean up pipeline events to prevent response serialization issues
         candidate_result.pop("pipeline_event", None)

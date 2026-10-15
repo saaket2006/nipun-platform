@@ -25,34 +25,53 @@
     <script src="assets/js/vendor/lucide.min.js"></script>
     <!-- GSAP -->
     <script src="assets/js/vendor/gsap.min.js"></script>
-    <script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+    <!-- Early sidebar state restoration to prevent layout flash -->
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem("nipun_sidebar_collapsed") === "true") {
+                    document.documentElement.classList.add("sidebar-pref-collapsed");
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 
 <body>
 <!-- Recruiter Workspace Container -->
     <div class="rec-layout hidden" id="recruiter-container">
         <!-- Sidebar -->
-        <aside class="rec-sidebar">
-            <div class="sidebar-logo flex items-center gap-2" id="recruiter-sidebar-logo">
-                <img src="assets/nipun_logo.svg" alt="Nipun Logo" style="height: 32px; width: auto;">
-                <span class="logo-text">Nipun</span>
+        <aside class="rec-sidebar" id="rec-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo flex items-center gap-2" id="recruiter-sidebar-logo" title="Nipun Workspace">
+                    <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="sidebar-logo-img">
+                    <span class="logo-text">Nipun</span>
+                </div>
+                <button type="button" class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle sidebar" title="Toggle sidebar" aria-expanded="true">
+                    <svg class="sidebar-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="2"/>
+                        <path d="M9 3v18"/>
+                        <path d="m16 15-3-3 3-3" class="toggle-icon-collapse"/>
+                        <path d="m14 9 3 3-3 3" class="toggle-icon-expand"/>
+                    </svg>
+                </button>
             </div>
             <nav class="sidebar-nav">
-                <a href="#/recruiter/dashboard" class="sidebar-link active" id="link-rec-dashboard">
+                <a href="#/recruiter/dashboard" class="sidebar-link active" id="link-rec-dashboard" title="Dashboard">
                     <span class="nav-icon">📊</span>
                     <span>Dashboard</span>
                 </a>
-                <a href="#/recruiter/screen" class="sidebar-link" id="link-rec-screen">
+                <a href="#/recruiter/screen" class="sidebar-link" id="link-rec-screen" title="Resume Screening">
                     <span class="nav-icon">🔎</span>
                     <span>Resume Screening</span>
                 </a>
-                <a href="#/recruiter/profile" class="sidebar-link" id="link-rec-profile">
+                <a href="#/recruiter/profile" class="sidebar-link" id="link-rec-profile" title="My Profile">
                     <span class="nav-icon">👤</span>
                     <span>My Profile</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <button id="rec-sign-out-btn" class="sign-out-btn">
+                <button id="rec-sign-out-btn" class="sign-out-btn" title="Logout">
                     <span class="nav-icon">⏻</span>
                     <span>Logout</span>
                 </button>

@@ -40,7 +40,8 @@ graph TD
      - **Text Extraction**: PyPDF2 / python-docx.
      - **NLP Preprocessing & Skill Extraction**: spaCy entity recognition and canonical skill ontology matching.
      - **Scoring & Ranking Engine**: Weighted hybrid scoring (skill match, semantic similarity, experience tenure, education, projects) driven by configurable scoring profiles.
-     - **Explainable AI (XAI)**: Component-level scoring rationales and resume improvement recommendations.
+     - **Explainable AI (XAI)**: Grounded evaluation powered by Google Gemini API (with ordered multi-model resilience: `gemini-3.5-flash-lite` as primary, falling back to `gemini-2.5-flash-lite`, `gemini-flash-latest`, and deterministic rule-based fallback). Produces grounded alignment summaries, key strengths, skill gaps, and component scoring rationales.
+     - **Resume Improvement Recommendations**: Targeted actionable recommendations with estimated ATS score gains, resolved status lifecycle, and candidate acceptance tracking.
 
 ---
 

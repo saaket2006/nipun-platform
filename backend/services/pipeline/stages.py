@@ -500,12 +500,44 @@ class ExplanationBuildingStage(PipelineStage):
                 semantic_data=event.matching.semantic_metadata_payload
             )
 
+            # Enrich with grounded explainable AI insights (Gemini with deterministic fallback)
+            from backend.services.xai.gemini_explainer import generate_grounded_xai_insights
+
+            extraction = event.matching.skills.extraction
+            raw_resume_text = getattr(extraction, "raw_text", "")
+            jd_text = getattr(extraction, "job_description", "") or getattr(extraction, "clean_jd", "")
+
+            gemini_xai = await generate_grounded_xai_insights(
+                candidate_dict=cand_dict,
+                job_description=jd_text,
+                resume_text=raw_resume_text,
+                score_components=components
+            )
+
+            # Merge Gemini component explanations if provided
+            merged_explanations = dict(explanations)
+            comp_expls = gemini_xai.get("component_explanations", {})
+            for comp_key, comp_dict in comp_expls.items():
+                if comp_key in merged_explanations and isinstance(comp_dict, dict):
+                    if comp_dict.get("why_awarded"):
+                        merged_explanations[comp_key].setdefault("summary", {})["why_awarded"] = comp_dict["why_awarded"]
+                    if comp_dict.get("why_deducted"):
+                        merged_explanations[comp_key].setdefault("summary", {})["why_deducted"] = comp_dict["why_deducted"]
+
+            final_summary = gemini_xai.get("overall_summary") or overall_reason
+
             # Enrich with complete structured XAI block
             output.analysis_metadata["xai"] = {
                 "enabled": True,
+                "source": gemini_xai.get("source", "RULE"),
+                "status": gemini_xai.get("status", "FALLBACK"),
+                "status_message": gemini_xai.get("status_message"),
+                "model": gemini_xai.get("model"),
+                "overall_summary": final_summary,
+                "strengths": gemini_xai.get("strengths", []),
+                "skill_gaps": gemini_xai.get("skill_gaps", []),
                 "components": serialized_comps,
-                "overall_summary": overall_reason,
-                "explanations": explanations
+                "explanations": merged_explanations
             }
 
             # Enrich with Adaptive Scoring Profile details (Part 6)
@@ -541,11 +573,11 @@ class ExplanationBuildingStage(PipelineStage):
 
             # Set flat fields for legacy compatibility / logs
             output.xai_explanations = {
-                "skills_summary": explanations.get("skills", {}).get("summary", {}).get("why_awarded", ""),
-                "experience_summary": explanations.get("experience", {}).get("summary", {}).get("why_awarded", ""),
-                "education_summary": explanations.get("education", {}).get("summary", {}).get("why_awarded", ""),
-                "projects_summary": explanations.get("projects", {}).get("summary", {}).get("why_awarded", ""),
-                "overall_reasoning": overall_reason
+                "skills_summary": merged_explanations.get("skills", {}).get("summary", {}).get("why_awarded", ""),
+                "experience_summary": merged_explanations.get("experience", {}).get("summary", {}).get("why_awarded", ""),
+                "education_summary": merged_explanations.get("education", {}).get("summary", {}).get("why_awarded", ""),
+                "projects_summary": merged_explanations.get("projects", {}).get("summary", {}).get("why_awarded", ""),
+                "overall_reasoning": final_summary
             }
 
         except Exception as e:
@@ -603,8 +635,11 @@ class RecommendationBuildingStage(PipelineStage):
             output.recommendations = serialized_recs
 
             # Inject recommendations block into analysis_metadata
+            has_llm = any(r.get("source") == "LLM" for r in serialized_recs)
             event.analysis_metadata["recommendations"] = {
                 "list": serialized_recs,
+                "source": "LLM" if has_llm else "RULE",
+                "status": "SUCCESS" if has_llm else "FALLBACK",
                 "generated_at": now_iso,
                 "engine_version": "1.0.0"
             }

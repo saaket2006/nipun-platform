@@ -65,32 +65,58 @@ async def enhance_recommendations_with_llm(recommendations: List[Recommendation]
     return recommendations
 
 async def _call_gemini_api(prompt: str, api_key: str) -> List[dict]:
-    model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
-    data = {
+    # Priority ordered list of Gemini models to attempt
+    from backend.services.xai.gemini_explainer import ORDERED_GEMINI_MODELS
+
+    headers = {"Content-Type": "application/json"}
+    payload = {
         "contents": [
             {
                 "parts": [
                     {"text": prompt}
                 ]
             }
-        ]
+        ],
+        "generationConfig": {
+            "temperature": 0.2,
+            "maxOutputTokens": 1024
+        }
     }
-    
-    headers = {"Content-Type": "application/json"}
+
     async with httpx.AsyncClient() as client:
-        response = await client.post(url, json=data, headers=headers, timeout=10.0)
-        res_body = response.json()
-        # Extract text response from Gemini structure
-        candidates = res_body.get("candidates", [])
-        if candidates:
-            text = candidates[0]["content"]["parts"][0]["text"].strip()
-            # Remove ```json wrappers if returned
-            if text.startswith("```json"):
-                text = text[7:]
-            if text.endswith("```"):
-                text = text[:-3]
-            return json.loads(text.strip())
+        for model_name in ORDERED_GEMINI_MODELS:
+            try:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+                response = await client.post(url, json=payload, headers=headers, timeout=12.0)
+                if response.status_code != 200:
+                    logger.warning("Gemini model '%s' returned status %d. Trying fallback...", model_name, response.status_code)
+                    continue
+
+                res_body = response.json()
+                candidates = res_body.get("candidates", [])
+                if not candidates:
+                    continue
+
+                text = candidates[0].get("content", {}).get("parts", [{}])[0].get("text", "").strip()
+                if not text:
+                    continue
+
+                if text.startswith("```json"):
+                    text = text[7:]
+                elif text.startswith("```"):
+                    text = text[3:]
+                if text.endswith("```"):
+                    text = text[:-3]
+                text = text.strip()
+
+                parsed = json.loads(text)
+                if isinstance(parsed, list):
+                    return parsed
+                elif isinstance(parsed, dict) and "recommendations" in parsed:
+                    return parsed["recommendations"]
+            except Exception as e:
+                logger.warning("Error with Gemini model '%s': %s", model_name, e)
+
     return []
 
 async def _call_openai_api(prompt: str, api_key: str) -> List[dict]:

@@ -7,6 +7,7 @@ import { initCandidatePage } from './pages/candidate.js';
 import { initRouter, handleRouting } from './router.js';
 import { initModals } from './components/modal.js';
 import { initNavbar } from './components/navbar.js';
+import { initSidebar } from './components/sidebar.js';
 import * as api from './api.js';
 import { getCandidateRowHTML, getCandidateDetailRowHTML } from './components/candidateCard.js';
 import { toggleButtonLoading } from './components/loadingSpinner.js';
@@ -53,11 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
         initRecruiterPage();
         initRouter();
         initNavbar(clearCandidateState);
+        initSidebar();
         handleRouting();
     } else if (isCandidatePage) {
         initCandidatePage();
         initRouter();
         initNavbar(clearCandidateState);
+        initSidebar();
         handleRouting();
     }
 
