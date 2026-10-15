@@ -459,4 +459,91 @@ def test_candidate_xai_and_dashboard_frontend_lifecycle():
     assert "Skill Gaps &amp; Missing Qualifications" in cand_js
 
 
+def test_candidate_analysis_snapshot_jd_display_and_wrapping():
+    """
+    Verify candidate analysis snapshot modal:
+    1. Removes nested scrollbar and small viewport (no max-height: 150px or overflow-y: auto on JD box).
+    2. Uses .cav-jd-card, .cav-jd-title, and .cav-jd-body with white-space: pre-wrap and overflow-wrap: break-word.
+    3. Allows multi-line wrapping of JD titles without truncation.
+    """
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+    recruiter_css = os.path.join(FRONTEND_DIR, "assets", "css", "recruiter.css")
+    candidate_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "candidate.js")
+
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    assert 'class="qv-section cav-jd-section"' in html_content
+    assert 'class="cav-jd-card"' in html_content
+    assert 'id="cav-jd-title"' in html_content
+    assert 'class="cav-jd-title"' in html_content
+    assert 'id="cav-jd-description"' in html_content
+    assert 'class="cav-jd-body"' in html_content
+    # Confirm old nested scrollbar max-height is eliminated
+    assert "max-height: 150px" not in html_content
+    assert "overflow-y: auto; background: rgba(0,0,0,0.2)" not in html_content
+
+    with open(recruiter_css, "r", encoding="utf-8") as f:
+        css_content = f.read()
+
+    assert ".cav-jd-card" in css_content
+    assert ".cav-jd-title" in css_content
+    assert ".cav-jd-body" in css_content
+    assert "white-space: pre-wrap;" in css_content
+    assert "overflow-wrap: break-word;" in css_content
+    assert "word-break: break-word;" in css_content
+
+    with open(candidate_js, "r", encoding="utf-8") as f:
+        js_content = f.read()
+
+    # Healing legacy truncated titles ending with '...'
+    assert 'jdTitle.endsWith("...")' in js_content
+    assert 'cavJdTitleEl.textContent = jdTitle' in js_content
+    assert 'cavJdDescEl.textContent = jdDesc' in js_content
+
+
+def test_candidate_analysis_snapshot_modal_backdrop_close_and_router_navigation():
+    """
+    Verify candidate analysis snapshot modal:
+    1. Clicking backdrop outside card closes modal and navigates to candidate dashboard.
+    2. Clicking inside card stops propagation and does not close modal.
+    3. Close button ('X') and Escape key close modal and navigate to candidate dashboard.
+    4. Router updates and handles report query parameter without page reload.
+    """
+    candidate_js = os.path.join(FRONTEND_DIR, "assets", "js", "pages", "candidate.js")
+    router_js = os.path.join(FRONTEND_DIR, "assets", "js", "router.js")
+
+    with open(candidate_js, "r", encoding="utf-8") as f:
+        js_content = f.read()
+
+    # Exported close function navigating to candidate dashboard
+    assert "export function closeCandidateAnalysisModal()" in js_content
+    assert "window.location.hash = ROUTES.CANDIDATE_DASHBOARD" in js_content
+
+    # Backdrop click detection via mousedown/mouseup on modal
+    assert "isMouseDownOnBackdrop" in js_content
+    assert "e.target === modal" in js_content
+
+    # Prevention of closure when clicking inside the card or selecting text
+    assert "card.addEventListener('mousedown'" in js_content
+    assert "card.addEventListener('click'" in js_content
+    assert "e.stopPropagation()" in js_content
+
+    # Escape key listener
+    assert "e.key === 'Escape'" in js_content
+
+    # Close button click
+    assert "closeBtn.addEventListener('click'" in js_content
+
+    with open(router_js, "r", encoding="utf-8") as f:
+        r_content = f.read()
+
+    # Router accepts params and handles candidate report routing / modal close
+    assert "handleCandidateRouting(hash, params = null)" in r_content
+    assert "handleCandidateRouting(currentHash, params)" in r_content
+    assert "params.get('report')" in r_content
+    assert "window.viewCandidateAnalysis(reportId)" in r_content
+
+
+
 

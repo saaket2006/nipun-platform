@@ -89,10 +89,16 @@ async def process_candidate_resume(
             label_source_val = "USER"
 
         # 3. Create database records
+        # Derive a clean, readable title from the job description (up to 250 chars)
+        jd_clean = job_description.strip()
+        lines = [l.strip() for l in jd_clean.splitlines() if l.strip()]
+        first_line = lines[0] if lines else "Target Job Description"
+        derived_title = first_line[:247] + "..." if len(first_line) > 250 else first_line
+
         # Save Job Description
         jd_model = JobDescription(
             owner_id=current_user.id,
-            title=job_description[:50] + ("..." if len(job_description) > 50 else ""),
+            title=derived_title,
             description=job_description
         )
         db.add(jd_model)
@@ -227,6 +233,16 @@ def get_candidate_resume_details(
     score_categories = meta.get("score", {}).get("categories", {})
     skills_info = meta.get("skills", {})
 
+    raw_jd_title = scan.job_description.title if scan and scan.job_description else ""
+    raw_jd_desc = scan.job_description.description if scan and scan.job_description else ""
+
+    # Heal legacy truncated titles (e.g., old entries truncated to 50 chars + "...")
+    if raw_jd_title and raw_jd_title.endswith("...") and raw_jd_desc:
+        prefix = raw_jd_title[:-3].strip()
+        first_line = next((line.strip() for line in raw_jd_desc.splitlines() if line.strip()), "")
+        if first_line.startswith(prefix):
+            raw_jd_title = first_line[:247] + "..." if len(first_line) > 250 else first_line
+
     return {
         "id": resume.id,
         "version": resume.version,
@@ -236,8 +252,8 @@ def get_candidate_resume_details(
         "uploaded_at": resume.uploaded_at.isoformat(),
         "ats_score": score,
         "job_description": {
-            "title": scan.job_description.title if scan and scan.job_description else "",
-            "description": scan.job_description.description if scan and scan.job_description else ""
+            "title": raw_jd_title,
+            "description": raw_jd_desc
         } if scan else None,
         "extracted_skills": skills_info.get("extracted") or meta.get("extracted_skills") or [],
         "matched_skills": skills_info.get("matched") or meta.get("matched_skills") or [],

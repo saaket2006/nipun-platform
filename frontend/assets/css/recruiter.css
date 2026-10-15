@@ -956,6 +956,46 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
     font-weight: 600;
 }
 
+/* Candidate Analysis Snapshot - Target Job Description */
+.cav-jd-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cav-jd-card {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cav-jd-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.45;
+    margin: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.cav-jd-body {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    margin: 0;
+}
+
 /* Responsive Overrides */
 @media (max-width: 800px) {
     .rec-sidebar {

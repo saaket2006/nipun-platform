@@ -3,7 +3,7 @@ import * as state from '../state.js';
 import { getEmptyStateHTML } from '../components/emptyState.js';
 import { toggleButtonLoading } from '../components/loadingSpinner.js';
 import { populateCandidateProfileUI } from '../components/profileSection.js';
-import { MESSAGES } from '../constants.js';
+import { MESSAGES, ROUTES } from '../constants.js';
 
 let candUploadedFile = null;
 let initialized = false;
@@ -121,15 +121,64 @@ export function initCandidatePage() {
         });
     }
 
+    const modal = document.getElementById('cand-analysis-view-modal');
     const closeBtn = document.getElementById('close-cand-analysis-btn');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            document.getElementById('cand-analysis-view-modal').classList.add('hidden');
+
+    if (modal) {
+        let isMouseDownOnBackdrop = false;
+
+        // Prevent accidental closing when clicking, dragging, selecting text, or interacting inside the report card
+        const card = modal.querySelector('.quick-view-card');
+        if (card) {
+            card.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                isMouseDownOnBackdrop = false;
+            });
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        modal.addEventListener('mousedown', (e) => {
+            isMouseDownOnBackdrop = (e.target === modal);
+        });
+
+        modal.addEventListener('mouseup', (e) => {
+            if (isMouseDownOnBackdrop && e.target === modal) {
+                closeCandidateAnalysisModal();
+            }
+            isMouseDownOnBackdrop = false;
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeCandidateAnalysisModal();
+            });
+        }
+
+        // Close on Escape keypress when modal is visible
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeCandidateAnalysisModal();
+            }
         });
     }
 
     initialized = true;
 }
+
+export function closeCandidateAnalysisModal() {
+    const modal = document.getElementById('cand-analysis-view-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+    // Navigate back to the candidate dashboard via existing hash router
+    if (window.location.hash !== ROUTES.CANDIDATE_DASHBOARD) {
+        window.location.hash = ROUTES.CANDIDATE_DASHBOARD;
+    }
+}
+window.closeCandidateAnalysisModal = closeCandidateAnalysisModal;
 
 function updateResumeCountDisplay() {
     const countSpan = document.getElementById('cand-resumes-count');
@@ -509,6 +558,16 @@ window.viewCandidateAnalysis = async (resumeId) => {
         } else {
             badge.classList.add('low-score');
         }
+        let jdTitle = details.job_description?.title || "Target Job Description";
+        const jdDesc = details.job_description?.description || "";
+        if (jdTitle.endsWith("...") && jdDesc) {
+            const prefix = jdTitle.slice(0, -3).trim();
+            const firstLine = jdDesc.split(/\r?\n/).map(l => l.trim()).find(l => l.length > 0) || "";
+            if (firstLine.startsWith(prefix)) {
+                jdTitle = firstLine;
+            }
+        }
+
         const cavCtxProfile = document.getElementById('cav-ctx-profile');
         const cavCtxJd = document.getElementById('cav-ctx-jd');
         const cavCtxEngine = document.getElementById('cav-ctx-engine');
@@ -517,13 +576,19 @@ window.viewCandidateAnalysis = async (resumeId) => {
             const profileVer = details.analysis_metadata?.profile_version || "1.0.0";
             const engineVer = details.analysis_metadata?.engine_version || "v1.0.0";
             cavCtxProfile.textContent = `${profileName} (v${profileVer})`;
-            cavCtxJd.textContent = details.job_description?.title || "N/A";
+            cavCtxJd.textContent = jdTitle;
             const cleanEngine = engineVer.replace(/^v/, '');
             cavCtxEngine.textContent = `Nipun Engine v${cleanEngine}`;
         }
 
-        document.getElementById('cav-jd-title').textContent = details.job_description?.title || "N/A";
-        document.getElementById('cav-jd-description').textContent = details.job_description?.description || "N/A";
+        const cavJdTitleEl = document.getElementById('cav-jd-title');
+        const cavJdDescEl = document.getElementById('cav-jd-description');
+        if (cavJdTitleEl) {
+            cavJdTitleEl.textContent = jdTitle;
+        }
+        if (cavJdDescEl) {
+            cavJdDescEl.textContent = jdDesc || "N/A";
+        }
         
         // Candidate Contact Details
         const cand = details.candidate_details || {};
@@ -550,7 +615,16 @@ window.viewCandidateAnalysis = async (resumeId) => {
         document.getElementById('cav-cand-matched-skills').innerHTML = mat.map(s => `<span class="skill-tag matched">${s}</span>`).join('') || '<span style="color:#666">None</span>';
         document.getElementById('cav-cand-missing-skills').innerHTML = mis.map(s => `<span class="skill-tag missing">${s}</span>`).join('') || '<span style="color:#666">None</span>';
         
-        document.getElementById('cand-analysis-view-modal').classList.remove('hidden');
+        const modal = document.getElementById('cand-analysis-view-modal');
+        if (modal) {
+            modal.dataset.currentReportId = String(resumeId);
+            modal.classList.remove('hidden');
+        }
+
+        const targetHash = `#/candidate/dashboard?report=${resumeId}`;
+        if (window.location.hash !== targetHash) {
+            window.location.hash = targetHash;
+        }
     } catch (err) {
         alert("Failed to load version details: " + err.message);
     }

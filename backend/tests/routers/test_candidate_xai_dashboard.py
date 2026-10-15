@@ -283,3 +283,52 @@ def test_candidate_dashboard_stats_and_history_lifecycle(client, db_session, can
         history_after_del = client.get("/api/candidate/resumes", headers={"Authorization": "Bearer valid_token"}).json()
         assert len(history_after_del) == 1
         assert history_after_del[0]["version"] == 1
+
+
+def test_candidate_job_description_title_non_truncation_and_legacy_healing(client, candidate_a, db_session):
+    """
+    Verify that candidate JD titles are not unnecessarily truncated to 50 characters,
+    and legacy truncated titles ending with '...' are healed from description in resume details.
+    """
+    long_title = "Senior Full Stack Python Developer with React, FastAPI, Docker, and Cloud Native Architecture Experience"
+    full_jd = f"{long_title}\n\nWe are looking for a senior developer with extensive Python and React expertise."
+
+    resume_content = b"%PDF-1.4 Fake PDF Content for Full Stack Developer with Python, FastAPI, Docker, React."
+
+    with patch("backend.dependencies.auth_deps.verify_firebase_id_token") as mock_verify, \
+         patch("backend.routers.candidate.parse_document_text", return_value="Skills: Python, FastAPI, React\nCandidate Alpha\ncandidate_a@example.com"), \
+         patch("backend.services.pipeline.stages.extract_text", return_value="Skills: Python, FastAPI, React\nCandidate Alpha\ncandidate_a@example.com"):
+
+        mock_verify.return_value = {"uid": candidate_a.firebase_uid, "email": candidate_a.email}
+
+        files = {"resume": ("resume_full.pdf", io.BytesIO(resume_content), "application/pdf")}
+        data = {"job_description": full_jd, "label": "Full JD Test"}
+
+        res = client.post("/api/candidate/process", headers={"Authorization": "Bearer valid_token"}, data=data, files=files)
+        assert res.status_code == 200, res.text
+        res_data = res.json()
+        assert "results" in res_data and len(res_data["results"]) > 0
+        resume_id = res_data["results"][0]["resume_id"]
+
+        # Fetch details: verify title preserved the full first line (well over 50 chars) without truncation
+        detail_res = client.get(f"/api/candidate/resumes/{resume_id}", headers={"Authorization": "Bearer valid_token"})
+        assert detail_res.status_code == 200
+        detail = detail_res.json()
+        assert detail["job_description"]["title"] == long_title
+        assert len(detail["job_description"]["title"]) > 50
+
+        # Simulate legacy truncated record in DB: title ends with '...'
+        scan = db_session.query(ScanResult).filter(ScanResult.resume_id == resume_id).first()
+        assert scan is not None
+        assert scan.job_description is not None
+        legacy_truncated = long_title[:50] + "..."
+        scan.job_description.title = legacy_truncated
+        db_session.commit()
+
+        # Fetch details again: verify healed title restored from description
+        healed_res = client.get(f"/api/candidate/resumes/{resume_id}", headers={"Authorization": "Bearer valid_token"})
+        assert healed_res.status_code == 200
+        healed_detail = healed_res.json()
+        assert healed_detail["job_description"]["title"] == long_title
+        assert not healed_detail["job_description"]["title"].endswith("...")
+
