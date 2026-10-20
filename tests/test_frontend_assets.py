@@ -201,14 +201,14 @@ def test_recruiter_profile_card_horizontal_layout_and_pencil_btn():
     assert 'id="profile-hiring-domain"' in rec_content
     assert 'id="rec-profile-edit-form"' in rec_content
 
-    # Candidate Profile isolation checks (must remain unchanged)
+    # Candidate Profile checks (now uses shared profile card styling and candidate fields)
     with open(candidate_html, "r", encoding="utf-8") as f:
         cand_content = f.read()
 
     assert 'id="cand-edit-profile-btn"' in cand_content
     assert 'id="cand-profile-display"' in cand_content
-    assert 'rec-profile-layout' not in cand_content
-    assert 'profile-edit-icon-btn' not in cand_content
+    assert 'class="rec-profile-layout"' in cand_content
+    assert 'class="profile-edit-icon-btn"' in cand_content
 
     # Recruiter CSS rules check
     with open(recruiter_css, "r", encoding="utf-8") as f:
@@ -462,9 +462,10 @@ def test_candidate_xai_and_dashboard_frontend_lifecycle():
 def test_candidate_analysis_snapshot_jd_display_and_wrapping():
     """
     Verify candidate analysis snapshot modal:
-    1. Removes nested scrollbar and small viewport (no max-height: 150px or overflow-y: auto on JD box).
-    2. Uses .cav-jd-card, .cav-jd-title, and .cav-jd-body with white-space: pre-wrap and overflow-wrap: break-word.
-    3. Allows multi-line wrapping of JD titles without truncation.
+    1. Removes redundant JD preview heading, keeping single compact scrollable box.
+    2. Summary card displays concise JD title, not full text.
+    3. Uses .cav-jd-card / .cav-jd-body with sensible max-height (140-180px), white-space: pre-wrap and overflow-wrap: break-word.
+    4. Contact info renders functional hyperlinks for email (mailto:), phone (tel:), linkedin (https://), and github (https://).
     """
     candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
     recruiter_css = os.path.join(FRONTEND_DIR, "assets", "css", "recruiter.css")
@@ -474,34 +475,37 @@ def test_candidate_analysis_snapshot_jd_display_and_wrapping():
         html_content = f.read()
 
     assert 'class="qv-section cav-jd-section"' in html_content
-    assert 'cav-jd-card' in html_content
-    assert 'id="cav-jd-title"' in html_content
-    assert 'class="cav-jd-title"' in html_content
     assert 'id="cav-jd-description"' in html_content
+    assert 'cav-jd-card' in html_content
     assert 'cav-jd-body' in html_content
-    # Confirm old nested scrollbar max-height is eliminated
-    assert "max-height: 150px" not in html_content
-    assert "overflow-y: auto; background: rgba(0,0,0,0.2)" not in html_content
+    # Confirm redundant preview h5 has been removed from candidate.html
+    assert '<h5 id="cav-jd-title"' not in html_content
 
     with open(recruiter_css, "r", encoding="utf-8") as f:
         css_content = f.read()
 
     assert ".cav-jd-card" in css_content
-    assert ".cav-jd-title" in css_content
     assert ".cav-jd-body" in css_content
-    assert "max-height: 180px;" in css_content
+    assert "max-height: 160px;" in css_content
     assert "overflow-y: auto;" in css_content
     assert "white-space: pre-wrap;" in css_content
     assert "overflow-wrap: break-word;" in css_content
     assert "word-break: break-word;" in css_content
+    assert ".contact-link" in css_content
 
     with open(candidate_js, "r", encoding="utf-8") as f:
         js_content = f.read()
 
-    # Healing legacy truncated titles ending with '...'
-    assert 'jdTitle.endsWith("...")' in js_content
-    assert 'cavJdTitleEl.textContent = jdTitle' in js_content
-    assert 'cavJdDescEl.textContent = jdDesc' in js_content
+    # Concise title in summary card
+    assert 'cavCtxJd.textContent = conciseJd' in js_content
+    # Single JD description box
+    assert 'cavJdDescEl.textContent = details.job_description?.description' in js_content
+    # Contact hyperlinks
+    assert 'formatContactLink' in js_content
+    assert 'mailto:' in js_content
+    assert 'tel:' in js_content
+    assert 'target' in js_content
+    assert 'noopener noreferrer' in js_content
 
 
 def test_candidate_analysis_snapshot_modal_backdrop_close_and_router_navigation():
@@ -545,6 +549,103 @@ def test_candidate_analysis_snapshot_modal_backdrop_close_and_router_navigation(
     assert "handleCandidateRouting(currentHash, params)" in r_content
     assert "params.get('report')" in r_content
     assert "window.viewCandidateAnalysis(reportId)" in r_content
+
+
+def test_candidate_resume_analysis_topbar_spacing():
+    """
+    Verify candidate Resume Analysis spacing:
+    1. .rec-topbar resets margin: 0 and margin-bottom: 0 in recruiter.css.
+    2. base.css scopes header margin to header:not(.rec-topbar) so topbar has no unintended 3rem margin.
+    3. candidate.html contains .screening-inputs directly inside .screening-workspace with no empty spacer banners.
+    """
+    base_css = os.path.join(FRONTEND_DIR, "assets", "css", "base.css")
+    recruiter_css = os.path.join(FRONTEND_DIR, "assets", "css", "recruiter.css")
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+
+    with open(base_css, "r", encoding="utf-8") as f:
+        base_content = f.read()
+    assert "header:not(.rec-topbar)" in base_content
+
+    with open(recruiter_css, "r", encoding="utf-8") as f:
+        rec_content = f.read()
+    assert ".rec-topbar" in rec_content
+    assert "margin: 0;" in rec_content
+    assert "margin-bottom: 0;" in rec_content
+
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        cand_content = f.read()
+    assert 'id="cand-view-screen"' in cand_content
+    assert 'class="screening-workspace"' in cand_content
+    assert 'class="screening-inputs glass-card"' in cand_content
+    assert 'id="cand-job-description"' in cand_content
+
+
+def test_candidate_profile_layout_and_pencil_edit_icon():
+    """
+    Verify candidate profile redesign matches recruiter profile:
+    1. Top-right pencil edit button (#cand-edit-profile-btn) with .profile-edit-icon-btn, aria-label, title, and SVG icon.
+    2. Profile identity on left (.rec-profile-identity) with avatar, prominent display name (#profile-cand-name), and email (#profile-cand-email).
+    3. Divider line (.rec-profile-divider).
+    4. Profile details horizontal grid (.rec-profile-details and .rec-profile-grid) with 5 candidate fields:
+       Current Role, Current Status (#profile-cand-status), Field of Study (#profile-cand-field),
+       Current Domain (#profile-cand-domain), Member Since (#profile-cand-joined).
+    5. Edit form (#cand-profile-edit-form) retains header, fields, cancel (#cand-cancel-edit-btn), and save (#cand-save-profile-btn).
+    6. recruiter.css includes candidate selectors in profile typography, grid, and responsive rules.
+    """
+    candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
+    recruiter_css = os.path.join(FRONTEND_DIR, "assets", "css", "recruiter.css")
+
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    # Pencil edit button in top-right
+    assert 'id="cand-edit-profile-btn"' in html_content
+    assert 'class="profile-edit-icon-btn"' in html_content
+    assert 'aria-label="Edit Profile"' in html_content
+    assert 'title="Edit Profile"' in html_content
+
+    # Identity section on left
+    assert 'class="rec-profile-layout"' in html_content
+    assert 'class="rec-profile-identity"' in html_content
+    assert 'class="profile-avatar rec-profile-avatar"' in html_content
+    assert 'class="profile-meta rec-profile-meta"' in html_content
+    assert 'id="profile-cand-name"' in html_content
+    assert 'id="profile-cand-email"' in html_content
+
+    # Divider
+    assert 'class="rec-profile-divider"' in html_content
+
+    # Horizontal details grid & candidate fields
+    assert 'class="rec-profile-details"' in html_content
+    assert 'class="rec-profile-grid"' in html_content
+    assert 'Current Role' in html_content
+    assert 'id="profile-cand-status"' in html_content
+    assert 'id="profile-cand-field"' in html_content
+    assert 'id="profile-cand-domain"' in html_content
+    assert 'id="profile-cand-joined"' in html_content
+
+    # Edit form
+    assert 'id="cand-profile-edit-form"' in html_content
+    assert 'id="cand-edit-display-name"' in html_content
+    assert 'id="cand-edit-status"' in html_content
+    assert 'id="cand-edit-field"' in html_content
+    assert 'id="cand-edit-domain"' in html_content
+    assert 'id="cand-cancel-edit-btn"' in html_content
+    assert 'id="cand-save-profile-btn"' in html_content
+
+    # CSS selectors in recruiter.css
+    with open(recruiter_css, "r", encoding="utf-8") as f:
+        css_content = f.read()
+
+    assert ".profile-edit-icon-btn" in css_content
+    assert ".rec-profile-layout" in css_content
+    assert ".rec-profile-identity" in css_content
+    assert "#profile-cand-name" in css_content
+    assert "#profile-cand-email" in css_content
+    assert "#cand-view-profile .rec-profile-grid .info-field" in css_content
+    assert "#cand-view-profile .rec-profile-grid .info-label" in css_content
+    assert "#cand-view-profile .rec-profile-grid .info-value" in css_content
+
 
 
 

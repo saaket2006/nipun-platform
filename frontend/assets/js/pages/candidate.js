@@ -532,6 +532,74 @@ function renderTimelineList(historyList) {
     }).join('');
 }
 
+export function formatContactLink(containerId, type, rawValue) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = '';
+
+    if (!rawValue || typeof rawValue !== 'string') {
+        el.textContent = 'N/A';
+        return;
+    }
+
+    const value = rawValue.trim();
+    if (!value || value === 'N/A' || value === 'Not Provided' || value === 'None') {
+        el.textContent = 'N/A';
+        return;
+    }
+
+    if (type === 'email') {
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            const a = document.createElement('a');
+            a.href = `mailto:${value}`;
+            a.className = 'contact-link';
+            a.textContent = value;
+            el.appendChild(a);
+            return;
+        }
+    } else if (type === 'phone') {
+        const telDigits = value.replace(/[^\d+]/g, '');
+        if (telDigits.length >= 7) {
+            const a = document.createElement('a');
+            a.href = `tel:${telDigits}`;
+            a.className = 'contact-link';
+            a.textContent = value;
+            el.appendChild(a);
+            return;
+        }
+    } else if (type === 'linkedin' || type === 'github') {
+        if (!/^(javascript|data|vbscript):/i.test(value)) {
+            let url = value;
+            if (!/^https?:\/\//i.test(url)) {
+                if (/^(www\.)?(linkedin\.com|github\.com)/i.test(url)) {
+                    url = 'https://' + url;
+                } else if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(url)) {
+                    url = 'https://' + url;
+                }
+            }
+
+            try {
+                const parsed = new URL(url);
+                if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.className = 'contact-link';
+                    a.textContent = value;
+                    el.appendChild(a);
+                    return;
+                }
+            } catch (err) {
+                // Not a valid URL destination
+            }
+        }
+    }
+
+    // Default fallback to text if not linkable
+    el.textContent = value;
+}
+
 window.viewCandidateAnalysis = async (resumeId) => {
     try {
         const details = await api.getCandidateResumeDetails(resumeId);
@@ -558,15 +626,6 @@ window.viewCandidateAnalysis = async (resumeId) => {
         } else {
             badge.classList.add('low-score');
         }
-        let jdTitle = details.job_description?.title || "Target Job Description";
-        const jdDesc = details.job_description?.description || "";
-        if (jdTitle.endsWith("...") && jdDesc) {
-            const prefix = jdTitle.slice(0, -3).trim();
-            const firstLine = jdDesc.split(/\r?\n/).map(l => l.trim()).find(l => l.length > 0) || "";
-            if (firstLine.startsWith(prefix)) {
-                jdTitle = firstLine;
-            }
-        }
 
         const cavCtxProfile = document.getElementById('cav-ctx-profile');
         const cavCtxJd = document.getElementById('cav-ctx-jd');
@@ -576,26 +635,37 @@ window.viewCandidateAnalysis = async (resumeId) => {
             const profileVer = details.analysis_metadata?.profile_version || "1.0.0";
             const engineVer = details.analysis_metadata?.engine_version || "v1.0.0";
             cavCtxProfile.textContent = `${profileName} (v${profileVer})`;
-            cavCtxJd.textContent = jdTitle;
-            const cleanEngine = engineVer.replace(/^v/, '');
+
+            // Concise JD title/name for the summary card
+            let conciseJd = (details.job_description?.title || "Target Job Description").trim();
+            if (conciseJd.length > 40) {
+                conciseJd = conciseJd.slice(0, 37).trim() + "...";
+            }
+            cavCtxJd.textContent = conciseJd;
+            if (details.job_description?.title) {
+                cavCtxJd.title = details.job_description.title;
+            }
+
+            const cleanEngine = String(engineVer).replace(/^v/, '');
             cavCtxEngine.textContent = `Nipun Engine v${cleanEngine}`;
         }
 
-        const cavJdTitleEl = document.getElementById('cav-jd-title');
+        // Single target job description box with full content
         const cavJdDescEl = document.getElementById('cav-jd-description');
-        if (cavJdTitleEl) {
-            cavJdTitleEl.textContent = jdTitle;
-        }
         if (cavJdDescEl) {
-            cavJdDescEl.textContent = jdDesc || "N/A";
+            cavJdDescEl.textContent = details.job_description?.description || "N/A";
+        }
+        const cavJdTitleEl = document.getElementById('cav-jd-title');
+        if (cavJdTitleEl) {
+            cavJdTitleEl.remove();
         }
         
-        // Candidate Contact Details
+        // Candidate Contact Details with functional hyperlinks
         const cand = details.candidate_details || {};
-        document.getElementById('cav-cand-email').textContent = cand.email || "N/A";
-        document.getElementById('cav-cand-phone').textContent = cand.phone || "N/A";
-        document.getElementById('cav-cand-linkedin').textContent = cand.linkedin || "N/A";
-        document.getElementById('cav-cand-github').textContent = cand.github || "N/A";
+        formatContactLink('cav-cand-email', 'email', cand.email);
+        formatContactLink('cav-cand-phone', 'phone', cand.phone);
+        formatContactLink('cav-cand-linkedin', 'linkedin', cand.linkedin);
+        formatContactLink('cav-cand-github', 'github', cand.github);
         
         // Render Explainable AI Breakdown
         document.getElementById('cav-xai-container').innerHTML = renderXaiContent(details.xai);

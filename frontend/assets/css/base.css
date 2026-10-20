@@ -43,7 +43,7 @@ body {
     padding: 3rem 1rem;
 }
 
-header {
+header:not(.rec-topbar) {
     text-align: center;
     margin-bottom: 3rem;
 }

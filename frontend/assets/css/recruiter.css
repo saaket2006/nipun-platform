@@ -286,6 +286,8 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
     position: sticky;
     top: 0;
     z-index: 90;
+    margin: 0;
+    margin-bottom: 0;
 }
 
 .topbar-title-section h2 {
@@ -498,7 +500,8 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
 /* ========================================================
    Recruiter Profile Card — Horizontal Layout & Redesign
    ======================================================== */
-.recruiter-profile-card {
+.recruiter-profile-card,
+.candidate-profile-card {
     position: relative;
     padding: 2.5rem 3.5rem 2.5rem 2.5rem;
     background: rgba(15, 23, 42, 0.65);
@@ -591,7 +594,8 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
 }
 
 /* Typography Hierarchy */
-.rec-profile-meta h3#profile-rec-name {
+.rec-profile-meta h3#profile-rec-name,
+.rec-profile-meta h3#profile-cand-name {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
@@ -601,7 +605,8 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
     word-break: break-word;
 }
 
-.rec-profile-meta p#profile-rec-email {
+.rec-profile-meta p#profile-rec-email,
+.rec-profile-meta p#profile-cand-email {
     margin: 0;
     font-size: 0.95rem;
     font-weight: 500;
@@ -636,13 +641,16 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
     gap: 1.5rem 2rem;
 }
 
-#rec-view-profile .rec-profile-grid .info-field {
+#rec-view-profile .rec-profile-grid .info-field,
+#cand-view-profile .rec-profile-grid .info-field {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
+    min-width: 0;
 }
 
-#rec-view-profile .rec-profile-grid .info-label {
+#rec-view-profile .rec-profile-grid .info-label,
+#cand-view-profile .rec-profile-grid .info-label {
     font-size: 0.75rem;
     color: #64748b;
     text-transform: uppercase;
@@ -650,12 +658,15 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
     letter-spacing: 0.06em;
 }
 
-#rec-view-profile .rec-profile-grid .info-value {
+#rec-view-profile .rec-profile-grid .info-value,
+#cand-view-profile .rec-profile-grid .info-value {
     font-size: 1.05rem;
     color: #f1f5f9;
     font-weight: 500;
     line-height: 1.4;
     word-break: break-word;
+    overflow-wrap: break-word;
+    min-width: 0;
 }
 
 /* Responsive Breakpoints */
@@ -686,7 +697,8 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
 }
 
 @media (max-width: 480px) {
-    .recruiter-profile-card {
+    .recruiter-profile-card,
+    .candidate-profile-card {
         padding: 1.5rem !important;
     }
 
@@ -715,11 +727,13 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
         font-size: 2rem;
     }
 
-    .rec-profile-meta h3#profile-rec-name {
+    .rec-profile-meta h3#profile-rec-name,
+    .rec-profile-meta h3#profile-cand-name {
         font-size: 1.3rem;
     }
 
-    .rec-profile-meta p#profile-rec-email {
+    .rec-profile-meta p#profile-rec-email,
+    .rec-profile-meta p#profile-cand-email {
         font-size: 0.9rem;
     }
 
@@ -963,24 +977,13 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
     gap: 0.75rem;
 }
 
-.cav-jd-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #ffffff;
-    line-height: 1.45;
-    margin: 0;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-}
-
 .cav-jd-card,
 .cav-jd-body {
     background: rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 10px;
     padding: 1.25rem;
-    max-height: 180px;
+    max-height: 160px;
     overflow-y: auto;
     font-size: 0.9rem;
     line-height: 1.6;
@@ -995,9 +998,28 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
 @media (max-width: 640px) {
     .cav-jd-card,
     .cav-jd-body {
-        max-height: 140px;
+        max-height: 130px;
         padding: 1rem;
     }
+}
+
+/* Candidate Contact Info Links */
+.contact-link {
+    color: #818cf8;
+    text-decoration: none;
+    transition: color 0.15s ease, text-decoration 0.15s ease;
+    word-break: break-all;
+}
+
+.contact-link:hover {
+    color: #a5b4fc;
+    text-decoration: underline;
+}
+
+.contact-link:focus-visible {
+    outline: 2px solid #818cf8;
+    outline-offset: 2px;
+    border-radius: 3px;
 }
 
 /* Responsive Overrides */
