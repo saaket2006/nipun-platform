@@ -1,0 +1,7 @@
+Taxonomic Category,Configured Policy Weight (w_i),Runtime Resolved Matches (Exp A),Runtime Resolved Share (%),Taxonomy Rule Input Cases (Exp C),Precedence-Consistent Cases,Precedence-Aware Consistency Rate (%),Mean Resolved Weight,Mean Resolver Confidence,Precedence Transition Explanation
+EXACT,1.0,20,6.31,17,17,100.0,1.0,1.0,"17 identity self-comparisons + 3 acronyms matching canonical name (SQL, HTML, CSS)"
+ALIAS,0.95,23,7.26,21,21,100.0,0.95,0.95,"21 declared aliases + 2 acronyms prioritized via alias rule (JS, TS)"
+ABBREVIATION,0.9,2,0.63,7,7,100.0,0.9,0.9,"2 standalone acronyms (LLM, K8s); 5 acronyms resolved via Exact/Alias precedence"
+HIERARCHICAL,0.75,6,1.89,6,6,100.0,0.75,0.75,6 canonical sibling framework pairs (3 bidirectional pairs)
+TECHNOLOGY_FAMILY,0.6,42,13.25,42,42,100.0,0.6,0.6,42 canonical cross-category discipline pairs
+UNKNOWN,0.0,224,70.66,224,224,100.0,0.0,0.0,224 orthogonal cross-domain canonical pairs

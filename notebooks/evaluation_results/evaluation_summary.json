@@ -1,0 +1,454 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-22T05:50:58.083673+00:00",
+    "framework": "Nipun AI Resume Screener Semantic Evaluation",
+    "project_identifier": "saaket2006/nipun-platform",
+    "knowledge_base_skills_count": 17,
+    "python_version": "3.11.0"
+  },
+  "experiment_a_match_analysis": {
+    "description": "Distribution of resolved relationship types returned by resolve_relationship across all 317 evaluations.",
+    "total_evaluated_comparisons": 317,
+    "canonical_pairwise_evaluations": 289,
+    "alias_evaluations": 21,
+    "abbreviation_evaluations": 7,
+    "breakdown_by_relationship_type": {
+      "EXACT": {
+        "evaluated_matches": 20,
+        "share_of_total_pct": 6.31,
+        "configured_weight": 1.0,
+        "mean_weight": 1.0,
+        "mean_confidence": 1.0
+      },
+      "ALIAS": {
+        "evaluated_matches": 23,
+        "share_of_total_pct": 7.26,
+        "configured_weight": 0.95,
+        "mean_weight": 0.95,
+        "mean_confidence": 0.95
+      },
+      "ABBREVIATION": {
+        "evaluated_matches": 2,
+        "share_of_total_pct": 0.63,
+        "configured_weight": 0.9,
+        "mean_weight": 0.9,
+        "mean_confidence": 0.9
+      },
+      "HIERARCHICAL": {
+        "evaluated_matches": 6,
+        "share_of_total_pct": 1.89,
+        "configured_weight": 0.75,
+        "mean_weight": 0.75,
+        "mean_confidence": 0.75
+      },
+      "TECHNOLOGY_FAMILY": {
+        "evaluated_matches": 42,
+        "share_of_total_pct": 13.25,
+        "configured_weight": 0.6,
+        "mean_weight": 0.6,
+        "mean_confidence": 0.6
+      },
+      "UNKNOWN": {
+        "evaluated_matches": 224,
+        "share_of_total_pct": 70.66,
+        "configured_weight": 0.0,
+        "mean_weight": 0.0,
+        "mean_confidence": 0.0
+      }
+    },
+    "overall_summary_statistics": {
+      "total_evaluations": 317,
+      "sum_of_resolved_weights": 73.35,
+      "arithmetic_mean_weight": 0.2314,
+      "standard_deviation": 0.3727,
+      "median_weight": 0.0,
+      "iqr": [
+        0.0,
+        0.6
+      ]
+    }
+  },
+  "experiment_b_pairwise_matrix": {
+    "matrix_dimensions": [
+      17,
+      17
+    ],
+    "total_pairwise_combinations": 289,
+    "diagonal_self_comparisons": 17,
+    "off_diagonal_comparisons": 272,
+    "off_diagonal_weight_counts": {
+      "0.75": 6,
+      "0.60": 42,
+      "0.00": 224
+    },
+    "is_canonical_symmetric": true,
+    "directional_asymmetry_supported": true
+  },
+  "experiment_c_rule_consistency": {
+    "description": "Precedence-aware verification of 317 taxonomy test cases categorized by their input origin in skills.json.",
+    "total_evaluated_rule_cases": 317,
+    "total_consistent_cases_precedence_aware": 317,
+    "overall_rule_consistency_rate_pct": 100.0,
+    "breakdown_by_category": {
+      "EXACT": {
+        "total_cases": 17,
+        "matching_cases_precedence_aware": 17,
+        "non_matching_cases": 0,
+        "consistency_rate_pct": 100.0
+      },
+      "ALIAS": {
+        "total_cases": 21,
+        "matching_cases_precedence_aware": 21,
+        "non_matching_cases": 0,
+        "consistency_rate_pct": 100.0
+      },
+      "ABBREVIATION": {
+        "total_cases": 7,
+        "matching_cases_precedence_aware": 7,
+        "non_matching_cases": 0,
+        "consistency_rate_pct": 100.0
+      },
+      "HIERARCHICAL": {
+        "total_cases": 6,
+        "matching_cases_precedence_aware": 6,
+        "non_matching_cases": 0,
+        "consistency_rate_pct": 100.0
+      },
+      "TECHNOLOGY_FAMILY": {
+        "total_cases": 42,
+        "matching_cases_precedence_aware": 42,
+        "non_matching_cases": 0,
+        "consistency_rate_pct": 100.0
+      },
+      "UNKNOWN": {
+        "total_cases": 224,
+        "matching_cases_precedence_aware": 224,
+        "non_matching_cases": 0,
+        "consistency_rate_pct": 100.0
+      }
+    }
+  },
+  "precedence_reconciliation": {
+    "total_comparisons": 317,
+    "reconciliation_summary": "In Experiment A, counts reflect the resolved output relationship type returned by resolve_relationship(). In Experiment C, counts reflect the input rule origin in skills.json. The difference in EXACT (20 vs 17), ALIAS (23 vs 21), and ABBREVIATION (2 vs 7) is explained by the rule precedence cascade: 3 acronyms matching the canonical name (SQL, HTML, CSS) resolve to EXACT (Rule 1); 2 acronyms declared in aliases (JS, TS) resolve to ALIAS (Rule 2); only 2 standalone acronyms (LLM, K8s) reach Rule 3 and resolve to ABBREVIATION.",
+    "category_transitions": [
+      {
+        "category": "EXACT",
+        "input_rule_cases": 17,
+        "runtime_resolved_matches": 20,
+        "difference": "+3",
+        "reason": "3 acronym tokens (SQL, HTML, CSS) match canonical names verbatim, resolving via Rule 1 (EXACT) before Rule 3."
+      },
+      {
+        "category": "ALIAS",
+        "input_rule_cases": 21,
+        "runtime_resolved_matches": 23,
+        "difference": "+2",
+        "reason": "2 acronym tokens (JS, TS) are declared in both aliases and abbreviations, resolving via Rule 2 (ALIAS) before Rule 3."
+      },
+      {
+        "category": "ABBREVIATION",
+        "input_rule_cases": 7,
+        "runtime_resolved_matches": 2,
+        "difference": "-5",
+        "reason": "5 of 7 acronym tokens resolve to higher-precedence rules (3 to EXACT, 2 to ALIAS); only LLM and K8s resolve to ABBREVIATION."
+      },
+      {
+        "category": "HIERARCHICAL",
+        "input_rule_cases": 6,
+        "runtime_resolved_matches": 6,
+        "difference": "0",
+        "reason": "3 bidirectional canonical framework sibling pairs."
+      },
+      {
+        "category": "TECHNOLOGY_FAMILY",
+        "input_rule_cases": 42,
+        "runtime_resolved_matches": 42,
+        "difference": "0",
+        "reason": "42 canonical cross-category discipline pairs."
+      },
+      {
+        "category": "UNKNOWN",
+        "input_rule_cases": 224,
+        "runtime_resolved_matches": 224,
+        "difference": "0",
+        "reason": "224 orthogonal cross-domain canonical pairs."
+      }
+    ]
+  },
+  "experiment_d_controlled_scenarios": {
+    "scenarios_evaluated": 3,
+    "required_skills": [
+      "Python",
+      "FastAPI",
+      "Docker",
+      "SQL"
+    ],
+    "scenarios": [
+      {
+        "scenario": "Scenario 1: Full & Sibling Match",
+        "candidate_skills_input": [
+          "Python",
+          "Fast API",
+          "Docker",
+          "PostgreSQL"
+        ],
+        "overall_score_pct": 93.75,
+        "matched_count": 4,
+        "missing_count": 0,
+        "sum_of_weights": 3.75,
+        "per_skill_breakdown": [
+          {
+            "required_skill": "Python",
+            "candidate_skills_evaluated": [
+              "Python",
+              "Fast API",
+              "Docker",
+              "PostgreSQL"
+            ],
+            "matched_candidate_skill": "Python",
+            "resolved_match_type": "EXACT",
+            "weight": 1.0,
+            "score_contribution_pct": 25.0,
+            "match_reason": "Exact keyword match"
+          },
+          {
+            "required_skill": "FastAPI",
+            "candidate_skills_evaluated": [
+              "Python",
+              "Fast API",
+              "Docker",
+              "PostgreSQL"
+            ],
+            "matched_candidate_skill": "FastAPI",
+            "resolved_match_type": "EXACT",
+            "weight": 1.0,
+            "score_contribution_pct": 25.0,
+            "match_reason": "Exact keyword match"
+          },
+          {
+            "required_skill": "Docker",
+            "candidate_skills_evaluated": [
+              "Python",
+              "Fast API",
+              "Docker",
+              "PostgreSQL"
+            ],
+            "matched_candidate_skill": "Docker",
+            "resolved_match_type": "EXACT",
+            "weight": 1.0,
+            "score_contribution_pct": 25.0,
+            "match_reason": "Exact keyword match"
+          },
+          {
+            "required_skill": "SQL",
+            "candidate_skills_evaluated": [
+              "Python",
+              "Fast API",
+              "Docker",
+              "PostgreSQL"
+            ],
+            "matched_candidate_skill": "PostgreSQL",
+            "resolved_match_type": "HIERARCHICAL",
+            "weight": 0.75,
+            "score_contribution_pct": 18.75,
+            "match_reason": "Matched via hierarchy: Both are Relational Databases under category Databases"
+          }
+        ]
+      },
+      {
+        "scenario": "Scenario 2: Partial Cross-Match",
+        "candidate_skills_input": [
+          "Flask",
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ],
+        "overall_score_pct": 33.75,
+        "matched_count": 2,
+        "missing_count": 2,
+        "sum_of_weights": 1.35,
+        "per_skill_breakdown": [
+          {
+            "required_skill": "Python",
+            "candidate_skills_evaluated": [
+              "Flask",
+              "HTML",
+              "CSS",
+              "JavaScript"
+            ],
+            "matched_candidate_skill": "Flask",
+            "resolved_match_type": "TECHNOLOGY_FAMILY",
+            "weight": 0.6,
+            "score_contribution_pct": 15.0,
+            "match_reason": "Matched via technology family: Both belong to Backend Development"
+          },
+          {
+            "required_skill": "FastAPI",
+            "candidate_skills_evaluated": [
+              "Flask",
+              "HTML",
+              "CSS",
+              "JavaScript"
+            ],
+            "matched_candidate_skill": "Flask",
+            "resolved_match_type": "HIERARCHICAL",
+            "weight": 0.75,
+            "score_contribution_pct": 18.75,
+            "match_reason": "Matched via hierarchy: Both are REST APIs under category Backend Frameworks"
+          },
+          {
+            "required_skill": "Docker",
+            "candidate_skills_evaluated": [
+              "Flask",
+              "HTML",
+              "CSS",
+              "JavaScript"
+            ],
+            "matched_candidate_skill": "None",
+            "resolved_match_type": "UNKNOWN",
+            "weight": 0.0,
+            "score_contribution_pct": 0.0,
+            "match_reason": "No match found for required skill Docker"
+          },
+          {
+            "required_skill": "SQL",
+            "candidate_skills_evaluated": [
+              "Flask",
+              "HTML",
+              "CSS",
+              "JavaScript"
+            ],
+            "matched_candidate_skill": "None",
+            "resolved_match_type": "UNKNOWN",
+            "weight": 0.0,
+            "score_contribution_pct": 0.0,
+            "match_reason": "No match found for required skill SQL"
+          }
+        ]
+      },
+      {
+        "scenario": "Scenario 3: Orthogonal Unmatched Profile",
+        "candidate_skills_input": [
+          "Radiology",
+          "Derivatives"
+        ],
+        "overall_score_pct": 0.0,
+        "matched_count": 0,
+        "missing_count": 4,
+        "sum_of_weights": 0.0,
+        "per_skill_breakdown": [
+          {
+            "required_skill": "Python",
+            "candidate_skills_evaluated": [
+              "Radiology",
+              "Derivatives"
+            ],
+            "matched_candidate_skill": "None",
+            "resolved_match_type": "UNKNOWN",
+            "weight": 0.0,
+            "score_contribution_pct": 0.0,
+            "match_reason": "No match found for required skill Python"
+          },
+          {
+            "required_skill": "FastAPI",
+            "candidate_skills_evaluated": [
+              "Radiology",
+              "Derivatives"
+            ],
+            "matched_candidate_skill": "None",
+            "resolved_match_type": "UNKNOWN",
+            "weight": 0.0,
+            "score_contribution_pct": 0.0,
+            "match_reason": "No match found for required skill FastAPI"
+          },
+          {
+            "required_skill": "Docker",
+            "candidate_skills_evaluated": [
+              "Radiology",
+              "Derivatives"
+            ],
+            "matched_candidate_skill": "None",
+            "resolved_match_type": "UNKNOWN",
+            "weight": 0.0,
+            "score_contribution_pct": 0.0,
+            "match_reason": "No match found for required skill Docker"
+          },
+          {
+            "required_skill": "SQL",
+            "candidate_skills_evaluated": [
+              "Radiology",
+              "Derivatives"
+            ],
+            "matched_candidate_skill": "None",
+            "resolved_match_type": "UNKNOWN",
+            "weight": 0.0,
+            "score_contribution_pct": 0.0,
+            "match_reason": "No match found for required skill SQL"
+          }
+        ]
+      }
+    ]
+  },
+  "experiment_e_edge_cases_and_robustness": {
+    "total_edge_case_tests": 6,
+    "passed_tests": 6,
+    "robustness_rate_pct": 100.0,
+    "tests": [
+      {
+        "Test ID": "EDGE-01",
+        "Test Scenario": "Empty Candidate Skills List",
+        "Input Description": "Required: [Python, SQL], Candidate: []",
+        "Observed Behavior": "Overall Score: 0.0%, Matched: 0, Missing: 2",
+        "Expected Outcome": "Score 0.0%, all requirements marked UNKNOWN, no exception",
+        "Pass/Fail": "PASS"
+      },
+      {
+        "Test ID": "EDGE-02",
+        "Test Scenario": "Empty Required Skills List",
+        "Input Description": "Required: [], Candidate: [Python]",
+        "Observed Behavior": "Overall Score: 0.0%, Breakdown: []",
+        "Expected Outcome": "Score 0.0%, zero-division safely avoided",
+        "Pass/Fail": "PASS"
+      },
+      {
+        "Test ID": "EDGE-03",
+        "Test Scenario": "Duplicate Candidate Skills",
+        "Input Description": "Required: [Python, FastAPI], Candidate: [Python, Python, FastAPI, FastAPI]",
+        "Observed Behavior": "Overall Score: 100.0%, Results count: 2",
+        "Expected Outcome": "Score exactly 100.0%, duplicate candidate skills deduplicated via max()",
+        "Pass/Fail": "PASS"
+      },
+      {
+        "Test ID": "EDGE-04",
+        "Test Scenario": "Duplicate Required Skills",
+        "Input Description": "Required: [Python, Python, FastAPI], Candidate: [Python]",
+        "Observed Behavior": "Overall Score: 86.67%, Weights: [1.0, 1.0, 0.6]",
+        "Expected Outcome": "Score 86.67%, requirements evaluated independently",
+        "Pass/Fail": "PASS"
+      },
+      {
+        "Test ID": "EDGE-05",
+        "Test Scenario": "Directional Family Association",
+        "Input Description": "Req: Backend Development vs Cand: FastAPI (and reverse)",
+        "Observed Behavior": "Req->Cand: TECHNOLOGY_FAMILY (w=0.6), Cand->Req: TECHNOLOGY_FAMILY (w=0.6)",
+        "Expected Outcome": "Both resolve to TECHNOLOGY_FAMILY (w=0.60)",
+        "Pass/Fail": "PASS"
+      },
+      {
+        "Test ID": "EDGE-06",
+        "Test Scenario": "Rule Precedence Cascade (Alias over Abbreviation)",
+        "Input Description": "JavaScript vs \"JS\" (token present in both aliases and abbreviations)",
+        "Observed Behavior": "Resolved as ALIAS (w=0.95)",
+        "Expected Outcome": "Rule 2 (ALIAS, w=0.95) fires before Rule 3 (ABBREVIATION, w=0.90)",
+        "Pass/Fail": "PASS"
+      }
+    ]
+  },
+  "metric_governance": {
+    "accuracy_reported": false,
+    "precision_recall_reported": false,
+    "f1_roc_auc_reported": false,
+    "omission_reason": "No pre-existing independent labelled benchmark dataset in repository; omitted to prevent circular validation."
+  }
+}
