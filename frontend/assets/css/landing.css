@@ -44,16 +44,44 @@
 }
 
 /* Stacking Sticky Cards Layout */
+#landing-container {
+    overflow-x: clip;
+}
+
 .features-container {
     position: relative;
 }
+.features-header {
+    position: relative;
+    z-index: 20;
+}
 .feature-card-wrapper {
+    position: -webkit-sticky;
     position: sticky;
-    top: 100px;
+    top: 90px;
     height: auto;
     min-height: 250px;
-    margin-bottom: 80px;
-    transition: transform var(--duration-hover) var(--easing-standard);
+    margin-bottom: 48px;
+    will-change: transform, opacity, filter;
+}
+
+@media (min-width: 768px) {
+    .feature-card-wrapper {
+        top: var(--card-dock-top, 187px);
+        margin-bottom: 56px;
+    }
+}
+
+/* Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+    .features-header,
+    .feature-card-wrapper {
+        position: relative !important;
+        top: auto !important;
+        transform: none !important;
+        filter: none !important;
+        opacity: 1 !important;
+    }
 }
 
 /* Interactive Demo playground styles */
@@ -108,3 +136,87 @@
 .glow-btn:hover::after {
     transform: translateX(100%);
 }
+
+/* Responsive Landing Navigation */
+@media (min-width: 768px) {
+    #navbar-landing nav {
+        display: flex !important;
+    }
+}
+
+/* Responsive Floating Badges on Mobile Viewport (<640px) */
+@media (max-width: 639px) {
+    .floating-badge-1 {
+        top: -0.875rem !important;
+        left: 0.5rem !important;
+    }
+    .floating-badge-2 {
+        bottom: -0.875rem !important;
+        right: 0.5rem !important;
+    }
+    .floating-badge-3 {
+        top: -0.875rem !important;
+        right: 0.5rem !important;
+    }
+}
+
+/* Normalized Landing Navbar Buttons */
+#navbar-landing .nav-login-btn,
+#navbar-landing .nav-signup-btn {
+    height: 46px !important;
+    min-height: 46px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    font-size: 0.92rem !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+}
+
+#navbar-landing .nav-login-btn {
+    padding: 0 1.85rem !important;
+    font-weight: 500 !important;
+    color: #cbd5e1 !important;
+    background: rgba(15, 23, 42, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+#navbar-landing .nav-login-btn:hover {
+    color: #ffffff !important;
+    background: rgba(30, 41, 59, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+#navbar-landing .nav-signup-btn {
+    width: auto !important;
+    padding: 0 2rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    background: #10b981 !important;
+    border: 1px solid transparent !important;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25) !important;
+}
+#navbar-landing .nav-signup-btn:hover {
+    background: #059669 !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+}
+
+@media (max-width: 639px) {
+    #navbar-landing .nav-login-btn,
+    #navbar-landing .nav-signup-btn {
+        height: 40px !important;
+        min-height: 40px !important;
+        font-size: 0.85rem !important;
+        border-radius: 8px !important;
+    }
+    #navbar-landing .nav-login-btn {
+        padding: 0 1rem !important;
+    }
+    #navbar-landing .nav-signup-btn {
+        padding: 0 1.15rem !important;
+    }
+}
+

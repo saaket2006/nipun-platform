@@ -85,30 +85,86 @@ export function initStoryAnimation() {
 }
 
 export function initFeatureStack() {
+    const section = document.getElementById('features');
+    const header = document.querySelector('.features-header');
+    const container = document.querySelector('.features-container');
     const cards = gsap.utils.toArray('.feature-card-wrapper');
-    if (cards.length === 0) return;
+
+    if (!section || !header || cards.length === 0) return;
     if (cards[0].offsetWidth === 0 || cards[0].offsetParent === null) return;
 
+    // Clean up any existing ScrollTriggers on this section
     ScrollTrigger.getAll().forEach(t => {
-        if (cards.includes(t.trigger)) t.kill();
+        if (cards.includes(t.trigger) || t.trigger === header || t.trigger === section || t.pin === header) {
+            t.kill();
+        }
     });
 
+    // Accessibility: Reduced Motion
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.set(header, { clearProps: 'all' });
+        cards.forEach(card => {
+            gsap.set(card, { clearProps: 'all' });
+        });
+        return;
+    }
+
+    const isDesktop = window.innerWidth >= 768;
+
+    // Dynamic navbar height calculation
+    const navbar = document.getElementById('navbar-landing');
+    function getScrolledNavbarHeight() {
+        if (!navbar) return 70;
+        if (navbar.classList.contains('py-3')) return navbar.offsetHeight;
+        return Math.min(navbar.offsetHeight, 77);
+    }
+
+    const getHeaderOffset = () => getScrolledNavbarHeight() + 10;
+    const headerHeight = header.offsetHeight || 80;
+    const getCardDockTop = () => getHeaderOffset() + headerHeight + 20;
+
+    // Set CSS variable for card dock position on desktop
+    document.documentElement.style.setProperty('--card-dock-top', `${getCardDockTop()}px`);
+
+    // Stage 2: Pin the Section Heading beneath fixed navbar on desktop
+    if (isDesktop) {
+        ScrollTrigger.create({
+            trigger: header,
+            start: () => `top ${getHeaderOffset()}px`,
+            endTrigger: container,
+            end: () => `bottom ${getCardDockTop() + 250}px`,
+            pin: true,
+            pinSpacing: false,
+            anticipatePin: 1
+        });
+    }
+
+    // Stage 3: Scroll-Driven Card Stacking
     cards.forEach((card, index) => {
         if (index === cards.length - 1) return;
+        const nextCard = cards[index + 1];
 
-        gsap.to(card, {
-            scrollTrigger: {
-                trigger: card,
-                start: 'top 120px',
-                end: 'bottom 100px',
-                scrub: true,
-                pin: false
+        gsap.fromTo(card,
+            {
+                scale: 1,
+                opacity: 1,
+                filter: 'blur(0px)'
             },
-            scale: 0.92,
-            opacity: 0.6,
-            filter: 'blur(3px)',
-            ease: 'none'
-        });
+            {
+                scrollTrigger: {
+                    trigger: card,
+                    endTrigger: nextCard,
+                    start: () => `top ${window.innerWidth >= 768 ? getCardDockTop() + 20 : 110}px`,
+                    end: () => `top ${window.innerWidth >= 768 ? getCardDockTop() : 90}px`,
+                    scrub: true,
+                    pin: false
+                },
+                scale: 0.92,
+                opacity: 0.6,
+                filter: 'blur(3px)',
+                ease: 'none'
+            }
+        );
     });
 }
 

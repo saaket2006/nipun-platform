@@ -5,7 +5,7 @@ import {
     initWalkthrough,
     initCounters,
     initNavbarEffects
-} from './animations.js?v=7';
+} from './animations.js?v=11';
 
 // Prevent browser scroll restoration from skewing initial ScrollTrigger layout calculations
 if ('scrollRestoration' in history) {
@@ -31,10 +31,15 @@ export function initAllLandingAnimations() {
 }
 window.initAllLandingAnimations = initAllLandingAnimations;
 
-document.addEventListener('DOMContentLoaded', () => {
+function initLandingPage() {
     const pathname = window.location.pathname;
-    if (pathname.endsWith('index.html') || pathname === '/') {
+    if (pathname.endsWith('index.html') || pathname === '/' || pathname === '') {
         window.scrollTo(0, 0);
+
+        // Initialize Lucide icons on landing page
+        if (typeof window.lucide !== 'undefined' && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
 
         // Ensure landing container is rendered and unhidden
         const landingContainer = document.getElementById('landing-container');
@@ -167,4 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLandingPage);
+} else {
+    initLandingPage();
+}

@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/animations.js": {
-    "mtime": 1789623073.394991,
-    "ast_hash": "31de5a1c155f0a5b93a09571b245a128",
+    "mtime": 1792682383.709793,
+    "ast_hash": "3723ea7031a2ab1c17acf87d07526168",
     "semantic_hash": ""
   },
   "frontend/assets/js/api.js": {
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/landing.js": {
-    "mtime": 1789623084.9548693,
-    "ast_hash": "d672eab6008fbc151bac3bfae59e859d",
+    "mtime": 1792682493.2608163,
+    "ast_hash": "34493579178319c1b8e6253bfdc7e3e3",
     "semantic_hash": ""
   },
   "frontend/assets/js/loadingOverlay.js": {
@@ -610,8 +610,8 @@
     "semantic_hash": ""
   },
   "frontend/index.html": {
-    "mtime": 1791910066.9093733,
-    "ast_hash": "27ca2f5a2acea9c0cd951985147a8392",
+    "mtime": 1792682477.920263,
+    "ast_hash": "1b38e87e68cd46fd78ff4e1eb37eb13f",
     "semantic_hash": ""
   },
   "frontend/onboarding.html": {
