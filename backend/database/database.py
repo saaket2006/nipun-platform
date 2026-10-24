@@ -10,7 +10,9 @@ DATABASE_URL = settings.DATABASE_URL
 
 if not DATABASE_URL:
     logger.critical("Startup Configuration Failed: DATABASE_URL is not set.")
-    # We won't raise RuntimeError here to allow the app to boot (e.g. for health checks)
+    if not settings.DEBUG:
+        raise RuntimeError("DATABASE_URL is not set in production. Refusing to start.")
+    # We won't raise RuntimeError here to allow the app to boot in dev (e.g. for health checks)
     DATABASE_URL = "sqlite:///./fallback.db" # Fallback so SQLAlchemy doesn't crash on create_engine
 else:
     # Normalize legacy postgres:// scheme to postgresql:// for SQLAlchemy compatibility

@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from backend.dependencies.auth_deps import require_candidate
 from backend.database.database import get_db
@@ -170,6 +170,7 @@ def get_candidate_resumes(
     logger.info("Candidate resumes list requested for user: %s", current_user.email)
     resumes = (
         db.query(Resume)
+        .options(joinedload(Resume.scan_results).joinedload(ScanResult.job_description))
         .filter(Resume.candidate_id == current_user.id, Resume.status == ResumeStatus.ACTIVE)
         .order_by(Resume.version.desc())
         .all()
