@@ -73,3 +73,46 @@ def test_extract_name_valid_and_invalid():
     # Name after a job title header
     resume_with_header = "SOFTWARE ENGINEER\nJohn Doe\njohn@example.com"
     assert extract_name(resume_with_header) == "John Doe"
+
+from backend.services.info_extractor import extract_projects
+
+def test_extract_projects_no_projects():
+    """Test extracting projects when there is no mention of projects."""
+    assert extract_projects("I have experience in Python.") == 0
+    assert extract_projects("Just a regular resume.") == 0
+
+def test_extract_projects_section_headers():
+    """Test extracting projects with different section headers."""
+    assert extract_projects("Some text\nProjects\nSome more text") == 3
+    assert extract_projects("Some text\nPersonal Projects\nSome more text") == 3
+    assert extract_projects("Some text\nAcademic Projects\nSome more text") == 3
+    assert extract_projects("   Projects   \n") == 3
+    assert extract_projects("  Personal Projects  \n") == 3
+    assert extract_projects("Academic Projects\n") == 3
+
+def test_extract_projects_project_counts():
+    """Test extracting projects based on word count without header."""
+    assert extract_projects("I worked on a project.") == 0
+    assert extract_projects("I worked on a project and another project.") == 1
+    assert extract_projects("project project project project") == 1
+    assert extract_projects("project project project project project") == 2
+    assert extract_projects("I have 6 projects: project 1, project 2, project 3, project 4, project 5") == 2
+
+def test_extract_projects_combined_score():
+    """Test extracting projects with both header and word counts, ensuring cap at 5."""
+    assert extract_projects("Projects\nI did a project.") == 4  # Header (3) + 1 project word (0) - Wait, "Projects" in header is 1 word, "project" is 1 word. Total 2 words -> +1 score. So 3+1 = 4.
+    assert extract_projects("Personal Projects\nProject 1\nProject 2\nProject 3\nProject 4") == 5 # Header (3) + 5 project words -> +2 score. So 3+2 = 5.
+    assert extract_projects("Academic Projects\nProject Project Project Project Project Project") == 5 # Cap at 5.
+
+def test_extract_projects_case_insensitivity():
+    """Test case insensitivity for projects extraction."""
+    assert extract_projects("PROJECTS\n") == 3
+    assert extract_projects("PERSONAL PROJECTS\n") == 3
+    assert extract_projects("ACADEMIC PROJECTS\n") == 3
+    assert extract_projects("PrOjEcTs\n") == 3
+    assert extract_projects("project PROJECT Project") == 1
+
+def test_extract_projects_regex_boundaries():
+    """Test word boundaries for project mentions."""
+    assert extract_projects("projecting projector") == 0
+    assert extract_projects("project projects") == 1
