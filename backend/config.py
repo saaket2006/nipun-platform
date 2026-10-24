@@ -12,23 +12,26 @@ class Settings:
     
     # CORS Settings
     _raw_origins: str = os.getenv("ALLOWED_ORIGINS", "")
+    _dev_origins: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:5000",
+        "http://localhost:5500",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5000",
+        "http://127.0.0.1:5500",
+        "http://127.0.0.1:8000",
+    ]
+    _prod_origins: List[str] = [
+        "https://ai-resume-screener-69d23.web.app",
+        "https://ai-resume-screener-69d23.firebaseapp.com",
+        "https://nipun-platform.web.app",
+        "https://nipun-platform.firebaseapp.com",
+    ]
     ALLOWED_ORIGINS: List[str] = (
         [origin.strip() for origin in _raw_origins.split(",") if origin.strip()]
         if _raw_origins.strip()
-        else [
-            "http://localhost:3000",
-            "http://localhost:5000",
-            "http://localhost:5500",
-            "http://localhost:8000",
-            "http://127.0.0.1:3000",
-            "http://127.0.0.1:5000",
-            "http://127.0.0.1:5500",
-            "http://127.0.0.1:8000",
-            "https://ai-resume-screener-69d23.web.app",
-            "https://ai-resume-screener-69d23.firebaseapp.com",
-            "https://nipun-platform.web.app",
-            "https://nipun-platform.firebaseapp.com",
-        ]
+        else (_prod_origins + _dev_origins if DEBUG else _prod_origins)
     )
     
     # Rate Limiting
