@@ -11,6 +11,32 @@ class SkillNormalizer:
         # This will fetch the singleton cached skills list
         self.skills = get_skills_loader()
 
+        # Pre-compute lookup dictionaries for O(1) matching
+        self._exact_map = {}
+        self._alias_map = {}
+        self._abbr_map = {}
+
+        for s in self.skills:
+            id_parts = s.id.split(".")
+            simple_id = id_parts[-1] if len(id_parts) > 1 else s.id
+
+            # Exact matches
+            for key in (s.canonical_name.lower(), s.id.lower(), simple_id.lower()):
+                if key not in self._exact_map:
+                    self._exact_map[key] = s
+
+            # Alias matches
+            for alias in s.aliases:
+                key = alias.lower()
+                if key not in self._alias_map:
+                    self._alias_map[key] = s
+
+            # Abbreviation matches
+            for abbr in s.abbreviations:
+                key = abbr.lower()
+                if key not in self._abbr_map:
+                    self._abbr_map[key] = s
+
     def normalize(self, skill_name: str) -> NormalizedSkill:
         if not skill_name:
             return self._build_unknown("")
@@ -18,26 +44,19 @@ class SkillNormalizer:
         cleaned = skill_name.strip()
         cleaned_lower = cleaned.lower()
 
-        # 1. Exact Match Check (canonical_name, stable id, or namespace-stripped id)
-        for s in self.skills:
-            id_parts = s.id.split(".")
-            simple_id = id_parts[-1] if len(id_parts) > 1 else s.id
-            if s.canonical_name.lower() == cleaned_lower or s.id == cleaned_lower or simple_id == cleaned_lower:
-                return NormalizedSkill(skill=s, match_type="exact", confidence=1.0)
+        # 1. Exact Match Check
+        if cleaned_lower in self._exact_map:
+            return NormalizedSkill(skill=self._exact_map[cleaned_lower], match_type="exact", confidence=1.0)
 
-        # 2. Alias Match Check (synonyms e.g. ReactJS -> React)
-        for s in self.skills:
-            for alias in s.aliases:
-                if alias.lower() == cleaned_lower:
-                    return NormalizedSkill(skill=s, match_type="alias", confidence=0.9)
+        # 2. Alias Match Check
+        if cleaned_lower in self._alias_map:
+            return NormalizedSkill(skill=self._alias_map[cleaned_lower], match_type="alias", confidence=0.9)
 
-        # 3. Abbreviation Match Check (e.g. LLM -> Large Language Models)
-        for s in self.skills:
-            for abbr in s.abbreviations:
-                if abbr.lower() == cleaned_lower:
-                    return NormalizedSkill(skill=s, match_type="abbreviation", confidence=0.8)
+        # 3. Abbreviation Match Check
+        if cleaned_lower in self._abbr_map:
+            return NormalizedSkill(skill=self._abbr_map[cleaned_lower], match_type="abbreviation", confidence=0.8)
 
-        # 4. Unknown/Temporary Skill fallback (no matching entry in knowledge base)
+        # 4. Unknown/Temporary Skill fallback
         return self._build_unknown(cleaned)
 
     def _build_unknown(self, raw_name: str) -> NormalizedSkill:
