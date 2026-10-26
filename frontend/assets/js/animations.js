@@ -95,8 +95,8 @@ export function initFeatureStack() {
 
     // Clean up any existing ScrollTriggers on this section
     ScrollTrigger.getAll().forEach(t => {
-        if (cards.includes(t.trigger) || t.trigger === header || t.trigger === section || t.pin === header) {
-            t.kill();
+        if (cards.includes(t.trigger) || t.trigger === header || t.trigger === section || t.pin === header || cards.some(c => t.pin === c)) {
+            t.kill(true);
         }
     });
 
@@ -105,6 +105,8 @@ export function initFeatureStack() {
         gsap.set(header, { clearProps: 'all' });
         cards.forEach(card => {
             gsap.set(card, { clearProps: 'all' });
+            card.style.position = 'relative';
+            card.style.top = 'auto';
         });
         return;
     }
@@ -121,10 +123,17 @@ export function initFeatureStack() {
 
     const getHeaderOffset = () => getScrolledNavbarHeight() + 10;
     const headerHeight = header.offsetHeight || 80;
-    const getCardDockTop = () => getHeaderOffset() + headerHeight + 20;
+    const getCardDockTop = () => isDesktop ? (getHeaderOffset() + headerHeight + 20) : 90;
 
-    // Set CSS variable for card dock position on desktop
+    // Set CSS variable for card dock position
     document.documentElement.style.setProperty('--card-dock-top', `${getCardDockTop()}px`);
+
+    // Ensure explicit z-index layering for stacking cards
+    cards.forEach((card, index) => {
+        card.style.position = 'relative';
+        card.style.top = 'auto';
+        card.style.zIndex = index + 1;
+    });
 
     // Stage 2: Pin the Section Heading beneath fixed navbar on desktop
     if (isDesktop) {
@@ -139,32 +148,42 @@ export function initFeatureStack() {
         });
     }
 
-    // Stage 3: Scroll-Driven Card Stacking
+    // Stage 3: Scroll-Driven Card Stacking with ScrollTrigger Pinning
     cards.forEach((card, index) => {
-        if (index === cards.length - 1) return;
-        const nextCard = cards[index + 1];
+        // Pin each card at the dock position until container ends
+        ScrollTrigger.create({
+            trigger: card,
+            start: () => `top ${getCardDockTop()}px`,
+            endTrigger: container,
+            end: () => `bottom ${getCardDockTop() + 250}px`,
+            pin: true,
+            pinSpacing: false,
+            anticipatePin: 1
+        });
 
-        gsap.fromTo(card,
-            {
-                scale: 1,
-                opacity: 1,
-                filter: 'blur(0px)'
-            },
-            {
-                scrollTrigger: {
-                    trigger: card,
-                    endTrigger: nextCard,
-                    start: () => `top ${window.innerWidth >= 768 ? getCardDockTop() + 20 : 110}px`,
-                    end: () => `top ${window.innerWidth >= 768 ? getCardDockTop() : 90}px`,
-                    scrub: true,
-                    pin: false
+        // Depth transition: as next card approaches, recede current card
+        if (index < cards.length - 1) {
+            const nextCard = cards[index + 1];
+            gsap.fromTo(card,
+                {
+                    scale: 1,
+                    opacity: 1,
+                    filter: 'blur(0px)'
                 },
-                scale: 0.92,
-                opacity: 0.6,
-                filter: 'blur(3px)',
-                ease: 'none'
-            }
-        );
+                {
+                    scrollTrigger: {
+                        trigger: nextCard,
+                        start: () => `top ${getCardDockTop() + 180}px`,
+                        end: () => `top ${getCardDockTop()}px`,
+                        scrub: true
+                    },
+                    scale: 0.94,
+                    opacity: 0.6,
+                    filter: 'blur(2px)',
+                    ease: 'none'
+                }
+            );
+        }
     });
 }
 

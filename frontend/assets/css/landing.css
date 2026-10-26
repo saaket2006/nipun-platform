@@ -56,9 +56,7 @@
     z-index: 20;
 }
 .feature-card-wrapper {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 90px;
+    position: relative;
     height: auto;
     min-height: 250px;
     margin-bottom: 48px;
@@ -67,7 +65,6 @@
 
 @media (min-width: 768px) {
     .feature-card-wrapper {
-        top: var(--card-dock-top, 187px);
         margin-bottom: 56px;
     }
 }
