@@ -1,16 +1,16 @@
 # Graph Report - nipun-platform  (2026-10-27)
 
 ## Corpus Check
-- 203 files · ~291,473 words
+- 203 files · ~291,465 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2341 nodes · 3967 edges · 148 communities (141 shown, 7 thin omitted)
+- 2341 nodes · 3967 edges · 148 communities (142 shown, 6 thin omitted)
 - Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 320 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9503db8b`
+- Built from commit: `dbf47c76`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,7 +19,7 @@
 - test_estimator.py
 - xai/builder.py
 - Skill
-- login.js
+- state.js
 - app.js
 - process_candidate_resume
 - gsap.min.js
@@ -30,7 +30,7 @@
 - Expo Animation Recipes
 - api.js
 - UserRole
-- state.js
+- test_candidate_xai_dashboard.py
 - s
 - recruiter.js
 - Tween
@@ -139,7 +139,7 @@
 - update_job_description
 - backend/config.py
 - xe
-- firebaseConfig
+- firebase-init.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `User` - 67 edges
@@ -168,7 +168,7 @@
 ## Import Cycles
 - 3-file cycle: `frontend/assets/js/auth.js -> frontend/assets/js/router.js -> frontend/assets/js/pages/login.js -> frontend/assets/js/auth.js`
 
-## Communities (148 total, 7 thin omitted)
+## Communities (148 total, 6 thin omitted)
 
 ### Community 0 - "stages.py"
 Cohesion: 0.09
@@ -186,13 +186,13 @@ Nodes (48): build_score_components(), Any, Builds the structured ScoreComponent 
 Cohesion: 0.06
 Nodes (40): get_weight(), Returns the matching weight for the given match type., MatchReason, MatchResult, BaseModel, Universal domain object representing a semantic match between a required skill…, Evaluates relationship type, confidence, and matches between two Skill objects.…, resolve_relationship() (+32 more)
 
-### Community 4 - "login.js"
-Cohesion: 0.20
-Nodes (20): checkAuthStatus(), _doCheckAuthStatus(), hideEmailVerificationModal(), initAuthListener(), showEmailVerificationModal(), waitForAuthState(), app, auth (+12 more)
+### Community 4 - "state.js"
+Cohesion: 0.15
+Nodes (21): checkAuthStatus(), _doCheckAuthStatus(), hideEmailVerificationModal(), initAuthListener(), showEmailVerificationModal(), waitForAuthState(), auth, initializeLoginPage() (+13 more)
 
 ### Community 5 - "app.js"
-Cohesion: 0.20
-Nodes (16): clearCandidateState(), handleFiles(), renderFileList(), updateResumeCountDisplay(), uploadedFiles, initModals(), getStepsForRole(), hideObError() (+8 more)
+Cohesion: 0.19
+Nodes (17): clearCandidateState(), handleFiles(), renderFileList(), updateResumeCountDisplay(), uploadedFiles, initModals(), MESSAGES, getStepsForRole() (+9 more)
 
 ### Community 6 - "process_candidate_resume"
 Cohesion: 0.10
@@ -230,9 +230,9 @@ Nodes (34): archiveJob(), createJob(), deleteCandidateResume(), deleteJob(), _ex
 Cohesion: 0.19
 Nodes (32): CompanyType, UserRole, GoogleLoginRequest, BaseModel, CandidateProfileResponse, CandidateProfileUpdate, Config, ForgotPasswordRequest (+24 more)
 
-### Community 15 - "state.js"
-Cohesion: 0.13
-Nodes (14): populateCandidateProfileUI(), populateRecruiterProfileUI(), initializeCandidateProfile(), showCandidateProfileFeedback(), initializeRecruiterDashboard(), initializeRecruiterProfile(), showRecruiterProfileFeedback(), getProfile() (+6 more)
+### Community 15 - "test_candidate_xai_dashboard.py"
+Cohesion: 0.15
+Nodes (13): candidate_a(), candidate_b(), disable_rate_limiting(), fixture, Temporarily disables SlowAPI rate limiting for unit tests., Creates Candidate A in the test database., Verify that candidate JD titles are not unnecessarily truncated to 50…, Creates Candidate B in the test database for cross-user isolation tests. (+5 more)
 
 ### Community 16 - "s"
 Cohesion: 0.15
@@ -292,7 +292,7 @@ Nodes (7): Ab(), Bb(), cb(), Context(), Ew(), fb(), zb()
 
 ### Community 30 - "test_profile_editing.py"
 Cohesion: 0.04
-Nodes (61): get_password_hash(), Hashes a plain text password using bcrypt., CandidateProfile, Creates a test user in the database., test_user(), candidate_a(), candidate_b(), disable_rate_limiting() (+53 more)
+Nodes (49): get_password_hash(), Hashes a plain text password using bcrypt., Creates a test user in the database., test_user(), candidate_user(), disable_rate_limiting(), fixture, Temporarily disables SlowAPI rate limiting for unit tests. (+41 more)
 
 ### Community 31 - "Oa"
 Cohesion: 0.53
@@ -431,8 +431,8 @@ Cohesion: 0.20
 Nodes (17): _build_deterministic_fallback(), _call_gemini_content(), generate_grounded_xai_insights(), Any, Makes HTTP request to Gemini API and parses JSON response., Safely extracts and parses JSON even if wrapped in markdown code fences or…, Constructs a deterministic, grounded rule-based summary when Gemini is…, Invokes the Google Gemini API to generate grounded, explainable AI insights for… (+9 more)
 
 ### Community 93 - "candidate.js"
-Cohesion: 0.19
-Nodes (15): getEmptyStateHTML(), toggleButtonLoading(), MESSAGES, clearCandidateWorkspaceState(), closeCandidateAnalysisModal(), initCandidatePage(), initializeCandidateDashboard(), renderCandidateAnalysisResults() (+7 more)
+Cohesion: 0.12
+Nodes (25): getEmptyStateHTML(), toggleButtonLoading(), populateCandidateProfileUI(), populateRecruiterProfileUI(), clearCandidateWorkspaceState(), closeCandidateAnalysisModal(), initCandidatePage(), initializeCandidateDashboard() (+17 more)
 
 ### Community 94 - "Glossary"
 Cohesion: 0.11
@@ -580,7 +580,7 @@ Nodes (20): Accessibility and responsive (gsap.matchMedia()), Common vars, Core 
 
 ### Community 130 - "User"
 Cohesion: 0.08
-Nodes (46): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online(), api_route, get_db(), FastAPI Dependency to yield a database session., Restricts route access to users registered with the RECRUITER role in… (+38 more)
+Nodes (45): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online(), api_route, get_db(), FastAPI Dependency to yield a database session., Restricts route access to users registered with the RECRUITER role in… (+37 more)
 
 ### Community 131 - "test_remediation.py"
 Cohesion: 0.15
@@ -642,17 +642,21 @@ Nodes (3): Settings, Dispatches a secure password reset email to the specified r
 Cohesion: 0.50
 Nodes (4): Ud(), vd(), we(), xe()
 
+### Community 147 - "firebase-init.js"
+Cohesion: 0.40
+Nodes (3): app, googleProvider, firebaseConfig
+
 ## Knowledge Gaps
 - **850 isolated node(s):** `Settings`, `inflightGetRequests`, `uploadedFiles`, `sidebarLinkIds`, `COMPANY_TYPES` (+845 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `s()` connect `s` to `bf`, `gsap.min.js`, `recruiter.js`, `Tween`, `cb`?**
   _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **Why does `User` connect `User` to `stages.py`, `backend/tests/test_recruiter.py`, `test_firebase_auth.py`, `process_resumes`, `process_candidate_resume`, `Session`, `test_custom_scoring.py`, `test_password_reset.py`, `routers/test_auth.py`, `UserRole`, `google_login`, `update_job_description`, `test_profile_editing.py`?**
+- **Why does `User` connect `User` to `stages.py`, `backend/tests/test_recruiter.py`, `test_firebase_auth.py`, `process_resumes`, `process_candidate_resume`, `Session`, `test_custom_scoring.py`, `test_password_reset.py`, `routers/test_auth.py`, `UserRole`, `test_candidate_xai_dashboard.py`, `google_login`, `update_job_description`, `test_profile_editing.py`?**
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `getCandidateDetailRowHTML()` connect `recruiter.js` to `s`, `app.js`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._

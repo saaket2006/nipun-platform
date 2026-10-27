@@ -1,6 +1,6 @@
 /**
  * Sidebar component that manages link highlights, titles, and collapsed-by-default
- * hover-delayed expansion in recruiter and candidate workspaces.
+ * instant hover expansion in recruiter and candidate workspaces.
  */
 
 const SIDEBAR_STORAGE_KEY = "nipun_sidebar_collapsed";
@@ -15,7 +15,7 @@ const sidebarLinkIds = {
 };
 
 // Timing constants
-const EXPAND_DELAY_MS = 500;
+const EXPAND_DELAY_MS = 0;
 const COLLAPSE_DELAY_MS = 350;
 
 let expandTimeout = null;
@@ -162,7 +162,7 @@ export function toggleSidebar() {
 
 /**
  * Handles pointer enter event on the sidebar.
- * Starts a 500ms hover-intent delay before expanding.
+ * Expands the sidebar instantly on hover.
  */
 function handlePointerEnter(e) {
     if (e.pointerType === 'touch') return;
@@ -180,13 +180,13 @@ function handlePointerEnter(e) {
         return;
     }
 
-    // Start 500ms hover-intent timer
-    expandTimeout = setTimeout(() => {
-        if (isPointerOverSidebar) {
-            expandSidebar(true);
-        }
+    if (expandTimeout) {
+        clearTimeout(expandTimeout);
         expandTimeout = null;
-    }, EXPAND_DELAY_MS);
+    }
+
+    // Instantly expand on hover
+    expandSidebar(true);
 }
 
 /**
@@ -198,7 +198,7 @@ function handlePointerLeave(e) {
 
     isPointerOverSidebar = false;
 
-    // If leaving before 500ms expansion completes, cancel expansion immediately
+    // Cancel any pending expansion timers if any
     if (expandTimeout) {
         clearTimeout(expandTimeout);
         expandTimeout = null;
