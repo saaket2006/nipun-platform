@@ -9,9 +9,9 @@
     font-family: 'Outfit', sans-serif;
 }
 
-/* Sidebar */
+/* Sidebar - Collapsed Rail by default, Overlay Expansion on hover */
 .rec-sidebar {
-    width: 260px;
+    width: 68px;
     background: #0B0B0D;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
@@ -21,32 +21,61 @@
     bottom: 0;
     left: 0;
     z-index: 100;
-    padding: 1.5rem 1rem;
+    padding: 1.25rem 0.5rem;
     box-sizing: border-box;
-    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.22s cubic-bezier(0.23, 1, 0.32, 1), 
+                padding 0.22s cubic-bezier(0.23, 1, 0.32, 1), 
+                box-shadow 0.22s ease,
+                border-color 0.22s ease;
+    will-change: width, box-shadow;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.rec-sidebar.expanded {
+    width: 260px;
+    padding: 1.5rem 1rem;
+    box-shadow: 12px 0 32px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.1);
+    border-right-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Sidebar Header & Toggle Button */
 .sidebar-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
     position: relative;
     min-height: 36px;
     width: 100%;
 }
 
+.rec-sidebar.expanded .sidebar-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 0.75rem;
+}
+
 .sidebar-logo {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
     margin-bottom: 0;
-    padding-left: 0.25rem;
+    padding: 0;
     cursor: pointer;
     transition: opacity 0.15s ease;
     user-select: none;
     min-width: 0;
+}
+
+.rec-sidebar.expanded .sidebar-logo {
+    justify-content: flex-start;
+    padding-left: 0.25rem;
 }
 
 .sidebar-logo-img {
@@ -83,6 +112,7 @@
     outline: none;
     border-color: #10b981;
     box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.35);
+    display: inline-flex !important;
 }
 
 .sidebar-toggle-btn:active {
@@ -103,6 +133,13 @@
     display: block;
 }
 
+/* On desktop with pointer/hover support, hide manual toggle button unless focused via keyboard */
+@media (hover: hover) and (pointer: fine) {
+    .sidebar-toggle-btn:not(:focus-visible) {
+        display: none !important;
+    }
+}
+
 .sidebar-logo:hover {
     opacity: 0.85;
 }
@@ -119,6 +156,11 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.02em;
+    display: none !important;
+}
+
+.rec-sidebar.expanded .logo-text {
+    display: inline-block !important;
 }
 
 .sidebar-nav {
@@ -130,16 +172,25 @@
 .sidebar-link {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
-    padding: 0.85rem 1rem;
+    padding: 0.75rem 0;
     color: #94a3b8;
     text-decoration: none;
     border-radius: 10px;
     font-size: 0.95rem;
     font-weight: 500;
-    transition: all 0.2s ease;
-    margin-bottom: 0.35rem;
+    transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease, padding 0.22s ease;
+    margin-bottom: 0.5rem;
     border: 1px solid transparent;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.rec-sidebar.expanded .sidebar-link {
+    justify-content: flex-start;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.35rem;
 }
 
 .sidebar-link:hover {
@@ -153,8 +204,23 @@
     border: 1px solid rgba(16, 185, 129, 0.15);
 }
 
+.sidebar-link span:not(.nav-icon),
+.sign-out-btn span:not(.nav-icon) {
+    display: none !important;
+    white-space: nowrap;
+}
+
+.rec-sidebar.expanded .sidebar-link span:not(.nav-icon),
+.rec-sidebar.expanded .sign-out-btn span:not(.nav-icon) {
+    display: inline-block !important;
+}
+
 .nav-icon {
     font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .sidebar-footer {
@@ -166,8 +232,9 @@
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
-    padding: 0.85rem 1rem;
+    padding: 0.75rem 0;
     background: transparent;
     border: 1px solid transparent;
     color: #f1f5f9;
@@ -176,8 +243,16 @@
     font-family: inherit;
     font-size: 0.95rem;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease, padding 0.22s ease;
     text-align: left;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+}
+
+.rec-sidebar.expanded .sign-out-btn {
+    justify-content: flex-start;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0;
 }
 
 .sign-out-btn:hover {
@@ -186,10 +261,10 @@
     color: #ef4444;
 }
 
-/* Main Content Wrapper */
+/* Main Content Wrapper - Anchored to collapsed sidebar rail (68px) */
 .rec-main-wrapper {
     flex: 1;
-    margin-left: 260px;
+    margin-left: 68px;
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -197,8 +272,8 @@
 }
 
 /* Sidebar Collapsed Rail (Desktop & Tablet > 800px) */
-html.sidebar-pref-collapsed .rec-layout .rec-sidebar,
-.rec-layout.sidebar-collapsed .rec-sidebar,
+html.sidebar-pref-collapsed .rec-layout .rec-sidebar:not(.expanded),
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded),
 .rec-sidebar.collapsed {
     width: 68px;
     padding: 1.25rem 0.5rem;
@@ -209,8 +284,8 @@ html.sidebar-pref-collapsed .rec-layout .rec-main-wrapper,
     margin-left: 68px;
 }
 
-html.sidebar-pref-collapsed .sidebar-header,
-.rec-layout.sidebar-collapsed .sidebar-header,
+html.sidebar-pref-collapsed .rec-sidebar:not(.expanded) .sidebar-header,
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded) .sidebar-header,
 .rec-sidebar.collapsed .sidebar-header {
     flex-direction: column;
     align-items: center;
@@ -219,34 +294,34 @@ html.sidebar-pref-collapsed .sidebar-header,
     padding: 0;
 }
 
-html.sidebar-pref-collapsed .sidebar-logo,
-.rec-layout.sidebar-collapsed .sidebar-logo,
+html.sidebar-pref-collapsed .rec-sidebar:not(.expanded) .sidebar-logo,
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded) .sidebar-logo,
 .rec-sidebar.collapsed .sidebar-logo {
     justify-content: center;
     padding: 0;
     margin-bottom: 0;
 }
 
-html.sidebar-pref-collapsed .logo-text,
-.rec-layout.sidebar-collapsed .logo-text,
+html.sidebar-pref-collapsed .rec-sidebar:not(.expanded) .logo-text,
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded) .logo-text,
 .rec-sidebar.collapsed .logo-text {
     display: none !important;
 }
 
-html.sidebar-pref-collapsed .sidebar-link span:not(.nav-icon),
-.rec-layout.sidebar-collapsed .sidebar-link span:not(.nav-icon),
+html.sidebar-pref-collapsed .rec-sidebar:not(.expanded) .sidebar-link span:not(.nav-icon),
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded) .sidebar-link span:not(.nav-icon),
 .rec-sidebar.collapsed .sidebar-link span:not(.nav-icon),
-html.sidebar-pref-collapsed .sign-out-btn span:not(.nav-icon),
-.rec-layout.sidebar-collapsed .sign-out-btn span:not(.nav-icon),
+html.sidebar-pref-collapsed .rec-sidebar:not(.expanded) .sign-out-btn span:not(.nav-icon),
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded) .sign-out-btn span:not(.nav-icon),
 .rec-sidebar.collapsed .sign-out-btn span:not(.nav-icon) {
     display: none !important;
 }
 
-html.sidebar-pref-collapsed .sidebar-link,
-.rec-layout.sidebar-collapsed .sidebar-link,
+html.sidebar-pref-collapsed .rec-sidebar:not(.expanded) .sidebar-link,
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded) .sidebar-link,
 .rec-sidebar.collapsed .sidebar-link,
-html.sidebar-pref-collapsed .sign-out-btn,
-.rec-layout.sidebar-collapsed .sign-out-btn,
+html.sidebar-pref-collapsed .rec-sidebar:not(.expanded) .sign-out-btn,
+.rec-layout.sidebar-collapsed .rec-sidebar:not(.expanded) .sign-out-btn,
 .rec-sidebar.collapsed .sign-out-btn {
     justify-content: center;
     padding: 0.75rem 0;
@@ -271,6 +346,16 @@ html.sidebar-pref-collapsed .sidebar-toggle-btn .toggle-icon-expand,
 .no-sidebar-transition,
 .no-sidebar-transition * {
     transition: none !important;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .rec-sidebar,
+    .rec-sidebar *,
+    .rec-main-wrapper {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
 }
 
 /* Topbar */

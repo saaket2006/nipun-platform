@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/components/sidebar.js": {
-    "mtime": 1792038244.9047098,
-    "ast_hash": "b5ba7ca60323093e8454c4edb120692c",
+    "mtime": 1793041766.6536403,
+    "ast_hash": "b799528b3368a28a3a52250c911a616d",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/statisticCard.js": {
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "frontend/candidate.html": {
-    "mtime": 1792090075.2375362,
-    "ast_hash": "12b1b8c59bbbb1d29b33c15a6ac89a41",
+    "mtime": 1793041214.7061036,
+    "ast_hash": "e055664164efbfb0b946c2944ec463e1",
     "semantic_hash": ""
   },
   "frontend/index.html": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "frontend/recruiter.html": {
-    "mtime": 1792038345.2188563,
-    "ast_hash": "4059002e3ecbdcf43869ce017d870596",
+    "mtime": 1793041187.621226,
+    "ast_hash": "ac7d31b1358611a11120ebc9aedf3e04",
     "semantic_hash": ""
   },
   "requirements.txt": {

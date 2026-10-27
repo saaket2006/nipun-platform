@@ -29,9 +29,7 @@
     <script>
         (function() {
             try {
-                if (localStorage.getItem("nipun_sidebar_collapsed") === "true") {
-                    document.documentElement.classList.add("sidebar-pref-collapsed");
-                }
+                document.documentElement.classList.add("sidebar-pref-collapsed");
             } catch (e) {}
         })();
     </script>
@@ -41,7 +39,7 @@
 <!-- Candidate Workspace Container -->
     <div class="rec-layout hidden" id="candidate-container">
         <!-- Sidebar -->
-        <aside class="rec-sidebar" id="cand-sidebar">
+        <aside class="rec-sidebar collapsed" id="cand-sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo flex items-center gap-2" id="candidate-sidebar-logo" title="Nipun Workspace">
                     <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="sidebar-logo-img">
@@ -57,21 +55,21 @@
                 </button>
             </div>
             <nav class="sidebar-nav">
-                <a href="#/candidate/dashboard" class="sidebar-link active" id="link-cand-dashboard" title="Dashboard">
+                <a href="#/candidate/dashboard" class="sidebar-link active" id="link-cand-dashboard" title="Dashboard" aria-label="Dashboard">
                     <span class="nav-icon">📊</span>
                     <span>Dashboard</span>
                 </a>
-                <a href="#/candidate/screen" class="sidebar-link" id="link-cand-screen" title="Resume Analysis">
+                <a href="#/candidate/screen" class="sidebar-link" id="link-cand-screen" title="Resume Analysis" aria-label="Resume Analysis">
                     <span class="nav-icon">🔎</span>
                     <span>Resume Analysis</span>
                 </a>
-                <a href="#/candidate/profile" class="sidebar-link" id="link-cand-profile" title="My Profile">
+                <a href="#/candidate/profile" class="sidebar-link" id="link-cand-profile" title="My Profile" aria-label="My Profile">
                     <span class="nav-icon">👤</span>
                     <span>My Profile</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <button id="cand-sign-out-btn" class="sign-out-btn" title="Logout">
+                <button id="cand-sign-out-btn" class="sign-out-btn" title="Logout" aria-label="Logout">
                     <span class="nav-icon">⏻</span>
                     <span>Logout</span>
                 </button>
