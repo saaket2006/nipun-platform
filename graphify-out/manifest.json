@@ -1053,5 +1053,20 @@
     "mtime": 1794054376.8560183,
     "ast_hash": "e0091d93f6a98eab8cffcea03d9e33c3",
     "semantic_hash": ""
+  },
+  "diagrams/ai-scoring-nlp-pipeline.html": {
+    "mtime": 1794165212.2674088,
+    "ast_hash": "77c3d94515fecb863650e7a6cf69e4ee",
+    "semantic_hash": ""
+  },
+  "diagrams/nipun-system-architecture.html": {
+    "mtime": 1794165149.419049,
+    "ast_hash": "5c9eb376beb61019347b836f393d87d5",
+    "semantic_hash": ""
+  },
+  "diagrams/recruiter-candidate-workflows.html": {
+    "mtime": 1794165279.5158882,
+    "ast_hash": "f425ef0a9d1680d49d972fd7fb751f5b",
+    "semantic_hash": ""
   }
 }

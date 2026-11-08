@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nipun AI System Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f5f5f5;
+      --paper-2: #ececec;
+      --card-bg: #ffffff;
+      --ink: #2d3142;
+      --ink-strong: #111111;
+      --muted: #4f5d75;
+      --soft: #5a6580;
+      --rule: rgba(45, 49, 66, 0.12);
+      --rule-solid: #bfc0c0;
+      --accent: #bf4520;
+      --accent-tint: rgba(191, 69, 32, 0.08);
+      --link: #2e5aa8;
+      --font-title: 'Instrument Serif', Georgia, serif;
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      padding: 2.5rem 1.5rem;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-wrapper {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 680px;
+    }
+
+    .diagram-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 2.5rem;
+      border-radius: 8px;
+    }
+
+    svg {
+      width: 100%;
+      min-width: 960px;
+      height: auto;
+      display: block;
+    }
+
+    @media print {
+      .diagram-container {
+        overflow-x: visible;
+      }
+      svg {
+        min-width: 0;
+      }
+    }
+
+    /* Summary Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 0.95fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+
+    .card .card-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .card-dot.coral { background: var(--accent); }
+    .card-dot.ink { background: var(--ink); }
+    .card-dot.link { background: var(--link); }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .card p, .card ul {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card ul {
+      list-style: none;
+    }
+
+    .card ul li {
+      margin-bottom: 0.35rem;
+      position: relative;
+      padding-left: 0.9rem;
+    }
+
+    .card ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--soft);
+    }
+
+    footer {
+      border-top: 1px solid var(--rule);
+      padding-top: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <p class="eyebrow">Topology &amp; Data Boundaries</p>
+      <h1>Nipun Platform System Architecture</h1>
+      <p class="subtitle">AI-assisted talent evaluation platform illustrating service boundaries, secure authentication handshakes, multi-stage NLP ingestion, and resilient multi-model LLM scoring.</p>
+    </header>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 960 600" role="img" aria-labelledby="nipun-system-architecture-title nipun-system-architecture-desc">
+        <title id="nipun-system-architecture-title">Nipun AI System Architecture</title>
+        <desc id="nipun-system-architecture-desc">High-level architecture diagram of the Nipun platform showing client interfaces, FastAPI backend, NLP extraction, AI scoring engine, Gemini XAI, and Supabase data store.</desc>
+
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/>
+          </marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#bf4520"/>
+          </marker>
+          <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
+          </marker>
+        </defs>
+
+        <!-- Clean Background -->
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- 1. ZONE CONTAINERS (Drawn first) -->
+        <!-- Zone 1: Client & Identity Layer -->
+        <rect x="40" y="56" width="224" height="432" rx="8" fill="rgba(45, 49, 66, 0.02)" stroke="rgba(45, 49, 66, 0.10)" stroke-width="0.8"/>
+        <rect x="52" y="60" width="132" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="118" y="71" fill="#5a6580" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">CLIENT &amp; IDENTITY</text>
+
+        <!-- Zone 2: API & Processing Pipeline -->
+        <rect x="296" y="56" width="232" height="432" rx="8" fill="rgba(45, 49, 66, 0.02)" stroke="rgba(45, 49, 66, 0.10)" stroke-width="0.8"/>
+        <rect x="308" y="60" width="136" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="376" y="71" fill="#5a6580" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">API &amp; INGESTION TIER</text>
+
+        <!-- Zone 3: Intelligence & Data Layer -->
+        <rect x="560" y="56" width="360" height="432" rx="8" fill="rgba(45, 49, 66, 0.02)" stroke="rgba(45, 49, 66, 0.10)" stroke-width="0.8"/>
+        <rect x="572" y="60" width="144" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="644" y="71" fill="#5a6580" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">INTELLIGENCE &amp; DATA TIER</text>
+
+        <!-- 2. CONNECTORS (Drawn before nodes so z-order keeps lines behind boxes) -->
+        <!-- Connection 1: Frontend SPA to Firebase Auth (Vertical straight line) -->
+        <line x1="152" y1="168" x2="152" y2="352" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <!-- Label with 6-10px gap -->
+        <rect x="116" y="250" width="72" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="152" y="260" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ID TOKEN</text>
+
+        <!-- Connection 2: Frontend SPA to FastAPI Server (Horizontal straight line) -->
+        <line x1="240" y1="128" x2="316" y2="128" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <!-- Label with gap -->
+        <rect x="250" y="108" width="56" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="278" y="118" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HTTPS/REST</text>
+
+        <!-- Connection 3: FastAPI to Firebase Auth (Orthogonal elbow: leave FastAPI left at y=148, go down to y=388, enter Firebase right at y=388) -->
+        <path d="M 316,148 H 286 Q 278,148 278,156 V 380 Q 278,388 270,388 H 240" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <!-- Label beside vertical segment with 8px horizontal gap -->
+        <rect x="238" y="294" width="34" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="255" y="304" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">VERIFY</text>
+
+        <!-- Connection 4: FastAPI Server to Doc Extraction (Vertical straight line) -->
+        <line x1="412" y1="168" x2="412" y2="228" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="382" y="188" width="60" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="412" y="198" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">DOCUMENT</text>
+
+        <!-- Connection 5: Doc Extraction to spaCy NLP (Vertical straight line) -->
+        <line x1="412" y1="300" x2="412" y2="360" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="386" y="320" width="52" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="412" y="330" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ENTITIES</text>
+
+        <!-- Connection 6: spaCy NLP to AI Scoring Engine (Orthogonal elbow: leave NLP right at y=396, H to 544, turn up to y=134, H to 580) -->
+        <path d="M 508,396 H 536 Q 544,396 544,388 V 142 Q 544,134 552,134 H 580" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <!-- Label on vertical segment with gap -->
+        <rect x="502" y="260" width="36" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="520" y="270" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SKILLS</text>
+
+        <!-- Connection 7: AI Scoring Engine to Gemini XAI (Horizontal straight line) -->
+        <line x1="732" y1="134" x2="760" y2="134" stroke="#bf4520" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+        <rect x="734" y="114" width="24" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="746" y="124" fill="#bf4520" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XAI</text>
+
+        <!-- Connection 8: AI Scoring Engine to Supabase PostgreSQL (Orthogonal elbow from bottom at x=656) -->
+        <path d="M 656,170 V 352" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="626" y="244" width="60" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="656" y="254" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">PERSIST</text>
+
+        <!-- Connection 9: Gemini XAI Reasoning to Supabase PostgreSQL (Orthogonal elbow: from Gemini bottom x=832 to Supabase top x=832) -->
+        <path d="M 832,170 V 352" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <rect x="804" y="244" width="56" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="832" y="254" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">RATIONALE</text>
+
+        <!-- 3. NODE BOXES -->
+        <!-- Node 1: Frontend SPA (User/Input Node) -->
+        <g id="node-frontend">
+          <rect x="64" y="96" width="176" height="72" rx="6" fill="#f5f5f5"/>
+          <rect x="64" y="96" width="176" height="72" rx="6" fill="rgba(79,93,117,0.06)" stroke="#5a6580" stroke-width="1"/>
+          <rect x="74" y="104" width="28" height="12" rx="2" fill="transparent" stroke="rgba(90,101,128,0.4)" stroke-width="0.8"/>
+          <text x="88" y="113" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SPA</text>
+          <text x="152" y="132" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Frontend Application</text>
+          <text x="152" y="150" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">vanilla js · tailwind</text>
+        </g>
+
+        <!-- Node 2: Firebase Auth (Security / Boundary Node) -->
+        <g id="node-firebase-auth">
+          <rect x="64" y="360" width="176" height="72" rx="6" fill="#f5f5f5"/>
+          <rect x="64" y="360" width="176" height="72" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)" stroke-width="1"/>
+          <rect x="74" y="368" width="34" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.35)" stroke-width="0.8"/>
+          <text x="91" y="377" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AUTH</text>
+          <text x="152" y="396" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Firebase Auth</text>
+          <text x="152" y="414" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">client sdk · admin verify</text>
+        </g>
+
+        <!-- Node 3: FastAPI Backend (Backend Core Node) -->
+        <g id="node-fastapi">
+          <rect x="316" y="96" width="192" height="72" rx="6" fill="#ffffff"/>
+          <rect x="316" y="96" width="192" height="72" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="326" y="104" width="28" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="340" y="113" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+          <text x="412" y="132" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">FastAPI Backend Service</text>
+          <text x="412" y="150" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">python 3.11 · render host</text>
+        </g>
+
+        <!-- Node 4: Document Ingestion (Backend Pipeline Node) -->
+        <g id="node-ingestion">
+          <rect x="316" y="228" width="192" height="72" rx="6" fill="#ffffff"/>
+          <rect x="316" y="228" width="192" height="72" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="326" y="236" width="44" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="348" y="245" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">PARSER</text>
+          <text x="412" y="264" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Document Extraction</text>
+          <text x="412" y="282" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">pypdf2 · docx2txt</text>
+        </g>
+
+        <!-- Node 5: spaCy NLP Pipeline (Backend NLP Node) -->
+        <g id="node-spacy">
+          <rect x="316" y="360" width="192" height="72" rx="6" fill="#ffffff"/>
+          <rect x="316" y="360" width="192" height="72" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="326" y="368" width="30" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="341" y="377" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NLP</text>
+          <text x="412" y="396" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">spaCy Entity Engine</text>
+          <text x="412" y="414" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ontology · skill extraction</text>
+        </g>
+
+        <!-- Node 6: AI Scoring Engine (Focal Accent Node 1) -->
+        <g id="node-scoring-engine">
+          <rect x="580" y="96" width="152" height="74" rx="6" fill="#f5f5f5"/>
+          <rect x="580" y="96" width="152" height="74" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1.2"/>
+          <rect x="590" y="104" width="46" height="12" rx="2" fill="transparent" stroke="rgba(191,69,32,0.4)" stroke-width="0.8"/>
+          <text x="613" y="113" fill="#bf4520" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SCORING</text>
+          <text x="656" y="132" fill="#bf4520" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">AI Scoring Engine</text>
+          <text x="656" y="150" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">hybrid weighted model</text>
+        </g>
+
+        <!-- Node 7: Gemini XAI Engine (Focal Accent Node 2) -->
+        <g id="node-gemini-xai">
+          <rect x="760" y="96" width="144" height="74" rx="6" fill="#f5f5f5"/>
+          <rect x="760" y="96" width="144" height="74" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1.2"/>
+          <rect x="770" y="104" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,69,32,0.4)" stroke-width="0.8"/>
+          <text x="784" y="113" fill="#bf4520" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LLM</text>
+          <text x="832" y="132" fill="#bf4520" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gemini XAI</text>
+          <text x="832" y="150" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">3.5/2.5 flash reasoning</text>
+        </g>
+
+        <!-- Node 8: Supabase PostgreSQL (Data Store Node) -->
+        <g id="node-supabase">
+          <rect x="580" y="360" width="324" height="72" rx="6" fill="#f5f5f5"/>
+          <rect x="580" y="360" width="324" height="72" rx="6" fill="rgba(45,49,66,0.04)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="590" y="368" width="48" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.4)" stroke-width="0.8"/>
+          <text x="614" y="377" fill="#5a6580" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STORAGE</text>
+          <text x="742" y="396" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Supabase PostgreSQL Database</text>
+          <text x="742" y="414" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">rls · candidate &amp; recruiter screening persistence</text>
+        </g>
+
+        <!-- Editorial Callout (Italic serif aside in top-right margin) -->
+        <text x="912" y="36" fill="#bf4520" font-size="13.5" font-style="italic" font-family="'Instrument Serif', serif" text-anchor="end">ordered multi-model resilience with fallback</text>
+        <path d="M 832,44 Q 856,66 848,94" fill="none" stroke="rgba(191,69,32,0.45)" stroke-width="1" stroke-dasharray="4,3"/>
+        <circle cx="848" cy="94" r="2.5" fill="#bf4520"/>
+
+        <!-- 4. HORIZONTAL LEGEND STRIP (Separated bottom strip) -->
+        <line x1="40" y1="520" x2="920" y2="520" stroke="rgba(45, 49, 66, 0.12)" stroke-width="0.8"/>
+        <text x="40" y="542" fill="#4f5d75" font-size="7.5" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+
+        <!-- Legend Item 1: Core Service -->
+        <rect x="120" y="534" width="12" height="12" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="140" y="544" fill="#2d3142" font-size="9" font-family="'Geist', sans-serif">Backend Service</text>
+
+        <!-- Legend Item 2: Focal AI Engine -->
+        <rect x="260" y="534" width="12" height="12" rx="2" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1.2"/>
+        <text x="280" y="544" fill="#2d3142" font-size="9" font-family="'Geist', sans-serif">Focal AI / LLM Engine</text>
+
+        <!-- Legend Item 3: Storage -->
+        <rect x="440" y="534" width="12" height="12" rx="2" fill="rgba(45,49,66,0.04)" stroke="#4f5d75" stroke-width="1"/>
+        <text x="460" y="544" fill="#2d3142" font-size="9" font-family="'Geist', sans-serif">Managed Store</text>
+
+        <!-- Legend Item 4: External / Auth -->
+        <rect x="580" y="534" width="12" height="12" rx="2" fill="rgba(79,93,117,0.06)" stroke="#5a6580" stroke-width="1"/>
+        <text x="600" y="544" fill="#2d3142" font-size="9" font-family="'Geist', sans-serif">Client / Identity Guard</text>
+
+        <!-- Legend Item 5: Secure / Async Flow -->
+        <line x1="750" y1="540" x2="774" y2="540" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="784" y="544" fill="#2d3142" font-size="9" font-family="'Geist', sans-serif">Async / Write-back</text>
+      </svg>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-grid">
+      <div class="card">
+        <p class="card-eyebrow">Scoring Architecture</p>
+        <div class="card-header">
+          <span class="card-dot coral"></span>
+          <h3>Hybrid Evaluation Engine</h3>
+        </div>
+        <ul>
+          <li><strong>Configurable Weight Profiles:</strong> Tailors skill match, experience, education, and projects per job description.</li>
+          <li><strong>Domain Entity Normalization:</strong> spaCy pipelines harmonize variant skill terminologies into a unified ontology.</li>
+          <li><strong>Zero Data Bleed:</strong> Scoring runs operate within tenant-isolated memory contexts before DB writes.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <p class="card-eyebrow">Explainability &amp; Resilience</p>
+        <div class="card-header">
+          <span class="card-dot coral"></span>
+          <h3>Multi-Model Gemini XAI</h3>
+        </div>
+        <ul>
+          <li><strong>Ordered Failover:</strong> Cascades from <code>gemini-3.5-flash-lite</code> to <code>2.5-flash-lite</code>, <code>flash-latest</code>, then deterministic scoring.</li>
+          <li><strong>Grounded Rationales:</strong> Generates actionable candidate feedback, specific skill gap alerts, and ATS remediation.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <p class="card-eyebrow">Identity &amp; Boundary</p>
+        <div class="card-header">
+          <span class="card-dot ink"></span>
+          <h3>Secure API Perimeter</h3>
+        </div>
+        <ul>
+          <li><strong>JWT Verification:</strong> Firebase Auth tokens validated on every incoming request.</li>
+          <li><strong>Strict Role Isolation:</strong> Segregated endpoints for recruiter batch screening vs candidate resume analysis.</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <span>NIPUN TALENT PLATFORM &middot; ARCHITECTURE SCHEMATIC</span>
+      <span>SYSTEM SPECIFICATION V2.0</span>
+    </footer>
+  </div>
+</body>
+</html>
+
