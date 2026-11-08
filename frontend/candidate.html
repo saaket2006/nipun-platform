@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nipun candidate portal for reviewing AI resume screening, skill matches, and explainable score analytics.">
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
@@ -12,6 +13,8 @@
     <!-- Self-hosted Outfit font declarations with font-display: block -->
     <link rel="stylesheet" href="assets/css/tailwind.min.css?v=2.1">
     <link rel="stylesheet" href="assets/css/fonts.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/tokens.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=2.1">
     <link rel="stylesheet" href="assets/css/design-tokens.css?v=2.1">
     <link rel="stylesheet" href="assets/css/base.css?v=2.1">
     <link rel="stylesheet" href="assets/css/ats.css?v=2.1">
@@ -46,7 +49,7 @@
                     <span class="logo-text">Nipun</span>
                 </div>
                 <button type="button" class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle sidebar" title="Toggle sidebar" aria-expanded="true">
-                    <svg class="sidebar-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg aria-hidden="true" class="sidebar-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect width="18" height="18" x="3" y="3" rx="2"/>
                         <path d="M9 3v18"/>
                         <path d="m16 15-3-3 3-3" class="toggle-icon-collapse"/>
@@ -56,21 +59,21 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="#/candidate/dashboard" class="sidebar-link active" id="link-cand-dashboard" title="Dashboard" aria-label="Dashboard">
-                    <span class="nav-icon">📊</span>
+                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                     <span>Dashboard</span>
                 </a>
                 <a href="#/candidate/screen" class="sidebar-link" id="link-cand-screen" title="Resume Analysis" aria-label="Resume Analysis">
-                    <span class="nav-icon">🔎</span>
+                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     <span>Resume Analysis</span>
                 </a>
                 <a href="#/candidate/profile" class="sidebar-link" id="link-cand-profile" title="My Profile" aria-label="My Profile">
-                    <span class="nav-icon">👤</span>
+                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     <span>My Profile</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
                 <button id="cand-sign-out-btn" class="sign-out-btn" title="Logout" aria-label="Logout">
-                    <span class="nav-icon">⏻</span>
+                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
                     <span>Logout</span>
                 </button>
             </div>
@@ -93,11 +96,11 @@
                 <!-- VIEW 1: CANDIDATE DASHBOARD -->
                 <section id="cand-view-dashboard" class="rec-view active">
                     <div class="welcome-banner">
-                        <h1 class="welcome-title">Welcome back, <span id="dash-cand-name">...</span>!</h1>
+                        <h1 class="welcome-title">Welcome back, <span id="dash-cand-name">…</span>!</h1>
                         <p class="welcome-subtitle">
-                            Status: <strong id="dash-cand-status" style="color: #fff;">...</strong> |
-                            Field of Study: <strong id="dash-cand-field" style="color: #fff;">...</strong> |
-                            Domain: <strong id="dash-cand-domain" style="color: #fff;">...</strong>
+                            Status: <strong id="dash-cand-status" style="color: var(--color-ink);">…</strong> |
+                            Field of Study: <strong id="dash-cand-field" style="color: var(--color-ink);">…</strong> |
+                            Domain: <strong id="dash-cand-domain" style="color: var(--color-ink);">…</strong>
                         </p>
                     </div>
 
@@ -106,7 +109,7 @@
                     </div>
 
                     <div class="analysis-history-section" style="margin-top: 2.5rem;">
-                        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #fff;">Analysis History</h2>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-ink);">Analysis History</h2>
                         <div id="candidate-timeline-list" class="timeline-container">
                             <!-- Populated dynamically via candidate.js -->
                         </div>
@@ -119,19 +122,19 @@
                         <div class="screening-inputs glass-card">
                             <div class="form-group">
                                 <label for="cand-job-description">Job Description</label>
-                                <textarea id="cand-job-description" placeholder="Paste target Job Description here..."></textarea>
+                                <textarea id="cand-job-description" placeholder="Paste target Job Description here…"></textarea>
                             </div>
 
                             <div class="form-group file-upload-wrapper">
                                 <label>Upload Your Resume (PDF/DOCX)</label>
                                 <div class="file-upload-box" id="cand-drop-zone">
-                                    <span class="upload-icon">📂</span>
+                                    <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-muted);"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
                                     <p>Drag and drop your resume here, or click to browse</p>
                                     <input type="file" id="cand-resumes" accept=".pdf,.docx" hidden>
 
                                     <div id="cand-resumes-header" class="resumes-dropdown-header hidden">
                                         <span id="cand-resumes-count">Resume (0)</span>
-                                        <span class="dropdown-chevron">▼</span>
+                                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
                                     </div>
                                     <ul id="cand-file-list" class="file-list"></ul>
                                 </div>
@@ -139,7 +142,7 @@
 
                             <div class="form-group" style="margin-top: 1rem;">
                                 <label for="cand-resume-label">Version Label (Optional)</label>
-                                <input type="text" id="cand-resume-label" placeholder="e.g. Software Engineer Application, V1" class="auth-input" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box; color: white;">
+                                <input type="text" id="cand-resume-label" placeholder="e.g. Software Engineer Application, V1" class="auth-input" style="background: var(--color-paper); border: 1px solid var(--color-rule); width: 100%; box-sizing: border-box; color: var(--color-ink);">
                             </div>
 
                             <button id="cand-process-btn" class="glow-btn">
@@ -182,7 +185,9 @@
                         <div id="cand-profile-display" class="rec-profile-layout">
                             <!-- Left Section: Avatar, Display Name, Email -->
                             <div class="rec-profile-identity">
-                                <div class="profile-avatar rec-profile-avatar">👤</div>
+                                <div class="profile-avatar rec-profile-avatar">
+                                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
                                 <div class="profile-meta rec-profile-meta">
                                     <h3 id="profile-cand-name">Candidate Name</h3>
                                     <p id="profile-cand-email">candidate@email.com</p>
@@ -221,8 +226,8 @@
 
                         <!-- Profile Edit Form -->
                         <form id="cand-profile-edit-form" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.75rem;">
-                                <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Edit Profile</h3>
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-rule); padding-bottom: 0.75rem;">
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin: 0;">Edit Profile</h3>
                             </div>
                             <div class="profile-info-grid">
                                 <div class="info-field">
@@ -271,16 +276,18 @@
 
             <div class="quick-view-body">
                 <div class="qv-profile-summary">
-                    <div class="qv-avatar">📄</div>
+                    <div class="qv-avatar">
+                        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
                     <div class="qv-meta">
                         <h3 id="cav-label">Version 1</h3>
                         <p id="cav-filename" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.25rem;">resume.pdf</p>
                         <p id="cav-date" style="font-size: 0.8rem; color: var(--text-secondary);">Uploaded on: 2026-07-12</p>
-                        <div id="cav-context-card" style="margin-top: 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
+                        <div id="cav-context-card" style="margin-top: 0.5rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
                             <span style="color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 0.25rem;">Scored Relative To:</span>
-                            <div style="color: #cbd5e1;">🎯 Profile: <strong id="cav-ctx-profile" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">📋 Job Description: <strong id="cav-ctx-jd" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">⚙️ Engine: <strong id="cav-ctx-engine" style="color: #fff;">Nipun Engine v1.0</strong></div>
+                            <div style="color: var(--color-ink-2);">Profile: <strong id="cav-ctx-profile" style="color: var(--color-ink);">-</strong></div>
+                            <div style="color: var(--color-ink-2);">Job Description: <strong id="cav-ctx-jd" style="color: var(--color-ink);">-</strong></div>
+                            <div style="color: var(--color-ink-2);">Engine: <strong id="cav-ctx-engine" style="color: var(--color-ink);">Nipun Engine v1.0</strong></div>
                         </div>
                     </div>
                     <div style="margin-left: auto;">
@@ -290,16 +297,16 @@
 
                 <div class="qv-section cav-jd-section">
                     <h4>Target Job Description</h4>
-                    <div id="cav-jd-description" class="cav-jd-card cav-jd-body"></div>
+                    <div id="cav-jd-description" class="cav-jd-content cav-jd-body"></div>
                 </div>
 
                 <div class="qv-section">
                     <h4>Contact Info in Resume</h4>
                     <div class="qv-info-grid">
-                        <div>📧 <span id="cav-cand-email">...</span></div>
-                        <div>📞 <span id="cav-cand-phone">...</span></div>
-                        <div>🔗 <span id="cav-cand-linkedin">...</span></div>
-                        <div>💻 <span id="cav-cand-github">...</span></div>
+                        <div>Email: <span id="cav-cand-email">…</span></div>
+                        <div>Phone: <span id="cav-cand-phone">…</span></div>
+                        <div>LinkedIn: <span id="cav-cand-linkedin">…</span></div>
+                        <div>GitHub: <span id="cav-cand-github">…</span></div>
                     </div>
                 </div>
 
@@ -317,15 +324,15 @@
                     <h4>Skills Overview</h4>
                     <div class="skills-block">
                         <h5>Extracted Skills</h5>
-                        <div id="cav-cand-extracted-skills" class="skills-tags-container">...</div>
+                        <div id="cav-cand-extracted-skills" class="skills-tags-container">…</div>
                     </div>
                     <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>&#x2705; Matched Skills</h5>
-                        <div id="cav-cand-matched-skills" class="skills-tags-container">...</div>
+                        <h5>Matched Skills</h5>
+                        <div id="cav-cand-matched-skills" class="skills-tags-container">…</div>
                     </div>
                     <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>&#x274C; Missing Skills</h5>
-                        <div id="cav-cand-missing-skills" class="skills-tags-container">...</div>
+                        <h5>Missing Skills</h5>
+                        <div id="cav-cand-missing-skills" class="skills-tags-container">…</div>
                     </div>
                 </div>
             </div>
@@ -348,7 +355,7 @@
             <div class="contact-email-container" style="text-align: center; margin: 2rem 0;">
                 <p style="font-size: 1.1rem; color: var(--text-secondary);">Email:</p>
                 <a href="mailto:nipun.platform@gmail.com"
-                    style="font-size: 1.3rem; color: #6366f1; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
+                    style="font-size: 1.3rem; color: var(--color-accent); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
                     target="_blank">nipun.platform@gmail.com</a>
             </div>
         </div>

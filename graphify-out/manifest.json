@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/animations.js": {
-    "mtime": 1793018203.2455354,
-    "ast_hash": "8cb3f7052740f2c89f429f6c0a8bc426",
+    "mtime": 1794158808.3623214,
+    "ast_hash": "07eb674f052fdaa76cc587aa8795d908",
     "semantic_hash": ""
   },
   "frontend/assets/js/api.js": {
@@ -395,14 +395,14 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/landing.js": {
-    "mtime": 1793018221.3991961,
-    "ast_hash": "1aef1aaf7aa62dd719f12600aa0c86ac",
+    "mtime": 1794158828.6003492,
+    "ast_hash": "0c69911df222cdfca49d77840694a940",
     "semantic_hash": ""
   },
   "frontend/assets/js/loadingOverlay.js": {
-    "mtime": 1785222814.8598306,
-    "ast_hash": "5ce9076f5cceaa3f0455596f152ccdf8",
-    "semantic_hash": "5ce9076f5cceaa3f0455596f152ccdf8"
+    "mtime": 1794057946.292848,
+    "ast_hash": "3eb55990b887b8e003de2f05237ed739",
+    "semantic_hash": ""
   },
   "frontend/assets/js/pages/candidate.js": {
     "mtime": 1792088353.2170167,
@@ -470,9 +470,9 @@
     "semantic_hash": ""
   },
   "tailwind.config.js": {
-    "mtime": 1785347559.9013448,
-    "ast_hash": "cfe0fbf004fe56c1c177f8df27b114d9",
-    "semantic_hash": "cfe0fbf004fe56c1c177f8df27b114d9"
+    "mtime": 1794057951.5250046,
+    "ast_hash": "92b3a39c63b21a38a35723351f9e0e11",
+    "semantic_hash": ""
   },
   "backend/services/pipeline/__init__.py": {
     "mtime": 1789013154.4404483,
@@ -605,23 +605,23 @@
     "semantic_hash": ""
   },
   "frontend/candidate.html": {
-    "mtime": 1793041214.7061036,
-    "ast_hash": "e055664164efbfb0b946c2944ec463e1",
+    "mtime": 1794057687.321766,
+    "ast_hash": "fc020d42cd58f5e8ed26982a8e2714ed",
     "semantic_hash": ""
   },
   "frontend/index.html": {
-    "mtime": 1793018251.374481,
-    "ast_hash": "900a57b780b7bfa5abe59aa8bb34ba2d",
+    "mtime": 1794158837.797731,
+    "ast_hash": "ff2b4dabbf6d2c40033b5fc5ee110d44",
     "semantic_hash": ""
   },
   "frontend/onboarding.html": {
-    "mtime": 1787644804.0764246,
-    "ast_hash": "4397ea034cb43c3cfc33ac4e02f6170b",
+    "mtime": 1794057687.3237793,
+    "ast_hash": "8145dbaf359848ad7654f68c12833378",
     "semantic_hash": ""
   },
   "frontend/recruiter.html": {
-    "mtime": 1793041187.621226,
-    "ast_hash": "ac7d31b1358611a11120ebc9aedf3e04",
+    "mtime": 1794058037.5253382,
+    "ast_hash": "e7a71af9fdf7a40ee81020f9b6b4f984",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   ".agents/skills/backend-architect/SKILL.md": {
-    "mtime": 1789889271.546354,
-    "ast_hash": "1704503fb44003f09dadf6ae1a163053",
+    "mtime": 1794025716.230011,
+    "ast_hash": "defa06d7192312c3f797df7a4c8c3ea3",
     "semantic_hash": ""
   },
   ".agents/skills/database-architect/SKILL.md": {
@@ -1044,44 +1044,14 @@
     "ast_hash": "cee2a9f3d80bbc772c01bb916764a2e0",
     "semantic_hash": ""
   },
-  ".agents/skills/gsap-core/SKILL.md": {
-    "mtime": 1792686657.7892468,
-    "ast_hash": "e14974bb48ddfe9e0da3406562b8f18f",
+  ".hallmark/log.json": {
+    "mtime": 1794058288.810734,
+    "ast_hash": "348cae02dbec1422fb8984419f7d33d9",
     "semantic_hash": ""
   },
-  ".agents/skills/gsap-frameworks/SKILL.md": {
-    "mtime": 1792686657.8015375,
-    "ast_hash": "8b067a9a32a69b11732678bcf09f5b4a",
-    "semantic_hash": ""
-  },
-  ".agents/skills/gsap-performance/SKILL.md": {
-    "mtime": 1792686657.8084705,
-    "ast_hash": "f6b97aae273b24930d77e634dcf1c62e",
-    "semantic_hash": ""
-  },
-  ".agents/skills/gsap-plugins/SKILL.md": {
-    "mtime": 1792686657.8230114,
-    "ast_hash": "694d28e8efac50b29b33905ffa62ec4f",
-    "semantic_hash": ""
-  },
-  ".agents/skills/gsap-react/SKILL.md": {
-    "mtime": 1792686657.8354514,
-    "ast_hash": "9fc3789feebbe444032cee2ade44f5b4",
-    "semantic_hash": ""
-  },
-  ".agents/skills/gsap-scrolltrigger/SKILL.md": {
-    "mtime": 1792686657.8526478,
-    "ast_hash": "4082bbc747d61f4241b2f0c5f2cfbeca",
-    "semantic_hash": ""
-  },
-  ".agents/skills/gsap-timeline/SKILL.md": {
-    "mtime": 1792686657.8655982,
-    "ast_hash": "3dfefe09dc41a59f2322734a7694b810",
-    "semantic_hash": ""
-  },
-  ".agents/skills/gsap-utils/SKILL.md": {
-    "mtime": 1792686657.8766892,
-    "ast_hash": "6a9b883f5a4ce55430fd7463176a2004",
+  ".hallmark/preflight.json": {
+    "mtime": 1794054376.8560183,
+    "ast_hash": "e0091d93f6a98eab8cffcea03d9e33c3",
     "semantic_hash": ""
   }
 }

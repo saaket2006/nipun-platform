@@ -1,0 +1,30 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "site",
+  "prompt": "redesign frontend",
+  "theme": "brand",
+  "shape": "Conversational FAQ",
+  "axes": "dark/grotesk-sans/chromatic-emerald",
+  "hero": "Counter",
+  "nav": "slab",
+  "footer": "colophon block",
+  "imagery": "product",
+  "photos": [],
+  "entry": "matrix",
+  "fingerprint": "modern-minimal-slate-emerald",
+  "sections": [
+   "hero",
+   "story",
+   "features",
+   "walkthrough",
+   "faq",
+   "cta",
+   "footer"
+  ],
+  "signature": "live semantic concept match breakdown",
+  "waived": [],
+  "date": "2026-11-07"
+ }
+]

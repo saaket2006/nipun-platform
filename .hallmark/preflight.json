@@ -1,0 +1,22 @@
+{
+  "scanned": "2026-11-07T17:55:00.000Z",
+  "findings": {
+    "fonts": "Outfit self-hosted (frontend/assets/css/fonts.css)",
+    "palette": "Dark slate with emerald accents (#070a13, #10b981) in frontend/assets/css/design-tokens.css",
+    "motion": "GSAP 3.12 + ScrollTrigger (frontend/assets/js/vendor)",
+    "spacing": "Tailwind 3.4.17 4pt scale",
+    "framework": "Vanilla JS MPA with Tailwind CSS and Lucide Icons"
+  },
+  "preserve": [
+    "Nipun AI Resume Screener brand and domain context",
+    "DOM element IDs, routes, form handlers, and JS hooks",
+    "Lucide icon bindings and module architecture"
+  ],
+  "introduce": [
+    "Design tokens block via tokens.css & base.css adhering to Hallmark Floor",
+    "Refined visual hierarchy, removing AI tells (emojis as icons, gradient text, card-in-card)",
+    "Strict contrast compliance and focus-visible states",
+    "Tabular numbers for metrics and accessible typography"
+  ]
+}
+

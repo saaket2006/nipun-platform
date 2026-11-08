@@ -5,7 +5,7 @@ import {
     initWalkthrough,
     initCounters,
     initNavbarEffects
-} from './animations.js?v=12';
+} from './animations.js?v=16';
 
 // Prevent browser scroll restoration from skewing initial ScrollTrigger layout calculations
 if ('scrollRestoration' in history) {

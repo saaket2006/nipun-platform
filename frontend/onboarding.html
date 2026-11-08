@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nipun onboarding wizard for setting up candidate and recruiter workspace profiles.">
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
@@ -12,6 +13,8 @@
     <!-- Self-hosted Outfit font declarations with font-display: block -->
     <link rel="stylesheet" href="assets/css/tailwind.min.css">
     <link rel="stylesheet" href="assets/css/fonts.css">
+    <link rel="stylesheet" href="assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css">
     <link rel="stylesheet" href="assets/css/design-tokens.css">
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/ats.css">
@@ -35,29 +38,29 @@
             <!-- Stepper Header -->
             <div class="onboarding-header" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.5rem; text-align: left; width: 100%;">
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <h3 style="margin: 0; font-size: 1.2rem; color: #fff;">Profile Setup</h3>
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--color-ink);">Profile Setup</h3>
                     <span id="onboarding-step-indicator" style="font-size: 0.85rem; color: var(--text-secondary);">Step 1 of 4</span>
                 </div>
-                <div style="height: 6px; width: 100%; background: rgba(255, 255, 255, 0.05); border-radius: 3px; overflow: hidden;">
-                    <div id="onboarding-progress-bar" style="height: 100%; width: 25%; background: linear-gradient(135deg, #6366f1, #a855f7); transition: width 0.3s ease;"></div>
+                <div style="height: 6px; width: 100%; background: var(--color-rule); border-radius: 3px; overflow: hidden;">
+                    <div id="onboarding-progress-bar" style="height: 100%; width: 25%; background: linear-gradient(135deg, var(--color-accent), var(--color-accent)); transition: width 0.3s ease;"></div>
                 </div>
             </div>
 
             <!-- STEP 1: WELCOME & ROLE SELECT -->
             <div id="ob-step-1" class="ob-step active-plane" style="width: 100%;">
-                <h2 style="margin-bottom: 0.5rem; color: #fff;">Welcome!</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Let's personalize your experience. Choose your role:</p>
+                <h2 style="margin-bottom: 0.5rem; color: var(--color-ink);">Welcome</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Let’s personalize your experience. Choose your role:</p>
                 <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; width: 100%;">
-                    <!-- Recruiter Choice Card -->
-                    <div id="ob-role-recruiter" class="ob-role-card" style="flex: 1; padding: 1.5rem; background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.05); border-radius: 12px; cursor: pointer; text-align: center; transition: all 0.2s;">
-                        <span style="font-size: 2.5rem; display: block; margin-bottom: 0.75rem;">💼</span>
-                        <strong style="font-size: 1.1rem; display: block; margin-bottom: 0.25rem; color: #fff;">Recruiter</strong>
+                    <!-- Recruiter Choice Option -->
+                    <div id="ob-role-recruiter" class="ob-role-option" style="flex: 1; padding: 1.5rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px; cursor: pointer; text-align: center; transition: border-color var(--dur-micro);">
+                        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-accent);"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        <strong style="font-size: 1.1rem; display: block; margin-bottom: 0.25rem; color: var(--color-ink);">Recruiter</strong>
                         <span style="font-size: 0.8rem; color: var(--text-secondary); display: block; line-height: 1.2;">Screen & rank candidates</span>
                     </div>
-                    <!-- Candidate Choice Card -->
-                    <div id="ob-role-candidate" class="ob-role-card" style="flex: 1; padding: 1.5rem; background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.05); border-radius: 12px; cursor: pointer; text-align: center; transition: all 0.2s;">
-                        <span style="font-size: 2.5rem; display: block; margin-bottom: 0.75rem;">🎓</span>
-                        <strong style="font-size: 1.1rem; display: block; margin-bottom: 0.25rem; color: #fff;">Candidate</strong>
+                    <!-- Candidate Choice Option -->
+                    <div id="ob-role-candidate" class="ob-role-option" style="flex: 1; padding: 1.5rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px; cursor: pointer; text-align: center; transition: border-color var(--dur-micro);">
+                        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-accent);"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        <strong style="font-size: 1.1rem; display: block; margin-bottom: 0.25rem; color: var(--color-ink);">Candidate</strong>
                         <span style="font-size: 0.8rem; color: var(--text-secondary); display: block; line-height: 1.2;">Review your profile matching</span>
                     </div>
                 </div>
@@ -65,78 +68,78 @@
 
             <!-- RECRUITER STEP 2: COMPANY NAME -->
             <div id="ob-rec-step-2" class="ob-step hidden" style="width: 100%;">
-                <h2 style="color: #fff; margin-bottom: 0.5rem;">Company Details</h2>
+                <h2 style="color: var(--color-ink); margin-bottom: 0.5rem;">Company Details</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">What is the name of your organization?</p>
                 <div class="form-group" style="margin-bottom: 2rem;">
-                    <input type="text" id="ob-company-name" placeholder="Acme Corp" class="auth-input">
+                    <input type="text" id="ob-company-name" placeholder="Apex Tech" class="auth-input">
                 </div>
             </div>
 
             <!-- RECRUITER STEP 3: COMPANY TYPE -->
             <div id="ob-rec-step-3" class="ob-step hidden" style="width: 100%;">
-                <h2 style="color: #fff; margin-bottom: 0.5rem;">Company Type</h2>
+                <h2 style="color: var(--color-ink); margin-bottom: 0.5rem;">Company Type</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">What is the size/category of your company?</p>
                 <div class="form-group" style="margin-bottom: 2rem;">
-                    <select id="ob-company-type" class="auth-input" style="width:100%; background: rgba(0, 0, 0, 0.4); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px; font-family: inherit;">
-                        <option value="" style="background: #111;">Select Company Type...</option>
-                        <option value="Startup" style="background: #111;">Startup</option>
-                        <option value="SME" style="background: #111;">SME</option>
-                        <option value="Enterprise" style="background: #111;">Enterprise</option>
-                        <option value="MNC" style="background: #111;">MNC</option>
-                        <option value="Government" style="background: #111;">Government</option>
-                        <option value="Educational Institution" style="background: #111;">Educational Institution</option>
-                        <option value="Consultancy" style="background: #111;">Consultancy</option>
-                        <option value="Non-Profit" style="background: #111;">Non-Profit</option>
-                        <option value="Other" style="background: #111;">Other</option>
+                    <select id="ob-company-type" class="auth-input" style="width:100%; background: var(--color-paper); color: var(--color-ink); border: 1px solid var(--color-rule); border-radius: 8px; padding: 12px; font-family: inherit;">
+                        <option value="">Select Company Type…</option>
+                        <option value="Startup">Startup</option>
+                        <option value="SME">SME</option>
+                        <option value="Enterprise">Enterprise</option>
+                        <option value="MNC">MNC</option>
+                        <option value="Government">Government</option>
+                        <option value="Educational Institution">Educational Institution</option>
+                        <option value="Consultancy">Consultancy</option>
+                        <option value="Non-Profit">Non-Profit</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
             </div>
 
             <!-- RECRUITER STEP 4: HIRING DOMAIN -->
             <div id="ob-rec-step-4" class="ob-step hidden" style="width: 100%;">
-                <h2 style="color: #fff; margin-bottom: 0.5rem;">Hiring Focus</h2>
+                <h2 style="color: var(--color-ink); margin-bottom: 0.5rem;">Hiring Focus</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Select your primary hiring domain:</p>
                 <div class="form-group" style="margin-bottom: 2rem;">
-                    <select id="ob-hiring-domain" class="auth-input" style="width:100%; background: rgba(0, 0, 0, 0.4); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px; font-family: inherit;">
-                        <option value="" style="background: #111;">Select hiring domain...</option>
-                        <option value="Software & IT" style="background: #111;">Software & IT</option>
-                        <option value="Mechanical" style="background: #111;">Mechanical</option>
-                        <option value="Civil" style="background: #111;">Civil</option>
-                        <option value="Electrical" style="background: #111;">Electrical</option>
-                        <option value="Electronics" style="background: #111;">Electronics</option>
-                        <option value="Data Science & AI" style="background: #111;">Data Science & AI</option>
-                        <option value="Finance" style="background: #111;">Finance</option>
-                        <option value="Marketing" style="background: #111;">Marketing</option>
-                        <option value="Healthcare" style="background: #111;">Healthcare</option>
-                        <option value="Education" style="background: #111;">Education</option>
-                        <option value="Legal" style="background: #111;">Legal</option>
-                        <option value="Human Resources" style="background: #111;">Human Resources</option>
-                        <option value="Sales" style="background: #111;">Sales</option>
-                        <option value="Other" style="background: #111;">Other</option>
+                    <select id="ob-hiring-domain" class="auth-input" style="width:100%; background: var(--color-paper); color: var(--color-ink); border: 1px solid var(--color-rule); border-radius: 8px; padding: 12px; font-family: inherit;">
+                        <option value="">Select hiring domain…</option>
+                        <option value="Software & IT">Software & IT</option>
+                        <option value="Mechanical">Mechanical</option>
+                        <option value="Civil">Civil</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Data Science & AI">Data Science & AI</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
             </div>
 
             <!-- CANDIDATE STEP 2: CURRENT STATUS -->
             <div id="ob-cand-step-2" class="ob-step hidden" style="width: 100%;">
-                <h2 style="color: #fff; margin-bottom: 0.5rem;">Current Status</h2>
+                <h2 style="color: var(--color-ink); margin-bottom: 0.5rem;">Current Status</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">What is your professional status?</p>
                 <div class="form-group" style="margin-bottom: 2rem;">
-                    <select id="ob-current-status" class="auth-input" style="width:100%; background: rgba(0, 0, 0, 0.4); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px; font-family: inherit;">
-                        <option value="" style="background: #111;">Select current status...</option>
-                        <option value="Student" style="background: #111;">Student</option>
-                        <option value="Working Professional" style="background: #111;">Working Professional</option>
-                        <option value="Career Switcher" style="background: #111;">Career Switcher</option>
-                        <option value="Freelancer" style="background: #111;">Freelancer</option>
-                        <option value="Job Seeker" style="background: #111;">Job Seeker</option>
-                        <option value="Other" style="background: #111;">Other</option>
+                    <select id="ob-current-status" class="auth-input" style="width:100%; background: var(--color-paper); color: var(--color-ink); border: 1px solid var(--color-rule); border-radius: 8px; padding: 12px; font-family: inherit;">
+                        <option value="">Select current status…</option>
+                        <option value="Student">Student</option>
+                        <option value="Working Professional">Working Professional</option>
+                        <option value="Career Switcher">Career Switcher</option>
+                        <option value="Freelancer">Freelancer</option>
+                        <option value="Job Seeker">Job Seeker</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
             </div>
 
             <!-- CANDIDATE STEP 3: FIELD OF STUDY -->
             <div id="ob-cand-step-3" class="ob-step hidden" style="width: 100%;">
-                <h2 style="color: #fff; margin-bottom: 0.5rem;">Field of Study</h2>
+                <h2 style="color: var(--color-ink); margin-bottom: 0.5rem;">Field of Study</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">What is your major or specialization?</p>
                 <div class="form-group" style="margin-bottom: 2rem;">
                     <input type="text" id="ob-field-study" placeholder="e.g. Computer Science / MBA" class="auth-input">
@@ -145,7 +148,7 @@
 
             <!-- CANDIDATE STEP 4: CURRENT DOMAIN -->
             <div id="ob-cand-step-4" class="ob-step hidden" style="width: 100%;">
-                <h2 style="color: #fff; margin-bottom: 0.5rem;">Current Domain</h2>
+                <h2 style="color: var(--color-ink); margin-bottom: 0.5rem;">Current Domain</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">What is your current domain or expertise?</p>
                 <div class="form-group" style="margin-bottom: 2rem;">
                     <input type="text" id="ob-current-domain" placeholder="e.g. Software Development / None" class="auth-input">

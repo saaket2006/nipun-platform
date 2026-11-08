@@ -57,31 +57,111 @@ export function initHeroAnimation() {
 }
 
 export function initStoryAnimation() {
+    const section = document.getElementById('story');
     const storyElements = gsap.utils.toArray('.story-element');
-    if (storyElements.length === 0) return;
+    if (!section || storyElements.length === 0) return;
     if (storyElements[0].offsetWidth === 0 || storyElements[0].offsetParent === null) return;
 
+    // Clean up any existing ScrollTriggers on this section
     ScrollTrigger.getAll().forEach(t => {
-        if (storyElements.includes(t.trigger)) t.kill();
+        if (t.trigger === section || storyElements.includes(t.trigger) || t.pin === section) {
+            t.kill(true);
+        }
     });
 
-    storyElements.forEach((el) => {
-        gsap.fromTo(el, 
-            { opacity: 0.1, y: 30, scale: 0.95 },
-            { 
-                opacity: 1, 
-                y: 0, 
-                scale: 1,
-                scrollTrigger: {
-                    trigger: el,
-                    start: 'top 80%',
-                    end: 'top 50%',
-                    scrub: true,
-                    toggleActions: 'play reverse play reverse'
-                }
-            }
-        );
+    // Accessibility: Reduced Motion
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.set(storyElements, { opacity: 1, filter: 'none', scale: 1, y: 0, clearProps: 'all' });
+        return;
+    }
+
+    const isDesktop = window.innerWidth >= 768;
+
+    // Initial state:
+    // Line 0 is active (bright white)
+    // Upcoming lines (1, 2, 3) are softly dimmed and ready to come in
+    gsap.set(storyElements[0], {
+        opacity: 1,
+        color: 'var(--color-ink)',
+        scale: 1,
+        y: 0,
+        filter: 'none'
     });
+    for (let i = 1; i < storyElements.length; i++) {
+        gsap.set(storyElements[i], {
+            opacity: 0.25,
+            color: 'var(--color-muted)',
+            scale: 0.98,
+            y: 12,
+            filter: 'none'
+        });
+    }
+
+    // Fast, brisk scrub timeline: moves swiftly through the dilemmas
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: isDesktop ? '+=80%' : '+=60%',
+            pin: true,
+            scrub: 0.35,
+            anticipatePin: 1
+        }
+    });
+
+    // Beat 1: Line 0 dims to 0.35, Line 1 comes in and lights up brightly
+    tl.to(storyElements[0], {
+        opacity: 0.35,
+        color: 'var(--color-muted)',
+        scale: 0.98,
+        duration: 0.6,
+        ease: 'power1.inOut'
+    }, 0.2);
+    tl.to(storyElements[1], {
+        opacity: 1,
+        color: 'var(--color-ink)',
+        scale: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'power2.out'
+    }, 0.2);
+
+    // Beat 2: Line 1 dims to 0.35, Line 2 comes in and lights up brightly
+    tl.to(storyElements[1], {
+        opacity: 0.35,
+        color: 'var(--color-muted)',
+        scale: 0.98,
+        duration: 0.6,
+        ease: 'power1.inOut'
+    }, 1.0);
+    tl.to(storyElements[2], {
+        opacity: 1,
+        color: 'var(--color-ink)',
+        scale: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'power2.out'
+    }, 1.0);
+
+    // Beat 3: Line 2 dims to 0.35, Line 3 comes in and lights up in radiant emerald
+    tl.to(storyElements[2], {
+        opacity: 0.35,
+        color: 'var(--color-muted)',
+        scale: 0.98,
+        duration: 0.6,
+        ease: 'power1.inOut'
+    }, 1.8);
+    tl.to(storyElements[3], {
+        opacity: 1,
+        color: 'var(--color-accent)',
+        scale: 1.05,
+        y: 0,
+        duration: 0.6,
+        ease: 'power2.out'
+    }, 1.8);
+
+    // Short hold beat before swiftly releasing
+    tl.to({}, { duration: 0.5 });
 }
 
 export function initFeatureStack() {
@@ -141,27 +221,27 @@ export function initFeatureStack() {
             trigger: header,
             start: () => `top ${getHeaderOffset()}px`,
             endTrigger: container,
-            end: () => `bottom ${getCardDockTop() + 250}px`,
+            end: () => `bottom ${getCardDockTop() + 350}px`,
             pin: true,
             pinSpacing: false,
             anticipatePin: 1
         });
     }
 
-    // Stage 3: Scroll-Driven Card Stacking with ScrollTrigger Pinning
+    // Stage 3: Scroll-Driven Card Stacking with generous reading time and progressive blur
     cards.forEach((card, index) => {
         // Pin each card at the dock position until container ends
         ScrollTrigger.create({
             trigger: card,
             start: () => `top ${getCardDockTop()}px`,
             endTrigger: container,
-            end: () => `bottom ${getCardDockTop() + 250}px`,
+            end: () => `bottom ${getCardDockTop() + 350}px`,
             pin: true,
             pinSpacing: false,
             anticipatePin: 1
         });
 
-        // Depth transition: as next card approaches, recede current card
+        // Depth transition: as next card approaches dock within final 160px, smoothly blur and recede the current card
         if (index < cards.length - 1) {
             const nextCard = cards[index + 1];
             gsap.fromTo(card,
@@ -173,16 +253,34 @@ export function initFeatureStack() {
                 {
                     scrollTrigger: {
                         trigger: nextCard,
-                        start: () => `top ${getCardDockTop() + 180}px`,
+                        start: () => `top ${getCardDockTop() + 160}px`,
                         end: () => `top ${getCardDockTop()}px`,
                         scrub: true
                     },
-                    scale: 0.94,
-                    opacity: 0.6,
-                    filter: 'blur(2px)',
+                    scale: 0.92,
+                    opacity: 0.15,
+                    filter: 'blur(12px)',
                     ease: 'none'
                 }
             );
+        }
+
+        // Deep recede transition: as future card (index + 2) approaches dock, fade out card completely
+        if (index < cards.length - 2) {
+            const futureCard = cards[index + 2];
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: futureCard,
+                    start: () => `top ${getCardDockTop() + 160}px`,
+                    end: () => `top ${getCardDockTop() + 40}px`,
+                    scrub: true
+                },
+                scale: 0.88,
+                opacity: 0,
+                filter: 'blur(20px)',
+                ease: 'none',
+                immediateRender: false
+            });
         }
     });
 }
@@ -327,10 +425,10 @@ export function initNavbarEffects() {
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            navbar.classList.add('backdrop-blur-md', 'bg-[#070a13]/85', 'border-b', 'border-slate-800/80', 'py-3');
+            navbar.classList.add('backdrop-blur-md', 'bg-dark/85', 'border-b', 'border-slate-800/80', 'py-3');
             navbar.classList.remove('py-5', 'bg-transparent', 'border-transparent');
         } else {
-            navbar.classList.remove('backdrop-blur-md', 'bg-[#070a13]/85', 'border-slate-800/80', 'py-3');
+            navbar.classList.remove('backdrop-blur-md', 'bg-dark/85', 'border-slate-800/80', 'py-3');
             navbar.classList.add('py-5', 'bg-transparent', 'border-transparent');
         }
     });
