@@ -1,6 +1,8 @@
 /**
- * Sidebar component that manages link highlights, titles, and collapsed-by-default
- * instant hover expansion in recruiter and candidate workspaces.
+ * Shared Horizontal Navigation & Responsive Mobile Drawer Component.
+ *
+ * Manages active route highlights, workspace header state, and responsive
+ * mobile slide-over drawer across recruiter and candidate workspaces.
  */
 
 const SIDEBAR_STORAGE_KEY = "nipun_sidebar_collapsed";
@@ -14,135 +16,100 @@ const sidebarLinkIds = {
     "#/candidate/profile": "link-cand-profile"
 };
 
-// Timing constants
-const EXPAND_DELAY_MS = 0;
-const COLLAPSE_DELAY_MS = 350;
-
-let expandTimeout = null;
-let collapseTimeout = null;
-let isPointerOverSidebar = false;
-
 /**
- * Checks whether the sidebar is currently collapsed.
+ * Checks whether the mobile navigation drawer (or legacy sidebar) is collapsed.
  * @returns {boolean}
  */
 export function isSidebarCollapsed() {
+    const drawer = document.getElementById('mobile-nav-drawer') || document.querySelector('.mobile-nav-drawer');
+    if (drawer) {
+        return drawer.classList.contains('hidden');
+    }
     const sidebar = document.querySelector('.rec-sidebar');
     if (sidebar) {
         return sidebar.classList.contains('collapsed') || !sidebar.classList.contains('expanded');
     }
-    try {
-        return localStorage.getItem(SIDEBAR_STORAGE_KEY) !== "false";
-    } catch (e) {
-        return true;
-    }
+    return true;
 }
 
 /**
- * Clears any pending hover-intent or collapse grace period timers.
- */
-function clearSidebarTimers() {
-    if (expandTimeout) {
-        clearTimeout(expandTimeout);
-        expandTimeout = null;
-    }
-    if (collapseTimeout) {
-        clearTimeout(collapseTimeout);
-        collapseTimeout = null;
-    }
-}
-
-/**
- * Expands the sidebar overlay layout.
+ * Expands / opens the mobile navigation drawer.
  * @param {boolean} [animate=true]
  */
 export function expandSidebar(animate = true) {
-    clearSidebarTimers();
+    const drawer = document.getElementById('mobile-nav-drawer') || document.querySelector('.mobile-nav-drawer');
+    const toggleBtns = document.querySelectorAll('.mobile-nav-toggle-btn, .sidebar-toggle-btn, #sidebar-toggle-btn');
 
-    const layout = document.querySelector('.rec-layout');
+    if (drawer) {
+        drawer.classList.remove('hidden');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        toggleBtns.forEach(btn => {
+            btn.setAttribute('aria-expanded', 'true');
+            const menuIcon = btn.querySelector('.mobile-nav-icon-menu');
+            const closeIcon = btn.querySelector('.mobile-nav-icon-close');
+            if (menuIcon) menuIcon.classList.add('hidden');
+            if (closeIcon) closeIcon.classList.remove('hidden');
+        });
+
+        // Focus close button for accessibility
+        const closeBtn = drawer.querySelector('#mobile-nav-close-btn, .mobile-nav-close-btn');
+        if (closeBtn) {
+            requestAnimationFrame(() => closeBtn.focus());
+        }
+    }
+
+    // Sync legacy sidebar if present
     const sidebar = document.querySelector('.rec-sidebar');
-    const toggleBtns = document.querySelectorAll('.sidebar-toggle-btn, #sidebar-toggle-btn');
-
-    if (!sidebar) return;
-
-    if (!animate) {
-        if (layout) layout.classList.add('no-sidebar-transition');
-        sidebar.classList.add('no-sidebar-transition');
+    if (sidebar) {
+        sidebar.classList.remove('collapsed');
+        sidebar.classList.add('expanded');
     }
-
-    sidebar.classList.remove('collapsed');
-    sidebar.classList.add('expanded');
-    if (layout) {
-        layout.classList.remove('sidebar-collapsed');
-        layout.classList.add('sidebar-expanded');
-    }
-    document.documentElement.classList.remove('sidebar-pref-collapsed');
-
-    toggleBtns.forEach(btn => {
-        btn.setAttribute('aria-expanded', 'true');
-        btn.setAttribute('title', 'Collapse sidebar');
-        btn.setAttribute('aria-label', 'Collapse sidebar');
-    });
 
     try {
         localStorage.setItem(SIDEBAR_STORAGE_KEY, "false");
     } catch (e) {}
-
-    if (!animate) {
-        void sidebar.offsetWidth;
-        requestAnimationFrame(() => {
-            if (layout) layout.classList.remove('no-sidebar-transition');
-            sidebar.classList.remove('no-sidebar-transition');
-        });
-    }
 }
 
 /**
- * Collapses the sidebar to its compact rail state.
+ * Collapses / closes the mobile navigation drawer.
  * @param {boolean} [animate=true]
  */
 export function collapseSidebar(animate = true) {
-    clearSidebarTimers();
+    const drawer = document.getElementById('mobile-nav-drawer') || document.querySelector('.mobile-nav-drawer');
+    const toggleBtns = document.querySelectorAll('.mobile-nav-toggle-btn, .sidebar-toggle-btn, #sidebar-toggle-btn');
 
-    const layout = document.querySelector('.rec-layout');
-    const sidebar = document.querySelector('.rec-sidebar');
-    const toggleBtns = document.querySelectorAll('.sidebar-toggle-btn, #sidebar-toggle-btn');
+    if (drawer) {
+        drawer.classList.add('hidden');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
 
-    if (!sidebar) return;
-
-    if (!animate) {
-        if (layout) layout.classList.add('no-sidebar-transition');
-        sidebar.classList.add('no-sidebar-transition');
+        toggleBtns.forEach(btn => {
+            btn.setAttribute('aria-expanded', 'false');
+            const menuIcon = btn.querySelector('.mobile-nav-icon-menu');
+            const closeIcon = btn.querySelector('.mobile-nav-icon-close');
+            if (menuIcon) menuIcon.classList.remove('hidden');
+            if (closeIcon) closeIcon.classList.add('hidden');
+        });
     }
 
-    sidebar.classList.add('collapsed');
-    sidebar.classList.remove('expanded');
-    if (layout) layout.classList.add('sidebar-collapsed');
-    document.documentElement.classList.add('sidebar-pref-collapsed');
-
-    toggleBtns.forEach(btn => {
-        btn.setAttribute('aria-expanded', 'false');
-        btn.setAttribute('title', 'Expand sidebar');
-        btn.setAttribute('aria-label', 'Expand sidebar');
-    });
+    // Sync legacy sidebar if present
+    const sidebar = document.querySelector('.rec-sidebar');
+    if (sidebar) {
+        sidebar.classList.add('collapsed');
+        sidebar.classList.remove('expanded');
+    }
 
     try {
         localStorage.setItem(SIDEBAR_STORAGE_KEY, "true");
     } catch (e) {}
-
-    if (!animate) {
-        void sidebar.offsetWidth;
-        requestAnimationFrame(() => {
-            if (layout) layout.classList.remove('no-sidebar-transition');
-            sidebar.classList.remove('no-sidebar-transition');
-        });
-    }
 }
 
 /**
- * Collapses or expands the sidebar layout.
- * @param {boolean} collapsed - Whether to collapse the sidebar
- * @param {boolean} [animate=true] - Whether to use smooth CSS transitions
+ * Collapses or expands the mobile navigation drawer.
+ * @param {boolean} collapsed - Whether to collapse the drawer
+ * @param {boolean} [animate=true]
  */
 export function setSidebarCollapsed(collapsed, animate = true) {
     if (collapsed) {
@@ -153,187 +120,95 @@ export function setSidebarCollapsed(collapsed, animate = true) {
 }
 
 /**
- * Toggles the sidebar between collapsed and expanded states.
+ * Toggles the mobile navigation drawer open / closed.
  */
 export function toggleSidebar() {
-    const nextState = isSidebarCollapsed();
-    setSidebarCollapsed(!nextState, true);
-}
-
-/**
- * Handles pointer enter event on the sidebar.
- * Expands the sidebar instantly on hover.
- */
-function handlePointerEnter(e) {
-    if (e.pointerType === 'touch') return;
-
-    isPointerOverSidebar = true;
-
-    // Grace period re-entry: cancel pending collapse immediately
-    if (collapseTimeout) {
-        clearTimeout(collapseTimeout);
-        collapseTimeout = null;
-    }
-
-    const sidebar = document.querySelector('.rec-sidebar');
-    if (!sidebar || sidebar.classList.contains('expanded')) {
-        return;
-    }
-
-    if (expandTimeout) {
-        clearTimeout(expandTimeout);
-        expandTimeout = null;
-    }
-
-    // Instantly expand on hover
-    expandSidebar(true);
-}
-
-/**
- * Handles pointer leave event on the sidebar.
- * Cancels pending expansion or starts a 350ms collapse grace period.
- */
-function handlePointerLeave(e) {
-    if (e.pointerType === 'touch') return;
-
-    isPointerOverSidebar = false;
-
-    // Cancel any pending expansion timers if any
-    if (expandTimeout) {
-        clearTimeout(expandTimeout);
-        expandTimeout = null;
-    }
-
-    const sidebar = document.querySelector('.rec-sidebar');
-    if (!sidebar || !sidebar.classList.contains('expanded')) {
-        return;
-    }
-
-    // Start collapse grace period (350ms)
-    collapseTimeout = setTimeout(() => {
-        // Do not collapse if keyboard focus is still inside the sidebar
-        if (!isPointerOverSidebar && !sidebar.contains(document.activeElement)) {
-            collapseSidebar(true);
-        }
-        collapseTimeout = null;
-    }, COLLAPSE_DELAY_MS);
-}
-
-/**
- * Handles focus entering the sidebar (keyboard navigation).
- */
-function handleFocusIn(e) {
-    if (collapseTimeout) {
-        clearTimeout(collapseTimeout);
-        collapseTimeout = null;
-    }
-    const sidebar = document.querySelector('.rec-sidebar');
-    if (sidebar && !sidebar.classList.contains('expanded')) {
+    if (isSidebarCollapsed()) {
         expandSidebar(true);
-    }
-}
-
-/**
- * Handles focus leaving the sidebar (keyboard navigation).
- */
-function handleFocusOut(e) {
-    const sidebar = document.querySelector('.rec-sidebar');
-    if (!sidebar) return;
-
-    requestAnimationFrame(() => {
-        if (!sidebar.contains(document.activeElement) && !isPointerOverSidebar) {
-            collapseSidebar(true);
-        }
-    });
-}
-
-/**
- * Handles keydown events within the sidebar (e.g. Escape to collapse).
- */
-function handleKeyDown(e) {
-    if (e.key === 'Escape') {
-        const sidebar = document.querySelector('.rec-sidebar');
-        if (sidebar && sidebar.classList.contains('expanded')) {
-            collapseSidebar(true);
-            const activeLink = sidebar.querySelector('.sidebar-link.active') || sidebar.querySelector('.sidebar-link');
-            if (activeLink) activeLink.focus();
-        }
-    }
-}
-
-/**
- * Outside tap detection for touch devices.
- */
-function handleOutsidePointerDown(e) {
-    const sidebar = document.querySelector('.rec-sidebar');
-    if (!sidebar) return;
-
-    if (sidebar.classList.contains('expanded') && !sidebar.contains(e.target) && !isPointerOverSidebar) {
+    } else {
         collapseSidebar(true);
     }
 }
 
 /**
- * Initializes the sidebar:
- * - Starts collapsed on fresh dashboard load
- * - Binds delayed hover-intent expansion and collapse grace period
- * - Binds keyboard focus and accessibility handlers
- * - Supports touch/tap toggles
+ * Handles Escape key press to dismiss mobile drawer.
  */
-export function initSidebar() {
-    const sidebar = document.querySelector('.rec-sidebar');
-    if (!sidebar) return;
-
-    // 1. Initial State: Always start collapsed on fresh dashboard load
-    collapseSidebar(false);
-
-    // Prevent duplicate event listener registration if initSidebar() is called multiple times
-    if (sidebar.dataset.sidebarInitialized === 'true') {
-        return;
+function handleKeyDown(e) {
+    if (e.key === 'Escape') {
+        const drawer = document.getElementById('mobile-nav-drawer') || document.querySelector('.mobile-nav-drawer');
+        if (drawer && !drawer.classList.contains('hidden')) {
+            collapseSidebar(true);
+            const toggleBtn = document.getElementById('sidebar-toggle-btn');
+            if (toggleBtn) toggleBtn.focus();
+        }
     }
-    sidebar.dataset.sidebarInitialized = 'true';
-
-    // 2. Attach hover-intent listeners (desktop pointer)
-    sidebar.addEventListener('pointerenter', handlePointerEnter);
-    sidebar.addEventListener('pointerleave', handlePointerLeave);
-
-    // 3. Attach keyboard focus and keydown listeners (accessibility)
-    sidebar.addEventListener('focusin', handleFocusIn);
-    sidebar.addEventListener('focusout', handleFocusOut);
-    sidebar.addEventListener('keydown', handleKeyDown);
-
-    // 4. Bind click handlers to toggle buttons (keyboard & touch fallback)
-    const toggleBtns = document.querySelectorAll('.sidebar-toggle-btn, #sidebar-toggle-btn');
-    toggleBtns.forEach(btn => {
-        btn.onclick = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleSidebar();
-        };
-    });
-
-    // 5. Outside tap detection for touch devices
-    document.addEventListener('pointerdown', handleOutsidePointerDown);
-
-    // 6. Auto-collapse on navigation link click for touch/mobile
-    const navLinks = sidebar.querySelectorAll('.sidebar-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 800 || window.matchMedia('(hover: none)').matches) {
-                collapseSidebar(true);
-            }
-        });
-    });
 }
 
 /**
- * Updates the active link in the sidebar based on the current hash route.
- * @param {string} hash - The active hash route
+ * Initializes the workspace navigation & mobile drawer component.
+ */
+export function initSidebar() {
+    const toggleBtns = document.querySelectorAll('.mobile-nav-toggle-btn, .sidebar-toggle-btn, #sidebar-toggle-btn');
+    const closeBtns = document.querySelectorAll('#mobile-nav-close-btn, .mobile-nav-close-btn');
+    const backdrops = document.querySelectorAll('#mobile-nav-backdrop, .mobile-nav-backdrop');
+    const drawerLinks = document.querySelectorAll('.mobile-nav-link');
+
+    // 1. Initial State: Always ensure mobile drawer starts closed
+    collapseSidebar(false);
+
+    // Prevent duplicate listener binding
+    if (document.documentElement.dataset.workspaceNavInitialized === 'true') {
+        return;
+    }
+    document.documentElement.dataset.workspaceNavInitialized = 'true';
+
+    // 2. Bind mobile hamburger toggle buttons
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleSidebar();
+        });
+    });
+
+    // 3. Bind drawer close buttons
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            collapseSidebar(true);
+        });
+    });
+
+    // 4. Bind backdrop tap to dismiss
+    backdrops.forEach(backdrop => {
+        backdrop.addEventListener('click', () => {
+            collapseSidebar(true);
+        });
+    });
+
+    // 5. Auto-collapse drawer on mobile nav link click
+    drawerLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            collapseSidebar(true);
+        });
+    });
+
+    // 6. Bind global Escape key handler
+    document.addEventListener('keydown', handleKeyDown);
+
+    // 7. Sync active navigation link with current URL hash
+    updateSidebarActiveLink(window.location.hash);
+}
+
+/**
+ * Updates the active link in both desktop horizontal navigation and mobile drawer.
+ * @param {string} hash - The active hash route (e.g., "#/recruiter/dashboard")
  */
 export function updateSidebarActiveLink(hash) {
     const activeHash = hash || "";
 
-    // Remove active class from all links
+    // Clear active class from all desktop links
     Object.values(sidebarLinkIds).forEach(id => {
         const link = document.getElementById(id);
         if (link) {
@@ -341,10 +216,25 @@ export function updateSidebarActiveLink(hash) {
         }
     });
 
-    // Add active class to current hash link
+    // Clear active class from all mobile drawer links
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    mobileLinks.forEach(link => {
+        link.classList.remove('active');
+    });
+
+    // Activate the current hash link on desktop
     const targetId = sidebarLinkIds[activeHash];
-    const activeLink = document.getElementById(targetId);
-    if (activeLink) {
-        activeLink.classList.add('active');
+    if (targetId) {
+        const activeLink = document.getElementById(targetId);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+
+        // Activate matching mobile drawer link
+        const activeMobileLink = document.querySelector(`.mobile-nav-link[data-nav-target="${targetId}"]`) ||
+                                 document.querySelector(`.mobile-nav-link[href="${activeHash}"]`);
+        if (activeMobileLink) {
+            activeMobileLink.classList.add('active');
+        }
     }
 }

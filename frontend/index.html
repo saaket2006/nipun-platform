@@ -11,9 +11,10 @@
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
-    <!-- Preload critical font weight so the browser loads it immediately without FOUT -->
-    <link rel="preload" href="assets/fonts/Outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <!-- Self-hosted Outfit font declarations with font-display: block -->
+    <!-- Preload critical self-hosted fonts for Editorial Intelligence without FOUT -->
+    <link rel="preload" href="assets/fonts/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/Newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Self-hosted font declarations (Newsreader, DM Sans, IBM Plex Mono) -->
     <link rel="stylesheet" href="assets/css/tailwind.min.css?v=7">
     <link rel="stylesheet" href="assets/css/fonts.css?v=7">
     <link rel="stylesheet" href="assets/css/tokens.css?v=7">
@@ -36,27 +37,27 @@
 
 <body>
     <!-- Public Landing Page Container -->
-    <div id="landing-container" class="bg-dark min-h-[100dvh] text-white relative">
+    <div id="landing-container" class="bg-paper min-h-[100dvh] text-ink relative">
         <!-- Sticky glass navbar -->
         <header id="navbar-landing"
             class="fixed top-0 left-0 right-0 z-50 py-5 transition-colors duration-300 bg-transparent border-transparent">
             <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <a href="index.html" id="landing-logo"
-                    class="flex items-center gap-2 font-bold text-white text-lg hover:opacity-80 transition-opacity cursor-pointer no-underline">
+                    class="flex items-center gap-2 font-bold text-ink text-lg hover:opacity-80 transition-opacity cursor-pointer no-underline">
                     <img src="assets/nipun_logo.svg" alt="Nipun Logo" style="height: 32px; width: auto;">
-                    <span class="text-white">Nipun</span>
+                    <span class="text-ink">Nipun</span>
                 </a>
-                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-                    <a href="#features" class="hover:text-white transition-colors no-underline">Features</a>
-                    <a href="#story" class="hover:text-white transition-colors no-underline">Platform Story</a>
-                    <a href="#faq" class="hover:text-white transition-colors no-underline">FAQ</a>
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-inkSecondary">
+                    <a href="#features" class="hover:text-forest transition-colors no-underline">Features</a>
+                    <a href="#story" class="hover:text-forest transition-colors no-underline">Platform Story</a>
+                    <a href="#faq" class="hover:text-forest transition-colors no-underline">FAQ</a>
                 </nav>
                 <div class="flex items-center gap-4">
                     <button
-                        class="nav-login-btn px-4 py-2 text-sm font-semibold text-slate-300 whitespace-nowrap hover:text-white transition-colors border border-slate-700 hover:bg-slate-800 rounded-lg">Sign
+                        class="nav-login-btn px-4 py-2 text-sm font-semibold text-ink whitespace-nowrap hover:text-ink transition-colors border border-rule hover:bg-paperRaised rounded-lg">Sign
                         In</button>
                     <button
-                        class="nav-signup-btn glow-btn px-4 py-2 text-sm font-semibold text-white whitespace-nowrap bg-emerald-500 hover:bg-emerald-600 rounded-lg transition-colors duration-150">Get
+                        class="nav-signup-btn px-4 py-2 text-sm font-semibold text-white whitespace-nowrap bg-forest hover:bg-forest-hover rounded-lg transition-colors duration-150">Get
                         Started</button>
                 </div>
             </div>
@@ -64,23 +65,23 @@
 
         <!-- Hero Section -->
         <section id="hero"
-            class="relative min-h-[100dvh] pt-32 pb-20 flex items-center justify-center bg-dark overflow-hidden">
+            class="relative min-h-[100dvh] pt-32 pb-20 flex items-center justify-center bg-paper overflow-hidden">
             <div class="hero-grid-pattern absolute inset-0 pointer-events-none"></div>
 
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
                 <div class="text-left space-y-6">
                     <h1
-                        class="hero-headline text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-normal pt-2">
+                        class="hero-headline text-4xl sm:text-5xl lg:text-6xl font-extrabold text-ink leading-normal pt-2">
                         AI Hiring Intelligence & Candidate Ranking
                     </h1>
 
-                    <p class="text-base sm:text-lg text-slate-400 max-w-xl">
+                    <p class="text-base sm:text-lg text-inkSecondary max-w-xl">
                         Screen resumes, map semantic skill matches, and score candidates with explainable engines.
                     </p>
 
                     <div class="flex flex-wrap items-center gap-4 pt-2">
                         <button
-                            class="nav-signup-btn glow-btn px-6 py-3 font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-colors duration-150 flex items-center gap-2">
+                            class="nav-signup-btn px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150 flex items-center gap-2">
                             <span>Start Screening</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
@@ -89,62 +90,62 @@
 
                 <div class="hero-mockup-container relative flex justify-center lg:justify-end">
                     <div
-                        class="hero-mockup-wrapper w-full max-w-[460px] bg-slateDark/70 border border-slate-800 rounded-2xl p-6 shadow-premium backdrop-blur-md relative [transform-style:preserve-3d]">
+                        class="hero-mockup-wrapper w-full max-w-[460px] bg-paperRaised border border-rule rounded-2xl p-6 shadow-premium relative [transform-style:preserve-3d]">
                         <div
-                            class="eval-header border-b border-slate-800/60 pb-3 mb-4 flex justify-between items-center">
-                            <span class="text-xs font-semibold text-slate-300">Semantic Evaluation Matrix</span>
-                            <span class="text-xs text-slate-500">Live Engine</span>
+                            class="eval-header border-b border-rule pb-3 mb-4 flex justify-between items-center">
+                            <span class="text-xs font-semibold text-ink">Semantic Evaluation Matrix</span>
+                            <span class="text-xs text-muted font-mono">Live Engine</span>
                         </div>
 
                         <div class="space-y-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-sm font-semibold text-white">Senior Backend Engineer</span>
+                                <span class="text-sm font-semibold text-ink">Senior Backend Engineer</span>
                                 <span
-                                    class="text-xs px-2 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 font-medium">Backend
+                                    class="text-xs px-2 py-0.5 rounded border border-forest/20 bg-forest/5 text-forest font-medium">Backend
                                     Profile</span>
                             </div>
 
                             <div class="space-y-2">
-                                <div class="flex justify-between text-xs text-slate-400">
+                                <div class="flex justify-between text-xs text-inkSecondary">
                                     <span>Python (FastAPI) Match</span>
-                                    <span class="font-semibold text-emerald-400 num">95%</span>
+                                    <span class="font-semibold text-forest font-mono num">95%</span>
                                 </div>
-                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-emerald-500 w-[95%]"></div>
+                                <div class="w-full bg-ivory border border-rule h-1.5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-forest w-[95%]"></div>
                                 </div>
                             </div>
                             <div class="space-y-2">
-                                <div class="flex justify-between text-xs text-slate-400">
+                                <div class="flex justify-between text-xs text-inkSecondary">
                                     <span>Docker & Kubernetes Match</span>
-                                    <span class="font-semibold text-emerald-400 num">82%</span>
+                                    <span class="font-semibold text-forest font-mono num">82%</span>
                                 </div>
-                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-emerald-500 w-[82%]"></div>
+                                <div class="w-full bg-ivory border border-rule h-1.5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-forest w-[82%]"></div>
                                 </div>
                             </div>
                             <div class="space-y-2">
-                                <div class="flex justify-between text-xs text-slate-400">
+                                <div class="flex justify-between text-xs text-inkSecondary">
                                     <span>Database Tenure (PostgreSQL)</span>
-                                    <span class="font-semibold text-emerald-400 num">76%</span>
+                                    <span class="font-semibold text-forest font-mono num">76%</span>
                                 </div>
-                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-emerald-500 w-[76%]"></div>
+                                <div class="w-full bg-ivory border border-rule h-1.5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-forest w-[76%]"></div>
                                 </div>
                             </div>
                         </div>
 
                         <div
-                            class="floating-badge-1 absolute -top-6 -left-6 bg-slateDark/95 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-premium text-xs text-slate-300 backdrop-blur-sm pointer-events-none">
-                            <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            class="floating-badge-1 absolute -top-6 -left-6 bg-paperRaised border border-rule px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-card text-xs text-ink pointer-events-none">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-forest"></i>
                             <span>Semantic Match</span>
                         </div>
                         <div
-                            class="floating-badge-2 absolute -bottom-6 -right-6 bg-slateDark/95 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-premium text-xs text-slate-300 backdrop-blur-sm pointer-events-none">
-                            <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            class="floating-badge-2 absolute -bottom-6 -right-6 bg-paperRaised border border-rule px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-card text-xs text-ink pointer-events-none">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-forest"></i>
                             <span>AI Verified</span>
                         </div>
                         <div
-                            class="floating-badge-3 absolute top-1/2 -right-8 bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-full shadow-glow text-xs pointer-events-none num">
+                            class="floating-badge-3 absolute top-1/2 -right-8 bg-forest text-white font-bold px-3 py-1.5 rounded-full shadow-card text-xs pointer-events-none font-mono num">
                             92% Match
                         </div>
                     </div>
@@ -155,20 +156,20 @@
 
 
         <!-- Problem Story Section -->
-        <section id="story" class="relative w-full bg-dark min-h-[100dvh] flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
+        <section id="story" class="relative w-full bg-paper min-h-[100dvh] flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
             <div class="story-container max-w-3xl w-full mx-auto text-center flex flex-col items-center justify-center my-auto">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-12 tracking-tight">The Screening Dilemma</h2>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink mb-12 tracking-tight">The Screening Dilemma</h2>
                 <div class="story-list w-full space-y-8 sm:space-y-10">
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-slate-400 font-medium transition-colors duration-300">
-                        <span class="num">1,000+</span> resumes submitted per opening.
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-inkSecondary font-medium transition-colors duration-300">
+                        <span class="num text-forest font-bold font-mono">1,000+</span> resumes submitted per opening.
                     </div>
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-slate-400 font-medium transition-colors duration-300">
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-inkSecondary font-medium transition-colors duration-300">
                         Hours consumed manually scanning keywords.
                     </div>
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-slate-400 font-medium transition-colors duration-300">
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-inkSecondary font-medium transition-colors duration-300">
                         Unconscious bias filtering out qualified talent.
                     </div>
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-emerald-400 font-bold transition-colors duration-300">
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-forest font-bold transition-colors duration-300">
                         Unified semantic evaluation and explainable scoring.
                     </div>
                 </div>
@@ -176,26 +177,26 @@
         </section>
 
         <!-- Features Sticky Stacking Section -->
-        <section id="features" class="pt-12 pb-36 sm:pb-48 bg-dark/60 relative">
+        <section id="features" class="pt-12 pb-36 sm:pb-48 bg-paper relative">
             <div class="max-w-4xl mx-auto px-6 text-center mb-8 features-header">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Platform Intelligence Highlights</h2>
-                <p class="text-slate-400">Seven evaluation layers engineered for accurate candidate ranking and bias reduction.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink mb-4">Platform Intelligence Highlights</h2>
+                <p class="text-inkSecondary">Seven evaluation layers engineered for accurate candidate ranking and bias reduction.</p>
             </div>
 
             <div class="max-w-3xl mx-auto px-6 features-container">
                 <!-- Card 1 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="brain-circuit" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">1. AI Resume Intelligence</h3>
-                            <p class="text-slate-400 text-sm">Deep textual structure analysis mapping entities,
+                            <div class="text-forest mb-4"><i data-lucide="brain-circuit" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">1. AI Resume Intelligence</h3>
+                            <p class="text-inkSecondary text-sm">Deep textual structure analysis mapping entities,
                                 achievements, and chronologies.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 font-mono text-xs text-slate-500 overflow-hidden">
-                            <span class="text-emerald-500">> parsing resume…</span><br>
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 font-mono text-xs text-inkSecondary overflow-hidden">
+                            <span class="text-forest font-semibold">> parsing resume…</span><br>
                             <span>Found: 7 years engineering tenure</span><br>
                             <span>Found: React, Postgres, Python, Docker</span>
                         </div>
@@ -205,23 +206,23 @@
                 <!-- Card 2 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="git-branch" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">2. Semantic Skill Mapping</h3>
-                            <p class="text-slate-400 text-sm">Translates extracted skills into a multi-dimensional
+                            <div class="text-forest mb-4"><i data-lucide="git-branch" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">2. Semantic Skill Mapping</h3>
+                            <p class="text-inkSecondary text-sm">Translates extracted skills into a multi-dimensional
                                 semantic space comparing aliases and abbreviations.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex gap-4 items-center justify-center">
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex gap-4 items-center justify-center">
                             <div
-                                class="flex-1 bg-emerald-500/5 border border-emerald-500/20 p-2.5 rounded-lg text-center">
-                                <span class="text-xs text-emerald-400 font-medium">JS / ES6</span>
+                                class="flex-1 bg-paperRaised border border-forest/30 p-2.5 rounded-lg text-center">
+                                <span class="text-xs text-forest font-medium font-mono">JS / ES6</span>
                             </div>
-                            <div class="text-slate-600">↔</div>
+                            <div class="text-muted">↔</div>
                             <div
-                                class="flex-1 bg-emerald-500/5 border border-emerald-500/20 p-2.5 rounded-lg text-center">
-                                <span class="text-xs text-emerald-400 font-medium">JavaScript</span>
+                                class="flex-1 bg-paperRaised border border-forest/30 p-2.5 rounded-lg text-center">
+                                <span class="text-xs text-forest font-medium font-mono">JavaScript</span>
                             </div>
                         </div>
                     </div>
@@ -230,30 +231,30 @@
                 <!-- Card 3 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="sliders" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">3. Adaptive Candidate Scoring</h3>
-                            <p class="text-slate-400 text-sm">Allows recruiters to customize weights dynamically based
+                            <div class="text-forest mb-4"><i data-lucide="sliders" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">3. Adaptive Candidate Scoring</h3>
+                            <p class="text-inkSecondary text-sm">Allows recruiters to customize weights dynamically based
                                 on role profiles like Backend, DevOps, or Fresh Graduates.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 grid grid-cols-4 gap-2 text-center items-center">
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 grid grid-cols-4 gap-2 text-center items-center">
                             <div>
-                                <div class="text-[10px] text-slate-500">Skills</div>
-                                <div class="text-xs font-bold text-white">45%</div>
+                                <div class="text-[10px] text-muted">Skills</div>
+                                <div class="text-xs font-bold text-ink font-mono">45%</div>
                             </div>
                             <div>
-                                <div class="text-[10px] text-slate-500">Exp</div>
-                                <div class="text-xs font-bold text-white">30%</div>
+                                <div class="text-[10px] text-muted">Exp</div>
+                                <div class="text-xs font-bold text-ink font-mono">30%</div>
                             </div>
                             <div>
-                                <div class="text-[10px] text-slate-500">Edu</div>
-                                <div class="text-xs font-bold text-white">5%</div>
+                                <div class="text-[10px] text-muted">Edu</div>
+                                <div class="text-xs font-bold text-ink font-mono">5%</div>
                             </div>
                             <div>
-                                <div class="text-[10px] text-slate-500">Projects</div>
-                                <div class="text-xs font-bold text-white">20%</div>
+                                <div class="text-[10px] text-muted">Projects</div>
+                                <div class="text-xs font-bold text-ink font-mono">20%</div>
                             </div>
                         </div>
                     </div>
@@ -262,18 +263,18 @@
                 <!-- Card 4 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="help-circle" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">4. Explainable AI</h3>
-                            <p class="text-slate-400 text-sm">Detailed scoring explanations telling recruiters exactly
+                            <div class="text-forest mb-4"><i data-lucide="help-circle" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">4. Explainable AI</h3>
+                            <p class="text-inkSecondary text-sm">Detailed scoring explanations telling recruiters exactly
                                 why a candidate matching score was awarded.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 text-xs text-slate-400 space-y-1 overflow-y-auto">
-                            <span class="text-emerald-400">✓ Awarded 45/45 skills points</span>: Matched Python, Docker,
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 text-xs text-inkSecondary space-y-1 overflow-y-auto">
+                            <span class="text-forest font-semibold">✓ Awarded 45/45 skills points</span>: Matched Python, Docker,
                             Postgres.<br>
-                            <span class="text-yellow-400">⚠ Reduced 5 points for experience</span>: Required 5 years,
+                            <span class="text-warning font-semibold">⚠ Reduced 5 points for experience</span>: Required 5 years,
                             candidate has 4.2 years.
                         </div>
                     </div>
@@ -282,26 +283,26 @@
                 <!-- Card 5 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="bar-chart-3" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">5. Recruiter Analytics</h3>
-                            <p class="text-slate-400 text-sm">Dashboard metrics summarizing matched talents, common
+                            <div class="text-forest mb-4"><i data-lucide="bar-chart-3" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">5. Recruiter Analytics</h3>
+                            <p class="text-inkSecondary text-sm">Dashboard metrics summarizing matched talents, common
                                 missing skills, and overall matching efficiency.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex justify-around items-center">
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex justify-around items-center">
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-white">24</div>
-                                <div class="text-[9px] text-slate-500">Screened</div>
+                                <div class="text-2xl font-bold text-ink font-mono">24</div>
+                                <div class="text-[9px] text-muted">Screened</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-emerald-400">82%</div>
-                                <div class="text-[9px] text-slate-500">Avg Match</div>
+                                <div class="text-2xl font-bold text-forest font-mono">82%</div>
+                                <div class="text-[9px] text-muted">Avg Match</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-white">8.4</div>
-                                <div class="text-[9px] text-slate-500">Avg Exp</div>
+                                <div class="text-2xl font-bold text-ink font-mono">8.4</div>
+                                <div class="text-[9px] text-muted">Avg Exp</div>
                             </div>
                         </div>
                     </div>
@@ -310,19 +311,19 @@
                 <!-- Card 6 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="history" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">6. Resume Version Comparison</h3>
-                            <p class="text-slate-400 text-sm">Tracks career progress across resume versions with
+                            <div class="text-forest mb-4"><i data-lucide="history" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">6. Resume Version Comparison</h3>
+                            <p class="text-inkSecondary text-sm">Tracks career progress across resume versions with
                                 built-in Comparison Reliability and score timeline indicators.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex gap-2 justify-center items-center">
-                            <div class="px-3 py-1.5 rounded bg-slate-800 text-[10px] text-slate-400">V1 (62%)</div>
-                            <div class="text-slate-600">→</div>
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex gap-2 justify-center items-center">
+                            <div class="px-3 py-1.5 rounded bg-paperRaised border border-rule text-[10px] text-inkSecondary font-mono">V1 (62%)</div>
+                            <div class="text-muted">→</div>
                             <div
-                                class="px-3 py-1.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-400 font-bold">
+                                class="px-3 py-1.5 rounded bg-forest/10 border border-forest/30 text-[10px] text-forest font-bold font-mono">
                                 V2 (78%)</div>
                         </div>
                     </div>
@@ -331,16 +332,16 @@
                 <!-- Card 7 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="git-merge" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">7. Multi-Agent Pipeline</h3>
-                            <p class="text-slate-400 text-sm">Sequential orchestration pipeline carrying request
+                            <div class="text-forest mb-4"><i data-lucide="git-merge" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">7. Multi-Agent Pipeline</h3>
+                            <p class="text-inkSecondary text-sm">Sequential orchestration pipeline carrying request
                                 contexts across semantic, xai, and mapping layers.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex justify-between items-center text-[10px] font-medium text-slate-500">
-                            <span>Upload</span> → <span>Parse</span> → <span>Match</span> → <span>Score</span> →
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex justify-between items-center text-[10px] font-medium text-inkSecondary font-mono">
+                            <span>Upload</span> <span class="text-muted">→</span> <span>Parse</span> <span class="text-muted">→</span> <span>Match</span> <span class="text-muted">→</span> <span>Score</span> <span class="text-muted">→</span>
                             <span>Explain</span>
                         </div>
                     </div>
@@ -349,66 +350,66 @@
         </section>
 
         <!-- Product Walkthrough Sticky Section -->
-        <section id="walkthrough" class="py-24 bg-dark relative">
+        <section id="walkthrough" class="py-24 bg-paper relative">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                 <div class="sticky top-32 space-y-6">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">How it Works</h2>
-                    <p class="text-slate-400 max-w-md">Follow the automated pipeline from the initial document upload up
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">How it Works</h2>
+                    <p class="text-inkSecondary max-w-md">Follow the automated pipeline from the initial document upload up
                         to explainable recruiter insights.</p>
 
                     <div class="space-y-8 pt-4">
-                        <div class="walkthrough-text-block border-l-2 border-emerald-500 pl-4 cursor-pointer"
+                        <div class="walkthrough-text-block border-l-2 border-forest pl-4 cursor-pointer"
                             data-visual-target="visual-upload">
-                            <h3 class="text-lg font-bold text-white">Step 1: Resume Upload</h3>
-                            <p class="text-slate-400 text-sm">Candidates or recruiters upload PDF or Word documents
+                            <h3 class="text-lg font-bold text-ink">Step 1: Resume Upload</h3>
+                            <p class="text-inkSecondary text-sm">Candidates or recruiters upload PDF or Word documents
                                 directly into the screening zone.</p>
                         </div>
-                        <div class="walkthrough-text-block border-l-2 border-slate-800 pl-4 cursor-pointer"
+                        <div class="walkthrough-text-block border-l-2 border-rule pl-4 cursor-pointer"
                             data-visual-target="visual-match">
-                            <h3 class="text-lg font-bold text-white">Step 2: Semantic Matching</h3>
-                            <p class="text-slate-400 text-sm">Our parsing algorithms resolve abbreviations, synonyms,
+                            <h3 class="text-lg font-bold text-ink">Step 2: Semantic Matching</h3>
+                            <p class="text-inkSecondary text-sm">Our parsing algorithms resolve abbreviations, synonyms,
                                 and context matches against job descriptions.</p>
                         </div>
-                        <div class="walkthrough-text-block border-l-2 border-slate-800 pl-4 cursor-pointer"
+                        <div class="walkthrough-text-block border-l-2 border-rule pl-4 cursor-pointer"
                             data-visual-target="visual-analytics">
-                            <h3 class="text-lg font-bold text-white">Step 3: Recruiter Analytics</h3>
-                            <p class="text-slate-400 text-sm">Dynamic match score timelines, xai breakdowns, and
+                            <h3 class="text-lg font-bold text-ink">Step 3: Recruiter Analytics</h3>
+                            <p class="text-inkSecondary text-sm">Dynamic match score timelines, xai breakdowns, and
                                 prioritized improvements appear instantly on the dashboard.</p>
                         </div>
                     </div>
                 </div>
 
                 <div
-                    class="relative min-h-[360px] flex items-center justify-center bg-slateDark/40 border border-slate-900 rounded-2xl p-8 backdrop-blur-md overflow-hidden">
+                    class="relative min-h-[360px] flex items-center justify-center bg-paperRaised border border-rule rounded-2xl p-8 shadow-card overflow-hidden">
                     <div id="visual-upload"
                         class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0">
-                        <div class="p-6 border border-dashed border-emerald-500/20 bg-emerald-500/5 rounded-xl">
+                        <div class="p-6 border border-dashed border-forest/30 bg-forest/5 rounded-xl">
                             <i data-lucide="upload-cloud"
-                                class="w-12 h-12 text-emerald-400 mx-auto mb-2"></i>
-                            <p class="text-sm font-semibold text-white">drag_and_drop_resume.pdf</p>
-                            <p class="text-xs text-slate-500">Ready to parse</p>
+                                class="w-12 h-12 text-forest mx-auto mb-2"></i>
+                            <p class="text-sm font-semibold text-ink">drag_and_drop_resume.pdf</p>
+                            <p class="text-xs text-muted font-mono">Ready to parse</p>
                         </div>
                     </div>
                     <div id="visual-match"
                         class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0"
                         style="display: none;">
-                        <div class="p-6 border border-emerald-500/10 bg-emerald-500/5 rounded-xl">
-                            <div class="flex justify-between items-center text-xs text-slate-400 font-medium mb-2">
+                        <div class="p-6 border border-forest/20 bg-forest/5 rounded-xl">
+                            <div class="flex justify-between items-center text-xs text-inkSecondary font-medium font-mono mb-2">
                                 <span>Kubernetes</span>
-                                <span>↔</span>
+                                <span class="text-muted">↔</span>
                                 <span>K8s</span>
                             </div>
-                            <p class="text-sm font-semibold text-white">100% Concept Equivalence</p>
-                            <p class="text-xs text-emerald-400">Semantic verification complete</p>
+                            <p class="text-sm font-semibold text-ink">100% Concept Equivalence</p>
+                            <p class="text-xs text-forest font-medium">Semantic verification complete</p>
                         </div>
                     </div>
                     <div id="visual-analytics"
                         class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0"
                         style="display: none;">
-                        <div class="p-6 border border-emerald-500/10 bg-emerald-500/5 rounded-xl">
-                            <div class="text-2xl font-bold text-emerald-400 mb-1 num">82.5%</div>
-                            <p class="text-xs font-semibold text-white">Excellent Match Score</p>
-                            <p class="text-xs text-slate-500">Calculated under Backend Profile</p>
+                        <div class="p-6 border border-forest/20 bg-forest/5 rounded-xl">
+                            <div class="text-2xl font-bold text-forest mb-1 num font-mono">82.5%</div>
+                            <p class="text-xs font-semibold text-ink">Excellent Match Score</p>
+                            <p class="text-xs text-muted">Calculated under Backend Profile</p>
                         </div>
                     </div>
                 </div>
@@ -416,53 +417,53 @@
         </section>
 
         <!-- FAQ Section -->
-        <section id="faq" class="py-24 bg-dark/60 relative">
+        <section id="faq" class="py-24 bg-paper relative">
             <div class="max-w-4xl mx-auto px-6 text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Frequently Asked Questions</h2>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink mb-4">Frequently Asked Questions</h2>
             </div>
             <div class="max-w-2xl mx-auto px-6 space-y-4">
-                <div class="faq-card bg-slateDark/60 border border-slate-800 rounded-xl overflow-hidden">
+                <div class="faq-card bg-paperRaised border border-rule rounded-xl shadow-card overflow-hidden">
                     <div class="faq-header p-5 flex justify-between items-center cursor-pointer select-none">
-                        <span class="font-semibold text-white text-sm">How does the Resume Match Score differ from keyword match?</span>
-                        <i data-lucide="chevron-down" class="faq-icon text-slate-500 w-4 h-4"></i>
+                        <span class="font-semibold text-ink text-sm">How does the Resume Match Score differ from keyword match?</span>
+                        <i data-lucide="chevron-down" class="faq-icon text-muted w-4 h-4"></i>
                     </div>
-                    <div class="faq-content px-5 pb-5 text-xs text-slate-400 hidden">
+                    <div class="faq-content px-5 pb-5 text-sm text-inkSecondary leading-relaxed hidden">
                         Keyword matching requires exact text matching. Our Semantic Matching engine parses aliases (e.g. JavaScript ↔ JS) and understands structural connections in the JD context, ensuring highly qualified candidates aren’t filtered out due to terminology differences.
                     </div>
                 </div>
-                <div class="faq-card bg-slateDark/60 border border-slate-800 rounded-xl overflow-hidden">
+                <div class="faq-card bg-paperRaised border border-rule rounded-xl shadow-card overflow-hidden">
                     <div class="faq-header p-5 flex justify-between items-center cursor-pointer select-none">
-                        <span class="font-semibold text-white text-sm">Can I customize the component weights?</span>
-                        <i data-lucide="chevron-down" class="faq-icon text-slate-500 w-4 h-4"></i>
+                        <span class="font-semibold text-ink text-sm">Can I customize the component weights?</span>
+                        <i data-lucide="chevron-down" class="faq-icon text-muted w-4 h-4"></i>
                     </div>
-                    <div class="faq-content px-5 pb-5 text-xs text-slate-400 hidden">
+                    <div class="faq-content px-5 pb-5 text-sm text-inkSecondary leading-relaxed hidden">
                         Yes! Recruiters can resolve different Scoring Profiles (e.g., DevOps Engineer, AI Engineer, Fresh Graduate) which adjusts the component coefficients for Skills, Experience, Education, and Projects dynamically.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Final CTA Aurora Section -->
-        <section class="py-24 bg-dark relative border-t border-slate-900/60 overflow-hidden text-center aurora-bg">
+        <!-- Final CTA Section -->
+        <section class="py-24 bg-ivory relative border-t border-rule overflow-hidden text-center">
             <div class="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">Calibrate Candidate Evaluation Today</h2>
-                <p class="text-slate-400 max-w-md mx-auto text-sm">Scale your candidate evaluations dynamically with high-precision semantic filters and zero human bias.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink leading-tight">Calibrate Candidate Evaluation Today</h2>
+                <p class="text-inkSecondary max-w-md mx-auto text-base">Scale your candidate evaluations dynamically with high-precision semantic filters and zero human bias.</p>
                 <button
-                    class="nav-signup-btn glow-btn px-6 py-3 font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-colors duration-150">Get
+                    class="nav-signup-btn px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150">Get
                     Started Now</button>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="border-t border-slate-900/85 bg-dark/95 backdrop-blur-lg pt-20 pb-10 text-slate-400">
+        <footer class="border-t border-rule bg-paper pt-20 pb-10 text-inkSecondary">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <!-- Column 1: Brand -->
                 <div class="space-y-4 text-left">
-                    <div class="flex items-center gap-2 font-bold text-white text-lg">
+                    <div class="flex items-center gap-2 font-bold text-ink text-lg">
                         <img src="assets/nipun_logo.svg" alt="Nipun Logo" style="height: 32px; width: auto;">
                         <span>Nipun</span>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
+                    <p class="text-xs text-muted leading-relaxed">
                         Next-Gen AI Hiring Intelligence Platform. Automating resume screening, semantic matching, and
                         explainable scoring for global recruitment pipelines.
                     </p>
@@ -470,25 +471,25 @@
 
                 <!-- Column 2: Navigation -->
                 <div class="space-y-4 text-left">
-                    <h3 class="text-sm font-semibold text-white">Product</h3>
+                    <h3 class="text-sm font-semibold text-ink">Product</h3>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="#features" class="hover:text-emerald-400 transition-colors">Features</a></li>
-                        <li><a href="#story" class="hover:text-emerald-400 transition-colors">Platform Story</a></li>
-                        <li><a href="#faq" class="hover:text-emerald-400 transition-colors">FAQ</a></li>
+                        <li><a href="#features" class="hover:text-forest transition-colors">Features</a></li>
+                        <li><a href="#story" class="hover:text-forest transition-colors">Platform Story</a></li>
+                        <li><a href="#faq" class="hover:text-forest transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 3: Contact & Info -->
                 <div class="space-y-4 text-left">
-                    <h3 class="text-sm font-semibold text-white">Connect</h3>
+                    <h3 class="text-sm font-semibold text-ink">Connect</h3>
                     <ul class="space-y-2 text-xs">
                         <li class="flex items-center gap-2">
-                            <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
+                            <i data-lucide="mail" class="w-4 h-4 text-forest"></i>
                             <a href="mailto:nipun.platform@gmail.com"
-                                class="hover:text-white transition-colors">nipun.platform@gmail.com</a>
+                                class="hover:text-forest transition-colors">nipun.platform@gmail.com</a>
                         </li>
                         <li class="flex items-center gap-2">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
+                            <i data-lucide="map-pin" class="w-4 h-4 text-forest"></i>
                             <span>Hyderabad, India</span>
                         </li>
                     </ul>
@@ -496,21 +497,21 @@
 
                 <!-- Column 4: Platform Showcase (nipun_main image) -->
                 <div class="space-y-4 text-left">
-                    <h3 class="text-sm font-semibold text-white">Platform Intelligence</h3>
+                    <h3 class="text-sm font-semibold text-ink">Platform Intelligence</h3>
                     <div
-                        class="relative group rounded-xl overflow-hidden border border-slate-800/80 bg-slate-950/40 p-2 shadow-premium transition-colors duration-300 hover:border-emerald-500/30 w-full">
+                        class="relative group rounded-xl overflow-hidden border border-rule bg-paperRaised p-2 shadow-card transition-colors duration-300 hover:border-forest/30 w-full">
                         <img src="assets/nipun_main.png" alt="Nipun Core Platform"
-                            class="rounded-lg h-auto max-h-32 w-full object-contain opacity-75 group-hover:opacity-100 transition-opacity duration-300">
+                            class="rounded-lg h-auto max-h-32 w-full object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
             </div>
 
             <div
-                class="max-w-7xl mx-auto px-6 border-t border-slate-900/60 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                class="max-w-7xl mx-auto px-6 border-t border-rule pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted">
                 <p>&copy; 2026 Nipun · Saaket Baldawa</p>
                 <div class="flex gap-6 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-forest transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-forest transition-colors">Terms of Service</a>
                 </div>
             </div>
         </footer>
@@ -770,7 +771,7 @@
 
 
     <script type="module" src="assets/js/app.js?v=7"></script>
-    <script type="module" src="assets/js/landing.js?v=16"></script>
+    <script type="module" src="assets/js/landing.js?v=17"></script>
 </body>
 
 </html>

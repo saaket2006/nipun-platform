@@ -358,7 +358,7 @@ def test_advanced_scoring_customization_controls():
 
 
 def test_sidebar_toggle_button_and_collapsible_rail():
-    """Verify shared recruiter and candidate layouts include the sidebar toggle button and collapsible rail styles."""
+    """Verify shared recruiter and candidate layouts implement shared horizontal navigation and responsive mobile drawer."""
     recruiter_html = os.path.join(FRONTEND_DIR, "recruiter.html")
     candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
     sidebar_js = os.path.join(FRONTEND_DIR, "assets", "js", "components", "sidebar.js")
@@ -368,20 +368,36 @@ def test_sidebar_toggle_button_and_collapsible_rail():
         with open(html_path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Sidebar header wrapper and toggle button
-        assert 'class="sidebar-header"' in content, f"{page_name} must contain .sidebar-header wrapper"
-        assert 'id="sidebar-toggle-btn"' in content, f"{page_name} must contain #sidebar-toggle-btn"
-        assert 'aria-label="Toggle sidebar"' in content or 'aria-label="Collapse sidebar"' in content, f"{page_name} toggle must have accessible aria-label"
-        assert 'title="Toggle sidebar"' in content or 'title="Collapse sidebar"' in content, f"{page_name} toggle must have title tooltip"
-        assert 'aria-expanded="true"' in content, f"{page_name} toggle must default to aria-expanded='true'"
+        # Shared horizontal header and navigation wrapper
+        assert 'class="workspace-header rec-topbar"' in content or 'workspace-header' in content, f"{page_name} must contain .workspace-header"
+        assert 'class="workspace-nav"' in content, f"{page_name} must contain .workspace-nav horizontal navigation"
+        assert 'id="sidebar-toggle-btn"' in content, f"{page_name} must contain #sidebar-toggle-btn for mobile navigation"
+        assert 'aria-label="Toggle navigation menu"' in content or 'aria-label="Toggle navigation"' in content or 'aria-label="Toggle sidebar"' in content, f"{page_name} toggle must have accessible aria-label"
+        assert 'title="Toggle navigation menu"' in content or 'title="Toggle navigation"' in content or 'title="Toggle sidebar"' in content, f"{page_name} toggle must have title tooltip"
+        assert 'aria-expanded="false"' in content or 'aria-expanded="true"' in content, f"{page_name} toggle must define aria-expanded"
+        assert 'id="mobile-nav-drawer"' in content, f"{page_name} must contain responsive #mobile-nav-drawer"
+        assert 'class="mobile-nav-sheet"' in content, f"{page_name} must contain .mobile-nav-sheet drawer panel"
 
-        # SVG icon geometry
-        assert 'class="sidebar-toggle-icon"' in content, f"{page_name} must contain .sidebar-toggle-icon"
-        assert 'toggle-icon-collapse' in content, f"{page_name} must contain collapse icon state"
-        assert 'toggle-icon-expand' in content, f"{page_name} must contain expand icon state"
+    # Role-specific links in HTML
+    with open(recruiter_html, "r", encoding="utf-8") as f:
+        rec_content = f.read()
+    assert 'id="recruiter-sidebar-logo"' in rec_content, "recruiter.html must preserve id='recruiter-sidebar-logo'"
+    assert 'id="link-rec-dashboard"' in rec_content, "recruiter.html must have #link-rec-dashboard"
+    assert 'id="link-rec-screen"' in rec_content, "recruiter.html must have #link-rec-screen"
+    assert 'id="link-rec-profile"' in rec_content, "recruiter.html must have #link-rec-profile"
+    assert 'id="rec-sign-out-btn"' in rec_content, "recruiter.html must have #rec-sign-out-btn"
+    assert 'id="rec-page-title"' in rec_content, "recruiter.html must have #rec-page-title"
+    assert 'id="rec-top-user-name"' in rec_content, "recruiter.html must have #rec-top-user-name"
 
-        # Early restoration script to prevent layout jumps/FOUC
-        assert 'sidebar-pref-collapsed' in content, f"{page_name} must have early restoration script"
+    with open(candidate_html, "r", encoding="utf-8") as f:
+        cand_content = f.read()
+    assert 'id="candidate-sidebar-logo"' in cand_content, "candidate.html must preserve id='candidate-sidebar-logo'"
+    assert 'id="link-cand-dashboard"' in cand_content, "candidate.html must have #link-cand-dashboard"
+    assert 'id="link-cand-screen"' in cand_content, "candidate.html must have #link-cand-screen"
+    assert 'id="link-cand-profile"' in cand_content, "candidate.html must have #link-cand-profile"
+    assert 'id="cand-sign-out-btn"' in cand_content, "candidate.html must have #cand-sign-out-btn"
+    assert 'id="cand-page-title"' in cand_content, "candidate.html must have #cand-page-title"
+    assert 'id="cand-top-user-name"' in cand_content, "candidate.html must have #cand-top-user-name"
 
     # JS Component exports & state logic
     with open(sidebar_js, "r", encoding="utf-8") as f:
@@ -391,22 +407,20 @@ def test_sidebar_toggle_button_and_collapsible_rail():
     assert "export function toggleSidebar" in js_content
     assert "export function setSidebarCollapsed" in js_content
     assert "export function isSidebarCollapsed" in js_content
-    assert "nipun_sidebar_collapsed" in js_content
-    assert "sidebar-collapsed" in js_content
-    assert "sidebar-pref-collapsed" in js_content
+    assert "export function updateSidebarActiveLink" in js_content
+    assert "mobile-nav-drawer" in js_content
 
-    # CSS styles and transitions
+    # CSS styles and responsive transitions
     with open(recruiter_css, "r", encoding="utf-8") as f:
         css_content = f.read()
 
-    assert ".sidebar-header" in css_content
-    assert ".sidebar-toggle-btn" in css_content
-    assert ".sidebar-collapsed" in css_content
-    assert ".sidebar-pref-collapsed" in css_content
-    assert "margin-left: 68px" in css_content
-    assert "width: 68px" in css_content
-    assert "@media (max-width: 800px)" in css_content
-    assert ".sidebar-toggle-btn" in css_content
+    assert ".workspace-header" in css_content
+    assert ".workspace-nav" in css_content
+    assert ".workspace-nav-link" in css_content
+    assert ".mobile-nav-toggle-btn" in css_content
+    assert ".mobile-nav-drawer" in css_content
+    assert ".mobile-nav-sheet" in css_content
+    assert "@media (max-width: 768px)" in css_content or "@media (max-width: 800px)" in css_content
 
 
 def test_candidate_xai_and_dashboard_frontend_lifecycle():

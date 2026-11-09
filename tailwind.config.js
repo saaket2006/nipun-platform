@@ -12,32 +12,56 @@ module.exports = {
       transparent: 'transparent',
       current: 'currentColor',
       inherit: 'inherit',
-      white: 'var(--color-ink)',
-      black: 'var(--color-paper)',
+      white: '#FFFFFF',
+      black: '#1A1917',
+      paper: 'var(--color-paper)',
+      paperRaised: 'var(--color-paper-2)',
+      ivory: 'var(--color-paper-3)',
+      ink: 'var(--color-ink)',
+      inkSecondary: 'var(--color-ink-2)',
+      muted: 'var(--color-muted)',
+      rule: 'var(--color-rule)',
+      ruleStrong: 'var(--color-rule-2)',
+      forest: {
+        DEFAULT: 'var(--color-forest)',
+        hover: 'var(--color-forest-hover)',
+        light: 'var(--color-forest-light)',
+        border: 'var(--color-forest-border)'
+      },
+      clay: {
+        DEFAULT: 'var(--color-clay)',
+        hover: 'var(--color-clay-hover)',
+        light: 'var(--color-clay-light)',
+        border: 'var(--color-clay-border)'
+      },
       slate: {
-        50: 'var(--color-paper-2)',
-        100: 'var(--color-paper-2)',
-        200: 'var(--color-paper-3)',
+        50: 'var(--color-paper-3)',
+        100: 'var(--color-paper-3)',
+        200: 'var(--color-rule)',
         300: 'var(--color-ink-2)',
-        400: 'var(--color-muted)',
+        400: 'var(--color-ink-2)',
         500: 'var(--color-muted)',
-        600: 'var(--color-rule-2)',
-        700: 'var(--color-rule)',
-        800: 'var(--color-paper-2)',
-        900: 'var(--color-paper)',
-        950: 'var(--color-paper)'
+        600: 'var(--color-ink-2)',
+        700: 'var(--color-ink-2)',
+        800: 'var(--color-ink)',
+        900: 'var(--color-ink)',
+        950: 'var(--color-ink)'
       },
       emerald: {
-        300: 'var(--color-accent)',
-        400: 'var(--color-accent)',
-        500: 'var(--color-accent)',
-        600: 'var(--color-accent)'
+        50: 'var(--color-forest-light)',
+        100: 'var(--color-forest-light)',
+        200: 'var(--color-forest-border)',
+        300: 'var(--color-forest)',
+        400: 'var(--color-forest)',
+        500: 'var(--color-forest)',
+        600: 'var(--color-forest-hover)',
+        700: 'var(--color-forest-hover)',
       },
       yellow: {
-        400: 'var(--color-accent)'
+        400: 'var(--color-warning)'
       },
-      primary: 'var(--color-accent)',
-      primaryHover: 'var(--color-accent)',
+      primary: 'var(--color-forest)',
+      primaryHover: 'var(--color-forest-hover)',
       dark: 'var(--color-paper)',
       slateDark: 'var(--color-paper-2)',
     },
@@ -90,6 +114,8 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['var(--font-body)', 'sans-serif'],
+        serif: ['var(--font-display)', 'serif'],
+        mono: ['var(--font-mono)', 'monospace'],
       }
     }
   },

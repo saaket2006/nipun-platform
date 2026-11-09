@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/animations.js": {
-    "mtime": 1794158808.3623214,
-    "ast_hash": "07eb674f052fdaa76cc587aa8795d908",
+    "mtime": 1794221887.119768,
+    "ast_hash": "62f2c465ce709df53740570e29bf90a5",
     "semantic_hash": ""
   },
   "frontend/assets/js/api.js": {
@@ -370,8 +370,8 @@
     "semantic_hash": "2a0f796621d85c80ee27de358037e291"
   },
   "frontend/assets/js/components/navbar.js": {
-    "mtime": 1792038273.7146735,
-    "ast_hash": "db2703481e14c67d50020376f910b985",
+    "mtime": 1794222666.8091443,
+    "ast_hash": "1bf50f50eca5653c7229af6b014efca7",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/profileSection.js": {
@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/components/sidebar.js": {
-    "mtime": 1793066376.3570857,
-    "ast_hash": "4152075821639328c9d0fd814a934cf1",
+    "mtime": 1794223458.8833723,
+    "ast_hash": "e89ebe6b975d7afba78a7dc61666cc0d",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/statisticCard.js": {
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/landing.js": {
-    "mtime": 1794158828.6003492,
-    "ast_hash": "0c69911df222cdfca49d77840694a940",
+    "mtime": 1794221887.1720202,
+    "ast_hash": "be5709accd9705e7c0a62f77c5cbdaaa",
     "semantic_hash": ""
   },
   "frontend/assets/js/loadingOverlay.js": {
@@ -430,8 +430,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/router.js": {
-    "mtime": 1792044406.9640477,
-    "ast_hash": "e7f4265cee355bebdea1a7b588013bf4",
+    "mtime": 1794224443.5076888,
+    "ast_hash": "acebfc898ac7dba06329f38d36057d75",
     "semantic_hash": ""
   },
   "frontend/assets/js/state.js": {
@@ -470,8 +470,8 @@
     "semantic_hash": ""
   },
   "tailwind.config.js": {
-    "mtime": 1794057951.5250046,
-    "ast_hash": "92b3a39c63b21a38a35723351f9e0e11",
+    "mtime": 1794220188.7754512,
+    "ast_hash": "1bb1f23c023a6a431f6a3dbba068abc1",
     "semantic_hash": ""
   },
   "backend/services/pipeline/__init__.py": {
@@ -605,23 +605,23 @@
     "semantic_hash": ""
   },
   "frontend/candidate.html": {
-    "mtime": 1794057687.321766,
-    "ast_hash": "fc020d42cd58f5e8ed26982a8e2714ed",
+    "mtime": 1794224443.8090713,
+    "ast_hash": "6a091eff386e6cf3cf060629ffa414b2",
     "semantic_hash": ""
   },
   "frontend/index.html": {
-    "mtime": 1794158837.797731,
-    "ast_hash": "ff2b4dabbf6d2c40033b5fc5ee110d44",
+    "mtime": 1794221887.2760727,
+    "ast_hash": "5ff902a6ae614cdee595265e9596bc3b",
     "semantic_hash": ""
   },
   "frontend/onboarding.html": {
-    "mtime": 1794057687.3237793,
-    "ast_hash": "8145dbaf359848ad7654f68c12833378",
+    "mtime": 1794218264.6439714,
+    "ast_hash": "708dde0d7b866b3ed063897c7df23c9b",
     "semantic_hash": ""
   },
   "frontend/recruiter.html": {
-    "mtime": 1794058037.5253382,
-    "ast_hash": "e7a71af9fdf7a40ee81020f9b6b4f984",
+    "mtime": 1794224445.048264,
+    "ast_hash": "24366b49c465e24af34eb961bb9bc482",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -755,8 +755,8 @@
     "semantic_hash": ""
   },
   "tests/test_frontend_assets.py": {
-    "mtime": 1792090443.9079916,
-    "ast_hash": "9f35b5f728096c4341e8105d7d401f70",
+    "mtime": 1794223460.2840974,
+    "ast_hash": "5e69c9b6c8bcf4e45aacbae0f5988da9",
     "semantic_hash": ""
   },
   "alembic/versions/2d0cabfd21b5_add_screening_tasks_table.py": {
@@ -765,7 +765,7 @@
     "semantic_hash": ""
   },
   "Architecture.md": {
-    "mtime": 1792041253.6830642,
+    "mtime": 1794217658.6690292,
     "ast_hash": "21ec7a5861a220464434805e6103ba56",
     "semantic_hash": ""
   },
@@ -1055,18 +1055,38 @@
     "semantic_hash": ""
   },
   "diagrams/ai-scoring-nlp-pipeline.html": {
-    "mtime": 1794165212.2674088,
-    "ast_hash": "77c3d94515fecb863650e7a6cf69e4ee",
+    "mtime": 1794165320.8086162,
+    "ast_hash": "aa57a1182f1d701810c449dedf706369",
     "semantic_hash": ""
   },
   "diagrams/nipun-system-architecture.html": {
-    "mtime": 1794165149.419049,
-    "ast_hash": "5c9eb376beb61019347b836f393d87d5",
+    "mtime": 1794165320.9158542,
+    "ast_hash": "2260272597ca237ab3d82527bc4af68b",
     "semantic_hash": ""
   },
   "diagrams/recruiter-candidate-workflows.html": {
-    "mtime": 1794165279.5158882,
-    "ast_hash": "f425ef0a9d1680d49d972fd7fb751f5b",
+    "mtime": 1794165321.010216,
+    "ast_hash": "e8506a2af57a7961453b62706495721d",
+    "semantic_hash": ""
+  },
+  "frontend/assets/fonts/OFL-DMSans.txt": {
+    "mtime": 1794219784.571627,
+    "ast_hash": "d02b8df6817cad8eeac5830771072d0f",
+    "semantic_hash": ""
+  },
+  "frontend/assets/fonts/OFL-IBMPlexMono.txt": {
+    "mtime": 1794219784.642605,
+    "ast_hash": "dc2c1601e5da8018cc63e292370259c5",
+    "semantic_hash": ""
+  },
+  "frontend/assets/fonts/OFL-Newsreader.txt": {
+    "mtime": 1794219784.6842706,
+    "ast_hash": "b4d82e3d6c2f7f4ff33e295ff24f2e10",
+    "semantic_hash": ""
+  },
+  "frontend/assets/fonts/OFL.txt": {
+    "mtime": 1794219784.7426295,
+    "ast_hash": "53a2fca503edf3efe5cd22eca1940dd9",
     "semantic_hash": ""
   }
 }

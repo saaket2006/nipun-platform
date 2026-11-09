@@ -1,36 +1,269 @@
-/* Hallmark · shape: Conversational FAQ · genre: modern-minimal · theme: brand · redesign: full
- * paper: oklch(14% 0.02 260) · accent: oklch(68% 0.17 160) · display: Outfit · body: Outfit · hero: Counter · nav: slab · footer: colophon block · signature: live semantic concept match breakdown
- * axes: dark/grotesk-sans/chromatic-emerald · posture: Counter · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: none, brand tokens fully calibrated and contrast secured */
+/* Nipun Editorial Intelligence — Landing Page Experience
+ * Theme: Editorial Intelligence (Warm Paper #FBF9F5, Raised #FFFFFF, Ivory #F3EFE6)
+ * Ink: Pitch Ink #1A1917, Secondary Ink #4A463F, Muted #7A746B
+ * Accents: Deep Forest #1E3A2F (Hover #294D3F), Clay #9C4B33
+ * Typography: Newsreader (Display), DM Sans (Body/Interface), IBM Plex Mono (Tabular/Metrics)
+ * Posture: Human-centered analytical instrument with editorial precision.
+ */
 
 @import url("./tokens.css");
 
-/* Background Atmosphere */
+/* Container & Foundation */
+#landing-container {
+    overflow-x: clip;
+    background-color: var(--color-paper) !important;
+    color: var(--color-ink) !important;
+    font-family: var(--font-body);
+}
+
+/* Atmosphere - Clean Grid without Neon Glow */
 .aurora-bg {
     position: relative;
     overflow: hidden;
+    background-color: var(--color-paper);
 }
 
 .aurora-bg::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, var(--color-accent-glow) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
+    display: none !important;
 }
 
-/* Container */
-#landing-container {
-    overflow-x: clip;
-    background-color: var(--color-paper);
-    color: var(--color-ink);
+.hero-grid-pattern {
+    background-image: linear-gradient(to right, var(--color-rule) 1px, transparent 1px),
+                      linear-gradient(to bottom, var(--color-rule) 1px, transparent 1px);
+    background-size: var(--space-2xl) var(--space-2xl);
+    opacity: 0.45;
 }
 
-/* Platform Story Section Centering & Progressive Spotlight */
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+
+#navbar-landing {
+    background: rgba(251, 249, 245, 0.94) !important;
+    border-bottom: 1px solid var(--color-rule) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#navbar-landing a,
+#navbar-landing nav a,
+#navbar-landing #landing-logo {
+    text-decoration: none !important;
+}
+
+#landing-logo,
+#landing-logo span {
+    color: var(--color-ink) !important;
+    font-family: var(--font-body) !important;
+    font-weight: 700 !important;
+    font-size: var(--text-lg) !important;
+    letter-spacing: -0.01em;
+}
+
+#navbar-landing nav a {
+    color: var(--color-ink-2) !important;
+    font-family: var(--font-body) !important;
+    font-weight: 500 !important;
+    font-size: var(--text-sm) !important;
+    transition: color var(--dur-micro) var(--ease-out) !important;
+}
+
+#navbar-landing nav a:hover {
+    color: var(--color-forest) !important;
+}
+
+/* Navbar Buttons */
+#navbar-landing .nav-login-btn,
+#navbar-landing .nav-signup-btn,
+.nav-signup-btn {
+    height: 44px !important;
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: var(--radius-md) !important;
+    font-size: var(--text-sm) !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    font-family: var(--font-body) !important;
+}
+
+#navbar-landing .nav-login-btn {
+    padding: 0 var(--space-lg) !important;
+    font-weight: 500 !important;
+    color: var(--color-ink) !important;
+    background: var(--color-paper-2) !important;
+    border: 1px solid var(--color-rule) !important;
+    box-shadow: var(--shadow-card) !important;
+    transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out) !important;
+}
+
+#navbar-landing .nav-login-btn:hover {
+    color: var(--color-ink) !important;
+    background: var(--color-paper-3) !important;
+    border-color: var(--color-rule-2) !important;
+}
+
+.nav-signup-btn,
+#navbar-landing .nav-signup-btn,
+#hero .nav-signup-btn {
+    padding: 0 var(--space-lg) !important;
+    font-weight: 600 !important;
+    color: #FFFFFF !important;
+    background: var(--color-forest) !important;
+    border: 1px solid var(--color-forest) !important;
+    box-shadow: 0 1px 3px rgba(26, 25, 23, 0.08) !important;
+    transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out) !important;
+}
+
+.nav-signup-btn:hover,
+#navbar-landing .nav-signup-btn:hover,
+#hero .nav-signup-btn:hover {
+    background: var(--color-forest-hover) !important;
+    border-color: var(--color-forest-hover) !important;
+    color: #FFFFFF !important;
+}
+
+.glow-btn::before,
+.glow-btn::after {
+    display: none !important;
+}
+
+/* ==========================================================================
+   Hero Section & Editorial Typography
+   ========================================================================== */
+
+#hero {
+    background-color: var(--color-paper) !important;
+    color: var(--color-ink) !important;
+}
+
+.hero-headline {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+    letter-spacing: var(--tracking-display) !important;
+    line-height: 1.15 !important;
+    font-size: clamp(2.25rem, 3.8vw + 0.5rem, 3.75rem) !important;
+}
+
+#hero p,
+.hero-subtitle {
+    color: var(--color-ink-2) !important;
+    font-family: var(--font-body) !important;
+    font-size: var(--text-lg) !important;
+    line-height: 1.6 !important;
+    max-width: 36rem !important;
+}
+
+/* ==========================================================================
+   Hero Analytical Mockup Card (Semantic Evaluation Matrix)
+   ========================================================================== */
+
+.hero-mockup-wrapper {
+    background-color: var(--color-paper-2) !important;
+    border: 1px solid var(--color-rule) !important;
+    border-radius: var(--radius-card) !important;
+    box-shadow: var(--shadow-elevated) !important;
+    color: var(--color-ink) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.eval-header {
+    background-color: var(--color-paper-3) !important;
+    border-bottom: 1px solid var(--color-rule) !important;
+    padding: var(--space-xs) var(--space-md) !important;
+    border-radius: calc(var(--radius-card) - 1px) calc(var(--radius-card) - 1px) 0 0 !important;
+}
+
+.eval-header span:first-child,
+.eval-header .text-slate-300 {
+    color: var(--color-ink) !important;
+    font-weight: 600 !important;
+    font-size: var(--text-xs) !important;
+}
+
+.eval-header span:last-child,
+.eval-header .text-slate-500 {
+    color: var(--color-muted) !important;
+    font-family: var(--font-mono) !important;
+    font-size: var(--text-xs) !important;
+}
+
+.hero-mockup-wrapper span.text-white {
+    color: var(--color-ink) !important;
+}
+
+.hero-mockup-wrapper [class*="text-emerald-400"] {
+    color: var(--color-forest) !important;
+}
+
+.hero-mockup-wrapper [class*="bg-emerald-500/5"] {
+    background-color: var(--color-forest-light) !important;
+    border: 1px solid var(--color-forest-border) !important;
+    color: var(--color-forest) !important;
+    font-weight: 500 !important;
+}
+
+.hero-mockup-wrapper .space-y-2 > div span:first-child,
+.hero-mockup-wrapper .space-y-2 span.text-slate-400 {
+    color: var(--color-ink-2) !important;
+    font-weight: 500 !important;
+}
+
+.hero-mockup-wrapper .space-y-2 > div span.num,
+.hero-mockup-wrapper .space-y-2 span[class*="text-emerald-400"] {
+    color: var(--color-forest) !important;
+    font-family: var(--font-mono) !important;
+    font-weight: 600 !important;
+}
+
+.hero-mockup-wrapper div[class*="bg-slate-900"],
+.hero-mockup-wrapper .w-full.bg-slate-900 {
+    background-color: var(--color-paper-3) !important;
+    border: 1px solid var(--color-rule) !important;
+}
+
+.hero-mockup-wrapper div[class*="bg-emerald-500"],
+.hero-mockup-wrapper .h-full.bg-emerald-500 {
+    background-color: var(--color-forest) !important;
+}
+
+/* Floating Badges */
+.floating-badge-1,
+.floating-badge-2 {
+    background-color: var(--color-paper-2) !important;
+    border: 1px solid var(--color-rule) !important;
+    color: var(--color-ink) !important;
+    font-weight: 500 !important;
+    box-shadow: var(--shadow-card) !important;
+    backdrop-filter: none !important;
+}
+
+.floating-badge-1 i,
+.floating-badge-2 i,
+.floating-badge-1 svg,
+.floating-badge-2 svg {
+    color: var(--color-forest) !important;
+}
+
+.floating-badge-3 {
+    background-color: var(--color-forest) !important;
+    color: #FFFFFF !important;
+    border: 1px solid var(--color-forest-border) !important;
+    font-family: var(--font-mono) !important;
+    font-weight: 600 !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+/* ==========================================================================
+   Story Section
+   ========================================================================== */
+
 #story {
     min-height: 100dvh;
     display: flex !important;
@@ -43,7 +276,7 @@
     padding: var(--space-2xl) var(--space-lg);
     box-sizing: border-box;
     overflow: hidden;
-    background-color: var(--color-paper);
+    background-color: var(--color-paper) !important;
 }
 
 .story-container {
@@ -56,24 +289,47 @@
     justify-content: center;
 }
 
+.story-container h2 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+}
+
 .story-element {
     transition: color var(--dur-short) var(--ease-out);
     will-change: transform, opacity;
     line-height: 1.5;
+    color: var(--color-ink-2) !important;
 }
 
 .story-element .num {
-    color: var(--color-ink);
+    color: var(--color-forest) !important;
+    font-family: var(--font-mono) !important;
     font-weight: 700;
 }
 
+/* ==========================================================================
+   Features Section
+   ========================================================================== */
+
 .features-container {
     position: relative;
+    background-color: var(--color-paper);
 }
 
 .features-header {
     position: relative;
     z-index: 50;
+}
+
+.features-header h2 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+}
+
+.features-header p {
+    color: var(--color-ink-2) !important;
 }
 
 .feature-card-wrapper {
@@ -97,11 +353,21 @@
     border: 1px solid var(--color-rule) !important;
     border-radius: var(--radius-card) !important;
     box-shadow: var(--shadow-card) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     position: relative;
     overflow: hidden;
     will-change: transform, opacity, filter;
+}
+
+.feature-card h3 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+}
+
+.feature-card p {
+    color: var(--color-ink-2) !important;
 }
 
 .feature-card .card-preview-box,
@@ -111,7 +377,182 @@
     border-color: var(--color-rule) !important;
 }
 
-/* Reduced Motion Fallback */
+/* ==========================================================================
+   Section Headings & Global Landing Copy
+   ========================================================================== */
+
+#landing-container h1,
+#landing-container h2,
+#landing-container h3,
+#landing-container h4 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+}
+
+#landing-container p {
+    color: var(--color-ink-2);
+}
+
+/* FAQ Section */
+#faq {
+    background-color: var(--color-paper) !important;
+}
+
+#faq h2 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+}
+
+.faq-card,
+#faq div[class*="border-slate-800"] {
+    border: 1px solid var(--color-rule) !important;
+    background-color: var(--color-paper-2) !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+.faq-header span,
+.faq-card span,
+#faq span[class*="text-white"],
+#faq span[class*="text-ink"] {
+    color: var(--color-ink) !important;
+    font-family: var(--font-body) !important;
+    font-weight: 600 !important;
+}
+
+.faq-header i,
+.faq-header svg {
+    color: var(--color-forest) !important;
+}
+
+.faq-content {
+    color: var(--color-ink-2) !important;
+    line-height: 1.6 !important;
+}
+
+/* Walkthrough Section */
+#walkthrough {
+    background-color: var(--color-paper) !important;
+    color: var(--color-ink) !important;
+}
+
+#walkthrough h2 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+}
+
+#walkthrough p {
+    color: var(--color-ink-2) !important;
+}
+
+.walkthrough-text-block h3 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-body) !important;
+    font-weight: 700 !important;
+}
+
+.walkthrough-text-block p {
+    color: var(--color-ink-2) !important;
+}
+
+.walkthrough-visual-panel {
+    color: var(--color-ink) !important;
+}
+
+.walkthrough-visual-panel p {
+    color: var(--color-ink) !important;
+}
+
+.walkthrough-visual-panel .num {
+    color: var(--color-forest) !important;
+    font-family: var(--font-mono) !important;
+}
+
+/* Final CTA & Footer */
+section.bg-ivory,
+section.aurora-bg,
+section.py-24.bg-dark {
+    background-color: var(--color-paper-3) !important;
+    border-top: 1px solid var(--color-rule) !important;
+}
+
+section.bg-ivory h2,
+section.aurora-bg h2,
+section.py-24.bg-dark h2 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+}
+
+section.bg-ivory p,
+section.aurora-bg p,
+section.py-24.bg-dark p {
+    color: var(--color-ink-2) !important;
+}
+
+footer {
+    background-color: var(--color-paper) !important;
+    border-top: 1px solid var(--color-rule) !important;
+    color: var(--color-ink-2) !important;
+}
+
+footer h3 {
+    color: var(--color-ink) !important;
+    font-family: var(--font-body) !important;
+    font-weight: 600 !important;
+}
+
+footer a {
+    color: var(--color-ink-2) !important;
+}
+
+footer a:hover {
+    color: var(--color-forest) !important;
+}
+
+footer p {
+    color: var(--color-muted) !important;
+}
+
+/* ==========================================================================
+   Responsive & Accessibility
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    #navbar-landing nav {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 639px) {
+    .floating-badge-1 {
+        top: -0.875rem !important;
+        left: 0.5rem !important;
+    }
+    .floating-badge-2 {
+        bottom: -0.875rem !important;
+        right: 0.5rem !important;
+    }
+    .floating-badge-3 {
+        top: -0.875rem !important;
+        right: 0.5rem !important;
+    }
+    #navbar-landing .nav-login-btn,
+    #navbar-landing .nav-signup-btn {
+        height: 40px !important;
+        min-height: 40px !important;
+        font-size: var(--text-xs) !important;
+        border-radius: var(--radius-sm) !important;
+    }
+    #navbar-landing .nav-login-btn {
+        padding: 0 var(--space-md) !important;
+    }
+    #navbar-landing .nav-signup-btn {
+        padding: 0 1.15rem !important;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     #story {
         min-height: auto !important;
@@ -131,111 +572,3 @@
         opacity: 1 !important;
     }
 }
-
-/* Live Evaluation Workspace Header */
-.eval-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;padding: var(--space-xs) var(--space-sm);
-    background: var(--color-paper-2);
-    border-bottom: 1px solid var(--color-rule);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
-
-.terminal-meta {
-    font-size: var(--text-xs);
-    color: var(--color-muted);
-}
-
-/* Interactive Utility States */
-.glow-btn {
-    position: relative;
-    overflow: hidden;
-}
-
-/* Responsive Landing Navigation */
-@media (min-width: 768px) {
-    #navbar-landing nav {
-        display: flex !important;
-    }
-}
-
-#navbar-landing a,
-#navbar-landing nav a,
-#navbar-landing #landing-logo {
-    text-decoration: none !important;
-}
-
-#navbar-landing nav a:hover {
-    text-decoration: none !important;
-    color: var(--color-ink) !important;
-}
-
-/* Responsive Floating Badges on Mobile Viewport (<640px) */
-@media (max-width: 639px) {
-    .floating-badge-1 {
-        top: -0.875rem !important;
-        left: 0.5rem !important;
-    }
-    .floating-badge-2 {
-        bottom: -0.875rem !important;
-        right: 0.5rem !important;
-    }
-    .floating-badge-3 {
-        top: -0.875rem !important;
-        right: 0.5rem !important;
-    }
-}
-
-/* Normalized Landing Navbar Buttons with WCAG AAA Contrast */
-#navbar-landing .nav-login-btn,
-#navbar-landing .nav-signup-btn {
-    height: 44px !important;
-    min-height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: var(--radius-md) !important;
-    font-size: var(--text-sm) !important;
-    line-height: 1 !important;
-    box-sizing: border-box !important;
-    transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out) !important;
-    cursor: pointer !important;
-    white-space: nowrap !important;
-    text-decoration: none !important;
-}
-
-#navbar-landing .nav-login-btn {padding: 0 var(--space-lg) !important;
-    font-weight: 500 !important;
-    color: var(--color-ink) !important;
-    background: var(--color-paper-2) !important;
-    border: 1px solid var(--color-rule) !important;
-}
-
-#navbar-landing .nav-login-btn:hover {
-    color: var(--color-ink) !important;
-    background: var(--color-paper-3) !important;
-    border-color: var(--color-rule-2) !important;
-}
-
-@media (max-width: 639px) {
-    #navbar-landing .nav-login-btn,
-    #navbar-landing .nav-signup-btn {
-        height: 40px !important;
-        min-height: 40px !important;
-        font-size: var(--text-xs) !important;
-        border-radius: var(--radius-sm) !important;
-    }
-    #navbar-landing .nav-login-btn {padding: 0 var(--space-md) !important;
-    }
-    #navbar-landing .nav-signup-btn {padding: 0 1.15rem !important;
-    }
-}
-
-.hero-grid-pattern {
-    background-image: linear-gradient(to right, var(--color-rule) 1px, transparent 1px),
-                      linear-gradient(to bottom, var(--color-rule) 1px, transparent 1px);
-    background-size: var(--space-2xl) var(--space-2xl);
-    opacity: 0.35;
-}
-

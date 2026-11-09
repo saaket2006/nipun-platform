@@ -1,0 +1,18 @@
+NIPUN FONT ASSETS LICENSING (SIL OPEN FONT LICENSE 1.1)
+
+All fonts distributed in this directory are open-source and licensed under the SIL Open Font License, Version 1.1.
+
+1. Newsreader
+   - Copyright 2020 The Newsreader Project Authors (https://github.com/productiontype/Newsreader)
+   - License file: OFL-Newsreader.txt
+
+2. DM Sans
+   - Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts)
+   - License file: OFL-DMSans.txt
+
+3. IBM Plex Mono
+   - Copyright 2017 IBM Corp. All rights reserved.
+   - License file: OFL-IBMPlexMono.txt
+
+Full license text for each font family is provided in the respective OFL-*.txt file alongside the font binaries in accordance with Condition 2 of the SIL Open Font License 1.1.
+

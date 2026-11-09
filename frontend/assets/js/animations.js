@@ -78,21 +78,23 @@ export function initStoryAnimation() {
     const isDesktop = window.innerWidth >= 768;
 
     // Initial state:
-    // Line 0 is active (bright white)
-    // Upcoming lines (1, 2, 3) are softly dimmed and ready to come in
+    // Line 0 is active (primary ink #1A1917)
+    // Upcoming lines (1, 2, 3) are secondary ink (#4A463F, contrast > 8.5:1) - never faint
     gsap.set(storyElements[0], {
         opacity: 1,
         color: 'var(--color-ink)',
-        scale: 1,
+        scale: 1.02,
+        fontWeight: '700',
         y: 0,
         filter: 'none'
     });
     for (let i = 1; i < storyElements.length; i++) {
         gsap.set(storyElements[i], {
-            opacity: 0.25,
-            color: 'var(--color-muted)',
+            opacity: 1,
+            color: 'var(--color-ink-2)',
             scale: 0.98,
-            y: 12,
+            fontWeight: '500',
+            y: 8,
             filter: 'none'
         });
     }
@@ -109,52 +111,58 @@ export function initStoryAnimation() {
         }
     });
 
-    // Beat 1: Line 0 dims to 0.35, Line 1 comes in and lights up brightly
+    // Beat 1: Line 0 shifts to secondary ink, Line 1 lights up in primary ink
     tl.to(storyElements[0], {
-        opacity: 0.35,
-        color: 'var(--color-muted)',
+        opacity: 1,
+        color: 'var(--color-ink-2)',
         scale: 0.98,
+        fontWeight: '500',
         duration: 0.6,
         ease: 'power1.inOut'
     }, 0.2);
     tl.to(storyElements[1], {
         opacity: 1,
         color: 'var(--color-ink)',
-        scale: 1,
+        scale: 1.02,
+        fontWeight: '700',
         y: 0,
         duration: 0.6,
         ease: 'power2.out'
     }, 0.2);
 
-    // Beat 2: Line 1 dims to 0.35, Line 2 comes in and lights up brightly
+    // Beat 2: Line 1 shifts to secondary ink, Line 2 lights up in primary ink
     tl.to(storyElements[1], {
-        opacity: 0.35,
-        color: 'var(--color-muted)',
+        opacity: 1,
+        color: 'var(--color-ink-2)',
         scale: 0.98,
+        fontWeight: '500',
         duration: 0.6,
         ease: 'power1.inOut'
     }, 1.0);
     tl.to(storyElements[2], {
         opacity: 1,
         color: 'var(--color-ink)',
-        scale: 1,
+        scale: 1.02,
+        fontWeight: '700',
         y: 0,
         duration: 0.6,
         ease: 'power2.out'
     }, 1.0);
 
-    // Beat 3: Line 2 dims to 0.35, Line 3 comes in and lights up in radiant emerald
+    // Beat 3: Line 2 shifts to secondary ink, Line 3 lights up in deep forest green
     tl.to(storyElements[2], {
-        opacity: 0.35,
-        color: 'var(--color-muted)',
+        opacity: 1,
+        color: 'var(--color-ink-2)',
         scale: 0.98,
+        fontWeight: '500',
         duration: 0.6,
         ease: 'power1.inOut'
     }, 1.8);
     tl.to(storyElements[3], {
         opacity: 1,
-        color: 'var(--color-accent)',
-        scale: 1.05,
+        color: 'var(--color-forest)',
+        scale: 1.04,
+        fontWeight: '700',
         y: 0,
         duration: 0.6,
         ease: 'power2.out'
@@ -305,14 +313,18 @@ export function initWalkthrough() {
         const activeBlock = blocks[index];
         const targetId = activeBlock.getAttribute('data-visual-target');
 
-        // 1. Highlight active text step block & dim inactive ones
+        // 1. Highlight active text step block & distinguish inactive ones with secondary ink
         blocks.forEach((block, idx) => {
+            block.classList.remove('opacity-50', 'opacity-70', 'opacity-100');
+            const h3 = block.querySelector('h3');
             if (idx === index) {
-                block.classList.remove('border-slate-800', 'opacity-50');
-                block.classList.add('border-emerald-500', 'opacity-100');
+                block.classList.remove('border-rule');
+                block.classList.add('border-forest');
+                if (h3) h3.style.color = 'var(--color-ink)';
             } else {
-                block.classList.remove('border-emerald-500', 'opacity-100');
-                block.classList.add('border-slate-800', 'opacity-50');
+                block.classList.remove('border-forest');
+                block.classList.add('border-rule');
+                if (h3) h3.style.color = 'var(--color-ink-2)';
             }
         });
 

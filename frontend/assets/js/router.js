@@ -37,10 +37,14 @@ export function handleRecruiterRouting(hash, params = null) {
     recViewProfile.classList.add('hidden');
     if (recViewHistoryDetail) recViewHistoryDetail.classList.add('hidden');
     
+    const recPageDivider = document.getElementById('rec-page-divider');
+    
     if (hash === ROUTES.HISTORY || hash.startsWith('#/recruiter/history')) {
         updateSidebarActiveLink(ROUTES.PROFILE);
         if (recViewHistoryDetail) recViewHistoryDetail.classList.remove('hidden');
         recPageTitle.textContent = "Screening Task Details";
+        recPageTitle.classList.remove('hidden');
+        if (recPageDivider) recPageDivider.classList.remove('hidden');
         let taskId = params ? params.get('id') : null;
         if (!taskId) {
             const taskIdMatch = window.location.hash.match(/(?:\?id=|\/)(\d+)/);
@@ -49,18 +53,18 @@ export function handleRecruiterRouting(hash, params = null) {
         initializeRecruiterHistoryDetail(taskId);
     } else {
         updateSidebarActiveLink(hash);
+        recPageTitle.textContent = "";
+        recPageTitle.classList.add('hidden');
+        if (recPageDivider) recPageDivider.classList.add('hidden');
         
         if (hash === ROUTES.DASHBOARD) {
             recViewDashboard.classList.remove('hidden');
-            recPageTitle.textContent = "Dashboard";
             initializeRecruiterDashboard();
         } else if (hash === ROUTES.SCREEN) {
             recViewScreen.classList.remove('hidden');
-            recPageTitle.textContent = "Resume Screening";
             initializeRecruiterScreen();
         } else if (hash === ROUTES.PROFILE) {
             recViewProfile.classList.remove('hidden');
-            recPageTitle.textContent = "My Profile";
             initializeRecruiterProfile();
         }
     }
@@ -74,6 +78,7 @@ export function handleCandidateRouting(hash, params = null) {
     const candViewScreen = document.getElementById('cand-view-screen');
     const candViewProfile = document.getElementById('cand-view-profile');
     const candPageTitle = document.getElementById('cand-page-title');
+    const candPageDivider = document.getElementById('cand-page-divider');
 
     if (!candViewDashboard || !candViewScreen || !candViewProfile || !candPageTitle) {
         return;
@@ -89,32 +94,39 @@ export function handleCandidateRouting(hash, params = null) {
 
     if (hash === ROUTES.CANDIDATE_DASHBOARD) {
         candViewDashboard.classList.remove('hidden');
-        candPageTitle.textContent = "Dashboard";
         
         const reportId = params ? (params.get('report') || params.get('id')) : null;
         if (reportId) {
+            candPageTitle.textContent = "Analysis Snapshot";
+            candPageTitle.classList.remove('hidden');
+            if (candPageDivider) candPageDivider.classList.remove('hidden');
             if (window.viewCandidateAnalysis) {
                 if (!candAnalysisModal || candAnalysisModal.classList.contains('hidden') || candAnalysisModal.dataset.currentReportId !== String(reportId)) {
                     window.viewCandidateAnalysis(reportId);
                 }
             }
         } else {
+            candPageTitle.textContent = "";
+            candPageTitle.classList.add('hidden');
+            if (candPageDivider) candPageDivider.classList.add('hidden');
             if (candAnalysisModal && !candAnalysisModal.classList.contains('hidden')) {
                 candAnalysisModal.classList.add('hidden');
             }
         }
         initializeCandidateDashboard();
     } else {
+        candPageTitle.textContent = "";
+        candPageTitle.classList.add('hidden');
+        if (candPageDivider) candPageDivider.classList.add('hidden');
+
         if (candAnalysisModal && !candAnalysisModal.classList.contains('hidden')) {
             candAnalysisModal.classList.add('hidden');
         }
         if (hash === ROUTES.CANDIDATE_SCREEN) {
             candViewScreen.classList.remove('hidden');
-            candPageTitle.textContent = "Resume Analysis";
             initializeCandidateScreen();
         } else if (hash === ROUTES.CANDIDATE_PROFILE) {
             candViewProfile.classList.remove('hidden');
-            candPageTitle.textContent = "My Profile";
             initializeCandidateProfile();
         }
     }

@@ -8,9 +8,10 @@
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
-    <!-- Preload critical font weight so the browser loads it immediately without FOUT -->
-    <link rel="preload" href="assets/fonts/Outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <!-- Self-hosted Outfit font declarations with font-display: block -->
+    <!-- Preload critical self-hosted fonts for Editorial Intelligence without FOUT -->
+    <link rel="preload" href="assets/fonts/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/Newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Self-hosted font declarations (Newsreader, DM Sans, IBM Plex Mono) -->
     <link rel="stylesheet" href="assets/css/tailwind.min.css?v=2.1">
     <link rel="stylesheet" href="assets/css/fonts.css?v=2.1">
     <link rel="stylesheet" href="assets/css/tokens.css?v=2.1">
@@ -40,56 +41,107 @@
 
 <body>
 <!-- Candidate Workspace Container -->
-    <div class="rec-layout hidden" id="candidate-container">
-        <!-- Sidebar -->
-        <aside class="rec-sidebar collapsed" id="cand-sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo flex items-center gap-2" id="candidate-sidebar-logo" title="Nipun Workspace">
-                    <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="sidebar-logo-img">
-                    <span class="logo-text">Nipun</span>
+    <div class="rec-layout" id="candidate-container">
+        <!-- Shared Horizontal Workspace Header -->
+        <header class="workspace-header rec-topbar" id="workspace-header">
+            <div class="workspace-header-inner">
+                <!-- Brand & Breadcrumb Hierarchy -->
+                <div class="workspace-brand-group">
+                    <a href="#/candidate/dashboard" class="workspace-logo" id="candidate-sidebar-logo" title="Nipun Workspace">
+                        <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="workspace-logo-img">
+                        <span class="workspace-brand-name">Nipun</span>
+                    </a>
+                    <span class="workspace-divider" aria-hidden="true">/</span>
+                    <span class="workspace-role-badge">Candidate</span>
+                    <span class="workspace-divider hidden" id="cand-page-divider" aria-hidden="true">/</span>
+                    <h2 id="cand-page-title" class="workspace-current-page hidden"></h2>
                 </div>
-                <button type="button" class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle sidebar" title="Toggle sidebar" aria-expanded="true">
-                    <svg aria-hidden="true" class="sidebar-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="18" height="18" x="3" y="3" rx="2"/>
-                        <path d="M9 3v18"/>
-                        <path d="m16 15-3-3 3-3" class="toggle-icon-collapse"/>
-                        <path d="m14 9 3 3-3 3" class="toggle-icon-expand"/>
-                    </svg>
-                </button>
+
+                <!-- Desktop Role-Specific Horizontal Navigation -->
+                <nav class="workspace-nav" aria-label="Candidate Navigation">
+                    <a href="#/candidate/dashboard" class="workspace-nav-link active" id="link-cand-dashboard" title="Dashboard" aria-label="Dashboard">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#/candidate/screen" class="workspace-nav-link" id="link-cand-screen" title="Resume Analysis" aria-label="Resume Analysis">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <span>Resume Analysis</span>
+                    </a>
+                    <a href="#/candidate/profile" class="workspace-nav-link" id="link-cand-profile" title="My Profile" aria-label="My Profile">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>My Profile</span>
+                    </a>
+                </nav>
+
+                <!-- Workspace User Identity & Actions -->
+                <div class="workspace-actions">
+                    <div class="workspace-user-identity" title="Active Candidate">
+                        <span class="user-status-dot" aria-hidden="true"></span>
+                        <span id="cand-top-user-name" class="workspace-username">Candidate</span>
+                    </div>
+                    <button type="button" id="cand-sign-out-btn" class="workspace-sign-out-btn" title="Logout" aria-label="Logout">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                        <span>Logout</span>
+                    </button>
+                    <!-- Mobile Hamburger Toggle Button -->
+                    <button type="button" class="mobile-nav-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle navigation menu" title="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+                        <svg aria-hidden="true" class="mobile-nav-icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="6" x2="20" y2="6"/>
+                            <line x1="4" y1="12" x2="20" y2="12"/>
+                            <line x1="4" y1="18" x2="20" y2="18"/>
+                        </svg>
+                        <svg aria-hidden="true" class="mobile-nav-icon-close hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <nav class="sidebar-nav">
-                <a href="#/candidate/dashboard" class="sidebar-link active" id="link-cand-dashboard" title="Dashboard" aria-label="Dashboard">
-                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#/candidate/screen" class="sidebar-link" id="link-cand-screen" title="Resume Analysis" aria-label="Resume Analysis">
-                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    <span>Resume Analysis</span>
-                </a>
-                <a href="#/candidate/profile" class="sidebar-link" id="link-cand-profile" title="My Profile" aria-label="My Profile">
-                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <span>My Profile</span>
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <button id="cand-sign-out-btn" class="sign-out-btn" title="Logout" aria-label="Logout">
-                    <svg aria-hidden="true" class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                    <span>Logout</span>
-                </button>
+        </header>
+
+        <!-- Responsive Mobile Drawer -->
+        <div class="mobile-nav-drawer hidden" id="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Candidate Navigation">
+            <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+            <div class="mobile-nav-sheet">
+                <div class="mobile-nav-sheet-header">
+                    <div class="flex items-center gap-2">
+                        <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="workspace-logo-img">
+                        <span class="workspace-brand-name">Nipun</span>
+                        <span class="workspace-role-badge">Candidate</span>
+                    </div>
+                    <button type="button" class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close navigation menu">
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <nav class="mobile-nav-links">
+                    <a href="#/candidate/dashboard" class="mobile-nav-link active" data-nav-target="link-cand-dashboard">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#/candidate/screen" class="mobile-nav-link" data-nav-target="link-cand-screen">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <span>Resume Analysis</span>
+                    </a>
+                    <a href="#/candidate/profile" class="mobile-nav-link" data-nav-target="link-cand-profile">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>My Profile</span>
+                    </a>
+                </nav>
+                <div class="mobile-nav-sheet-footer">
+                    <div class="mobile-nav-user-info">
+                        <span class="user-status-dot" aria-hidden="true"></span>
+                        <span class="mobile-nav-user-text font-mono">Candidate Workspace</span>
+                    </div>
+                    <button type="button" id="cand-mobile-sign-out-btn" class="mobile-nav-sign-out-btn" aria-label="Logout">
+                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
             </div>
-        </aside>
+        </div>
 
         <!-- Main Content Wrapper -->
         <div class="rec-main-wrapper">
-            <!-- Topbar -->
-            <header class="rec-topbar">
-                <div class="topbar-title-section">
-                    <h2 id="cand-page-title">Dashboard</h2>
-                </div>
-                <div class="topbar-profile">
-                    <span id="cand-top-user-name" class="topbar-username">Candidate</span>
-                </div>
-            </header>
 
             <!-- Dynamic Views -->
             <main class="rec-content">

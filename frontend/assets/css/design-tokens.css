@@ -1,22 +1,21 @@
-/* Hallmark · shape: Conversational FAQ · genre: modern-minimal · theme: brand · redesign: full
- * paper: oklch(14% 0.02 260) · accent: oklch(68% 0.17 160) · display: Outfit · body: Outfit · hero: Counter · nav: slab · footer: colophon block · signature: live semantic concept match breakdown
- * axes: dark/grotesk-sans/chromatic-emerald · posture: Counter · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: none, brand tokens fully calibrated and contrast secured */
+/* Nipun Editorial Intelligence — Design Tokens Mapping
+ * Mappings for layout, shadows, elevation, and custom editorial scrollbars.
+ */
 
 @import url("./tokens.css");
 
 :root {
-    /* Color Palette mapped to Hallmark OKLCH Tokens */
+    /* Color Palette mapped to Canonical Editorial Tokens */
     --color-bg-dark: var(--color-paper);
-    --color-bg-slate: var(--color-paper-2);
+    --color-bg-slate: var(--color-paper-3);
     --color-bg-card: var(--color-paper-2);
-    --color-primary: var(--color-accent);
-    --color-primary-hover: var(--color-accent-hover);
-    --color-primary-glow: var(--color-accent-glow);
+    --color-primary: var(--color-forest);
+    --color-primary-hover: var(--color-forest-hover);
+    --color-primary-glow: var(--color-forest-light);
     --color-border: var(--color-rule);
     --color-border-hover: var(--color-rule-2);
     --color-text-primary: var(--color-ink);
-    --color-text-secondary: var(--color-muted);
+    --color-text-secondary: var(--color-ink-2);
     
     /* Layout Tokens */
     --radius-lg: var(--radius-card);
@@ -24,13 +23,13 @@
     --radius-sm: var(--radius-sm);
     --glass-blur: 0px;
     --shadow-premium: var(--shadow-card);
-    --shadow-glow: 0 0 20px var(--color-accent-glow);
+    --shadow-glow: 0 0 0 1px var(--color-forest-border);
 
     /* Motion System */
     --duration-hover: var(--dur-micro);
     --duration-reveal: var(--dur-short);
     --duration-hero: var(--dur-long);
-    --duration-stagger: 80ms;
+    --duration-stagger: 60ms;
     --duration-fade: var(--dur-short);
 
     --easing-standard: var(--ease-out);
@@ -40,17 +39,17 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
     background: var(--color-paper);
 }
 ::-webkit-scrollbar-thumb {
     background: var(--color-rule-2);
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--color-paper);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-paper);
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-accent);
+    background: var(--color-forest);
 }

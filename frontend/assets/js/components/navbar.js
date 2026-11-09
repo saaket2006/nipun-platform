@@ -121,10 +121,22 @@ export function initNavbar(clearCandidateStateCallback) {
             handleLogout(clearRecruiterWorkspaceState);
         });
     }
+    const recMobileSignOutBtn = document.getElementById('rec-mobile-sign-out-btn');
+    if (recMobileSignOutBtn) {
+        recMobileSignOutBtn.addEventListener('click', () => {
+            handleLogout(clearRecruiterWorkspaceState);
+        });
+    }
 
     // Candidate workspace sign out link
     if (candSignOutBtn) {
         candSignOutBtn.addEventListener('click', () => {
+            handleLogout(clearCandidateWorkspaceState);
+        });
+    }
+    const candMobileSignOutBtn = document.getElementById('cand-mobile-sign-out-btn');
+    if (candMobileSignOutBtn) {
+        candMobileSignOutBtn.addEventListener('click', () => {
             handleLogout(clearCandidateWorkspaceState);
         });
     }
