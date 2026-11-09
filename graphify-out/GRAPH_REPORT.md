@@ -1,16 +1,16 @@
 # Graph Report - nipun-platform  (2026-11-09)
 
 ## Corpus Check
-- 197 files · ~288,790 words
+- 197 files · ~289,359 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2183 nodes · 3807 edges · 138 communities (130 shown, 8 thin omitted)
+- 2183 nodes · 3810 edges · 138 communities (130 shown, 8 thin omitted)
 - Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 315 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f2b3f347`
+- Built from commit: `7f889cd6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -181,8 +181,8 @@ Cohesion: 0.14
 Nodes (27): clearCandidateState(), handleFiles(), renderFileList(), updateResumeCountDisplay(), uploadedFiles, checkAuthStatus(), _doCheckAuthStatus(), hideEmailVerificationModal() (+19 more)
 
 ### Community 5 - "onboarding.js"
-Cohesion: 0.20
-Nodes (16): API_BASE, API_ENDPOINTS, CANDIDATE_STATUS_VALUES, COMPANY_TYPES, MESSAGES, ROLES, ROUTES, getStepsForRole() (+8 more)
+Cohesion: 0.23
+Nodes (14): API_BASE, API_ENDPOINTS, CANDIDATE_STATUS_VALUES, COMPANY_TYPES, MESSAGES, getStepsForRole(), hideObError(), initializeOnboardingPage (+6 more)
 
 ### Community 7 - "gsap.min.js"
 Cohesion: 0.06
@@ -349,8 +349,8 @@ Cohesion: 0.29
 Nodes (7): legacy_process_resumes(), limit, post, Request, Session, UploadFile, Legacy endpoint delegating to recruiter process_resumes. Requires Recruiter…
 
 ### Community 75 - "router.js"
-Cohesion: 0.18
-Nodes (21): handleLogoNavigation(), handleLogout(), initNavbar(), collapseSidebar(), expandSidebar(), handleKeyDown(), initSidebar(), isSidebarCollapsed() (+13 more)
+Cohesion: 0.16
+Nodes (24): handleLogoNavigation(), handleLogout(), initNavbar(), collapseSidebar(), expandSidebar(), handleKeyDown(), initSidebar(), isSidebarCollapsed() (+16 more)
 
 ### Community 76 - "API Design Principles Implementation Playbook"
 Cohesion: 0.10
@@ -438,7 +438,7 @@ Nodes (16): Code Quality, Color & Contrast, Content & Copy, Edge Cases & Error S
 
 ### Community 100 - "candidate.js"
 Cohesion: 0.09
-Nodes (27): getEmptyStateHTML(), populateCandidateProfileUI(), populateRecruiterProfileUI(), closeCandidateAnalysisModal(), initCandidatePage(), initializeCandidateDashboard(), initializeCandidateProfile(), renderCandidateAnalysisResults() (+19 more)
+Nodes (26): getEmptyStateHTML(), populateCandidateProfileUI(), populateRecruiterProfileUI(), closeCandidateAnalysisModal(), initCandidatePage(), initializeCandidateDashboard(), initializeCandidateProfile(), renderCandidateAnalysisResults() (+18 more)
 
 ### Community 101 - "get_screening_task_detail"
 Cohesion: 0.33

@@ -21,6 +21,12 @@ export function initModals() {
                 contactModal.classList.add('hidden');
             }
         });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !contactModal.classList.contains('hidden')) {
+                contactModal.classList.add('hidden');
+            }
+        });
     }
 
     // Hide Name modal / Change name elements as custom name editing is replaced in Phase 1

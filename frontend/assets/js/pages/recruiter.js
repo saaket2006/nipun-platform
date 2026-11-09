@@ -298,6 +298,11 @@ export function initRecruiterPage() {
     if (closeUnsavedBtn) {
         closeUnsavedBtn.addEventListener('click', closeUnsavedModal);
     }
+    if (unsavedModal) {
+        unsavedModal.addEventListener('click', (e) => {
+            if (e.target === unsavedModal) closeUnsavedModal();
+        });
+    }
     if (btnDiscardChanges) {
         btnDiscardChanges.addEventListener('click', () => {
             const target = pendingNavigationTargetId;
@@ -342,6 +347,11 @@ export function initRecruiterPage() {
     }
     if (btnCancelSaveJd) {
         btnCancelSaveJd.addEventListener('click', closeSaveJdModal);
+    }
+    if (saveJdModal) {
+        saveJdModal.addEventListener('click', (e) => {
+            if (e.target === saveJdModal) closeSaveJdModal();
+        });
     }
 
     if (saveJdNameInput) {
@@ -452,6 +462,11 @@ export function initRecruiterPage() {
     }
     if (btnCancelUpdateJd) {
         btnCancelUpdateJd.addEventListener('click', closeUpdateJdModal);
+    }
+    if (updateJdModal) {
+        updateJdModal.addEventListener('click', (e) => {
+            if (e.target === updateJdModal) closeUpdateJdModal();
+        });
     }
 
     if (updateJdNameInput) {
@@ -593,8 +608,23 @@ export function initRecruiterPage() {
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !recQuickViewModal.classList.contains('hidden')) {
-                recQuickViewModal.classList.add('hidden');
+            if (e.key === 'Escape') {
+                if (unsavedModal && !unsavedModal.classList.contains('hidden')) {
+                    closeUnsavedModal();
+                    return;
+                }
+                if (updateJdModal && !updateJdModal.classList.contains('hidden')) {
+                    closeUpdateJdModal();
+                    return;
+                }
+                if (saveJdModal && !saveJdModal.classList.contains('hidden')) {
+                    closeSaveJdModal();
+                    return;
+                }
+                if (recQuickViewModal && !recQuickViewModal.classList.contains('hidden')) {
+                    recQuickViewModal.classList.add('hidden');
+                    return;
+                }
             }
         });
     }
@@ -754,9 +784,10 @@ function renderRecFileList() {
     recFileList.innerHTML = '';
     recUploadedFiles.forEach((file, index) => {
         const li = document.createElement('li');
+        li.className = 'rec-file-item';
         li.innerHTML = `
-            <span>${file.name}</span>
-            <span style="color: #ef4444; cursor:pointer;" onclick="removeRecFile(${index})">&times;</span>
+            <span class="rec-file-name" style="color: var(--color-ink); font-weight: 500; font-size: 0.85rem;">📄 ${escapeHTML(file.name)}</span>
+            <button type="button" class="rec-file-remove-btn" onclick="removeRecFile(${index})" aria-label="Remove file" style="background: transparent; border: none; color: var(--color-clay); font-size: 1.25rem; line-height: 1; cursor: pointer; padding: 0 4px;">&times;</button>
         `;
         recFileList.appendChild(li);
     });
@@ -799,17 +830,17 @@ export async function initializeRecruiterDashboard() {
         // Render common missing skills list
         const missingList = document.getElementById("stat-missing-skills-list");
         if (missingList) {
-            missingList.innerHTML = stats.most_common_missing_skills.length > 0
-                ? stats.most_common_missing_skills.map(s => `<li>${s.skill} (found ${s.count} times)</li>`).join("")
-                : "<li style='list-style:none; color:gray;'>No missing skills recorded yet</li>";
+            missingList.innerHTML = stats.most_common_missing_skills && stats.most_common_missing_skills.length > 0
+                ? stats.most_common_missing_skills.map(s => `<li>${escapeHTML(s.skill)} (found ${s.count} times)</li>`).join("")
+                : "<li style='list-style:none; color: var(--color-muted); font-size: 0.8125rem; font-family: var(--font-body);'>No missing skills recorded yet</li>";
         }
         
         // Render common matched skills list
         const matchedList = document.getElementById("stat-matched-skills-list");
         if (matchedList) {
-            matchedList.innerHTML = stats.most_common_matched_skills.length > 0
-                ? stats.most_common_matched_skills.map(s => `<li>${s.skill} (found ${s.count} times)</li>`).join("")
-                : "<li style='list-style:none; color:gray;'>No matched skills recorded yet</li>";
+            matchedList.innerHTML = stats.most_common_matched_skills && stats.most_common_matched_skills.length > 0
+                ? stats.most_common_matched_skills.map(s => `<li>${escapeHTML(s.skill)} (found ${s.count} times)</li>`).join("")
+                : "<li style='list-style:none; color: var(--color-muted); font-size: 0.8125rem; font-family: var(--font-body);'>No matched skills recorded yet</li>";
         }
         
         // Improvements list is candidate-only; clear and do not render on recruiter dashboard
@@ -1072,7 +1103,6 @@ function renderRecruiterHistoryList(tasks) {
     tasks.forEach(task => {
         const item = document.createElement('div');
         item.className = 'history-item-card';
-        item.style.cssText = 'background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease;';
         
         const dateStr = task.created_at ? new Date(task.created_at).toLocaleDateString(undefined, {
             year: 'numeric',
@@ -1083,16 +1113,16 @@ function renderRecruiterHistoryList(tasks) {
         }) : 'N/A';
 
         item.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                <h4 style="font-size: 1.05rem; font-weight: 600; color: #fff; margin: 0;">${escapeHTML(task.role || 'Screening Run')}</h4>
-                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.85rem;">
-                    <span style="color: var(--text-secondary); display: inline-flex; align-items: center; gap: 0.35rem;">📅 ${dateStr}</span>
-                    <span style="color: rgba(255,255,255,0.2);">•</span>
-                    <span style="color: #a5b4fc; font-weight: 500; display: inline-flex; align-items: center; gap: 0.35rem;">📄 ${task.resume_count} Resumes Scanned</span>
+            <div class="history-item-main" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <h4 class="history-item-role" style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin: 0;">${escapeHTML(task.role || 'Screening Run')}</h4>
+                <div class="history-item-meta" style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8125rem;">
+                    <span class="history-meta-date" style="color: var(--color-muted); font-family: var(--font-mono); display: inline-flex; align-items: center; gap: 0.35rem;">📅 ${dateStr}</span>
+                    <span class="history-meta-divider" style="color: var(--color-rule);">•</span>
+                    <span class="history-meta-badge" style="background: var(--color-forest-light); color: var(--color-forest); border: 1px solid var(--color-forest-border); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 0.35rem;">${task.resume_count} Resumes Scanned</span>
                 </div>
             </div>
-            <div>
-                <button type="button" class="glow-btn secondary history-more-info-btn" data-task-id="${task.id}" style="padding: 0.5rem 1.15rem; font-size: 0.85rem; cursor: pointer;">
+            <div class="history-item-actions">
+                <button type="button" class="glow-btn secondary history-more-info-btn" data-task-id="${task.id}" style="padding: 0.45rem 1rem; font-size: 0.8125rem; font-weight: 600; cursor: pointer;">
                     More Info →
                 </button>
             </div>
@@ -1243,19 +1273,19 @@ export function renderRecruiterResults(results, scoringConfig = null) {
 
             banner.className = 'scoring-applied-banner';
             banner.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <span style="font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; ${isCustom ? 'background: rgba(99, 102, 241, 0.2); color: #c7d2fe; border: 1px solid rgba(99, 102, 241, 0.4);' : 'background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4);'}">
+                <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                    <span style="font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; ${isCustom ? 'background: var(--color-clay-light); color: var(--color-clay); border: 1px solid var(--color-clay-border);' : 'background: var(--color-forest-light); color: var(--color-forest); border: 1px solid var(--color-forest-border);'}">
                         ${isCustom ? '⚙️ Custom Scoring Applied' : '✓ Profile Defaults Applied'}
                     </span>
-                    <span style="font-weight: 600; color: #f8fafc;">${escapeHTML(profileName)}</span>
+                    <span style="font-weight: 600; color: var(--color-ink); font-family: var(--font-body);">${escapeHTML(profileName)}</span>
                 </div>
-                <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                    <span>Skills: <strong style="color: #cbd5e1;">${skillsPct}%</strong></span>
-                    <span>Exp: <strong style="color: #cbd5e1;">${expPct}%</strong></span>
-                    <span>Edu: <strong style="color: #cbd5e1;">${eduPct}%</strong></span>
-                    <span>Projects: <strong style="color: #cbd5e1;">${projPct}%</strong></span>
-                    ${isCustom && thresh.max_experience_years ? `<span style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 0.5rem;">Exp Target: <strong style="color: #cbd5e1;">${thresh.max_experience_years}y</strong></span>` : ''}
-                    ${isCustom && thresh.project_target_count ? `<span>Proj Target: <strong style="color: #cbd5e1;">${thresh.project_target_count}</strong></span>` : ''}
+                <div style="font-size: 0.8125rem; color: var(--color-muted); display: flex; gap: 0.85rem; flex-wrap: wrap; align-items: center;">
+                    <span>Skills: <strong style="color: var(--color-ink); font-family: var(--font-mono);">${skillsPct}%</strong></span>
+                    <span>Exp: <strong style="color: var(--color-ink); font-family: var(--font-mono);">${expPct}%</strong></span>
+                    <span>Edu: <strong style="color: var(--color-ink); font-family: var(--font-mono);">${eduPct}%</strong></span>
+                    <span>Projects: <strong style="color: var(--color-ink); font-family: var(--font-mono);">${projPct}%</strong></span>
+                    ${isCustom && thresh.max_experience_years ? `<span style="border-left: 1px solid var(--color-rule); padding-left: 0.6rem;">Exp Target: <strong style="color: var(--color-ink); font-family: var(--font-mono);">${thresh.max_experience_years}y</strong></span>` : ''}
+                    ${isCustom && thresh.project_target_count ? `<span>Proj Target: <strong style="color: var(--color-ink); font-family: var(--font-mono);">${thresh.project_target_count}</strong></span>` : ''}
                 </div>
             `;
             banner.classList.remove('hidden');
@@ -1350,7 +1380,8 @@ export function showCandidateQuickView(cand) {
                 a.href = url;
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
-                a.style.color = '#6366f1';
+                a.style.color = 'var(--color-forest)';
+                a.style.fontWeight = '500';
                 a.style.textDecoration = 'none';
                 a.textContent = cand.linkedin;
                 qvCandLinkedin.innerHTML = '';
@@ -1371,7 +1402,8 @@ export function showCandidateQuickView(cand) {
                 a.href = url;
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
-                a.style.color = '#6366f1';
+                a.style.color = 'var(--color-forest)';
+                a.style.fontWeight = '500';
                 a.style.textDecoration = 'none';
                 a.textContent = cand.github;
                 qvCandGithub.innerHTML = '';
@@ -1407,7 +1439,7 @@ export function showCandidateQuickView(cand) {
 
     // Sanitize skills via textContent assignment by creating elements
     const createSkillTags = (skills, className) => {
-        if (!skills || skills.length === 0) return '<span style="color:#666">None</span>';
+        if (!skills || skills.length === 0) return '<span style="color: var(--color-muted); font-size: 0.8125rem; font-family: var(--font-body);">None</span>';
         const container = document.createElement('div');
         skills.forEach(s => {
             const span = document.createElement('span');
@@ -1430,93 +1462,124 @@ window.showCandidateQuickView = showCandidateQuickView;
 export function renderXaiContent(xaiData) {
     if (!xaiData || !xaiData.enabled) {
         return `
-            <div style="background: rgba(255, 255, 255, 0.02); border-left: 4px solid #ef4444; padding: 1rem; border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.95rem; color: #fca5a5;">This analysis was created before Explainable Scoring was available.</p>
+            <div style="background: var(--color-paper-3); border-left: 3px solid var(--color-clay); padding: 1rem 1.25rem; border-radius: 8px;">
+                <p style="margin: 0; font-size: 0.875rem; color: var(--color-clay); font-family: var(--font-body);">This analysis was created before Explainable Scoring was available.</p>
             </div>
         `;
     }
 
-    const components = xaiData.components || [];
+    const components = Array.isArray(xaiData.components) ? xaiData.components : [];
     const explanations = xaiData.explanations || {};
+    const overallSummary = xaiData.overall_summary || 'Overall alignment evaluated across candidate profile and job requirements.';
     
     let html = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: rgba(255,255,255,0.02); padding: 0.5rem 1rem; border-radius: 8px;">
-            <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Explanation Level:</span>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="xai-level-btn active" onclick="toggleXaiLevel('summary')" style="font-size: 0.8rem; padding: 0.25rem 0.6rem; border-radius: 4px; background: #6366f1; border: none; color: #fff; cursor: pointer;">Summary</button>
-                <button class="xai-level-btn" onclick="toggleXaiLevel('detailed')" style="font-size: 0.8rem; padding: 0.25rem 0.6rem; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc; cursor: pointer;">Detailed</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.5rem 0.85rem; border-radius: 8px;">
+            <span style="font-size: 0.8125rem; color: var(--color-ink-2); font-weight: 600; font-family: var(--font-body);">Explanation Level:</span>
+            <div style="display: flex; gap: 0.4rem;">
+                <button class="xai-level-btn active" onclick="toggleXaiLevel('summary')" style="font-size: 0.8125rem; padding: 0.25rem 0.65rem; border-radius: 6px; background: var(--color-forest); border: 1px solid var(--color-forest); color: #ffffff; font-family: var(--font-body); font-weight: 600; cursor: pointer;">Summary</button>
+                <button class="xai-level-btn" onclick="toggleXaiLevel('detailed')" style="font-size: 0.8125rem; padding: 0.25rem 0.65rem; border-radius: 6px; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink-2); font-family: var(--font-body); font-weight: 500; cursor: pointer;">Detailed</button>
             </div>
         </div>
 
-        <div style="background: rgba(99, 102, 241, 0.05); border-left: 4px solid #6366f1; padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
-            <h4 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: #fff;">&#x1F4A1; Overall Summary</h4>
-            <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: #cbd5e1;">${xaiData.overall_summary}</p>
+        <div style="background: var(--color-forest-light); border: 1px solid var(--color-forest-border); border-left: 3px solid var(--color-forest); padding: 1.1rem 1.25rem; border-radius: 8px; margin-bottom: 1.25rem;">
+            <h4 style="margin-top: 0; margin-bottom: 0.35rem; font-size: 0.9375rem; color: var(--color-forest); font-family: var(--font-body); font-weight: 700;">Overall Alignment Summary</h4>
+            <p style="margin: 0; font-size: 0.875rem; line-height: 1.6; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(overallSummary)}</p>
         </div>
 
         <div class="xai-accordion-group" style="display: flex; flex-direction: column; gap: 0.75rem;">
     `;
 
     components.forEach((comp) => {
-        let key = comp.name.toLowerCase().replace(" ", "_");
+        if (!comp) return;
+        const compName = comp.name || "Evaluation Component";
+        let key = compName.toLowerCase().replace(/\s+/g, "_");
         if (key === "technical_skills") key = "skills";
         if (key === "work_experience") key = "experience";
         
         const compExpl = explanations[key] || {};
-        const summaryExpl = compExpl.summary || { why_awarded: "No summary explanation.", why_deducted: "" };
-        const detailedExpl = compExpl.detailed || { why_awarded: "No detailed explanation.", why_deducted: "" };
+        const summaryExpl = compExpl.summary || { why_awarded: "Full criteria alignment evaluated.", why_deducted: "" };
+        const detailedExpl = compExpl.detailed || { why_awarded: summaryExpl.why_awarded || "Full criteria alignment evaluated.", why_deducted: summaryExpl.why_deducted || "" };
         
-        let statusColor = "#ef4444";
-        if (comp.status === "met") statusColor = "#10b981";
-        else if (comp.status === "partially_met") statusColor = "#f59e0b";
-        else if (comp.status === "exceeded") statusColor = "#3b82f6";
+        const statusVal = String(comp.status || "evaluated").toLowerCase();
+        let statusBg = "var(--color-clay-light)";
+        let statusColor = "var(--color-clay)";
+        let statusBorder = "var(--color-clay-border)";
+        if (statusVal === "met" || statusVal === "exceeded") {
+            statusBg = "var(--color-forest-light)";
+            statusColor = "var(--color-forest)";
+            statusBorder = "var(--color-forest-border)";
+        } else if (statusVal === "partially_met" || statusVal === "partial") {
+            statusBg = "#FEF6EB";
+            statusColor = "#8C5B14";
+            statusBorder = "#F2DEC0";
+        }
 
-        const statusBadge = `<span style="background: ${statusColor}15; color: ${statusColor}; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase;">${comp.status.replace("_", " ")}</span>`;
+        const displayStatus = statusVal.replace(/_/g, " ");
+        const statusBadge = `<span style="background: ${statusBg}; color: ${statusColor}; border: 1px solid ${statusBorder}; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; text-transform: uppercase;">${escapeHTML(displayStatus)}</span>`;
+        const rawScore = Math.round(typeof comp.raw_score === 'number' ? comp.raw_score : (typeof comp.score === 'number' ? comp.score : 0));
+        const weightPct = Math.round((typeof comp.weight === 'number' ? comp.weight : 0) * 100);
+
+        const evidenceItems = Array.isArray(comp.evidence) ? comp.evidence : [];
 
         html += `
-            <div class="xai-accordion-item" style="border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.01);">
-                <div class="xai-accordion-header" onclick="toggleXaiAccordion(this)" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; cursor: pointer; transition: background 0.2s;">
+            <div class="xai-accordion-item" style="border: 1px solid var(--color-rule); border-radius: 8px; overflow: hidden; background: var(--color-paper-2);">
+                <div class="xai-accordion-header" onclick="toggleXaiAccordion(this)" style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.15rem; cursor: pointer; transition: background 0.15s ease; background: var(--color-paper-2);">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <span class="xai-chevron" style="font-size: 0.75rem; color: var(--text-secondary); transition: transform 0.2s; display: inline-block;">&#x25B6;</span>
-                        <strong style="color: #fff; font-size: 0.95rem;">${comp.name}</strong>
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">(${comp.weight * 100}% weight)</span>
+                        <span class="xai-chevron" style="font-size: 0.75rem; color: var(--color-muted); transition: transform 0.2s; display: inline-block;">&#x25B6;</span>
+                        <strong style="color: var(--color-ink); font-family: var(--font-body); font-size: 0.9375rem;">${escapeHTML(compName)}</strong>
+                        <span style="font-size: 0.8125rem; color: var(--color-muted); font-family: var(--font-mono);">(${weightPct}% weight)</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         ${statusBadge}
-                        <strong style="color: #fff; font-size: 1rem;">${Math.round(comp.raw_score)}%</strong>
+                        <strong style="color: var(--color-ink); font-family: var(--font-mono); font-size: 0.9375rem; font-variant-numeric: tabular-nums;">${rawScore}%</strong>
                     </div>
                 </div>
                 
-                <div class="xai-accordion-content hidden" style="padding: 1rem; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.15); display: none;">
-                    <div style="margin-bottom: 0.75rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #10b981; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x2705; Points Awarded</h5>
-                        <p class="xai-text-awarded-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #e2e8f0;">${summaryExpl.why_awarded}</p>
-                        <p class="xai-text-awarded-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #e2e8f0; display: none;">${detailedExpl.why_awarded}</p>
+                <div class="xai-accordion-content hidden" style="padding: 1.15rem; border-top: 1px solid var(--color-rule); background: var(--color-paper); display: none;">
+                    <div style="margin-bottom: 0.85rem;">
+                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.75rem; color: var(--color-forest); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Points Awarded</h5>
+                        <p class="xai-text-awarded-summary" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(summaryExpl.why_awarded || 'Full criteria alignment evaluated.')}</p>
+                        <p class="xai-text-awarded-detailed" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body); display: none;">${escapeHTML(detailedExpl.why_awarded || summaryExpl.why_awarded || 'Full criteria alignment evaluated.')}</p>
                     </div>
                     
                     <div style="margin-bottom: 1rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #ef4444; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x274C; Deductions &amp; Gaps</h5>
-                        <p class="xai-text-deducted-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">${summaryExpl.why_deducted || 'No deductions applied.'}</p>
-                        <p class="xai-text-deducted-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; display: none;">${detailedExpl.why_deducted || 'No deductions applied.'}</p>
+                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.75rem; color: var(--color-clay); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Deductions &amp; Gaps</h5>
+                        <p class="xai-text-deducted-summary" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(summaryExpl.why_deducted || 'No deductions applied.')}</p>
+                        <p class="xai-text-deducted-detailed" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body); display: none;">${escapeHTML(detailedExpl.why_deducted || summaryExpl.why_deducted || 'No deductions applied.')}</p>
                     </div>
 
                     <div>
-                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.8rem; color: #6366f1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x1F4C2; Supporting Evidence</h5>
+                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.75rem; color: var(--color-forest); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Supporting Evidence</h5>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            ${comp.evidence.map(ev => {
-                                let impColor = "#10b981";
-                                if (ev.importance === "medium") impColor = "#f59e0b";
-                                else if (ev.importance === "high") impColor = "#ef4444";
+                            ${evidenceItems.map(ev => {
+                                if (!ev) return '';
+                                const evTitle = typeof ev === 'string' ? ev : (ev.title || ev.feature || 'Supporting Signal');
+                                const evDesc = typeof ev === 'string' ? '' : (ev.description || ev.comment || '');
+                                const evImp = (typeof ev === 'object' && ev.importance) ? String(ev.importance).toLowerCase() : 'info';
+                                
+                                let impBg = "var(--color-forest-light)";
+                                let impColor = "var(--color-forest)";
+                                let impBorder = "var(--color-forest-border)";
+                                if (evImp === "medium") {
+                                    impBg = "#FEF6EB";
+                                    impColor = "#8C5B14";
+                                    impBorder = "#F2DEC0";
+                                } else if (evImp === "high") {
+                                    impBg = "var(--color-clay-light)";
+                                    impColor = "var(--color-clay)";
+                                    impBorder = "var(--color-clay-border)";
+                                }
                                 
                                 return `
-                                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); padding: 0.75rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                    <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                            <strong style="font-size: 0.85rem; color: #fff;">${ev.title}</strong>
-                                            <span style="font-size: 0.7rem; color: ${impColor}; font-weight: bold; background: ${impColor}10; padding: 0.1rem 0.3rem; border-radius: 3px; text-transform: uppercase;">${ev.importance}</span>
+                                            <strong style="font-size: 0.85rem; color: var(--color-ink); font-family: var(--font-body);">${escapeHTML(evTitle)}</strong>
+                                            <span style="font-size: 0.6875rem; color: ${impColor}; background: ${impBg}; border: 1px solid ${impBorder}; font-family: var(--font-mono); font-weight: 600; padding: 0.1rem 0.4rem; border-radius: 3px; text-transform: uppercase;">${escapeHTML(evImp)}</span>
                                         </div>
-                                        <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">${ev.description}</p>
+                                        ${evDesc ? `<p style="margin: 0; font-size: 0.8125rem; color: var(--color-ink-2); line-height: 1.45; font-family: var(--font-body);">${escapeHTML(evDesc)}</p>` : ''}
                                     </div>
                                 `;
-                            }).join('') || '<p style="margin:0; font-size:0.8rem; color:#666;">No evidence items identified.</p>'}
+                            }).join('') || '<p style="margin:0; font-size:0.8125rem; color:var(--color-muted); font-family:var(--font-body);">No evidence items recorded for this criteria.</p>'}
                         </div>
                     </div>
                 </div>
@@ -1525,6 +1588,8 @@ export function renderXaiContent(xaiData) {
     });
 
     html += `</div>`;
+    return html;
+}
     return html;
 }
 
@@ -1593,14 +1658,14 @@ export function initAdvancedScoringControls() {
             if (statusBadge) {
                 if (isCustom) {
                     statusBadge.textContent = 'Custom Scoring Active';
-                    statusBadge.style.color = '#a5b4fc';
-                    statusBadge.style.background = 'rgba(99, 102, 241, 0.15)';
-                    statusBadge.style.borderColor = 'rgba(99, 102, 241, 0.3)';
+                    statusBadge.style.color = 'var(--color-clay)';
+                    statusBadge.style.background = 'var(--color-clay-light)';
+                    statusBadge.style.borderColor = 'var(--color-clay-border)';
                 } else {
                     statusBadge.textContent = 'Default Scoring Active';
-                    statusBadge.style.color = '#10b981';
-                    statusBadge.style.background = 'rgba(16, 185, 129, 0.1)';
-                    statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+                    statusBadge.style.color = 'var(--color-forest)';
+                    statusBadge.style.background = 'var(--color-forest-light)';
+                    statusBadge.style.borderColor = 'var(--color-forest-border)';
                     // Re-sync with profile defaults when returning to default mode
                     syncScoringControlsWithSelectedProfile(true);
                 }
@@ -1785,11 +1850,11 @@ function updateTotalWeightsDisplay() {
     if (badge) {
         badge.textContent = `${total}%`;
         if (total === 100 && anyEnabled) {
-            badge.style.color = '#10b981';
-            badge.style.background = 'rgba(16, 185, 129, 0.1)';
+            badge.style.color = 'var(--color-forest)';
+            badge.style.background = 'var(--color-forest-light)';
         } else {
-            badge.style.color = '#f59e0b';
-            badge.style.background = 'rgba(245, 158, 11, 0.15)';
+            badge.style.color = 'var(--color-warning)';
+            badge.style.background = 'var(--color-warning-dim)';
         }
     }
 
@@ -1798,15 +1863,15 @@ function updateTotalWeightsDisplay() {
             msg.style.display = 'none';
         } else if (!anyEnabled) {
             msg.style.display = 'block';
-            msg.style.background = 'rgba(239, 68, 68, 0.15)';
-            msg.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-            msg.style.color = '#fca5a5';
+            msg.style.background = 'var(--color-clay-light)';
+            msg.style.border = '1px solid var(--color-clay-border)';
+            msg.style.color = 'var(--color-clay)';
             msg.textContent = '❌ At least one scoring criterion must be enabled.';
         } else if (total !== 100) {
             msg.style.display = 'block';
-            msg.style.background = 'rgba(245, 158, 11, 0.15)';
-            msg.style.border = '1px solid rgba(245, 158, 11, 0.3)';
-            msg.style.color = '#fde68a';
+            msg.style.background = 'var(--color-warning-dim)';
+            msg.style.border = '1px solid #F2DEC0';
+            msg.style.color = 'var(--color-warning)';
             msg.innerHTML = `⚠️ Active weights sum to <strong>${total}%</strong>. Adjust sliders or click Auto-Balance to sum to exactly 100%.`;
         } else {
             msg.style.display = 'none';
@@ -1893,9 +1958,9 @@ export function resetAdvancedScoringState() {
     const statusBadge = document.getElementById('custom-scoring-status-badge');
     if (statusBadge) {
         statusBadge.textContent = 'Default Scoring Active';
-        statusBadge.style.color = '#10b981';
-        statusBadge.style.background = 'rgba(16, 185, 129, 0.1)';
-        statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+        statusBadge.style.color = 'var(--color-forest)';
+        statusBadge.style.background = 'var(--color-forest-light)';
+        statusBadge.style.borderColor = 'var(--color-forest-border)';
     }
 
     const controlsPanel = document.getElementById('custom-scoring-controls');

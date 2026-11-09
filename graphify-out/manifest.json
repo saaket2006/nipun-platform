@@ -350,8 +350,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/components/candidateCard.js": {
-    "mtime": 1791910131.434616,
-    "ast_hash": "a1807bedf2a2ce748e663003370470be",
+    "mtime": 1794228872.3756154,
+    "ast_hash": "1bde0d0287eea8ece3a9a90d4c1df1f3",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/emptyState.js": {
@@ -365,9 +365,9 @@
     "semantic_hash": "36fcb463784fd5c1bda2d681e8bbb93c"
   },
   "frontend/assets/js/components/modal.js": {
-    "mtime": 1785222740.1709797,
-    "ast_hash": "2a0f796621d85c80ee27de358037e291",
-    "semantic_hash": "2a0f796621d85c80ee27de358037e291"
+    "mtime": 1794229105.9398422,
+    "ast_hash": "9947533932b761d256e67466d5ee244f",
+    "semantic_hash": ""
   },
   "frontend/assets/js/components/navbar.js": {
     "mtime": 1794222666.8091443,
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/recruiter.js": {
-    "mtime": 1791971784.101667,
-    "ast_hash": "e52fbe7c30757971411a074ff6878758",
+    "mtime": 1794229156.0114985,
+    "ast_hash": "01f25eb554c187f43125a1a78a7f1276",
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/signup.js": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "frontend/recruiter.html": {
-    "mtime": 1794224883.7520082,
-    "ast_hash": "5c1a8bba894493e89b5b6e6e02a83c9f",
+    "mtime": 1794229503.285727,
+    "ast_hash": "a453ebd594b97d06ad9effb3b8a00e08",
     "semantic_hash": ""
   },
   "requirements.txt": {
