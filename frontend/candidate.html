@@ -73,12 +73,8 @@
                     </a>
                 </nav>
 
-                <!-- Workspace User Identity & Actions -->
+                <!-- Workspace Actions -->
                 <div class="workspace-actions">
-                    <div class="workspace-user-identity" title="Active Candidate">
-                        <span class="user-status-dot" aria-hidden="true"></span>
-                        <span id="cand-top-user-name" class="workspace-username">Candidate</span>
-                    </div>
                     <button type="button" id="cand-sign-out-btn" class="workspace-sign-out-btn" title="Logout" aria-label="Logout">
                         <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
                         <span>Logout</span>
@@ -130,7 +126,7 @@
                 <div class="mobile-nav-sheet-footer">
                     <div class="mobile-nav-user-info">
                         <span class="user-status-dot" aria-hidden="true"></span>
-                        <span class="mobile-nav-user-text font-mono">Candidate Workspace</span>
+                        <span id="cand-top-user-name" class="mobile-nav-user-text font-mono">Candidate Workspace</span>
                     </div>
                     <button type="button" id="cand-mobile-sign-out-btn" class="mobile-nav-sign-out-btn" aria-label="Logout">
                         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
@@ -150,10 +146,13 @@
                     <div class="welcome-banner">
                         <h1 class="welcome-title">Welcome back, <span id="dash-cand-name">…</span>!</h1>
                         <p class="welcome-subtitle">
-                            Status: <strong id="dash-cand-status" style="color: var(--color-ink);">…</strong> |
-                            Field of Study: <strong id="dash-cand-field" style="color: var(--color-ink);">…</strong> |
-                            Domain: <strong id="dash-cand-domain" style="color: var(--color-ink);">…</strong>
+                            Track your resume match intelligence, view progression across version iterations, and align your qualifications with target roles.
                         </p>
+                        <div class="welcome-meta-badges">
+                            <span class="meta-badge"><span class="badge-dot"></span> Status: <strong id="dash-cand-status" style="margin-left: 4px; color: var(--color-ink);">…</strong></span>
+                            <span class="meta-badge"><span class="badge-dot" style="background: var(--color-forest);"></span> Field of Study: <strong id="dash-cand-field" style="margin-left: 4px; color: var(--color-ink);">…</strong></span>
+                            <span class="meta-badge"><span class="badge-dot" style="background: var(--color-clay);"></span> Focus Domain: <strong id="dash-cand-domain" style="margin-left: 4px; color: var(--color-ink);">…</strong></span>
+                        </div>
                     </div>
 
                     <div id="cand-stats-container">
@@ -161,7 +160,15 @@
                     </div>
 
                     <div class="analysis-history-section" style="margin-top: 2.5rem;">
-                        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-ink);">Analysis History</h2>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                            <div>
+                                <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--color-ink); margin: 0 0 0.25rem 0;">Analysis History</h2>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted);">Past resume versions evaluated against target job descriptions.</p>
+                            </div>
+                            <a href="#/candidate/screen" class="glow-btn" style="text-decoration: none; font-size: 0.8125rem; padding: 0.5rem 1.1rem; background: var(--color-forest); color: #fff; border-radius: 6px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                <span>+ Analyze New Resume</span>
+                            </a>
+                        </div>
                         <div id="candidate-timeline-list" class="timeline-container">
                             <!-- Populated dynamically via candidate.js -->
                         </div>
@@ -171,33 +178,44 @@
                 <!-- VIEW 2: RESUME ANALYSIS -->
                 <section id="cand-view-screen" class="rec-view hidden">
                     <div class="screening-workspace">
-                        <div class="screening-inputs glass-card">
-                            <div class="form-group">
-                                <label for="cand-job-description">Job Description</label>
-                                <textarea id="cand-job-description" placeholder="Paste target Job Description here…"></textarea>
+                        <div class="screening-inputs glass-card" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px; padding: 2rem; box-shadow: 0 1px 3px rgba(26,25,23,0.03);">
+                            <div style="margin-bottom: 1.5rem;">
+                                <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--color-ink); margin: 0 0 0.4rem 0;">Resume Match Analysis</h2>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted); line-height: 1.5;">
+                                    Paste a job description and upload your resume to evaluate criteria alignment, uncover skill gaps, and receive actionable AI recommendations.
+                                </p>
                             </div>
 
-                            <div class="form-group file-upload-wrapper">
-                                <label>Upload Your Resume (PDF/DOCX)</label>
-                                <div class="file-upload-box" id="cand-drop-zone">
-                                    <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-muted);"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
-                                    <p>Drag and drop your resume here, or click to browse</p>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label for="cand-job-description" style="display: block; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 0.4rem;">Target Job Description</label>
+                                <textarea id="cand-job-description" placeholder="Paste target job description requirements or responsibilities here…" style="width: 100%; min-height: 180px; padding: 1rem; border-radius: 8px; background: var(--color-paper); border: 1px solid var(--color-rule); color: var(--color-ink); font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.6; box-sizing: border-box; resize: vertical;"></textarea>
+                            </div>
+
+                            <div class="form-group file-upload-wrapper" style="margin-bottom: 1.25rem;">
+                                <label for="cand-resumes" style="display: block; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 0.4rem;">Upload Your Resume (PDF or DOCX)</label>
+                                <div class="file-upload-box" id="cand-drop-zone" style="cursor: pointer;">
+                                    <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-forest);"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.9375rem; color: var(--color-ink); font-weight: 500;">Drag and drop your resume here, or click to browse</p>
+                                    <span style="font-size: 0.8125rem; color: var(--color-muted);">Supported formats: PDF, DOCX (Max 10MB)</span>
                                     <input type="file" id="cand-resumes" accept=".pdf,.docx" hidden>
 
-                                    <div id="cand-resumes-header" class="resumes-dropdown-header hidden">
-                                        <span id="cand-resumes-count">Resume (0)</span>
+                                    <div id="cand-resumes-header" class="resumes-dropdown-header hidden" style="margin-top: 0.75rem;">
+                                        <span id="cand-resumes-count" style="font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600; color: var(--color-forest);">Resume (0)</span>
                                         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
                                     </div>
-                                    <ul id="cand-file-list" class="file-list"></ul>
+                                    <ul id="cand-file-list" class="file-list" style="list-style: none; padding: 0; margin-top: 0.5rem;"></ul>
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-top: 1rem;">
-                                <label for="cand-resume-label">Version Label (Optional)</label>
-                                <input type="text" id="cand-resume-label" placeholder="e.g. Software Engineer Application, V1" class="auth-input" style="background: var(--color-paper); border: 1px solid var(--color-rule); width: 100%; box-sizing: border-box; color: var(--color-ink);">
+                            <div class="form-group" style="margin-bottom: 1.5rem;">
+                                <label for="cand-resume-label" style="display: block; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 0.4rem;">
+                                    Version Label <span style="font-size: 0.75rem; font-weight: 500; color: var(--color-muted); background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 2px 8px; border-radius: 9999px; margin-left: 0.35rem; font-family: var(--font-mono);">Optional</span>
+                                </label>
+                                <input type="text" id="cand-resume-label" placeholder="e.g. Senior Frontend Engineer - Stripe Application (V2)" class="auth-input" style="background: var(--color-paper); border: 1px solid var(--color-rule); width: 100%; box-sizing: border-box; color: var(--color-ink); font-size: 0.9rem; padding: 0.7rem 0.9rem; border-radius: 8px;">
+                                <span style="display: block; font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem;">Track progress across customized resume iterations in your career timeline.</span>
                             </div>
 
-                            <button id="cand-process-btn" class="glow-btn">
+                            <button id="cand-process-btn" class="glow-btn" style="background: var(--color-forest); border: 1px solid var(--color-forest); color: #FFFFFF; font-weight: 600; padding: 0.85rem 1.75rem; border-radius: 8px; font-size: 0.9375rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;">
                                 <span>Analyze Resume</span>
                                 <div class="loader hidden"></div>
                             </button>
@@ -205,8 +223,16 @@
 
                         <!-- Screening Results -->
                         <div class="results-section hidden" id="cand-results-container" style="margin-top: 2rem;">
-                            <h3>Analysis Results</h3>
-                            <div class="glass-card" id="cand-results-details" style="padding: 2rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+                                <div>
+                                    <h3 style="margin: 0; font-family: var(--font-display); font-size: 1.5rem; color: var(--color-ink);">Analysis Results</h3>
+                                    <p style="margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--color-muted);">Detailed qualification signals and tailored improvement advice.</p>
+                                </div>
+                                <a href="#/candidate/dashboard" class="glow-btn secondary" style="font-size: 0.8125rem; padding: 0.5rem 1rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink-2); border-radius: 6px; font-weight: 500;">
+                                    <span>← Back to Dashboard</span>
+                                </a>
+                            </div>
+                            <div class="glass-card" id="cand-results-details" style="padding: 2rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px; box-shadow: 0 1px 3px rgba(26,25,23,0.03);">
                                 <!-- Dynamic results markup populated by JS -->
                             </div>
                         </div>
@@ -319,11 +345,11 @@
 
 
 <!-- Candidate Analysis View Modal -->
-    <div id="cand-analysis-view-modal" class="auth-modal-overlay hidden">
+    <div id="cand-analysis-view-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="cand-analysis-title">
         <div class="glass-card quick-view-card">
             <div class="quick-view-header">
-                <h2>Analysis Snapshot</h2>
-                <button id="close-cand-analysis-btn" class="close-modal-btn">✕</button>
+                <h2 id="cand-analysis-title" style="font-family: var(--font-display);">Analysis Snapshot</h2>
+                <button id="close-cand-analysis-btn" class="close-modal-btn" aria-label="Close analysis snapshot">✕</button>
             </div>
 
             <div class="quick-view-body">
@@ -349,7 +375,9 @@
 
                 <div class="qv-section cav-jd-section">
                     <h4>Target Job Description</h4>
-                    <div id="cav-jd-description" class="cav-jd-content cav-jd-body"></div>
+                    <div class="cav-jd-card">
+                        <div id="cav-jd-description" class="cav-jd-content cav-jd-body"></div>
+                    </div>
                 </div>
 
                 <div class="qv-section">
@@ -396,11 +424,11 @@
 
 
 <!-- Contact Modal -->
-    <div id="contact-modal" class="auth-modal-overlay hidden">
+    <div id="contact-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="cand-contact-title">
         <div class="glass-card contact-card">
             <div class="modal-header">
-                <h2>Contact</h2>
-                <button id="close-contact-btn" class="close-modal-btn">✕</button>
+                <h2 id="cand-contact-title" style="font-family: var(--font-display);">Contact</h2>
+                <button id="close-contact-btn" class="close-modal-btn" aria-label="Close contact dialog">✕</button>
             </div>
             <p class="modal-subtitle">Got a question or found a bug? Reach out to us directly!</p>
 

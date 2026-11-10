@@ -245,7 +245,7 @@ export async function initializeCandidateDashboard() {
     if (dashCandDomain && (dashCandDomain.textContent === "..." || !dashCandDomain.textContent)) dashCandDomain.textContent = "Loading...";
 
     statsContainer.innerHTML = `
-        <div class="dashboard-loading" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
+        <div class="dashboard-loading" style="text-align: center; padding: 2.5rem; color: var(--color-muted); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">
             <div class="loader" style="margin: 0 auto 0.75rem;"></div>
             Loading your dashboard data...
         </div>
@@ -253,7 +253,7 @@ export async function initializeCandidateDashboard() {
 
     if (timelineContainer) {
         timelineContainer.innerHTML = `
-            <div class="timeline-loading" style="text-align: center; padding: 2rem; color: var(--text-secondary); background: rgba(255,255,255,0.01); border-radius: 8px;">
+            <div class="timeline-loading" style="text-align: center; padding: 2rem; color: var(--color-muted); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">
                 <div class="loader" style="margin: 0 auto 0.75rem;"></div>
                 Loading analysis history...
             </div>
@@ -310,17 +310,15 @@ export async function initializeCandidateDashboard() {
             let progressTimelineHTML = "";
             if (chronologicalList.length > 0) {
                 const timelineSteps = chronologicalList.map(item => `
-                    <div style="display: flex; flex-direction: column; align-items: center; min-width: 80px; position: relative;">
-                        <span style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">V${item.version}</span>
-                        <div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 2; border: 3px solid #1e1e2e; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                    <div class="career-node">
+                        <span class="career-node-version">V${item.version}</span>
+                        <div class="career-node-circle">
                             ${item.ats_score}%
                         </div>
-                        <span style="font-size: 0.7rem; color: #94a3b8; margin-top: 0.4rem; text-align: center; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${item.label}">${item.label}</span>
+                        <span class="career-node-label" title="${item.label}">${item.label}</span>
                     </div>
                 `).join(`
-                    <div style="height: 4px; flex-grow: 1; min-width: 40px; background: rgba(255,255,255,0.08); margin-top: 24px; position: relative; z-index: 1;">
-                        <div style="position: absolute; top: -8px; left: calc(50% - 6px); color: var(--text-secondary); font-size: 0.9rem;">&#x2192;</div>
-                    </div>
+                    <div class="career-node-connector"></div>
                 `);
 
                 const oldest = chronologicalList[0];
@@ -352,15 +350,15 @@ export async function initializeCandidateDashboard() {
                     const isReliable = sameJD && sameProfile && sameEngine;
 
                     let reliabilityDetailsHTML = `
-                        <div style="font-size: 0.75rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.2rem; opacity: 0.85;">
-                            <div style="color: ${sameJD ? '#10b981' : '#ef4444'}; font-weight: 500;">
-                                ${sameJD ? '&#x2713; Same Job Description' : '&#x2717; Different Job Description'}
+                        <div style="font-size: 0.75rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem;">
+                            <div style="color: ${sameJD ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 500;">
+                                ${sameJD ? '✓ Same Job Description' : '✗ Different Job Description'}
                             </div>
-                            <div style="color: ${sameProfile ? '#10b981' : '#ef4444'}; font-weight: 500;">
-                                ${sameProfile ? '&#x2713; Same Profile' : '&#x2717; Different Profile'}
+                            <div style="color: ${sameProfile ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 500;">
+                                ${sameProfile ? '✓ Same Profile' : '✗ Different Profile'}
                             </div>
-                            <div style="color: ${sameEngine ? '#10b981' : '#ef4444'}; font-weight: 500;">
-                                ${sameEngine ? '&#x2713; Same Engine Version' : '&#x2717; Different Engine Version'}
+                            <div style="color: ${sameEngine ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 500;">
+                                ${sameEngine ? '✓ Same Engine Version' : '✗ Different Engine Version'}
                             </div>
                         </div>
                     `;
@@ -368,13 +366,17 @@ export async function initializeCandidateDashboard() {
                     if (scoreDiff > 0) {
                         progressStatsHTML = `
                             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.25rem;">
-                                <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15); padding: 0.6rem 0.9rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; color: #34d399; font-weight: bold; font-size: 0.9rem; width: fit-content;">
-                                    <span>&#x1F680; Resume Improved:</span>
-                                    <span style="font-size: 1.05rem; color: #10b981;">+${scoreDiff.toFixed(1)} points</span>
-                                    <span style="font-weight: normal; color: #a7f3d0; font-size: 0.8rem;">in ${timeText}</span>
+                                <div style="background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.6rem 0.9rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-ink); font-weight: 600; font-size: 0.875rem; width: fit-content;">
+                                    <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                        Resume Improved:
+                                    </span>
+                                    <span style="font-size: 1.05rem; font-family: var(--font-mono); color: var(--color-forest); font-weight: 700;">+${scoreDiff.toFixed(1)} points</span>
+                                    <span style="font-weight: normal; color: var(--color-muted); font-size: 0.8rem;">in ${timeText}</span>
                                 </div>
-                                <div style="font-size: 0.8rem; color: ${isReliable ? '#10b981' : '#f59e0b'}; font-weight: 600; margin-top: 0.25rem;">
-                                    Comparison Reliability: ${isReliable ? 'HIGH &#x2B50;' : 'LOW &#x26A0;'}
+                                <div style="font-size: 0.8rem; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 600; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+                                    <span>Comparison Reliability:</span>
+                                    <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.1rem 0.45rem; border-radius: 4px; background: ${isReliable ? 'rgba(30, 58, 47, 0.1)' : 'rgba(156, 75, 51, 0.1)'}; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; border: 1px solid ${isReliable ? 'rgba(30, 58, 47, 0.25)' : 'rgba(156, 75, 51, 0.25)'};">${isReliable ? 'HIGH' : 'LOW'}</span>
                                 </div>
                                 ${reliabilityDetailsHTML}
                             </div>
@@ -382,8 +384,9 @@ export async function initializeCandidateDashboard() {
                     } else {
                         progressStatsHTML = `
                             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
-                                <div style="font-size: 0.8rem; color: ${isReliable ? '#10b981' : '#f59e0b'}; font-weight: 600;">
-                                    Comparison Reliability: ${isReliable ? 'HIGH &#x2B50;' : 'LOW &#x26A0;'}
+                                <div style="font-size: 0.8rem; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
+                                    <span>Comparison Reliability:</span>
+                                    <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.1rem 0.45rem; border-radius: 4px; background: ${isReliable ? 'rgba(30, 58, 47, 0.1)' : 'rgba(156, 75, 51, 0.1)'}; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; border: 1px solid ${isReliable ? 'rgba(30, 58, 47, 0.25)' : 'rgba(156, 75, 51, 0.25)'};">${isReliable ? 'HIGH' : 'LOW'}</span>
                                 </div>
                                 ${reliabilityDetailsHTML}
                             </div>
@@ -392,12 +395,17 @@ export async function initializeCandidateDashboard() {
                 }
 
                 progressTimelineHTML = `
-                    <div class="stat-card span-two" style="grid-column: span 2; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px;">
+                    <div class="stat-card span-two" style="grid-column: span 2; background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 1.5rem; border-radius: 12px;">
                         <div class="stat-header" style="margin-bottom: 1rem;">
-                            <span class="stat-title" style="font-weight: 600; color: #fff;">&#x1F4C8; Career Progress Timeline</span>
-                            <span class="stat-icon">&#x1F525;</span>
+                            <span class="stat-title" style="font-weight: 600; color: var(--color-ink); font-size: 0.9375rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                                Career Progress Timeline
+                            </span>
+                            <span class="stat-icon" style="color: var(--color-forest); display: inline-flex;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </span>
                         </div>
-                        <div style="display: flex; align-items: center; overflow-x: auto; padding: 0.5rem 0; width: 100%; gap: 0.25rem;">
+                        <div class="career-ribbon-container">
                             ${timelineSteps}
                         </div>
                         ${progressStatsHTML}
@@ -410,7 +418,9 @@ export async function initializeCandidateDashboard() {
                     <div class="stat-card">
                         <div class="stat-header">
                             <span class="stat-title">Latest Resume Match Score</span>
-                            <span class="stat-icon">&#x1F4C8;</span>
+                            <span class="stat-icon" style="color: var(--color-forest); display: inline-flex;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            </span>
                         </div>
                         <div class="stat-value" id="cand-stat-latest-score">${stats.latest_ats_score}%</div>
                         <p class="stat-description">Most recent semantic relevance match</p>
@@ -418,7 +428,9 @@ export async function initializeCandidateDashboard() {
                     <div class="stat-card">
                         <div class="stat-header">
                             <span class="stat-title">Last Analysis Date</span>
-                            <span class="stat-icon">&#x1F4C5;</span>
+                            <span class="stat-icon" style="color: var(--color-forest); display: inline-flex;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            </span>
                         </div>
                         <div class="stat-value" style="font-size: 1.5rem; margin-top: 0.5rem;" id="cand-stat-last-date">${formattedDate}</div>
                         <p class="stat-description">Timestamp of the last run</p>
@@ -450,16 +462,16 @@ export async function initializeCandidateDashboard() {
         }
         if (statsContainer) {
             statsContainer.innerHTML = `
-                <div style="text-align: center; padding: 2rem; color: #f87171; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                <div style="text-align: center; padding: 2rem; color: var(--color-clay); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">
                     <p style="margin: 0 0 0.5rem 0; font-weight: 600;">Could not load dashboard statistics.</p>
-                    <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--text-secondary);">${err.message || "An unexpected error occurred."}</p>
+                    <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--color-muted);">${err.message || "An unexpected error occurred."}</p>
                     <button onclick="initializeCandidateDashboard()" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">Retry</button>
                 </div>
             `;
         }
         if (timelineContainer) {
             timelineContainer.innerHTML = `
-                <div style="text-align: center; padding: 2rem; color: #f87171; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                <div style="text-align: center; padding: 2rem; color: var(--color-clay); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">
                     <p style="margin: 0 0 0.5rem 0; font-weight: 600;">Could not load analysis history.</p>
                     <button onclick="initializeCandidateDashboard()" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">Retry</button>
                 </div>
@@ -474,7 +486,7 @@ function renderTimelineList(historyList) {
     if (!container) return;
 
     if (!historyList || historyList.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 2rem; background: rgba(255,255,255,0.02); border-radius: 8px;">No analysis history yet.</p>`;
+        container.innerHTML = `<p style="color: var(--color-muted); text-align: center; padding: 2rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">No analysis history yet.</p>`;
         return;
     }
 
@@ -496,32 +508,39 @@ function renderTimelineList(historyList) {
         }
 
         return `
-            <div class="glass-card timeline-card" style="margin-bottom: 1rem; padding: 1.5rem; position: relative; border-left: 4px solid ${isNewest ? '#6366f1' : 'transparent'}; background: rgba(255, 255, 255, 0.02); border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s;">
-                ${isNewest ? `<span class="newest-badge" style="position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; font-size: 0.75rem; font-weight: bold; padding: 0.25rem 0.6rem; border-radius: 12px;">Newest Version</span>` : ''}
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 250px;">
-                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <h3 style="margin: 0; font-size: 1.15rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+            <div class="glass-card timeline-card ${isNewest ? 'is-newest' : ''}">
+                ${isNewest ? `<span class="newest-badge">Newest Version</span>` : ''}
+                <div class="timeline-content-grid">
+                    <div class="timeline-main-info">
+                        <div class="timeline-title-row">
+                            <h3 class="timeline-title">
                                 <span>${item.label}</span>
-                                <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: normal;">(V${item.version})</span>
-                            </h3>                            <button onclick="renameCandidateAnalysis(${item.id}, '${item.label.replace(/'/g, "\\'")}')" class="footer-link-btn" style="background: none; border: none; font-size: 0.9rem; cursor: pointer; color: #94a3b8; padding: 0;" title="Rename Label">&#x2712;&#xFE0F;</button>
+                                <span class="timeline-version-tag">V${item.version}</span>
+                            </h3>
+                            <button onclick="renameCandidateAnalysis(${item.id}, '${item.label.replace(/'/g, "\\'")}')" class="timeline-rename-btn" title="Rename Label" aria-label="Rename Label">✎</button>
                         </div>
-                        <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <span>&#x1F4C1; ${item.original_filename}</span>
-                            <span>&bull;</span>
-                            <span>&#x1F4C5; ${uploadDate}</span>
+                        <p class="timeline-meta-text">
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                ${item.original_filename}
+                            </span>
+                            <span>•</span>
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                ${uploadDate}
+                            </span>
                         </p>
-                        <p style="margin: 0; font-size: 0.85rem; color: #94a3b8; background: rgba(0,0,0,0.15); padding: 0.5rem; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
-                            <strong>JD:</strong> ${item.job_description_title} &#x2014; ${item.job_description_summary}
+                        <p class="timeline-jd-summary">
+                            <strong>Target JD:</strong> ${item.job_description_title} — ${item.job_description_summary}
                         </p>
                     </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem; min-width: 150px;">
-                        <span class="score-badge ${scoreClass}" style="font-size: 1.1rem; font-weight: bold; padding: 0.4rem 0.8rem;">${item.ats_score}% Match</span>
-                        <div style="display: flex; gap: 0.5rem;">
+                    <div class="timeline-actions-group">
+                        <span class="score-badge ${scoreClass}" style="font-size: 1.05rem; font-family: var(--font-mono); font-weight: 700; padding: 0.4rem 0.8rem;">${item.ats_score}% Match</span>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                             <button onclick="viewCandidateAnalysis(${item.id})" class="glow-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
                                 <span>View Analysis</span>
                             </button>
-                            <button onclick="deleteCandidateAnalysis(${item.id})" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; border-color: #ef4444; color: #ef4444;">
+                            <button onclick="deleteCandidateAnalysis(${item.id})" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; border-color: var(--color-rule-2); color: var(--color-clay);">
                                 <span>Delete</span>
                             </button>
                         </div>
@@ -702,19 +721,19 @@ window.viewCandidateAnalysis = async (resumeId) => {
 
 window.toggleRecCard = (headerEl) => {
     const item = headerEl.closest('.rec-card');
-    const content = item.querySelector('.rec-content');
+    const content = item.querySelector('.rec-content, .rec-card-content');
     const chevron = item.querySelector('.rec-chevron');
     
     if (content.style.display === 'none' || content.classList.contains('hidden')) {
         content.style.display = 'block';
         content.classList.remove('hidden');
         chevron.style.transform = 'rotate(90deg)';
-        headerEl.style.background = 'rgba(255, 255, 255, 0.03)';
+        headerEl.style.background = 'var(--color-paper-3)';
     } else {
         content.style.display = 'none';
         content.classList.add('hidden');
         chevron.style.transform = 'rotate(0deg)';
-        headerEl.style.background = 'transparent';
+        headerEl.style.background = 'var(--color-paper-2)';
     }
 };
 
@@ -736,8 +755,8 @@ window.updateRecommendationStatus = async (resumeId, recId, status) => {
 export function renderRecommendations(recsData, resumeId = null) {
     if (!recsData || !recsData.list || recsData.list.length === 0) {
         return `
-            <div style="background: rgba(255, 255, 255, 0.02); border-left: 4px solid #ef4444; padding: 1rem; border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.95rem; color: #fca5a5;">This analysis was created before Resume Improvement Recommendations were available.</p>
+            <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-left: 4px solid var(--color-clay); padding: 1rem 1.25rem; border-radius: 8px;">
+                <p style="margin: 0; font-size: 0.95rem; color: var(--color-clay); font-weight: 500;">This analysis was created before Resume Improvement Recommendations were available.</p>
             </div>
         `;
     }
@@ -745,52 +764,77 @@ export function renderRecommendations(recsData, resumeId = null) {
     let html = `<div style="display: flex; flex-direction: column; gap: 0.75rem;">`;
 
     recsData.list.forEach((rec) => {
-        let priColor = "#ef4444"; // red
-        if (rec.priority === "HIGH") priColor = "#f59e0b"; // orange
-        else if (rec.priority === "MEDIUM") priColor = "#eab308"; // yellow
-        else if (rec.priority === "LOW") priColor = "#3b82f6"; // blue
+        let priBg = "var(--color-clay)";
+        let priColor = "#FFFFFF";
+        if (rec.priority === "HIGH") {
+            priBg = "var(--color-clay)";
+            priColor = "#FFFFFF";
+        } else if (rec.priority === "MEDIUM") {
+            priBg = "var(--color-ochre)";
+            priColor = "#FFFFFF";
+        } else if (rec.priority === "LOW") {
+            priBg = "var(--color-paper-3)";
+            priColor = "var(--color-ink-2)";
+        }
         
-        let statusColor = "#3b82f6"; // blue for active
+        let statusBg = "var(--color-paper-3)";
+        let statusColor = "var(--color-ink-2)";
         const statusUpper = (rec.status || "ACTIVE").toUpperCase();
-        if (statusUpper === "COMPLETED") statusColor = "#10b981"; // green
-        else if (statusUpper === "DISMISSED") statusColor = "#6b7280"; // gray
-        else if (statusUpper === "EXPIRED") statusColor = "#ef4444"; // red
+        if (statusUpper === "COMPLETED") {
+            statusBg = "rgba(30, 58, 47, 0.12)";
+            statusColor = "var(--color-forest)";
+        } else if (statusUpper === "DISMISSED") {
+            statusBg = "var(--color-paper-3)";
+            statusColor = "var(--color-muted)";
+        } else if (statusUpper === "EXPIRED") {
+            statusBg = "rgba(156, 75, 51, 0.12)";
+            statusColor = "var(--color-clay)";
+        }
 
-        const priBadge = `<span style="background: ${priColor}15; color: ${priColor}; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase;">${rec.priority}</span>`;
-        const statusBadge = `<span style="background: ${statusColor}15; color: ${statusColor}; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase; margin-right: 0.5rem;">${statusUpper}</span>`;
-        const gainBadge = `<span style="background: rgba(16, 185, 129, 0.1); color: #10b981; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px;">+${rec.estimated_score_gain.toFixed(1)} ATS pts</span>`;
+        const priBadge = `<span style="background: ${priBg}; color: ${priColor}; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase; font-family: var(--font-mono);">${rec.priority}</span>`;
+        const statusBadge = `<span style="background: ${statusBg}; color: ${statusColor}; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase; margin-right: 0.5rem; font-family: var(--font-mono); border: 1px solid var(--color-rule);">${statusUpper}</span>`;
+        const gainBadge = `<span style="background: rgba(30, 58, 47, 0.1); color: var(--color-forest); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: var(--font-mono); border: 1px solid rgba(30, 58, 47, 0.2);">+${rec.estimated_score_gain.toFixed(1)} ATS pts</span>`;
 
         html += `
-            <div class="rec-card" style="border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.01);">
-                <div class="rec-header" onclick="toggleRecCard(this)" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; cursor: pointer; transition: background 0.2s;">
+            <div class="rec-card">
+                <div class="rec-card-header rec-header" onclick="toggleRecCard(this)">
                     <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
-                        <span class="rec-chevron" style="font-size: 0.75rem; color: var(--text-secondary); transition: transform 0.2s; display: inline-block;">&#x25B6;</span>
-                        <strong style="color: #fff; font-size: 0.95rem;">${rec.title}</strong>
+                        <span class="rec-chevron" style="font-size: 0.75rem; color: var(--color-muted); transition: transform 0.2s; display: inline-block;">▶</span>
+                        <strong style="color: var(--color-ink); font-size: 0.95rem; font-weight: 600;">${rec.title}</strong>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                         ${statusBadge}
                         ${priBadge}
                         ${gainBadge}
                     </div>
                 </div>
                 
-                <div class="rec-content hidden" style="padding: 1rem; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.15); display: none;">
-                    <div style="margin-bottom: 0.75rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #cbd5e1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x1F4A1; Actionable Advice</h5>
-                        <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #e2e8f0;">${rec.description}</p>
+                <div class="rec-card-content rec-content hidden" style="display: none;">
+                    <div style="margin-bottom: 0.85rem;">
+                        <h5 style="margin: 0 0 0.35rem 0; font-size: 0.75rem; color: var(--color-forest); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.4rem;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                            Actionable Advice
+                        </h5>
+                        <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink);">${rec.description}</p>
                     </div>
                     
-                    <div style="margin-bottom: 0.75rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x2753; Why We Recommend This</h5>
-                        <p style="margin: 0; font-size: 0.85rem; line-height: 1.4; color: var(--text-secondary);">${rec.reason}</p>
+                    <div style="margin-bottom: 0.85rem;">
+                        <h5 style="margin: 0 0 0.35rem 0; font-size: 0.75rem; color: var(--color-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.4rem;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            Why We Recommend This
+                        </h5>
+                        <p style="margin: 0; font-size: 0.85rem; line-height: 1.45; color: var(--color-ink-2);">${rec.reason}</p>
                     </div>
         `;
 
         if (rec.related_skills && rec.related_skills.length > 0) {
-            const skillTags = rec.related_skills.map(s => `<span class="skill-tag" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); color: #a5b4fc; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 4px; display: inline-block; margin-right: 0.25rem; margin-top: 0.25rem;">${s}</span>`).join('');
+            const skillTags = rec.related_skills.map(s => `<span class="skill-tag" style="background: var(--color-paper-3); border: 1px solid var(--color-rule-2); color: var(--color-ink); font-size: 0.75rem; padding: 0.15rem 0.5rem; border-radius: 4px; display: inline-block; margin-right: 0.3rem; margin-top: 0.3rem;">${s}</span>`).join('');
             html += `
-                    <div style="margin-top: 0.5rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #6366f1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x1F3F7;&#xFE0F; Related Skill(s)</h5>
+                    <div style="margin-top: 0.75rem;">
+                        <h5 style="margin: 0 0 0.35rem 0; font-size: 0.75rem; color: var(--color-forest); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.4rem;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                            Related Skill(s)
+                        </h5>
                         <div style="display: flex; flex-wrap: wrap;">${skillTags}</div>
                     </div>
             `;
@@ -798,20 +842,20 @@ export function renderRecommendations(recsData, resumeId = null) {
 
         if (resumeId && statusUpper === "ACTIVE") {
             html += `
-                <div style="display: flex; gap: 0.5rem; margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
-                    <button onclick="event.stopPropagation(); updateRecommendationStatus(${resumeId}, '${rec.id}', 'COMPLETED')" class="glow-btn" style="font-size: 0.8rem; padding: 0.35rem 0.75rem; background: linear-gradient(135deg, #10b981, #059669); border: none; color: #fff; cursor: pointer;">
-                        <span>&#x2713; Mark Completed</span>
+                <div style="display: flex; gap: 0.6rem; margin-top: 1rem; border-top: 1px solid var(--color-rule); padding-top: 1rem;">
+                    <button onclick="event.stopPropagation(); updateRecommendationStatus(${resumeId}, '${rec.id}', 'COMPLETED')" class="glow-btn" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; background: var(--color-forest); border: none; color: #FFFFFF; cursor: pointer; border-radius: 6px; font-weight: 600;">
+                        <span>✓ Mark Completed</span>
                     </button>
-                    <button onclick="event.stopPropagation(); updateRecommendationStatus(${resumeId}, '${rec.id}', 'DISMISSED')" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem; border-color: rgba(255,255,255,0.2); color: #ccc; cursor: pointer;">
-                        <span>&#x2715; Dismiss</span>
+                    <button onclick="event.stopPropagation(); updateRecommendationStatus(${resumeId}, '${rec.id}', 'DISMISSED')" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; border-color: var(--color-rule-2); color: var(--color-muted); cursor: pointer; border-radius: 6px;">
+                        <span>✕ Dismiss</span>
                     </button>
                 </div>
             `;
         } else if (statusUpper !== "ACTIVE") {
             const dateStr = rec.resolved_at ? new Date(rec.resolved_at).toLocaleDateString() : '';
             html += `
-                <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
-                    <span>Status: <strong>${statusUpper}</strong></span>
+                <div style="margin-top: 1rem; border-top: 1px solid var(--color-rule); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--color-muted);">
+                    <span>Status: <strong style="color: var(--color-ink);">${statusUpper}</strong></span>
                     ${dateStr ? `<span>Resolved on: ${dateStr}</span>` : ''}
                 </div>
             `;
@@ -836,12 +880,12 @@ window.toggleXaiAccordion = (headerEl) => {
         content.style.display = 'block';
         content.classList.remove('hidden');
         chevron.style.transform = 'rotate(90deg)';
-        headerEl.style.background = 'rgba(255, 255, 255, 0.03)';
+        headerEl.style.background = 'var(--color-paper-3)';
     } else {
         content.style.display = 'none';
         content.classList.add('hidden');
         chevron.style.transform = 'rotate(0deg)';
-        headerEl.style.background = 'transparent';
+        headerEl.style.background = 'var(--color-paper-2)';
     }
 };
 
@@ -850,12 +894,14 @@ window.toggleXaiLevel = (level) => {
     summaryBtns.forEach(btn => {
         if (btn.getAttribute('onclick').includes(level)) {
             btn.classList.add('active');
-            btn.style.background = '#6366f1';
-            btn.style.color = '#fff';
+            btn.style.background = 'var(--color-forest)';
+            btn.style.color = '#FFFFFF';
+            btn.style.borderColor = 'transparent';
         } else {
             btn.classList.remove('active');
-            btn.style.background = 'rgba(255,255,255,0.05)';
-            btn.style.color = '#ccc';
+            btn.style.background = 'var(--color-paper-3)';
+            btn.style.color = 'var(--color-ink-2)';
+            btn.style.border = '1px solid var(--color-rule-2)';
         }
     });
 
@@ -880,8 +926,8 @@ window.toggleXaiLevel = (level) => {
 export function renderXaiContent(xaiData) {
     if (!xaiData || !xaiData.enabled) {
         return `
-            <div style="background: rgba(255, 255, 255, 0.02); border-left: 4px solid #ef4444; padding: 1rem; border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.95rem; color: #fca5a5;">This analysis was created before Explainable Scoring was available.</p>
+            <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-left: 4px solid var(--color-clay); padding: 1rem 1.25rem; border-radius: 8px;">
+                <p style="margin: 0; font-size: 0.95rem; color: var(--color-clay); font-weight: 500;">This analysis was created before Explainable Scoring was available.</p>
             </div>
         `;
     }
@@ -896,23 +942,27 @@ export function renderXaiContent(xaiData) {
     let statusHeaderHTML = "";
     if (isAiSuccess) {
         statusHeaderHTML = `
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); padding: 0.6rem 1rem; border-radius: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.65rem 1rem; border-radius: 8px;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="font-size: 1rem;">✨</span>
-                    <strong style="color: #a5b4fc; font-size: 0.85rem;">Grounded AI Insights (Gemini${xaiData.model ? ` • ${xaiData.model}` : ''})</strong>
+                    <span style="color: var(--color-forest); display: inline-flex;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                    </span>
+                    <strong style="color: var(--color-forest); font-size: 0.85rem;">Grounded AI Insights (Gemini${xaiData.model ? ` • ${xaiData.model}` : ''})</strong>
                 </div>
-                <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; text-transform: uppercase;">Active</span>
+                <span style="font-size: 0.75rem; background: rgba(30, 58, 47, 0.1); color: var(--color-forest); font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase; font-family: var(--font-mono);">Active</span>
             </div>
         `;
     } else {
         const fallbackMsg = xaiData.status_message || "AI-generated insights are temporarily unavailable. Displaying deterministic keyword and experience matching.";
         statusHeaderHTML = `
-            <div style="margin-bottom: 1rem; background: rgba(245, 158, 11, 0.08); border-left: 4px solid #f59e0b; padding: 0.75rem 1rem; border-radius: 8px;">
+            <div style="margin-bottom: 1rem; background: var(--color-paper-3); border-left: 4px solid var(--color-ochre); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--color-rule); border-left-width: 4px; border-left-color: var(--color-ochre);">
                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-                    <span style="font-size: 0.95rem;">⚠️</span>
-                    <strong style="color: #fbbf24; font-size: 0.85rem;">Deterministic Matching (Rule-Based Fallback)</strong>
+                    <span style="color: var(--color-ochre); display: inline-flex;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </span>
+                    <strong style="color: var(--color-ochre); font-size: 0.85rem;">Deterministic Matching (Rule-Based Fallback)</strong>
                 </div>
-                <p style="margin: 0; font-size: 0.8rem; color: #cbd5e1; line-height: 1.4;">${fallbackMsg}</p>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--color-ink-2); line-height: 1.4;">${fallbackMsg}</p>
             </div>
         `;
     }
@@ -921,32 +971,32 @@ export function renderXaiContent(xaiData) {
     let strengthsGapsHTML = "";
     if (strengths.length > 0 || skillGaps.length > 0) {
         const strengthsList = strengths.map(s => `
-            <li style="margin-bottom: 0.35rem; display: flex; align-items: flex-start; gap: 0.4rem;">
-                <span style="color: #10b981; font-weight: bold;">&#x2713;</span>
-                <span style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.4;">${s}</span>
+            <li style="margin-bottom: 0.4rem; display: flex; align-items: flex-start; gap: 0.5rem;">
+                <span style="color: var(--color-forest); font-weight: bold;">✓</span>
+                <span style="color: var(--color-ink); font-size: 0.85rem; line-height: 1.4;">${s}</span>
             </li>
-        `).join('') || '<li style="color: #94a3b8; font-size: 0.85rem;">None identified.</li>';
+        `).join('') || '<li style="color: var(--color-muted); font-size: 0.85rem;">None identified.</li>';
 
         const gapsList = skillGaps.map(g => `
-            <li style="margin-bottom: 0.35rem; display: flex; align-items: flex-start; gap: 0.4rem;">
-                <span style="color: #ef4444; font-weight: bold;">&#x2717;</span>
-                <span style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.4;">${g}</span>
+            <li style="margin-bottom: 0.4rem; display: flex; align-items: flex-start; gap: 0.5rem;">
+                <span style="color: var(--color-clay); font-weight: bold;">✗</span>
+                <span style="color: var(--color-ink); font-size: 0.85rem; line-height: 1.4;">${g}</span>
             </li>
-        `).join('') || '<li style="color: #94a3b8; font-size: 0.85rem;">None identified.</li>';
+        `).join('') || '<li style="color: var(--color-muted); font-size: 0.85rem;">None identified.</li>';
 
         strengthsGapsHTML = `
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 8px; padding: 1rem;">
-                    <h5 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #34d399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
-                        <span>&#x2705;</span> Key Strengths
+                <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-top: 3px solid var(--color-forest); border-radius: 8px; padding: 1.15rem;">
+                    <h5 style="margin: 0 0 0.6rem 0; font-size: 0.8125rem; color: var(--color-forest); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono);">
+                        <span style="font-weight: 700;">✓</span> Key Strengths
                     </h5>
-                    <ul style="margin: 0; padding-left: 0.5rem; list-style: none;">${strengthsList}</ul>
+                    <ul style="margin: 0; padding-left: 0.25rem; list-style: none;">${strengthsList}</ul>
                 </div>
-                <div style="background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 8px; padding: 1rem;">
-                    <h5 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #f87171; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
-                        <span>&#x26A0;&#xFE0F;</span> Skill Gaps &amp; Missing Qualifications
+                <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-top: 3px solid var(--color-clay); border-radius: 8px; padding: 1.15rem;">
+                    <h5 style="margin: 0 0 0.6rem 0; font-size: 0.8125rem; color: var(--color-clay); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono);">
+                        <span style="font-weight: 700;">✗</span> Skill Gaps &amp; Missing Qualifications
                     </h5>
-                    <ul style="margin: 0; padding-left: 0.5rem; list-style: none;">${gapsList}</ul>
+                    <ul style="margin: 0; padding-left: 0.25rem; list-style: none;">${gapsList}</ul>
                 </div>
             </div>
         `;
@@ -955,17 +1005,20 @@ export function renderXaiContent(xaiData) {
     let html = `
         ${statusHeaderHTML}
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: rgba(255,255,255,0.02); padding: 0.5rem 1rem; border-radius: 8px;">
-            <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Explanation Level:</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.5rem 1rem; border-radius: 8px;">
+            <span style="font-size: 0.85rem; color: var(--color-ink-2); font-weight: 600;">Explanation Level:</span>
             <div style="display: flex; gap: 0.5rem;">
-                <button class="xai-level-btn active" onclick="toggleXaiLevel('summary')" style="font-size: 0.8rem; padding: 0.25rem 0.6rem; border-radius: 4px; background: #6366f1; border: none; color: #fff; cursor: pointer;">Summary</button>
-                <button class="xai-level-btn" onclick="toggleXaiLevel('detailed')" style="font-size: 0.8rem; padding: 0.25rem 0.6rem; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc; cursor: pointer;">Detailed</button>
+                <button class="xai-level-btn active" onclick="toggleXaiLevel('summary')" style="font-size: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 6px; background: var(--color-forest); border: none; color: #FFFFFF; font-weight: 600; cursor: pointer;">Summary</button>
+                <button class="xai-level-btn" onclick="toggleXaiLevel('detailed')" style="font-size: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 6px; background: var(--color-paper-3); border: 1px solid var(--color-rule-2); color: var(--color-ink-2); cursor: pointer;">Detailed</button>
             </div>
         </div>
 
-        <div style="background: rgba(99, 102, 241, 0.05); border-left: 4px solid #6366f1; padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
-            <h4 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: #fff;">&#x1F4A1; Overall Alignment Summary</h4>
-            <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: #cbd5e1;">${xaiData.overall_summary}</p>
+        <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-left: 4px solid var(--color-forest); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <h4 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; font-family: var(--font-display); color: var(--color-ink); font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                Overall Alignment Summary
+            </h4>
+            <p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; color: var(--color-ink-2);">${xaiData.overall_summary}</p>
         </div>
 
         ${strengthsGapsHTML}
@@ -982,58 +1035,73 @@ export function renderXaiContent(xaiData) {
         const summaryExpl = compExpl.summary || { why_awarded: "No summary explanation.", why_deducted: "" };
         const detailedExpl = compExpl.detailed || { why_awarded: "No detailed explanation.", why_deducted: "" };
         
-        let statusColor = "#ef4444";
-        if (comp.status === "met") statusColor = "#10b981";
-        else if (comp.status === "partially_met") statusColor = "#f59e0b";
-        else if (comp.status === "exceeded") statusColor = "#3b82f6";
+        let statusBg = "var(--color-paper-3)";
+        let statusColor = "var(--color-clay)";
+        if (comp.status === "met") {
+            statusBg = "rgba(30, 58, 47, 0.1)";
+            statusColor = "var(--color-forest)";
+        } else if (comp.status === "partially_met") {
+            statusBg = "rgba(217, 119, 6, 0.1)";
+            statusColor = "var(--color-ochre)";
+        } else if (comp.status === "exceeded") {
+            statusBg = "rgba(30, 58, 47, 0.15)";
+            statusColor = "var(--color-forest)";
+        }
 
-        const statusBadge = `<span style="background: ${statusColor}15; color: ${statusColor}; font-size: 0.75rem; font-weight: bold; padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase;">${comp.status.replace("_", " ")}</span>`;
+        const statusBadge = `<span style="background: ${statusBg}; color: ${statusColor}; font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; text-transform: uppercase; font-family: var(--font-mono);">${comp.status.replace("_", " ")}</span>`;
 
         html += `
-            <div class="xai-accordion-item" style="border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.01);">
-                <div class="xai-accordion-header" onclick="toggleXaiAccordion(this)" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; cursor: pointer; transition: background 0.2s;">
+            <div class="xai-accordion-item" style="border: 1px solid var(--color-rule); border-radius: 8px; overflow: hidden; background: var(--color-paper-2); margin-bottom: 0.75rem;">
+                <div class="xai-accordion-header" onclick="toggleXaiAccordion(this)" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; cursor: pointer; transition: background 0.15s ease; user-select: none;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <span class="xai-chevron" style="font-size: 0.75rem; color: var(--text-secondary); transition: transform 0.2s; display: inline-block;">&#x25B6;</span>
-                        <strong style="color: #fff; font-size: 0.95rem;">${comp.name}</strong>
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">(${comp.weight * 100}% weight)</span>
+                        <span class="xai-chevron" style="font-size: 0.75rem; color: var(--color-muted); transition: transform 0.2s; display: inline-block;">▶</span>
+                        <strong style="color: var(--color-ink); font-size: 0.95rem; font-weight: 600;">${comp.name}</strong>
+                        <span style="font-size: 0.8125rem; color: var(--color-muted); font-family: var(--font-mono);">(${comp.weight * 100}% weight)</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         ${statusBadge}
-                        <strong style="color: #fff; font-size: 1rem;">${Math.round(comp.raw_score)}%</strong>
+                        <strong style="color: var(--color-ink); font-size: 1rem; font-family: var(--font-mono);">${Math.round(comp.raw_score)}%</strong>
                     </div>
                 </div>
                 
-                <div class="xai-accordion-content hidden" style="padding: 1rem; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.15); display: none;">
-                    <div style="margin-bottom: 0.75rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #10b981; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x2705; Points Awarded</h5>
-                        <p class="xai-text-awarded-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #e2e8f0;">${summaryExpl.why_awarded}</p>
-                        <p class="xai-text-awarded-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #e2e8f0; display: none;">${detailedExpl.why_awarded}</p>
+                <div class="xai-accordion-content hidden" style="padding: 1.25rem; border-top: 1px solid var(--color-rule); background: var(--color-paper); display: none;">
+                    <div style="margin-bottom: 0.85rem;">
+                        <h5 style="margin: 0 0 0.35rem 0; font-size: 0.75rem; color: var(--color-forest); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.35rem;">
+                            <span>✓</span> Points Awarded
+                        </h5>
+                        <p class="xai-text-awarded-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink);">${summaryExpl.why_awarded}</p>
+                        <p class="xai-text-awarded-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink); display: none;">${detailedExpl.why_awarded}</p>
                     </div>
                     
                     <div style="margin-bottom: 1rem;">
-                        <h5 style="margin: 0 0 0.25rem 0; font-size: 0.8rem; color: #ef4444; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x274C; Deductions &amp; Gaps</h5>
-                        <p class="xai-text-deducted-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">${summaryExpl.why_deducted || 'No deductions applied.'}</p>
-                        <p class="xai-text-deducted-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; display: none;">${detailedExpl.why_deducted || 'No deductions applied.'}</p>
+                        <h5 style="margin: 0 0 0.35rem 0; font-size: 0.75rem; color: var(--color-clay); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.35rem;">
+                            <span>✗</span> Deductions &amp; Gaps
+                        </h5>
+                        <p class="xai-text-deducted-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink-2);">${summaryExpl.why_deducted || 'No deductions applied.'}</p>
+                        <p class="xai-text-deducted-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink-2); display: none;">${detailedExpl.why_deducted || 'No deductions applied.'}</p>
                     </div>
 
                     <div>
-                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.8rem; color: #6366f1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">&#x1F4C2; Supporting Evidence</h5>
+                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.75rem; color: var(--color-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.4rem;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                            Supporting Evidence
+                        </h5>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                             ${comp.evidence.map(ev => {
-                                let impColor = "#10b981";
-                                if (ev.importance === "medium") impColor = "#f59e0b";
-                                else if (ev.importance === "high") impColor = "#ef4444";
+                                let impColor = "var(--color-forest)";
+                                if (ev.importance === "medium") impColor = "var(--color-ochre)";
+                                else if (ev.importance === "high") impColor = "var(--color-clay)";
                                 
                                 return `
-                                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); padding: 0.75rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                    <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                            <strong style="font-size: 0.85rem; color: #fff;">${ev.title}</strong>
-                                            <span style="font-size: 0.7rem; color: ${impColor}; font-weight: bold; background: ${impColor}10; padding: 0.1rem 0.3rem; border-radius: 3px; text-transform: uppercase;">${ev.importance}</span>
+                                            <strong style="font-size: 0.85rem; color: var(--color-ink); font-weight: 600;">${ev.title}</strong>
+                                            <span style="font-size: 0.7rem; color: ${impColor}; font-weight: bold; background: var(--color-paper-3); padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase; font-family: var(--font-mono);">${ev.importance}</span>
                                         </div>
-                                        <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">${ev.description}</p>
+                                        <p style="margin: 0; font-size: 0.8125rem; color: var(--color-ink-2); line-height: 1.4;">${ev.description}</p>
                                     </div>
                                 `;
-                            }).join('') || '<p style="margin:0; font-size:0.8rem; color:#666;">No evidence items identified.</p>'}
+                            }).join('') || '<p style="margin:0; font-size:0.8rem; color:var(--color-muted);">No evidence items identified.</p>'}
                         </div>
                     </div>
                 </div>
@@ -1217,9 +1285,9 @@ function showCandidateProfileFeedback(message, isSuccess) {
 
     feedbackEl.className = '';
     if (isSuccess) {
-        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80;";
+        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(30, 58, 47, 0.08); border: 1px solid rgba(30, 58, 47, 0.2); color: var(--color-forest);";
     } else {
-        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171;";
+        feedbackEl.style.cssText = "margin-bottom: 1.5rem; padding: 0.85rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; background: rgba(156, 75, 51, 0.08); border: 1px solid rgba(156, 75, 51, 0.2); color: var(--color-clay);";
     }
     feedbackEl.textContent = message;
 }
@@ -1230,68 +1298,80 @@ function renderCandidateAnalysisResults(cand) {
     if (!resultsDetails || !resultsContainer) return;
 
     let scoreClass = 'low-score';
+    let scoreInterpretation = "Relevance is low. Review missing skills and recommended improvements below to align with target role requirements.";
     if (cand.similarity_score >= 70) {
         scoreClass = 'high-score';
+        scoreInterpretation = "Strong semantic relevance. Your qualifications strongly match core job requirements.";
     } else if (cand.similarity_score >= 40) {
         scoreClass = 'med-score';
+        scoreInterpretation = "Moderate alignment. Core requirements partially met; targeted resume refinements can boost overall suitability.";
     }
 
-    const matchedTags = (cand.matched_skills || []).map(s => `<span class="skill-tag matched">${s}</span>`).join('') || '<span style="color:#666">None</span>';
-    const missingTags = (cand.missing_skills || []).map(s => `<span class="skill-tag missing">${s}</span>`).join('') || '<span style="color:#666">None</span>';
-    const extractedTags = (cand.matched_skills || []).concat(cand.missing_skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:#666">None</span>';
+    const matchedTags = (cand.matched_skills || []).map(s => `<span class="skill-tag matched">${s}</span>`).join('') || '<span style="color:var(--color-muted)">None</span>';
+    const missingTags = (cand.missing_skills || []).map(s => `<span class="skill-tag missing">${s}</span>`).join('') || '<span style="color:var(--color-muted)">None</span>';
+    const extractedTags = (cand.matched_skills || []).concat(cand.missing_skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:var(--color-muted)">None</span>';
 
     const xaiData = cand.xai || cand.analysis_metadata?.xai;
     const recsData = cand.recommendations || cand.analysis_metadata?.recommendations;
     const resumeId = cand.resume_id || cand.id;
 
     resultsDetails.innerHTML = `
-        <div class="qv-profile-summary" style="display: flex; align-items: center; gap: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem;">
-            <div class="qv-avatar" style="font-size: 3rem; background: rgba(255,255,255,0.02); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&#x1F4C4;</div>
-            <div class="qv-meta">
-                <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem 0;">${cand.name || 'Candidate Resume'}</h2>
-                <p class="score-badge ${scoreClass}" style="font-size: 1.25rem; font-weight: bold; margin: 0;">${cand.similarity_score}% Match</p>
+        <div class="qv-profile-summary" style="display: flex; align-items: center; gap: 1.5rem; border-bottom: 1px solid var(--color-rule); padding-bottom: 1.5rem; flex-wrap: wrap;">
+            <div class="qv-avatar" style="background: var(--color-paper-3); border: 1px solid var(--color-rule); width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--color-forest);">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
             </div>
+            <div class="qv-meta" style="flex: 1; min-width: 220px;">
+                <h2 style="font-size: 1.6rem; font-family: var(--font-display); font-weight: 700; color: var(--color-ink); margin: 0 0 0.35rem 0;">${cand.name || 'Candidate Resume'}</h2>
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <span class="score-badge ${scoreClass}" style="font-size: 1.15rem; font-family: var(--font-mono); font-weight: 700; padding: 0.35rem 0.85rem;">${cand.similarity_score}% Match</span>
+                    <span style="font-size: 0.8125rem; color: var(--color-muted);">Evaluated via Semantic Analysis Engine</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="cand-score-callout">
+            <strong style="color: var(--color-ink);">Analysis Insight:</strong> ${scoreInterpretation}
         </div>
 
         <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
             <div>
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">Resume Information</h4>
+                <h4 style="font-size: 0.8125rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-rule); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">Resume Information</h4>
                 <div class="profile-info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div class="info-field">
-                        <span class="info-label" style="font-size: 0.75rem; color: #94a3b8;">Education</span>
-                        <span class="info-value" style="color: #fff; font-weight: 500;">${cand.education || 'N/A'}</span>
+                    <div class="info-field" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.85rem 1rem; border-radius: 8px;">
+                        <span class="info-label" style="font-size: 0.75rem; color: var(--color-muted); font-family: var(--font-mono); display: block; margin-bottom: 0.25rem;">Education</span>
+                        <span class="info-value" style="color: var(--color-ink); font-weight: 600; font-size: 0.95rem;">${cand.education || 'N/A'}</span>
                     </div>
-                    <div class="info-field">
-                        <span class="info-label" style="font-size: 0.75rem; color: #94a3b8;">Experience</span>
-                        <span class="info-value" style="color: #fff; font-weight: 500;">${cand.experience ? `${cand.experience} Years` : '0 Years'}</span>
+                    <div class="info-field" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.85rem 1rem; border-radius: 8px;">
+                        <span class="info-label" style="font-size: 0.75rem; color: var(--color-muted); font-family: var(--font-mono); display: block; margin-bottom: 0.25rem;">Experience</span>
+                        <span class="info-value" style="color: var(--color-ink); font-weight: 600; font-size: 0.95rem;">${cand.experience ? `${cand.experience} Years` : '0 Years'}</span>
                     </div>
-                    <div class="info-field">
-                        <span class="info-label" style="font-size: 0.75rem; color: #94a3b8;">Projects Match</span>
-                        <span class="info-value" style="color: #fff; font-weight: 500;">${cand.projects ? `${cand.projects} out of 3 projects` : '0 projects'}</span>
+                    <div class="info-field" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.85rem 1rem; border-radius: 8px;">
+                        <span class="info-label" style="font-size: 0.75rem; color: var(--color-muted); font-family: var(--font-mono); display: block; margin-bottom: 0.25rem;">Projects Match</span>
+                        <span class="info-value" style="color: var(--color-ink); font-weight: 600; font-size: 0.95rem;">${cand.projects ? `${cand.projects} out of 3 projects` : '0 projects'}</span>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">Skills Overview</h4>
+                <h4 style="font-size: 0.8125rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-rule); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">Skills Overview</h4>
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <div>
-                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.8rem; color: #cbd5e1; font-weight: 600;">Extracted Skills</h5>
-                        <div class="skills-tags-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${extractedTags}</div>
+                        <h5 style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: var(--color-ink); font-weight: 600;">Extracted Skills</h5>
+                        <div class="skills-tags-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">${extractedTags}</div>
                     </div>
                     <div>
-                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.8rem; color: #cbd5e1; font-weight: 600;">&#x2705; Matched Skills</h5>
-                        <div class="skills-tags-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${matchedTags}</div>
+                        <h5 style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: var(--color-forest); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;"><span style="font-weight: 700;">✓</span> Matched Skills</h5>
+                        <div class="skills-tags-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">${matchedTags}</div>
                     </div>
                     <div>
-                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.8rem; color: #cbd5e1; font-weight: 600;">&#x274C; Missing Skills</h5>
-                        <div class="skills-tags-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${missingTags}</div>
+                        <h5 style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: var(--color-clay); font-weight: 600; display: flex; align-items: center; gap: 0.35rem;"><span style="font-weight: 700;">✗</span> Missing Skills</h5>
+                        <div class="skills-tags-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">${missingTags}</div>
                     </div>
                 </div>
             </div>
 
             <div id="cand-results-xai-section">
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+                <h4 style="font-size: 0.8125rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-rule); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
                     Explainable AI (XAI) Breakdown
                 </h4>
                 <div id="cand-inline-xai-container">
@@ -1300,7 +1380,7 @@ function renderCandidateAnalysisResults(cand) {
             </div>
 
             <div id="cand-results-recs-section">
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+                <h4 style="font-size: 0.8125rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-rule); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
                     Resume Improvement Recommendations
                 </h4>
                 <div id="cand-inline-recs-container">
@@ -1308,11 +1388,17 @@ function renderCandidateAnalysisResults(cand) {
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: flex; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--color-rule);">
                 <a href="#/candidate/dashboard" class="glow-btn" style="text-decoration: none; font-size: 0.85rem; padding: 0.5rem 1.25rem;">
-                    <span>View in Dashboard History &#x2192;</span>
+                    <span>View in Dashboard History →</span>
                 </a>
             </div>
+        </div>
+    `;
+
+    resultsContainer.classList.remove('hidden');
+    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+}
         </div>
     `;
 
