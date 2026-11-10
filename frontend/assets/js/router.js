@@ -16,7 +16,7 @@ import {
     showForgotPasswordView,
     showResetPasswordView,
     resetAuthModalToTabs
-} from './pages/login.js';
+} from './pages/login.js?v=19';
 
 /**
  * Handles recruiter workspace routing sub-views.

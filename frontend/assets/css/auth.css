@@ -1,17 +1,24 @@
-/* Hallmark · shape: Conversational FAQ · genre: modern-minimal · theme: brand · redesign: full
- * paper: oklch(14% 0.02 260) · accent: oklch(68% 0.17 160) · display: Outfit · body: Outfit · hero: Counter · nav: slab · footer: colophon block · signature: live semantic concept match breakdown
- * axes: dark/grotesk-sans/chromatic-emerald · posture: Counter · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: none, brand tokens fully calibrated and contrast secured */
+/* Nipun Editorial Intelligence — Authentication & Modal Experience
+ * Design Direction: Editorial Intelligence (Warm Paper #FBF9F5, White #FFFFFF, Ivory #F3EFE6)
+ * Pitch Ink #1A1917, Secondary Ink #4A463F, Muted Ink #7A746B
+ * Accents: Deep Forest #1E3A2F (Hover #294D3F), Restrained Clay #9C4B33
+ * Typography: Newsreader (Display Headlines), DM Sans (Body/Forms), IBM Plex Mono (Code/Constraints)
+ */
 
 @import url("./tokens.css");
 
-/* Authentication Modal Styles */
+/* ==========================================================================
+   Auth Modal Overlay & Window Foundation
+   ========================================================================== */
+
 .auth-modal-overlay {
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
-    background: var(--color-paper-alpha);
+    background: rgba(26, 25, 23, 0.48);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,6 +26,8 @@
     opacity: 1;
     visibility: visible;
     transition: opacity var(--dur-short) var(--ease-out), visibility var(--dur-short) var(--ease-out);
+    padding: var(--space-md);
+    box-sizing: border-box;
 }
 
 .auth-modal-overlay.hidden {
@@ -27,49 +36,128 @@
     visibility: hidden;
 }
 
+/* ==========================================================================
+   Editorial Auth Card
+   ========================================================================== */
+
 .auth-card {
-    width: 90%;
-    max-width: 420px;margin: 0;
-    text-align: center;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    text-align: left;
     position: relative;
-    background: var(--color-paper-2);
+    background: #FFFFFF;
     color: var(--color-ink);
     border: 1px solid var(--color-rule);
-    border-radius: var(--radius-card);padding: var(--space-xl) var(--space-lg);
-    box-shadow: var(--shadow-card);
+    border-radius: var(--radius-card);
+    padding: 2.25rem 2.25rem 2rem;
+    box-shadow: 0 20px 48px -12px rgba(26, 25, 23, 0.18), 0 2px 6px rgba(26, 25, 23, 0.05);
+    box-sizing: border-box;
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Auth Tabs */
+/* Auth Modal Close Button */
+.auth-close-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-paper-3);
+    border: 1px solid var(--color-rule);
+    color: var(--color-ink-2);
+    font-size: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    z-index: 100;
+}
+
+.auth-close-btn:hover {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-color: var(--color-rule-2);
+}
+
+.auth-close-btn:focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 2px;
+}
+
+/* Auth Card Typography */
+.auth-card h2 {
+    font-family: var(--font-display) !important;
+    font-size: 1.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.015em !important;
+    color: var(--color-ink) !important;
+    margin: 0 0 0.375rem 0 !important;
+    line-height: 1.25 !important;
+}
+
+.auth-card p {
+    font-family: var(--font-body) !important;
+    color: var(--color-ink-2) !important;
+    font-size: 0.875rem !important;
+    margin: 0 0 1.5rem 0 !important;
+    line-height: 1.5 !important;
+}
+
+/* ==========================================================================
+   Segmented Tab Switching (Login / Sign Up)
+   ========================================================================== */
+
 .auth-tabs {
     display: flex;
-    background: var(--color-paper);
-    border-radius: var(--radius-md);margin-bottom: var(--space-lg);
-padding: var(--space-3xs);
+    background: var(--color-paper-3);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+    padding: 3px;
     position: relative;
     border: 1px solid var(--color-rule);
+    box-sizing: border-box;
 }
 
 .auth-tab {
     flex: 1;
     background: transparent;
     color: var(--color-muted);
-    border: none;padding: var(--space-sm);
-    font-size: var(--text-sm);
+    border: none;
+    padding: 0.55rem 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
-    font-family: inherit;
+    border-radius: calc(var(--radius-md) - 3px);
+    transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    font-family: var(--font-body);
     position: relative;
     z-index: 2;
+    text-align: center;
+}
+
+.auth-tab:hover:not(.active) {
+    color: var(--color-ink);
 }
 
 .auth-tab.active {
     color: var(--color-ink);
-    background: var(--color-paper-3);
-    border: 1px solid var(--color-rule-2);
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(26, 25, 23, 0.08), 0 1px 2px rgba(26, 25, 23, 0.04);
 }
 
+.auth-tab:focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 1px;
+}
+
+/* Smooth Tab Plane Transition */
 .auth-plane {
     animation: planeFadeIn var(--dur-short) var(--ease-out);
 }
@@ -85,94 +173,97 @@ padding: var(--space-3xs);
     }
 }
 
-.auth-card h2 {
-    font-size: var(--text-2xl);
-    font-weight: 700;margin-bottom: var(--space-xs);
-    color: var(--color-ink);
-}
+/* ==========================================================================
+   Input Fields & Forms
+   ========================================================================== */
 
-.auth-card p {
-    color: var(--color-muted);
-    font-size: var(--text-sm);margin-bottom: var(--space-lg);
+.form-group {
+    margin-bottom: 1rem;
+    position: relative;
 }
 
 .auth-input {
     width: 100%;
+    height: 44px;
+    min-height: 44px;
     background: var(--color-paper);
     border: 1px solid var(--color-rule);
-    border-radius: var(--radius-md);padding: 0.8rem var(--space-md);
+    border-radius: var(--radius-md);
+    padding: 0 1rem;
     color: var(--color-ink);
-    font-family: inherit;
-    font-size: var(--text-md);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
     outline: none;
-    transition: border-color var(--dur-micro) var(--ease-out);
-    color-scheme: dark;
+    transition: border-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    color-scheme: light;
+    box-sizing: border-box;
 }
 
-.auth-input:focus-visible,
-.auth-input:focus {
-    border-color: var(--color-accent);
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+.auth-input::placeholder {
+    color: var(--color-muted-dim);
+    font-size: 0.875rem;
 }
 
-select.auth-input option {
-    background-color: var(--color-paper-2);
-    color: var(--color-ink);
+.auth-input:hover {
+    border-color: var(--color-rule-2);
 }
 
-/* Chrome/Safari Autofill fix */
+.auth-input:focus,
+.auth-input:focus-visible {
+    border-color: var(--color-forest);
+    box-shadow: 0 0 0 3px rgba(30, 58, 47, 0.12);
+    background: #FFFFFF;
+    outline: none;
+}
+
+/* Chrome/Safari Autofill Styling */
 .auth-input:-webkit-autofill,
 .auth-input:-webkit-autofill:hover,
 .auth-input:-webkit-autofill:focus {
     -webkit-text-fill-color: var(--color-ink);
-    -webkit-box-shadow: 0 0 0px 1000px var(--color-paper-2) inset;
+    -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset;
     transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Hide default browser password reveal and clear icons */
-input[type="password"]::-ms-reveal,
-input[type="password"]::-ms-clear {
-    display: none !important;
-}
-
-input[type="password"]::-webkit-credentials-reveal,
-input[type="password"]::-webkit-password-toggle {
-    display: none !important;
-}
-
+/* Password Input Wrapper & Toggle Controls */
 .password-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
-.password-input-wrapper .auth-input {padding-right: var(--space-2xl);
+.password-input-wrapper .auth-input {
+    padding-right: 4.5rem;
 }
 
-.toggle-password-btn, .clear-password-btn {
+.toggle-password-btn,
+.clear-password-btn {
     position: absolute;
     background: none;
     border: none;
     color: var(--color-muted);
     cursor: pointer;
-    font-size: 1rem;padding: var(--space-2xs);
+    font-size: 0.9rem;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: color var(--dur-micro) var(--ease-out);
     z-index: 10;
+    border-radius: 4px;
 }
 
 .toggle-password-btn {
-    right: 40px;
+    right: 36px;
 }
 
 .clear-password-btn {
-    right: 10px;
+    right: 8px;
 }
 
-.toggle-password-btn:hover, .clear-password-btn:hover {
+.toggle-password-btn:hover,
+.clear-password-btn:hover {
     color: var(--color-ink);
 }
 
@@ -180,36 +271,127 @@ input[type="password"]::-webkit-password-toggle {
     color: var(--color-error);
 }
 
-.password-constraints {
-    text-align: left;margin-top: var(--space-xs);
-    font-size: var(--text-xs);
-    color: var(--color-muted);padding-left: var(--space-2xs);
+.password-toggle-icon {
+    font-size: 1rem;
+    line-height: 1;
+    display: inline-block;
 }
 
-.password-constraints p {margin: var(--space-3xs) 0 !important;
+/* Password Constraints Checklist */
+.password-constraints {
+    text-align: left;
+    margin-top: 0.625rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-muted);
     display: flex;
-    align-items: center;gap: var(--space-xs);
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 2px;
+}
+
+.password-constraints p {
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     transition: color var(--dur-micro);
+    line-height: 1.4 !important;
 }
 
 .password-constraints p::before {
     content: '○';
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--color-muted-dim);
 }
 
 .password-constraints p.valid {
-    color: var(--color-success);
+    color: var(--color-forest) !important;
+    font-weight: 500;
 }
 
 .password-constraints p.valid::before {
     content: '●';
+    color: var(--color-forest);
 }
 
-.auth-divider {margin: var(--space-md) 0;
+/* ==========================================================================
+   Primary Action Buttons
+   ========================================================================== */
+
+.auth-card .glow-btn,
+#email-login-btn,
+#email-signup-btn,
+#forgot-submit-btn,
+#reset-submit-btn,
+#check-verification-btn {
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    background: var(--color-forest) !important;
+    color: #FFFFFF !important;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    border: 1px solid var(--color-forest) !important;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 1px 3px rgba(26, 25, 23, 0.08);
+    transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    margin-top: 0.5rem;
+    box-sizing: border-box;
+}
+
+.auth-card .glow-btn:hover:not(:disabled),
+#email-login-btn:hover:not(:disabled),
+#email-signup-btn:hover:not(:disabled),
+#forgot-submit-btn:hover:not(:disabled),
+#reset-submit-btn:hover:not(:disabled),
+#check-verification-btn:hover:not(:disabled) {
+    background: var(--color-forest-hover) !important;
+    border-color: var(--color-forest-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(30, 58, 47, 0.16);
+}
+
+.auth-card .glow-btn:active:not(:disabled),
+#email-login-btn:active:not(:disabled),
+#email-signup-btn:active:not(:disabled),
+#forgot-submit-btn:active:not(:disabled),
+#reset-submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.auth-card .glow-btn:disabled,
+#email-login-btn:disabled,
+#email-signup-btn:disabled,
+#forgot-submit-btn:disabled,
+#reset-submit-btn:disabled,
+#check-verification-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   Divider & Social Sign-In
+   ========================================================================== */
+
+.auth-divider {
+    margin: 1.25rem 0;
     display: flex;
     align-items: center;
     color: var(--color-muted);
-    font-size: var(--text-xs);
+    font-size: 0.6875rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .auth-divider::before,
@@ -219,59 +401,202 @@ input[type="password"]::-webkit-password-toggle {
     border-bottom: 1px solid var(--color-rule);
 }
 
-.auth-divider span {padding: 0 var(--space-sm);
+.auth-divider span {
+    padding: 0 0.875rem;
 }
 
 .google-btn {
-    width: 100%;padding: 0.8rem;
-    background: transparent;
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    padding: 0 1rem;
+    background: #FFFFFF;
     color: var(--color-ink);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-body);
     border: 1px solid var(--color-rule);
     border-radius: var(--radius-md);
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;gap: var(--space-sm);
-    transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    justify-content: center;
+    gap: 0.625rem;
+    box-shadow: 0 1px 2px rgba(26, 25, 23, 0.04);
+    transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    box-sizing: border-box;
 }
 
-.google-btn:hover {
-    background: var(--color-paper-2);
+.google-btn:hover:not(:disabled) {
+    background: var(--color-paper-3);
     border-color: var(--color-rule-2);
+}
+
+.google-btn:active:not(:disabled) {
+    transform: scale(0.99);
 }
 
 .google-icon {
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
 }
+
+/* ==========================================================================
+   Links & Navigation Controls
+   ========================================================================== */
+
+.forgot-password-link {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color var(--dur-micro) var(--ease-out);
+    display: inline-block;
+    font-family: var(--font-body);
+}
+
+.forgot-password-link:hover {
+    color: var(--color-forest);
+    text-decoration: underline;
+}
+
+.secondary-link {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color var(--dur-micro) var(--ease-out);
+    font-family: var(--font-body);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.secondary-link:hover {
+    color: var(--color-ink);
+}
+
+/* ==========================================================================
+   Feedback, Error, and Success Messages
+   ========================================================================== */
 
 .auth-error-message {
-    color: var(--color-error) !important;margin-top: var(--space-md) !important;
-margin-bottom: 0 !important;
-    font-size: var(--text-xs);
-    text-align: center;
+    color: var(--color-error) !important;
+    background: var(--color-error-dim) !important;
+    border: 1px solid rgba(163, 40, 34, 0.2) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.8125rem !important;
+    line-height: 1.4 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0 !important;
+    text-align: left !important;
+    font-family: var(--font-body) !important;
 }
 
-.header-top {
+.auth-success-message {
+    background: var(--color-forest-light) !important;
+    border: 1px solid var(--color-forest-border) !important;
+    color: var(--color-forest) !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: var(--radius-sm) !important;
+    font-size: 0.8125rem !important;
+    line-height: 1.4 !important;
+    text-align: left !important;
+    font-family: var(--font-body) !important;
+    margin-top: 1rem !important;
+}
+
+/* ==========================================================================
+   Email Verification Modal
+   ========================================================================== */
+
+.verification-modal-card {
+    text-align: center !important;
+}
+
+.verification-badge-icon {
+    margin: 0 auto 1rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-forest-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-forest);
+    border: 1px solid var(--color-forest-border);
+}
+
+/* ==========================================================================
+   Contact Modal
+   ========================================================================== */
+
+.contact-card {
+    width: 100%;
+    max-width: 440px;
+    background: #FFFFFF;
+    color: var(--color-ink);
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-card);
+    padding: 2.25rem 2.25rem 2rem;
+    box-shadow: 0 20px 48px -12px rgba(26, 25, 23, 0.18);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.contact-card .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    text-align: left;
+    margin-bottom: 0.5rem;
 }
 
-.header-titles h1 {
-    font-size: var(--text-display-s);
+.contact-card .modal-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0;
 }
 
-.log-out-btn {
-    width: auto;padding: 0.6rem 1.2rem;
-    font-size: var(--text-sm);
+.close-modal-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-paper-3);
+    border: 1px solid var(--color-rule);
+    color: var(--color-ink-2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: background-color var(--dur-micro) var(--ease-out);
 }
 
-/* User Profile Dropdown */
+.close-modal-btn:hover {
+    background: var(--color-paper);
+    color: var(--color-ink);
+}
+
+.contact-email-container a {
+    color: var(--color-forest) !important;
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--dur-micro) var(--ease-out);
+}
+
+.contact-email-container a:hover {
+    color: var(--color-forest-hover) !important;
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   User Profile Dropdown (Legacy & Workspace Compatible)
+   ========================================================================== */
+
 .user-profile-dropdown {
     position: relative;
     display: inline-block;
@@ -279,8 +604,9 @@ margin-bottom: 0 !important;
 
 .user-info-trigger {
     display: flex;
-    align-items: center;gap: var(--space-xs);
-padding: 0.6rem 1.2rem;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.6rem 1.2rem;
     background: var(--color-paper-2);
     border: 1px solid var(--color-rule);
     border-radius: var(--radius-md);
@@ -292,12 +618,7 @@ padding: 0.6rem 1.2rem;
 
 .user-info-trigger:hover {
     background: var(--color-paper-3);
-    border-color: var(--color-accent);
-}
-
-.dropdown-chevron {
-    font-size: 0.7rem;
-    opacity: 0.7;
+    border-color: var(--color-forest);
 }
 
 .dropdown-content {
@@ -306,12 +627,13 @@ padding: 0.6rem 1.2rem;
     right: 0;
     top: 110%;
     min-width: 200px;
-    background: var(--color-paper-2);
+    background: #FFFFFF;
     border: 1px solid var(--color-rule);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 10px 25px -5px rgba(26, 25, 23, 0.1);
     z-index: var(--z-dropdown);
-    overflow: hidden;padding: var(--space-2xs);
+    overflow: hidden;
+    padding: var(--space-2xs);
 }
 
 .user-profile-dropdown:hover .dropdown-content,
@@ -320,7 +642,8 @@ padding: 0.6rem 1.2rem;
 }
 
 .dropdown-content button {
-    width: 100%;padding: var(--space-sm) var(--space-md);
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
     text-align: left;
     background: none;
     border: none;
@@ -331,7 +654,8 @@ padding: 0.6rem 1.2rem;
     transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
     border-radius: var(--radius-sm);
     display: flex;
-    align-items: center;gap: var(--space-xs);
+    align-items: center;
+    gap: var(--space-xs);
 }
 
 .dropdown-content button:hover {
@@ -339,81 +663,22 @@ padding: 0.6rem 1.2rem;
     color: var(--color-ink);
 }
 
-.sign-out-dropdown-btn:hover {
-    color: var(--color-error) !important;
-}
+/* ==========================================================================
+   Mobile Responsive Refinements
+   ========================================================================== */
 
-/* Modal Actions */
-.modal-actions {
-    display: flex;gap: var(--space-xs);
-margin-top: var(--space-md);
-}
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 1.75rem 1.25rem 1.5rem;
+        max-width: 100%;
+        border-radius: var(--radius-lg);
+    }
 
-.modal-actions button {
-    flex: 1;
-}
+    .auth-card h2 {
+        font-size: 1.5rem !important;
+    }
 
-.glow-btn.secondary {
-    background: var(--color-paper-2);
-    color: var(--color-ink);
-    border: 1px solid var(--color-rule);
-}
-
-.glow-btn.secondary:hover {
-    background: var(--color-paper-3);
-    border-color: var(--color-rule-2);
-}
-
-/* Close Button for Auth Modal */
-.auth-close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    color: var(--color-muted);
-    font-size: 1.25rem;
-    cursor: pointer;
-    line-height: 1;padding: var(--space-2xs);
-    transition: color var(--dur-micro) var(--ease-out);
-    z-index: 100;
-}
-
-.auth-close-btn:hover {
-    color: var(--color-ink);
-}
-
-/* Password Reset Styles */
-.forgot-password-link {
-    font-size: var(--text-xs);
-    color: var(--color-muted);
-    text-decoration: none;
-    transition: color var(--dur-micro) var(--ease-out);
-    display: inline-block;
-}
-
-.forgot-password-link:hover {
-    color: var(--color-accent);
-    text-decoration: underline;
-}
-
-.auth-success-message {
-    background: var(--color-accent-dim);
-    border: 1px solid var(--color-rule-accent);
-    color: var(--color-accent);padding: 0.85rem var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: var(--text-sm);
-    line-height: 1.5;
-    text-align: center;
-}
-
-.secondary-link {
-    font-size: var(--text-sm);
-    color: var(--color-muted);
-    text-decoration: none;
-    transition: color var(--dur-micro) var(--ease-out);
-}
-
-.secondary-link:hover {
-    color: var(--color-ink);
+    .auth-input {
+        font-size: 1rem !important; /* Prevents auto-zoom on iOS */
+    }
 }

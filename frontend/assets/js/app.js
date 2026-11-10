@@ -1,5 +1,5 @@
 import { checkAuthStatus, initAuthListener } from './auth.js';
-import { initLoginPage, initializeLoginPage } from './pages/login.js';
+import { initLoginPage, initializeLoginPage } from './pages/login.js?v=19';
 import { initSignupPage, initializeSignupPage } from './pages/signup.js';
 import { initOnboarding, showOnboardingWizard } from './pages/onboarding.js';
 import { initRecruiterPage } from './pages/recruiter.js';

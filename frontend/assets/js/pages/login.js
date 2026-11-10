@@ -177,11 +177,19 @@ export function initLoginPage() {
         btn.addEventListener('click', () => {
             const targetId = btn.getAttribute('data-target');
             const inputElement = document.getElementById(targetId);
-            const iconElement = btn.querySelector('span');
+            if (!inputElement) return;
 
-            const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
-            inputElement.setAttribute('type', type);
-            iconElement.textContent = type === 'password' ? '👁️' : '🙈';
+            const isPassword = inputElement.getAttribute('type') === 'password';
+            const newType = isPassword ? 'text' : 'password';
+            inputElement.setAttribute('type', newType);
+            btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+
+            const eyeIcon = btn.querySelector('.icon-eye');
+            const eyeOffIcon = btn.querySelector('.icon-eye-off');
+            if (eyeIcon && eyeOffIcon) {
+                eyeIcon.classList.toggle('hidden', isPassword);
+                eyeOffIcon.classList.toggle('hidden', !isPassword);
+            }
         });
     });
 

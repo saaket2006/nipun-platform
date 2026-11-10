@@ -949,26 +949,6 @@ margin-bottom: 0;
     margin-bottom: 1rem;
 }
 
-@media (max-width: 680px) {
-    .welcome-banner {
-        padding: 1.25rem 1.25rem;
-    }
-    .welcome-title {
-        font-size: 1.5rem;
-    }
-    .rec-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    .stat-card.span-two {
-        grid-column: span 1 !important;
-    }
-    .rec-selects-row {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-    }
-}
-
 .stat-card {
     background: var(--color-paper-2);
     border: 1px solid var(--color-rule);
@@ -1036,10 +1016,35 @@ margin-bottom: 0;
 
 .stat-card.span-two {
     grid-column: span 2;
-    background: var(--color-paper-2) !important;
-    border: 1px solid var(--color-rule) !important;
-    padding: 1.5rem 1.75rem !important;
-    border-radius: 12px !important;
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-rule);
+    padding: 1.5rem 1.75rem;
+    border-radius: 12px;
+}
+
+@media (max-width: 680px) {
+    .welcome-banner {
+        padding: 1.25rem 1.25rem;
+    }
+    .welcome-title {
+        font-size: 1.5rem;
+    }
+    .rec-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+    .stat-card {
+        min-width: 0;
+        padding: 1.15rem 1rem !important;
+    }
+    .stat-card.span-two {
+        grid-column: span 1 !important;
+        padding: 1.15rem 1rem !important;
+    }
+    .rec-selects-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
 }
 
 #stat-missing-skills-list,
@@ -1701,13 +1706,6 @@ gap: var(--space-sm);
     box-sizing: border-box;
 }
 
-/* Fallback constrained mode if standalone embedding is required */
-.cav-jd-card.is-constrained,
-.cav-jd-body.is-constrained {
-    max-height: 160px;
-    overflow-y: auto;
-}
-
 @media (max-width: 640px) {
     .cav-jd-card {
         padding: 0.85rem;
@@ -2301,6 +2299,15 @@ padding: 0 !important;
     }
     .career-ribbon-container {
         padding: 0.5rem 0;
+    }
+    .career-node {
+        min-width: 64px;
+    }
+    .career-node-connector {
+        min-width: 16px;
+    }
+    .career-node-label {
+        max-width: 70px;
     }
 }
 

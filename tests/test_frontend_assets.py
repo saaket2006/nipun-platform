@@ -476,9 +476,9 @@ def test_candidate_xai_and_dashboard_frontend_lifecycle():
 def test_candidate_analysis_snapshot_jd_display_and_wrapping():
     """
     Verify candidate analysis snapshot modal:
-    1. Removes redundant JD preview heading, keeping single compact scrollable box.
+    1. Removes redundant JD preview heading, keeping single clean display box.
     2. Summary card displays concise JD title, not full text.
-    3. Uses .cav-jd-card / .cav-jd-body with sensible max-height (140-180px), white-space: pre-wrap and overflow-wrap: break-word.
+    3. Uses .cav-jd-card / .cav-jd-body with natural text flow, white-space: pre-wrap and overflow-wrap: break-word, delegating scrolling to primary modal body (.quick-view-body with overflow-y: auto).
     4. Contact info renders functional hyperlinks for email (mailto:), phone (tel:), linkedin (https://), and github (https://).
     """
     candidate_html = os.path.join(FRONTEND_DIR, "candidate.html")
@@ -500,7 +500,6 @@ def test_candidate_analysis_snapshot_jd_display_and_wrapping():
 
     assert ".cav-jd-card" in css_content
     assert ".cav-jd-body" in css_content
-    assert "max-height: 160px;" in css_content
     assert "overflow-y: auto;" in css_content
     assert "white-space: pre-wrap;" in css_content
     assert "overflow-wrap: break-word;" in css_content
@@ -659,8 +658,3 @@ def test_candidate_profile_layout_and_pencil_edit_icon():
     assert "#cand-view-profile .rec-profile-grid .info-field" in css_content
     assert "#cand-view-profile .rec-profile-grid .info-label" in css_content
     assert "#cand-view-profile .rec-profile-grid .info-value" in css_content
-
-
-
-
-
