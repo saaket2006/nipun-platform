@@ -2,6 +2,7 @@ import * as state from '../state.js';
 import { checkAuthStatus } from '../auth.js';
 import { showError, hideError, validatePassword } from '../utils.js';
 import { MESSAGES } from '../constants.js';
+import { initializeSignupPage } from './signup.js?v=29';
 import { 
     auth, 
     googleProvider, 
@@ -149,6 +150,7 @@ export function initLoginPage() {
     // Tab Switching Logic
     tabLogin.addEventListener('click', () => {
         resetAuthModalToTabs();
+        initializeSignupPage();
         tabLogin.classList.add('active');
         tabSignup.classList.remove('active');
         loginPlane.classList.remove('hidden');
@@ -161,6 +163,8 @@ export function initLoginPage() {
 
     tabSignup.addEventListener('click', () => {
         resetAuthModalToTabs();
+        initializeSignupPage();
+        if (loginForm) loginForm.reset();
         tabSignup.classList.add('active');
         tabLogin.classList.remove('active');
         signupPlane.classList.remove('hidden');
@@ -202,10 +206,8 @@ export function initLoginPage() {
             inputElement.value = '';
             inputElement.focus();
 
-            if (targetId === 'signup-password' || targetId === 'reset-new-password') {
-                const event = new Event('input', { bubbles: true });
-                inputElement.dispatchEvent(event);
-            }
+            const event = new Event('input', { bubbles: true });
+            inputElement.dispatchEvent(event);
         });
     });
 
@@ -386,6 +388,19 @@ export function initLoginPage() {
 export function initializeLoginPage() {
     const authErrorMsg = document.getElementById('auth-error');
     if (authErrorMsg) authErrorMsg.classList.add('hidden');
+
+    const loginPassword = document.getElementById('login-password');
+    if (loginPassword) {
+        loginPassword.setAttribute('type', 'password');
+    }
+    const loginToggleBtn = document.querySelector('#login-plane .toggle-password-btn');
+    if (loginToggleBtn) {
+        loginToggleBtn.setAttribute('aria-label', 'Show password');
+        const eyeIcon = loginToggleBtn.querySelector('.icon-eye');
+        const eyeOffIcon = loginToggleBtn.querySelector('.icon-eye-off');
+        if (eyeIcon) eyeIcon.classList.remove('hidden');
+        if (eyeOffIcon) eyeOffIcon.classList.add('hidden');
+    }
 
     resetAuthModalToTabs();
     const tabLogin = document.getElementById('tab-login');

@@ -17,7 +17,7 @@ import {
     showResetPasswordView,
     resetAuthModalToTabs
 } from './pages/login.js';
-import { openAuthModal, closeAuthModal } from './components/modal.js?v=27';
+import { openAuthModal, closeAuthModal } from './components/modal.js?v=29';
 
 /**
  * Handles recruiter workspace routing sub-views.

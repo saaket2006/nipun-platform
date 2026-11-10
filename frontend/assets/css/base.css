@@ -103,6 +103,16 @@ textarea:focus {
     border-color: var(--color-accent);
 }
 
+/* Global suppression of Microsoft Edge & IE native password reveal and clear controls */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
 .file-upload-box {
     border: 2px dashed var(--color-rule-2);
     border-radius: var(--radius-md);padding: 3rem var(--space-md);

@@ -1,135 +1,91 @@
 # Graph Report - nipun-platform  (2026-11-10)
 
 ## Corpus Check
-- 198 files · ~293,652 words
+- 146 files · ~224,966 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2204 nodes · 3836 edges · 138 communities (132 shown, 6 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 315 edges (avg confidence: 0.52)
+- 1391 nodes · 3061 edges · 93 communities (83 shown, 10 thin omitted)
+- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 315 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `aaf97de1`
+- Built from commit: `9a4c087e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- stages.py
-- test_estimator.py
+- PipelineStage
+- test_custom_scoring.py
 - xai/builder.py
 - Skill
-- app.js
-- onboarding.js
+- login.js
+- state.js
 - routers/test_auth.py
 - gsap.min.js
-- Core Principles
-- tests/test_info_extractor.py
+- AnalysisContext
+- stages.py
 - ScrollTrigger.min.js
 - test_password_reset.py
-- Expo Animation Recipes
+- screen_resumes
 - api.js
 - UserRole
-- candidate.js
+- navbar.js
 - s
 - recruiter.js
 - Tween
 - package.json
-- Animation Recipes
-- Worst-Case Catalog
+- test_password_visibility_duplication.py
+- test_candidate_patch_rejects_forbidden_fields
 - _d
-- Documentation Architect
+- .__init__
 - yc
 - ja
 - jc
 - landing.js
-- Animation Standards Reference
+- .__init__
 - cb
 - test_profile_editing.py
 - Oa
 - bf
 - skill_expander.py
-- process_candidate_resume
+- User
 - Landing Index HTML
 - Nipun AI Resume Screener & Ranking System — High-Level Architecture
 - loadingOverlay.js
 - Q
 - r
-- google_login
+- auth.py
 - validate_skill_name
 - zd
 - firebase-config.example.js
 - Graphify Agent Rule
 - Graphify Workflow Guide
 - AI Resume Screener Overview
-- Capabilities
+- test_live_schema_verification_job_descriptions
 - Python Dependencies
 - Session
-- User
+- main.py
 - test_firebase_auth.py
-- Core Principles
-- Capabilities
+- test_get_recruiter_stats_omits_candidate_recommendations
 - backend/tests/test_recruiter.py
-- navbar.js
-- API Design Principles Implementation Playbook
-- Core Principles
-- API Design Principles
+- candidate.js
 - test_frontend_assets.py
-- Animation Audit Playbook
-- Write Swift
-- onboard.md
-- Apple Design
-- The Fixes
 - Chapter: Semantic Matching Evaluation & Knowledge Base Verification
-- Prototyping Variants
 - test_auth_modal_regression.py
-- Delight Techniques
-- Implement Animations
 - generate_grounded_xai_insights
-- test_custom_scoring.py
-- Glossary
-- Introduce Color Strategically
-- Design Critique
-- Animation Performance
-- Finding Animation Opportunities
-- Polish Systematically
+- extract_education
 - router.js
 - process_resumes
-- Implement Adaptations
-- Improve Copy Systematically
-- Simplify the Design
 - test_remediation.py
-- Generate Comprehensive Report
-- Amplify the Design
-- Optimization Strategy
-- Working With Sonner
-- Frontend Aesthetics Guidelines
-- Refine the Design
-- Hardening Dimensions
-- The list
-- Design Engineering
-- Component Building Principles
-- Step 2: Ask UX-Focused Questions
-- The Animation Decision Framework
-- clip-path for Animation
-- Performance Rules
-- Gesture and Drag Interactions
-- extract.md
-- CSS Transform Mastery
-- The Sonner Principles (Building Loved Components)
-- Spring Animations
 - K
-- Core Philosophy
-- Debugging Animations
-- normalize.md
-- seed_default_profiles
 - update_job_description
 - legacy_process_resumes
 - get_screening_task_detail
-- policy/__init__.py
-- fixture
-- backend/config.py
-- firebase-init.js
+- test_candidate_xai_dashboard.py
+- app.js
+- test_confirm_password.py
+- list_job_descriptions
 
 ## God Nodes (most connected - your core abstractions)
 1. `User` - 67 edges
@@ -146,27 +102,27 @@
 ## Surprising Connections (you probably didn't know these)
 - `CandidateProfile` --uses--> `UserRole`  [INFERRED]
   backend/models/models.py → backend/models/enums.py
-- `JobDescription` --uses--> `UserRole`  [INFERRED]
-  backend/models/models.py → backend/models/enums.py
 - `PasswordResetToken` --uses--> `UserRole`  [INFERRED]
   backend/models/models.py → backend/models/enums.py
-- `RecruiterProfile` --uses--> `UserRole`  [INFERRED]
-  backend/models/models.py → backend/models/enums.py
 - `Resume` --uses--> `UserRole`  [INFERRED]
+  backend/models/models.py → backend/models/enums.py
+- `ScanResult` --uses--> `UserRole`  [INFERRED]
+  backend/models/models.py → backend/models/enums.py
+- `ScoringProfile` --uses--> `UserRole`  [INFERRED]
   backend/models/models.py → backend/models/enums.py
 
 ## Import Cycles
 - 3-file cycle: `frontend/assets/js/auth.js -> frontend/assets/js/router.js -> frontend/assets/js/pages/login.js -> frontend/assets/js/auth.js`
 
-## Communities (138 total, 6 thin omitted)
+## Communities (93 total, 10 thin omitted)
 
-### Community 0 - "stages.py"
-Cohesion: 0.08
-Nodes (69): ResumeStatus, Resume, ScanResult, ScoringProfile, preprocess_text(), Cleans text by: - Lowercasing - Removing punctuation - Removing stopwords -…, AnalysisContext, Any (+61 more)
+### Community 0 - "PipelineStage"
+Cohesion: 0.18
+Nodes (41): ResumeStatus, Resume, ScanResult, ScoringProfile, ExplanationBuiltEvent, PersistenceEvent, PipelineEvent, ProfileResolvedEvent (+33 more)
 
-### Community 1 - "test_estimator.py"
-Cohesion: 0.09
-Nodes (39): build_resume_recommendations(), Any, Assembles, enhances, and prioritizes resume improvement recommendations from a…, estimate_education_gain(), estimate_experience_gain(), estimate_missing_skill_gain(), estimate_project_gain(), Calculates gain for increasing experience details up to maximum scoring… (+31 more)
+### Community 1 - "test_custom_scoring.py"
+Cohesion: 0.05
+Nodes (58): Defines thresholds and priorities for AI Resume Improvement Engine…, RecommendationPolicy, Defines recruiter-specific configurations and security permissions., RecruiterPolicy, Defines policy configurations for ATS scoring and weights. Removes magic…, ScoringPolicy, Any, Validates, sanitizes, and normalizes optional recruiter custom scoring… (+50 more)
 
 ### Community 2 - "xai/builder.py"
 Cohesion: 0.07
@@ -174,15 +130,15 @@ Nodes (48): build_score_components(), Any, Builds the structured ScoreComponent 
 
 ### Community 3 - "Skill"
 Cohesion: 0.06
-Nodes (40): get_weight(), Returns the matching weight for the given match type., MatchReason, MatchResult, BaseModel, Universal domain object representing a semantic match between a required skill…, Evaluates relationship type, confidence, and matches between two Skill objects.…, resolve_relationship() (+32 more)
+Nodes (38): get_weight(), Returns the matching weight for the given match type., MatchReason, MatchResult, BaseModel, Universal domain object representing a semantic match between a required skill…, Evaluates relationship type, confidence, and matches between two Skill objects.…, resolve_relationship() (+30 more)
 
-### Community 4 - "app.js"
+### Community 4 - "login.js"
 Cohesion: 0.17
-Nodes (24): clearCandidateState(), handleFiles(), renderFileList(), updateResumeCountDisplay(), uploadedFiles, checkAuthStatus(), _doCheckAuthStatus(), hideEmailVerificationModal() (+16 more)
+Nodes (22): checkAuthStatus(), _doCheckAuthStatus(), hideEmailVerificationModal(), initAuthListener(), showEmailVerificationModal(), waitForAuthState(), app, auth (+14 more)
 
-### Community 5 - "onboarding.js"
-Cohesion: 0.20
-Nodes (15): API_BASE, API_ENDPOINTS, CANDIDATE_STATUS_VALUES, COMPANY_TYPES, MESSAGES, ROLES, ROUTES, getStepsForRole() (+7 more)
+### Community 5 - "state.js"
+Cohesion: 0.15
+Nodes (16): getStepsForRole(), hideObError(), initializeOnboardingPage, initOnboarding(), showObError(), showOnboardingWizard(), submitOnboarding(), updateOnboardingUI() (+8 more)
 
 ### Community 6 - "routers/test_auth.py"
 Cohesion: 0.24
@@ -192,13 +148,13 @@ Nodes (7): fetch_google_certs(), test_fetch_google_certs_error(), test_fetch_goo
 Cohesion: 0.06
 Nodes (16): ee(), Jd(), Kd(), Ld(), ma(), Md(), na(), Od() (+8 more)
 
-### Community 8 - "Core Principles"
-Cohesion: 0.06
-Nodes (33): 10. Content and microcopy, 11. Feedback and error recovery, 12. Data-heavy interfaces, 13. Animation and interaction, 1. Understand, 1. Understand the user and the task, 2. Prioritize usability, 2. Structure (+25 more)
+### Community 8 - "AnalysisContext"
+Cohesion: 0.11
+Nodes (17): AnalysisContext, Any, Lightweight, shared context carrying tracing IDs, configurations, and stage…, AnalysisPipeline, Session, Orchestrator to run raw resume payloads through sequential pipeline stages., Runs stages 1 through 7 of the analysis pipeline., create_docx_bytes() (+9 more)
 
-### Community 9 - "tests/test_info_extractor.py"
-Cohesion: 0.06
-Nodes (52): extract_education(), extract_email(), extract_experience(), extract_github(), extract_linkedin(), extract_name(), extract_phone(), extract_projects() (+44 more)
+### Community 9 - "stages.py"
+Cohesion: 0.08
+Nodes (38): extract_email(), extract_experience(), extract_github(), extract_name(), extract_phone(), extract_projects(), extract_relevant_internships(), Very crude heuristic to determine the scale or presence of personal/academic… (+30 more)
 
 ### Community 10 - "ScrollTrigger.min.js"
 Cohesion: 0.07
@@ -206,23 +162,23 @@ Nodes (4): dc(), Ha(), Ia(), ob()
 
 ### Community 11 - "test_password_reset.py"
 Cohesion: 0.08
-Nodes (28): Verifies a plain text password against the hashed version using bcrypt., verify_password(), PasswordResetToken, disable_rate_limiting(), existing_user(), fixture, Test resetting password with a valid token., Temporarily disables SlowAPI rate limiting for unit tests. (+20 more)
+Nodes (27): Verifies a plain text password against the hashed version using bcrypt., verify_password(), disable_rate_limiting(), existing_user(), fixture, Test resetting password with a valid token., Temporarily disables SlowAPI rate limiting for unit tests., Test that a reset token cannot be reused a second time. (+19 more)
 
-### Community 12 - "Expo Animation Recipes"
-Cohesion: 0.06
-Nodes (33): Bottom sheet you can drag to dismiss, Collapsing header on scroll, Expo Animation Recipes, Firing something once at a threshold, Keyboard-synced UI, List entrances, Press feedback, Screen transitions (Expo Router) (+25 more)
+### Community 12 - "screen_resumes"
+Cohesion: 0.15
+Nodes (10): preprocess_text(), Cleans text by: - Lowercasing - Removing punctuation - Removing stopwords -…, Any, Session, Core business logic to screen and rank candidate resumes against a job…, screen_resumes(), extract_skills(), load_tech_skills() (+2 more)
 
 ### Community 13 - "api.js"
-Cohesion: 0.11
-Nodes (34): archiveJob(), createJob(), deleteCandidateResume(), deleteJob(), _executeRequest(), forgotPassword(), getCandidateResumeDetails(), getCandidateResumes() (+26 more)
+Cohesion: 0.12
+Nodes (33): archiveJob(), createJob(), deleteCandidateResume(), deleteJob(), _executeRequest(), forgotPassword(), getCandidateResumeDetails(), getCandidateResumes() (+25 more)
 
 ### Community 14 - "UserRole"
-Cohesion: 0.19
-Nodes (32): CompanyType, UserRole, GoogleLoginRequest, BaseModel, CandidateProfileResponse, CandidateProfileUpdate, Config, ForgotPasswordRequest (+24 more)
+Cohesion: 0.14
+Nodes (38): CompanyType, UserRole, JobDescription, RecruiterProfile, ScreeningTask, BaseModel, UpdateRecommendationPayload, patch (+30 more)
 
-### Community 15 - "candidate.js"
-Cohesion: 0.21
-Nodes (11): getEmptyStateHTML(), toggleButtonLoading(), populateCandidateProfileUI(), populateRecruiterProfileUI(), closeCandidateAnalysisModal(), initCandidatePage(), renderCandidateAnalysisResults(), renderFileList() (+3 more)
+### Community 15 - "navbar.js"
+Cohesion: 0.16
+Nodes (19): handleLogout(), initNavbar(), collapseSidebar(), expandSidebar(), handleKeyDown(), initSidebar(), isSidebarCollapsed(), setSidebarCollapsed() (+11 more)
 
 ### Community 16 - "s"
 Cohesion: 0.15
@@ -240,21 +196,17 @@ Nodes (18): _assertThisInitialized(), Ec(), Fc(), gc(), ka(), qa(), t(), tb() (+
 Cohesion: 0.12
 Nodes (15): autoprefixer, cors, firebase, dependencies, cors, firebase, devDependencies, autoprefixer (+7 more)
 
-### Community 20 - "Animation Recipes"
-Cohesion: 0.06
-Nodes (31): Accordion / collapse, Animation Recipes, Button press, Drag to dismiss, Drawer / sheet, Dropdown, popover, menu, select, Hold to confirm, Masking a crossfade that won't settle (+23 more)
+### Community 20 - "test_password_visibility_duplication.py"
+Cohesion: 0.18
+Nodes (10): Verify auth.css suppresses Microsoft Edge & IE native password reveal/clear…, Test Confirm Password field focus, typing, blur, refocus, and toggling in…, Verify that Password and Confirm Password visibility toggles and clear buttons…, Verify that every password-input-wrapper in index.html contains exactly ONE…, Test interactive focus, typing, blur, refocus, and toggling in Chromium/Edge., test_css_suppresses_native_ms_reveal_and_clear(), test_dom_has_exactly_one_toggle_per_password_wrapper(), test_independent_visibility_toggles_and_clear() (+2 more)
 
-### Community 21 - "Worst-Case Catalog"
-Cohesion: 0.06
-Nodes (29): Collections, Emails, URLs, identifiers, Environment, Images and media, Labels, titles, and copy from data, Numbers and money, People and names, States (+21 more)
+### Community 21 - "test_candidate_patch_rejects_forbidden_fields"
+Cohesion: 0.40
+Nodes (5): PATCH endpoint rejects unknown/forbidden fields with 422 Unprocessable Entity., PATCH endpoint rejects unknown/forbidden fields with 422 Unprocessable Entity., test_candidate_patch_rejects_forbidden_fields(), test_recruiter_patch_rejects_forbidden_fields(), parametrize
 
 ### Community 22 - "_d"
 Cohesion: 0.29
 Nodes (10): be(), _d(), fa(), ia(), ie(), je(), ke(), le() (+2 more)
-
-### Community 23 - "Documentation Architect"
-Cohesion: 0.06
-Nodes (32): 1. Documentation must reflect reality, 2. Optimize for usefulness, not length, 3. Start with the audience and purpose, 4. Use progressive disclosure, 5. Explain important "why", Architecture, Architecture Documentation, Code References (+24 more)
 
 ### Community 24 - "yc"
 Cohesion: 0.22
@@ -272,17 +224,13 @@ Nodes (9): Ab(), J(), jc(), kb(), lc(), Ra(), rb(), Sa() (+1 more)
 Cohesion: 0.44
 Nodes (9): initCounters(), initFeatureStack(), initHeroAnimation(), initNavbarEffects(), initStoryAnimation(), initWalkthrough(), initAllLandingAnimations(), initLandingMobileNav() (+1 more)
 
-### Community 28 - "Animation Standards Reference"
-Cohesion: 0.07
-Nodes (26): Aggressive Escalation Triggers, Guidelines, Initial Response, Operating Posture, Part 1 — Findings table (REQUIRED), Part 2 — Verdict (REQUIRED), Remedial Preference Hierarchy, Required Output Format (+18 more)
-
 ### Community 29 - "cb"
 Cohesion: 0.29
 Nodes (7): Ab(), Bb(), cb(), Context(), Ew(), fb(), zb()
 
 ### Community 30 - "test_profile_editing.py"
-Cohesion: 0.04
-Nodes (61): get_password_hash(), Hashes a plain text password using bcrypt., CandidateProfile, Creates a test user in the database., test_user(), candidate_a(), candidate_b(), disable_rate_limiting() (+53 more)
+Cohesion: 0.05
+Nodes (39): candidate_user(), disable_rate_limiting(), fixture, Temporarily disables SlowAPI rate limiting for unit tests., Candidate partial update changes only provided field, preserving others., Recruiter can update display_name., Recruiter can update company_name, company_type, and hiring_domain., Recruiter partial update changes only provided field, preserving others. (+31 more)
 
 ### Community 31 - "Oa"
 Cohesion: 0.53
@@ -296,9 +244,9 @@ Nodes (10): bf(), cf(), df(), ef(), kf(), lf(), M(), mf() (+2 more)
 Cohesion: 0.40
 Nodes (4): get_related_skills(), is_skill_in_text(), Checks if an explicit skill contains a broad conceptual keyword. For example,…, Checks if a skill or any of its known aliases exists in the given text. Handles…
 
-### Community 34 - "process_candidate_resume"
-Cohesion: 0.10
-Nodes (23): candidate_status(), delete_candidate_resume(), get_candidate_resume_details(), get_candidate_resumes(), get_candidate_stats(), process_candidate_resume(), delete, get (+15 more)
+### Community 34 - "User"
+Cohesion: 0.08
+Nodes (36): User, candidate_status(), delete_candidate_resume(), get_candidate_resume_details(), get_candidate_resumes(), get_candidate_stats(), process_candidate_resume(), delete (+28 more)
 
 ### Community 35 - "Landing Index HTML"
 Cohesion: 0.40
@@ -320,253 +268,69 @@ Nodes (4): la(), Q(), Gb(), Hb()
 Cohesion: 0.50
 Nodes (4): mc(), O(), P(), r()
 
-### Community 48 - "google_login"
-Cohesion: 0.18
-Nodes (21): create_access_token(), Generates a secure JSON Web Token., forgot_password(), get_me(), google_login(), login(), get, limit (+13 more)
+### Community 48 - "auth.py"
+Cohesion: 0.13
+Nodes (29): Settings, create_access_token(), Generates a secure JSON Web Token., PasswordResetToken, forgot_password(), get_me(), google_login(), GoogleLoginRequest (+21 more)
 
 ### Community 49 - "validate_skill_name"
 Cohesion: 0.33
 Nodes (9): Validates that a skill name contains reasonable characters and isn't empty,…, validate_skill_name(), test_validate_skill_name_empty_or_whitespace_only(), test_validate_skill_name_invalid_chars(), test_validate_skill_name_non_string(), test_validate_skill_name_too_long(), test_validate_skill_name_valid_common(), test_validate_skill_name_valid_special_chars() (+1 more)
 
-### Community 63 - "Capabilities"
-Cohesion: 0.06
-Nodes (31): API Contract & Documentation, API Design & Patterns, API Gateway & Load Balancing, Asynchronous Processing, Authentication & Authorization, Backend Architect, Behavioral Traits, Caching Strategies (+23 more)
-
 ### Community 66 - "Session"
-Cohesion: 0.12
-Nodes (19): archive_job_description(), delete_job_description(), get_scoring_profiles(), get_screening_history(), list_job_descriptions(), delete, get, Session (+11 more)
+Cohesion: 0.29
+Nodes (8): archive_job_description(), delete_job_description(), delete, Session, Soft-deletes (archives) a job description., Permanently deletes a job description and its scan results., test_archive_job_description_success(), test_archive_job_description_unauthorized()
 
-### Community 68 - "User"
-Cohesion: 0.08
-Nodes (46): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online(), api_route, get_db(), FastAPI Dependency to yield a database session., Restricts route access to users registered with the RECRUITER role in… (+38 more)
+### Community 68 - "main.py"
+Cohesion: 0.09
+Nodes (21): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online(), api_route, check_db_connection(), get_db(), Tests connection to the configured database on demand (e.g. startup or health… (+13 more)
 
 ### Community 69 - "test_firebase_auth.py"
-Cohesion: 0.07
-Nodes (39): App, get_firebase_admin_app(), Any, Verifies a Firebase ID token using the Firebase Admin SDK. Extracts trusted…, Lazily initializes and returns the singleton Firebase Admin App. Supports: 1.…, verify_firebase_id_token(), get_current_user(), Session (+31 more)
-
-### Community 71 - "Core Principles"
-Cohesion: 0.08
-Nodes (24): 1. Start with requirements, 2. Prefer simplicity, 3. Evaluate technology choices rationally, 4. Design for data integrity, 5. Design schemas around actual access patterns, 6. Treat migrations as production changes, 7. Scale only when justified, 8. Consider the whole system (+16 more)
-
-### Community 72 - "Capabilities"
-Cohesion: 0.09
-Nodes (22): Application Security Testing, Behavioral Traits, Capabilities, Cloud Security, Compliance & Governance, DevSecOps & Security Automation, Do not use this skill when, Emerging Security Technologies (+14 more)
+Cohesion: 0.06
+Nodes (45): App, get_firebase_admin_app(), Any, Verifies a Firebase ID token using the Firebase Admin SDK. Extracts trusted…, Lazily initializes and returns the singleton Firebase Admin App. Supports: 1.…, verify_firebase_id_token(), get_current_user(), Session (+37 more)
 
 ### Community 74 - "backend/tests/test_recruiter.py"
-Cohesion: 0.14
-Nodes (19): create_job_description(), Adds a new job description to the recruiter's library or promotes an ad-hoc JD.…, Verify that JobDescription.name is an active synonym for JobDescription.title., Verify create_job_description correctly accepts 'name' instead of 'title'., Inspects live database schema to verify the table and name/title column…, Verify get_recruiter_stats returns empty top_recommended_improvements even if…, Verify get_candidate_resume_details still returns recommendations for candidate…, test_candidate_resume_details_preserves_recommendations() (+11 more)
+Cohesion: 0.18
+Nodes (15): create_job_description(), Adds a new job description to the recruiter's library or promotes an ad-hoc JD.…, Verify that JobDescription.name is an active synonym for JobDescription.title., Verify create_job_description correctly accepts 'name' instead of 'title'., Verify get_candidate_resume_details still returns recommendations for candidate…, test_candidate_resume_details_preserves_recommendations(), test_create_job_description_deduplication(), test_create_job_description_duplicate_names_distinct_records() (+7 more)
 
-### Community 75 - "navbar.js"
-Cohesion: 0.28
-Nodes (13): handleLogoNavigation(), handleLogout(), initNavbar(), collapseSidebar(), expandSidebar(), handleKeyDown(), initSidebar(), isSidebarCollapsed() (+5 more)
-
-### Community 76 - "API Design Principles Implementation Playbook"
-Cohesion: 0.10
-Nodes (19): 1. RESTful Design Principles, 2. GraphQL Design Principles, 3. API Versioning Strategies, API Design Principles Implementation Playbook, Best Practices, Common Pitfalls, Core Concepts, GraphQL APIs (+11 more)
-
-### Community 77 - "Core Principles"
-Cohesion: 0.10
-Nodes (19): 10. Testing, 11. SEO, 1. Follow the existing project architecture, 2. Build for correctness first, 3. Component design, 4. State and data fetching, 5. Responsive design, 6. Accessibility (+11 more)
-
-### Community 78 - "API Design Principles"
-Cohesion: 0.25
-Nodes (7): API Design Principles, Description:, Do not use this skill when, Instructions, Name: api-design-principles, Resources, Use this skill when
+### Community 75 - "candidate.js"
+Cohesion: 0.19
+Nodes (12): getEmptyStateHTML(), toggleButtonLoading(), populateCandidateProfileUI(), closeCandidateAnalysisModal(), initCandidatePage(), renderCandidateAnalysisResults(), renderFileList(), renderRecommendations() (+4 more)
 
 ### Community 79 - "test_frontend_assets.py"
 Cohesion: 0.05
 Nodes (38): Verify frontend/firebase-config.js exists and is valid JavaScript exporting…, Verify recruiter.html contains the full quick view modal and candidate.html…, Verify candidate card renders quick view button with data attributes and…, Verify recruiter profile has horizontal side-by-side layout, pencil icon…, Verify recruiter screening history has a compact icon-only refresh button with…, Verify that frontend/firebase-config.js is not ignored by .gitignore., Verify recruiter pages hide candidate recommendations while candidate views…, Verify recruiter screening has explicit reset controls and state reset… (+30 more)
 
-### Community 81 - "Animation Audit Playbook"
-Cohesion: 0.08
-Nodes (22): 1. Purpose & frequency, 2. Easing & duration, 3. Physicality & origin, 4. Interruptibility, 5. Performance, 6. Accessibility, 7. Cohesion & tokens, 8. Missed opportunities (+14 more)
-
-### Community 83 - "Write Swift"
-Cohesion: 0.09
-Nodes (22): 10. ARC and object lifetime, 11. Testing — Swift Testing by default, 12. Macros, 13. Logging and debugging, 14. Unsafe code and interop, 15. Modern syntax you should be using, 16. Migrating an existing codebase to Swift 6, 1. Model data with value types (+14 more)
-
-### Community 84 - "onboard.md"
-Cohesion: 0.09
-Nodes (22): Assess Onboarding Needs, Context Over Ceremony, Contextual Help, Design Onboarding Experiences, Documentation & Help, Empty State Design, Feature Discovery & Adoption, Guided Tours & Walkthroughs (+14 more)
-
-### Community 85 - "Apple Design"
-Cohesion: 0.09
-Nodes (21): 10. Gesture design details (the "feel" checklist), 11. Frame-level smoothness, 12. Materials & depth — translucency conveys hierarchy, 13. Multimodal feedback — motion + sound + haptics, 14. Reduced motion & accessibility, 15. Typography — optical sizing, tracking, leading, 16. Design foundations — the eight principles, 17. Process (+13 more)
-
-### Community 86 - "The Fixes"
-Cohesion: 0.09
-Nodes (21): 10. Status bar color doesn't match, 11. Right in Chrome, wrong on phone, 1. Hover state stuck after tap, 2. Gray/blue flash on tap, 3. Layout has the wrong height, 4. Page zooms into the input, 5. Tap feels laggy, 6. Pull-to-refresh hijacks scroll (+13 more)
-
 ### Community 87 - "Chapter: Semantic Matching Evaluation & Knowledge Base Verification"
 Cohesion: 0.07
 Nodes (26): 1. Executive Summary & Evaluation Scope, 2.1 Canonical Knowledge Base & Taxonomy Structure, 2.2 Relationship Categories & Deterministic Policy Weights, 2.3 Rule Precedence Cascade, 2.4 Multi-Skill Scoring Formula, 2. Methodology & Mathematical Formulation, 3.1 Total Evaluation Case Construction (Total $N = 317$), 3.2 Match Type Distribution (Experiment A) (+18 more)
-
-### Community 88 - "Prototyping Variants"
-Cohesion: 0.10
-Nodes (19): Behavior contract, Markup, Reference wiring, Rules, Styles, The Picker, Hard Rules, Initial Response (+11 more)
 
 ### Community 89 - "test_auth_modal_regression.py"
 Cohesion: 0.12
 Nodes (16): Verify app.js handles readyState interactive/complete so module execution never…, Verify router.js integrates with modal.js for auth routing., Verify index.html contains exactly one #auth-modal element., Verify #auth-modal has login and signup tabs and planes., Verify all key CTA buttons in index.html possess resilient data-auth-modal…, Verify modal.js exports explicit openAuthModal and closeAuthModal functions., Verify modal.js attaches event delegation on document to handle auth triggers…, Verify app.js actively calls initModals() during page initialization. (+8 more)
 
-### Community 90 - "Delight Techniques"
-Cohesion: 0.10
-Nodes (20): Appropriate to Context, Assess Delight Opportunities, Celebration Moments, Compound Over Time, Context Gathering (Do This First), Delight Amplifies, Never Blocks, Delight Principles, Delight Techniques (+12 more)
-
-### Community 91 - "Implement Animations"
-Cohesion: 0.10
-Nodes (19): Accessibility, Assess Animation Opportunities, Context Gathering (Do This First), CSS Animations, Delight Moments, Entrance Animations, Feedback & Guidance, Implement Animations (+11 more)
-
 ### Community 92 - "generate_grounded_xai_insights"
 Cohesion: 0.20
 Nodes (17): _build_deterministic_fallback(), _call_gemini_content(), generate_grounded_xai_insights(), Any, Makes HTTP request to Gemini API and parses JSON response., Safely extracts and parses JSON even if wrapped in markdown code fences or…, Constructs a deterministic, grounded rule-based summary when Gemini is…, Invokes the Google Gemini API to generate grounded, explainable AI insights for… (+9 more)
 
-### Community 93 - "test_custom_scoring.py"
-Cohesion: 0.27
-Nodes (11): Any, Validates, sanitizes, and normalizes optional recruiter custom scoring…, validate_and_normalize_scoring_config(), test_validation_normalizes_percentages_to_decimal_sum_one(), test_validation_redistributes_when_criterion_is_disabled(), test_validation_rejects_all_zero_or_disabled_weights(), test_validation_rejects_invalid_json(), test_validation_rejects_missing_weights() (+3 more)
-
-### Community 94 - "Glossary"
-Cohesion: 0.11
-Nodes (18): Animation Vocabulary, Easing — how speed changes over an animation, Entrances & Exits — how elements appear and disappear, Examples, Feedback & Interaction — responding to the user's actions, Glossary, Initial Response, Instructions (+10 more)
-
-### Community 95 - "Introduce Color Strategically"
-Cohesion: 0.11
-Nodes (18): Accent Color Application, Accessibility, Assess Color Opportunity, Background & Surfaces, Balance & Refinement, Borders & Accents, Cohesion, Context Gathering (Do This First) (+10 more)
-
-### Community 96 - "Design Critique"
-Cohesion: 0.11
-Nodes (18): 10. Microcopy & Voice, 1. AI Slop Detection (CRITICAL), 2. Visual Hierarchy, 3. Information Architecture, 4. Emotional Resonance, 5. Discoverability & Affordance, 6. Composition & Balance, 7. Typography as Communication (+10 more)
-
-### Community 97 - "Animation Performance"
-Cohesion: 0.11
-Nodes (17): Animation Performance, Hard Rules, Initial Response, Operating Posture, Phase 1: Find what animates, Phase 2: Diagnose, Phase 3: Report, React: Don't Animate Through State (+9 more)
-
-### Community 98 - "Finding Animation Opportunities"
-Cohesion: 0.12
-Nodes (16): 1. Frequency — how often will a user see this?, 2. Purpose — why does this animate?, 3. Speed — can it stay inside budget?, 4. Function — does motion help or hinder here?, Finding Animation Opportunities, Hard Rules, Initial Response, Operating Posture (+8 more)
-
-### Community 99 - "Polish Systematically"
-Cohesion: 0.12
-Nodes (16): Code Quality, Color & Contrast, Content & Copy, Edge Cases & Error States, Final Verification, Forms & Inputs, Icons & Images, Interaction States (+8 more)
+### Community 93 - "extract_education"
+Cohesion: 0.21
+Nodes (15): extract_education(), extract_linkedin(), Heuristically extract highest degree level. Returns standard labels for…, Extract a LinkedIn profile URL., test_extract_education_bachelor(), test_extract_education_boundaries(), test_extract_education_case_insensitivity(), test_extract_education_master() (+7 more)
 
 ### Community 100 - "router.js"
-Cohesion: 0.11
-Nodes (29): closeAuthModal(), initModals(), openAuthModal(), updateSidebarActiveLink(), initializeCandidateDashboard(), initializeCandidateProfile(), initializeCandidateScreen(), renderTimelineList() (+21 more)
+Cohesion: 0.23
+Nodes (19): getProfile(), handleLogoNavigation(), populateRecruiterProfileUI(), updateSidebarActiveLink(), initializeCandidateDashboard(), initializeCandidateProfile(), initializeCandidateScreen(), initializeRecruiterDashboard() (+11 more)
 
 ### Community 101 - "process_resumes"
 Cohesion: 0.20
 Nodes (10): process_resumes(), limit, post, Request, UploadFile, Screens uploaded resume files against a job description. Enforces…, test_process_resumes_rejects_invalid_custom_scoring(), anyio (+2 more)
 
-### Community 102 - "Implement Adaptations"
-Cohesion: 0.13
-Nodes (14): Assess Adaptation Challenge, Content Adaptation, Desktop Adaptation (Mobile → Desktop), Email Adaptation (Web → Email), Implement Adaptations, Layout Adaptation Techniques, Mobile Adaptation (Desktop → Mobile), Navigation Adaptation (+6 more)
-
-### Community 103 - "Improve Copy Systematically"
-Cohesion: 0.13
-Nodes (14): Apply Clarity Principles, Assess Current Copy, Button & CTA Text, Confirmation Dialogs, Empty States, Error Messages, Form Labels & Instructions, Help Text & Tooltips (+6 more)
-
-### Community 104 - "Simplify the Design"
-Cohesion: 0.13
-Nodes (14): Assess Current State, Code Simplification, Content Simplification, Context Gathering (Do This First), Document Removed Complexity, Information Architecture, Interaction Simplification, Layout Simplification (+6 more)
-
 ### Community 105 - "test_remediation.py"
 Cohesion: 0.08
 Nodes (30): extract_text(), extract_text_from_docx(), extract_text_from_pdf(), Extract text from a DOCX file, including paragraphs and tables., Route to appropriate extractor based on extension., Extract text from a PDF file., build_analysis_metadata(), Any (+22 more)
 
-### Community 106 - "Generate Comprehensive Report"
-Cohesion: 0.14
-Nodes (13): Anti-Patterns Verdict, Critical Issues, Detailed Findings by Severity, Diagnostic Scan, Executive Summary, Generate Comprehensive Report, High-Severity Issues, Low-Severity Issues (+5 more)
-
-### Community 107 - "Amplify the Design"
-Cohesion: 0.14
-Nodes (13): Amplify the Design, Assess Current State, Color Intensification, Composition Boldness, Context Gathering (Do This First), MANDATORY PREPARATION, Motion & Animation, Plan Amplification (+5 more)
-
-### Community 108 - "Optimization Strategy"
-Cohesion: 0.14
-Nodes (13): Animation Performance, Assess Performance Issues, Core Web Vitals Optimization, Cumulative Layout Shift (CLS < 0.1), First Input Delay (FID < 100ms) / INP (< 200ms), Largest Contentful Paint (LCP < 2.5s), Loading Performance, Network Optimization (+5 more)
-
-### Community 109 - "Working With Sonner"
-Cohesion: 0.15
-Nodes (11): Functions, Sonner API Reference, `toast()` options, `<Toaster />`, Initial Response, Picking the right call, Recipes, Setup (+3 more)
-
-### Community 110 - "Frontend Aesthetics Guidelines"
-Cohesion: 0.15
-Nodes (12): Color & Theme, Design Direction, Frontend Aesthetics Guidelines, Implementation Principles, Interaction, Layout & Space, Motion, Responsive (+4 more)
-
-### Community 111 - "Refine the Design"
-Cohesion: 0.15
-Nodes (12): Assess Current State, Color Refinement, Composition Refinement, Context Gathering (Do This First), MANDATORY PREPARATION, Motion Reduction, Plan Refinement, Refine the Design (+4 more)
-
-### Community 112 - "Hardening Dimensions"
-Cohesion: 0.17
-Nodes (11): Accessibility Resilience, Assess Hardening Needs, Edge Cases & Boundary Conditions, Error Handling, Hardening Dimensions, Input Validation & Sanitization, Internationalization (i18n), Performance Resilience (+3 more)
-
-### Community 113 - "The list"
-Cohesion: 0.18
-Nodes (10): Charts, Common mismatches to catch, How to use this, Initial Response, Interaction & performance, Motion & visuals, Picking The Right Library, State & styling (+2 more)
-
-### Community 114 - "Design Engineering"
-Cohesion: 0.22
-Nodes (8): Accessibility, Design Engineering, Initial Response, prefers-reduced-motion, Review Checklist, Review Format (Required), Stagger Animations, Touch device hover states
-
-### Community 115 - "Component Building Principles"
-Cohesion: 0.25
-Nodes (8): Animate enter states with @starting-style, Buttons must feel responsive, Component Building Principles, Make popovers origin-aware, Never animate from scale(0), Tooltips: skip delay on subsequent hovers, Use blur to mask imperfect transitions, Use CSS transitions over keyframes for interruptible UI
-
-### Community 116 - "Step 2: Ask UX-Focused Questions"
-Cohesion: 0.25
-Nodes (7): Accessibility & Inclusion, Aesthetic Preferences, Brand & Personality, Step 1: Explore the Codebase, Step 2: Ask UX-Focused Questions, Step 3: Write Design Context, Users & Purpose
-
-### Community 117 - "The Animation Decision Framework"
-Cohesion: 0.33
-Nodes (6): 1. Should this animate at all?, 2. What is the purpose?, 3. What easing should it use?, 4. How fast should it be?, Perceived performance, The Animation Decision Framework
-
-### Community 118 - "clip-path for Animation"
-Cohesion: 0.33
-Nodes (6): clip-path for Animation, Comparison sliders, Hold-to-delete pattern, Image reveals on scroll, Tabs with perfect color transitions, The inset shape
-
-### Community 119 - "Performance Rules"
-Cohesion: 0.33
-Nodes (6): CSS animations beat JS under load, CSS variables are inheritable, Framer Motion hardware acceleration caveat, Only animate transform and opacity, Performance Rules, Use WAAPI for programmatic CSS animations
-
-### Community 120 - "Gesture and Drag Interactions"
-Cohesion: 0.33
-Nodes (6): Damping at boundaries, Friction instead of hard stops, Gesture and Drag Interactions, Momentum-based dismissal, Multi-touch protection, Pointer capture for drag
-
-### Community 121 - "extract.md"
-Cohesion: 0.33
-Nodes (5): Discover, Document, Extract & Enrich, Migrate, Plan Extraction
-
-### Community 122 - "CSS Transform Mastery"
-Cohesion: 0.40
-Nodes (5): 3D transforms for depth, CSS Transform Mastery, scale() scales children too, transform-origin, translateY with percentages
-
-### Community 123 - "The Sonner Principles (Building Loved Components)"
-Cohesion: 0.40
-Nodes (5): Asymmetric enter/exit timing, Cohesion matters, Review your work the next day, The opacity + height combination, The Sonner Principles (Building Loved Components)
-
-### Community 124 - "Spring Animations"
-Cohesion: 0.40
-Nodes (5): Interruptibility advantage, Spring Animations, Spring-based mouse interactions, Spring configuration, When to use springs
-
 ### Community 125 - "K"
 Cohesion: 0.40
 Nodes (5): A(), B(), F(), G(), K()
-
-### Community 126 - "Core Philosophy"
-Cohesion: 0.50
-Nodes (4): Beauty is leverage, Core Philosophy, Taste is trained, not innate, Unseen details compound
-
-### Community 127 - "Debugging Animations"
-Cohesion: 0.50
-Nodes (4): Debugging Animations, Frame-by-frame inspection, Slow motion testing, Test on real devices
-
-### Community 128 - "normalize.md"
-Cohesion: 0.50
-Nodes (3): Clean Up, Execute, Plan
-
-### Community 129 - "seed_default_profiles"
-Cohesion: 0.22
-Nodes (8): check_db_connection(), Tests connection to the configured database on demand (e.g. startup or health…, Startup event handler: verify database connectivity and seed default profiles., startup_event(), Session, Checks if scoring profiles exist in the database; if not, seeds missing default…, seed_default_profiles(), on_event
 
 ### Community 130 - "update_job_description"
 Cohesion: 0.25
@@ -580,36 +344,34 @@ Nodes (7): legacy_process_resumes(), limit, post, Request, Session, UploadFile, 
 Cohesion: 0.33
 Nodes (6): get_screening_task_detail(), Retrieves complete details for a specific screening task owned by the…, Verify get_screening_task_detail strips recommendations from candidate…, test_get_screening_task_detail_omits_candidate_recommendations(), test_get_screening_task_detail_owner_success(), test_get_screening_task_detail_unauthorized_or_missing()
 
-### Community 133 - "policy/__init__.py"
-Cohesion: 0.16
-Nodes (8): Defines thresholds and priorities for AI Resume Improvement Engine…, RecommendationPolicy, Defines recruiter-specific configurations and security permissions., RecruiterPolicy, Defines policy configurations for ATS scoring and weights. Removes magic…, ScoringPolicy, Defines policy configurations and fallback weights for adaptive scoring…, ScoringProfilePolicy
+### Community 134 - "test_candidate_xai_dashboard.py"
+Cohesion: 0.08
+Nodes (29): get_password_hash(), Hashes a plain text password using bcrypt., CandidateProfile, post, Session, Creates a user profile based on the role and marks onboarding as completed., submit_onboarding(), anyio_backend() (+21 more)
 
-### Community 134 - "fixture"
-Cohesion: 0.33
-Nodes (6): anyio_backend(), client(), db_session(), fixture, Create a new database session for a test., Create a test client using the test database.
+### Community 135 - "app.js"
+Cohesion: 0.30
+Nodes (9): clearCandidateState(), handleFiles(), renderFileList(), updateResumeCountDisplay(), uploadedFiles, closeAuthModal(), initModals(), openAuthModal() (+1 more)
 
-### Community 135 - "backend/config.py"
-Cohesion: 0.40
-Nodes (3): Settings, Dispatches a secure password reset email to the specified recipient. Security…, send_password_reset_email()
+### Community 137 - "test_confirm_password.py"
+Cohesion: 0.13
+Nodes (14): Verify index.html contains #signup-confirm-group and #signup-confirm-password…, Verify that when opened via file:// protocol (CORS-isolated, zero-module), the…, Confirm Password field must NOT appear in Login, Forgot Password, or unrelated…, Verify signup.js exports validatePasswordMatch and gates Firebase registration., Confirm password value must never be sent to API, state, or storage., Verify auth.css defines .confirm-password-group, .is-visible, and feedback…, Verify full interactive lifecycle: reveal, clear, match, mismatch, tab…, test_auth_css_defines_smooth_transitions_and_semantic_feedback() (+6 more)
 
-### Community 136 - "firebase-init.js"
-Cohesion: 0.40
-Nodes (3): app, googleProvider, firebaseConfig
+### Community 139 - "list_job_descriptions"
+Cohesion: 0.22
+Nodes (9): get_screening_history(), list_job_descriptions(), get, Retrieves all job descriptions created by the recruiter. Deduplicates identical…, Retrieves the screening history runs for the authenticated recruiter, ordered…, Verify list_job_descriptions serializes both 'name' and 'title'., test_get_screening_history_ordered(), test_list_job_descriptions_deduplication() (+1 more)
 
 ## Knowledge Gaps
-- **737 isolated node(s):** `Settings`, `inflightGetRequests`, `uploadedFiles`, `sidebarLinkIds`, `COMPANY_TYPES` (+732 more)
+- **53 isolated node(s):** `Settings`, `inflightGetRequests`, `uploadedFiles`, `sidebarLinkIds`, `COMPANY_TYPES` (+48 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `User` connect `User` to `PipelineStage`, `test_custom_scoring.py`, `Session`, `legacy_process_resumes`, `main.py`, `test_firebase_auth.py`, `test_candidate_xai_dashboard.py`, `get_screening_task_detail`, `process_resumes`, `update_job_description`, `backend/tests/test_recruiter.py`, `list_job_descriptions`, `routers/test_auth.py`, `test_password_reset.py`, `UserRole`, `auth.py`, `test_profile_editing.py`?**
+  _High betweenness centrality (0.072) - this node is a cross-community bridge._
 - **Why does `s()` connect `s` to `bf`, `gsap.min.js`, `recruiter.js`, `Tween`, `cb`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `User` connect `User` to `stages.py`, `process_candidate_resume`, `legacy_process_resumes`, `Session`, `test_firebase_auth.py`, `get_screening_task_detail`, `process_resumes`, `update_job_description`, `routers/test_auth.py`, `backend/tests/test_recruiter.py`, `test_password_reset.py`, `UserRole`, `google_login`, `test_custom_scoring.py`, `test_profile_editing.py`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **Why does `getCandidateDetailRowHTML()` connect `recruiter.js` to `s`, `app.js`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
 - **Are the 5 inferred relationships involving `User` (e.g. with `CompanyType` and `ResumeStatus`) actually correct?**
   _`User` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 32 inferred relationships involving `UserRole` (e.g. with `CandidateProfile` and `JobDescription`) actually correct?**
@@ -618,3 +380,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`CompanyType` has 31 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 11 inferred relationships involving `AnalysisContext` (e.g. with `AnalysisPipeline` and `ExplanationBuildingStage`) actually correct?**
   _`AnalysisContext` has 11 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 18 inferred relationships involving `PipelineStage` (e.g. with `AnalysisPipeline` and `ResumeStatus`) actually correct?**
+  _`PipelineStage` has 18 INFERRED edges - model-reasoned connections that need verification._

@@ -1,13 +1,13 @@
-import { checkAuthStatus, initAuthListener } from './auth.js';
-import { initLoginPage, initializeLoginPage } from './pages/login.js';
-import { initSignupPage, initializeSignupPage } from './pages/signup.js';
-import { initOnboarding, showOnboardingWizard } from './pages/onboarding.js';
-import { initRecruiterPage } from './pages/recruiter.js';
-import { initCandidatePage } from './pages/candidate.js';
-import { initRouter, handleRouting } from './router.js';
-import { initModals, openAuthModal } from './components/modal.js?v=27';
-import { initNavbar } from './components/navbar.js';
-import { initSidebar } from './components/sidebar.js';
+import { checkAuthStatus, initAuthListener } from './auth.js?v=29';
+import { initLoginPage, initializeLoginPage } from './pages/login.js?v=29';
+import { initSignupPage, initializeSignupPage } from './pages/signup.js?v=29';
+import { initOnboarding, showOnboardingWizard } from './pages/onboarding.js?v=29';
+import { initRecruiterPage } from './pages/recruiter.js?v=29';
+import { initCandidatePage } from './pages/candidate.js?v=29';
+import { initRouter, handleRouting } from './router.js?v=29';
+import { initModals, openAuthModal } from './components/modal.js?v=29';
+import { initNavbar } from './components/navbar.js?v=29';
+import { initSidebar } from './components/sidebar.js?v=29';
 import * as api from './api.js';
 import { getCandidateRowHTML, getCandidateDetailRowHTML } from './components/candidateCard.js';
 import { toggleButtonLoading } from './components/loadingSpinner.js';
@@ -26,10 +26,10 @@ function onReady(fn) {
 onReady(() => {
     const pathname = window.location.pathname.toLowerCase();
 
-    const isLandingPage = pathname === '/' || pathname.endsWith('index.html') || pathname === '';
     const isOnboardingPage = pathname.includes('onboarding');
     const isRecruiterPage = pathname.includes('recruiter');
     const isCandidatePage = pathname.includes('candidate');
+    const isLandingPage = Boolean(document.getElementById('landing-hero') || document.getElementById('signup-form') || (!isOnboardingPage && !isRecruiterPage && !isCandidatePage));
 
     // Always initialize resilient modal handlers and event delegation first
     initModals();

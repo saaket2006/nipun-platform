@@ -46,3 +46,13 @@ Thumbs.db
 .firebase/
 .codegraph/
 graphify-out/
+
+# Python testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Project Specific Tools
+.agents/
+.hallmark/
+.diagram-design

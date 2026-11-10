@@ -1,3 +1,5 @@
+import { initializeSignupPage } from '../pages/signup.js?v=29';
+
 let modalsInitialized = false;
 
 /**
@@ -37,6 +39,9 @@ export function openAuthModal(mode = 'login', token = '') {
         authErrorMsg.classList.add('hidden');
         authErrorMsg.textContent = '';
     }
+
+    // Reset signup form and conditional confirm password state
+    initializeSignupPage();
 
     if (mode === 'signup') {
         if (tabsContainer) tabsContainer.classList.remove('hidden');
@@ -120,6 +125,7 @@ export function closeAuthModal() {
         authModal.classList.add('hidden');
         authModal.setAttribute('aria-hidden', 'true');
     }
+    initializeSignupPage();
 
     // Clear hash if it is currently an auth hash
     const currentHash = window.location.hash;

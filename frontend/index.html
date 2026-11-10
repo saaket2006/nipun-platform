@@ -20,9 +20,9 @@
     <link rel="stylesheet" href="assets/css/tokens.css?v=7">
     <link rel="stylesheet" href="assets/css/hallmark-base.css?v=8">
     <link rel="stylesheet" href="assets/css/design-tokens.css?v=8">
-    <link rel="stylesheet" href="assets/css/base.css?v=7">
+    <link rel="stylesheet" href="assets/css/base.css?v=8">
     <link rel="stylesheet" href="assets/css/ats.css?v=7">
-    <link rel="stylesheet" href="assets/css/auth.css?v=19">
+    <link rel="stylesheet" href="assets/css/auth.css?v=22">
     <link rel="stylesheet" href="assets/css/onboarding.css?v=7">
     <link rel="stylesheet" href="assets/css/components.css?v=7">
     <link rel="stylesheet" href="assets/css/recruiter.css?v=7">
@@ -840,6 +840,29 @@
                             <p id="constraint-special">At least 1 special character (@$!%*?&)</p>
                         </div>
                     </div>
+                    <!-- Conditional Confirm Password Field (revealed when password contains value) -->
+                    <div class="form-group confirm-password-group" id="signup-confirm-group" aria-hidden="true">
+                        <div class="password-input-wrapper">
+                            <input type="password" id="signup-confirm-password" name="confirm-password" autocomplete="new-password"
+                                placeholder="Confirm Password" class="auth-input" aria-label="Confirm Password">
+                            <button type="button" class="toggle-password-btn" data-target="signup-confirm-password" aria-label="Show password">
+                                <svg class="icon-eye w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off hidden w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
+                            </button>
+                            <button type="button" class="clear-password-btn" data-target="signup-confirm-password" aria-label="Clear password">
+                                <span>✕</span>
+                            </button>
+                        </div>
+                        <div class="password-match-feedback hidden" id="signup-password-match-feedback" aria-live="polite"></div>
+                    </div>
                     <button type="submit" class="glow-btn" id="email-signup-btn">
                         <span>Sign Up</span>
                     </button>
@@ -999,6 +1022,61 @@
                 authErrorMsg.textContent = '';
             }
 
+            // Reset forms, constraints, and confirm password state when opening or switching modes
+            var signupForm = document.getElementById('signup-form');
+            if (signupForm) signupForm.reset();
+            var confirmGroup = document.getElementById('signup-confirm-group');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            if (confirmGroup) {
+                confirmGroup.classList.remove('is-visible');
+                confirmGroup.setAttribute('aria-hidden', 'true');
+            }
+            if (confirmInput) {
+                confirmInput.value = '';
+                confirmInput.classList.remove('input-match-success', 'input-match-error');
+            }
+            if (matchFeedback) {
+                matchFeedback.textContent = '';
+                matchFeedback.className = 'password-match-feedback hidden';
+            }
+            var passInputs = document.querySelectorAll('#auth-modal input');
+            passInputs.forEach(function (inp) {
+                if (inp.id && inp.id.indexOf('password') !== -1) {
+                    inp.setAttribute('type', 'password');
+                }
+            });
+            var passToggles = document.querySelectorAll('#auth-modal .toggle-password-btn');
+            passToggles.forEach(function (btn) {
+                btn.setAttribute('aria-label', 'Show password');
+                var eye = btn.querySelector('.icon-eye');
+                var eyeOff = btn.querySelector('.icon-eye-off');
+                if (eye) eye.classList.remove('hidden');
+                if (eyeOff) eyeOff.classList.add('hidden');
+            });
+            var cLength = document.getElementById('constraint-length');
+            var cNumber = document.getElementById('constraint-number');
+            var cSpecial = document.getElementById('constraint-special');
+            if (cLength) cLength.className = '';
+            if (cNumber) cNumber.className = '';
+            if (cSpecial) cSpecial.className = '';
+
+            // Reset all password input types to 'password' and restore default eye toggle state
+            var passInputs = document.querySelectorAll('#auth-modal input');
+            passInputs.forEach(function (inp) {
+                if (inp.id && inp.id.indexOf('password') !== -1) {
+                    inp.setAttribute('type', 'password');
+                }
+            });
+            var passToggles = document.querySelectorAll('#auth-modal .toggle-password-btn');
+            passToggles.forEach(function (btn) {
+                btn.setAttribute('aria-label', 'Show password');
+                var eye = btn.querySelector('.icon-eye');
+                var eyeOff = btn.querySelector('.icon-eye-off');
+                if (eye) eye.classList.remove('hidden');
+                if (eyeOff) eyeOff.classList.add('hidden');
+            });
+
             if (mode === 'signup') {
                 if (tabsContainer) tabsContainer.classList.remove('hidden');
                 if (divider) divider.classList.remove('hidden');
@@ -1044,6 +1122,37 @@
                 authModal.classList.add('hidden');
                 authModal.setAttribute('aria-hidden', 'true');
             }
+            var signupForm = document.getElementById('signup-form');
+            if (signupForm) signupForm.reset();
+            var confirmGroup = document.getElementById('signup-confirm-group');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            if (confirmGroup) {
+                confirmGroup.classList.remove('is-visible');
+                confirmGroup.setAttribute('aria-hidden', 'true');
+            }
+            if (confirmInput) {
+                confirmInput.value = '';
+                confirmInput.classList.remove('input-match-success', 'input-match-error');
+            }
+            if (matchFeedback) {
+                matchFeedback.textContent = '';
+                matchFeedback.className = 'password-match-feedback hidden';
+            }
+            var passInputs = document.querySelectorAll('#auth-modal input');
+            passInputs.forEach(function (inp) {
+                if (inp.id && inp.id.indexOf('password') !== -1) {
+                    inp.setAttribute('type', 'password');
+                }
+            });
+            var passToggles = document.querySelectorAll('#auth-modal .toggle-password-btn');
+            passToggles.forEach(function (btn) {
+                btn.setAttribute('aria-label', 'Show password');
+                var eye = btn.querySelector('.icon-eye');
+                var eyeOff = btn.querySelector('.icon-eye-off');
+                if (eye) eye.classList.remove('hidden');
+                if (eyeOff) eyeOff.classList.add('hidden');
+            });
             try {
                 var hash = window.location.hash;
                 if (hash === '#/login' || hash === '#/signup' || hash === '#/forgot-password' || hash.indexOf('#/reset-password') === 0) {
@@ -1058,6 +1167,114 @@
 
         window.openAuthModal = openAuthModal;
         window.closeAuthModal = closeAuthModal;
+
+        // Reactive Password & Confirm Password Matching Engine (Zero-delay, works offline & across all protocols)
+        function validatePasswordMatchResilient(passVal, confirmVal) {
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var authErrorMsg = document.getElementById('auth-error');
+
+            if (!confirmVal) {
+                if (matchFeedback) {
+                    matchFeedback.textContent = '';
+                    matchFeedback.className = 'password-match-feedback hidden';
+                }
+                if (confirmInput) {
+                    confirmInput.classList.remove('input-match-success', 'input-match-error');
+                }
+                return false;
+            }
+
+            if (passVal === confirmVal) {
+                if (matchFeedback) {
+                    matchFeedback.innerHTML = '<span>✓</span> <span>Passwords match.</span>';
+                    matchFeedback.className = 'password-match-feedback match-success';
+                }
+                if (confirmInput) {
+                    confirmInput.classList.remove('input-match-error');
+                    confirmInput.classList.add('input-match-success');
+                }
+                if (authErrorMsg && (authErrorMsg.textContent === 'Passwords do not match.' || authErrorMsg.textContent === 'Please confirm your password.')) {
+                    authErrorMsg.classList.add('hidden');
+                    authErrorMsg.textContent = '';
+                }
+                return true;
+            } else {
+                if (matchFeedback) {
+                    matchFeedback.innerHTML = '<span>✕</span> <span>Passwords do not match.</span>';
+                    matchFeedback.className = 'password-match-feedback match-error';
+                }
+                if (confirmInput) {
+                    confirmInput.classList.remove('input-match-success');
+                    confirmInput.classList.add('input-match-error');
+                }
+                return false;
+            }
+        }
+
+        function handlePasswordInput() {
+            var signupPass = document.getElementById('signup-password');
+            var confirmGroup = document.getElementById('signup-confirm-group');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            if (!signupPass || !confirmGroup) return;
+
+            var passVal = signupPass.value;
+
+            // Password complexity constraint feedback
+            var cLength = document.getElementById('constraint-length');
+            var cNumber = document.getElementById('constraint-number');
+            var cSpecial = document.getElementById('constraint-special');
+            if (cLength) cLength.className = passVal.length >= 8 ? 'valid' : (passVal.length > 0 ? 'invalid' : '');
+            if (cNumber) cNumber.className = /\d/.test(passVal) ? 'valid' : (passVal.length > 0 ? 'invalid' : '');
+            if (cSpecial) cSpecial.className = /[@$!%*?&]/.test(passVal) ? 'valid' : (passVal.length > 0 ? 'invalid' : '');
+
+            if (passVal.length > 0) {
+                // Reveal Confirm Password smoothly directly below Password
+                if (!confirmGroup.classList.contains('is-visible')) {
+                    confirmGroup.classList.add('is-visible');
+                    confirmGroup.setAttribute('aria-hidden', 'false');
+                }
+                if (confirmInput && confirmInput.value.length > 0) {
+                    validatePasswordMatchResilient(passVal, confirmInput.value);
+                }
+            } else {
+                // Hide Confirm Password and reset values and feedback
+                confirmGroup.classList.remove('is-visible');
+                confirmGroup.setAttribute('aria-hidden', 'true');
+                if (confirmInput) {
+                    confirmInput.value = '';
+                    confirmInput.classList.remove('input-match-success', 'input-match-error');
+                }
+                if (matchFeedback) {
+                    matchFeedback.textContent = '';
+                    matchFeedback.className = 'password-match-feedback hidden';
+                }
+            }
+        }
+
+        function handleConfirmPasswordInput() {
+            var signupPass = document.getElementById('signup-password');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            if (!signupPass || !confirmInput) return;
+            validatePasswordMatchResilient(signupPass.value, confirmInput.value);
+        }
+
+        // Delegated input & keyup listeners for password and confirm password
+        function onPasswordChange(e) {
+            if (!e.target) return;
+            if (e.target.id === 'signup-password') {
+                handlePasswordInput();
+            } else if (e.target.id === 'signup-confirm-password') {
+                handleConfirmPasswordInput();
+            }
+        }
+        document.addEventListener('input', onPasswordChange);
+        document.addEventListener('change', onPasswordChange);
+        document.addEventListener('keyup', onPasswordChange);
+        document.addEventListener('paste', function (e) {
+            setTimeout(function () { onPasswordChange(e); }, 10);
+        });
 
         // Global capture-phase click handler: intercepts all auth triggers across DOM immediately
         document.addEventListener('click', function (e) {
@@ -1074,6 +1291,44 @@
             if (closeBtn) {
                 e.preventDefault();
                 closeAuthModal();
+                return;
+            }
+
+            // Toggle Password Visibility
+            var toggleBtn = e.target.closest('.toggle-password-btn');
+            if (toggleBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                var targetId = toggleBtn.getAttribute('data-target');
+                var inputElem = document.getElementById(targetId);
+                if (inputElem) {
+                    var isPass = inputElem.getAttribute('type') === 'password';
+                    inputElem.setAttribute('type', isPass ? 'text' : 'password');
+                    toggleBtn.setAttribute('aria-label', isPass ? 'Hide password' : 'Show password');
+                    var eyeIcon = toggleBtn.querySelector('.icon-eye');
+                    var eyeOffIcon = toggleBtn.querySelector('.icon-eye-off');
+                    if (eyeIcon && eyeOffIcon) {
+                        eyeIcon.classList.toggle('hidden', isPass);
+                        eyeOffIcon.classList.toggle('hidden', !isPass);
+                    }
+                }
+                return;
+            }
+
+            // Clear Password Text
+            var clearBtn = e.target.closest('.clear-password-btn');
+            if (clearBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                var clearTargetId = clearBtn.getAttribute('data-target');
+                var clearInputElem = document.getElementById(clearTargetId);
+                if (clearInputElem) {
+                    clearInputElem.value = '';
+                    clearInputElem.focus();
+                    clearInputElem.dispatchEvent(new Event('input', { bubbles: true }));
+                }
                 return;
             }
 
@@ -1136,11 +1391,44 @@
                 }
             }
         });
+
+        // Form submit gating for Sign Up
+        document.addEventListener('submit', function (e) {
+            if (e.target && e.target.id === 'signup-form') {
+                var signupPass = document.getElementById('signup-password');
+                var confirmInput = document.getElementById('signup-confirm-password');
+                var authErrorMsg = document.getElementById('auth-error');
+                var passVal = signupPass ? signupPass.value : '';
+                var confirmVal = confirmInput ? confirmInput.value : '';
+
+                if (!confirmVal) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    if (authErrorMsg) {
+                        authErrorMsg.textContent = 'Please confirm your password.';
+                        authErrorMsg.classList.remove('hidden');
+                    }
+                    if (confirmInput) confirmInput.focus();
+                    return false;
+                }
+                if (passVal !== confirmVal) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    if (authErrorMsg) {
+                        authErrorMsg.textContent = 'Passwords do not match.';
+                        authErrorMsg.classList.remove('hidden');
+                    }
+                    validatePasswordMatchResilient(passVal, confirmVal);
+                    if (confirmInput) confirmInput.focus();
+                    return false;
+                }
+            }
+        }, true);
     })();
     </script>
 
-    <script type="module" src="assets/js/app.js?v=27"></script>
-    <script type="module" src="assets/js/landing.js?v=27"></script>
+    <script type="module" src="assets/js/app.js?v=29"></script>
+    <script type="module" src="assets/js/landing.js?v=29"></script>
 </body>
 
 </html>
