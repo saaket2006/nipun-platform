@@ -43,12 +43,12 @@
     height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--color-paper);
+    background: transparent;
 }
 ::-webkit-scrollbar-thumb {
     background: var(--color-rule-2);
     border-radius: var(--radius-pill);
-    border: 1px solid var(--color-paper);
+    border: 1px solid transparent;
 }
 ::-webkit-scrollbar-thumb:hover {
     background: var(--color-forest);

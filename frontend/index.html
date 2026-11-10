@@ -18,15 +18,15 @@
     <link rel="stylesheet" href="assets/css/tailwind.min.css?v=7">
     <link rel="stylesheet" href="assets/css/fonts.css?v=7">
     <link rel="stylesheet" href="assets/css/tokens.css?v=7">
-    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=7">
-    <link rel="stylesheet" href="assets/css/design-tokens.css?v=7">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=8">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=8">
     <link rel="stylesheet" href="assets/css/base.css?v=7">
     <link rel="stylesheet" href="assets/css/ats.css?v=7">
-    <link rel="stylesheet" href="assets/css/auth.css?v=18">
+    <link rel="stylesheet" href="assets/css/auth.css?v=19">
     <link rel="stylesheet" href="assets/css/onboarding.css?v=7">
     <link rel="stylesheet" href="assets/css/components.css?v=7">
     <link rel="stylesheet" href="assets/css/recruiter.css?v=7">
-    <link rel="stylesheet" href="assets/css/landing.css?v=18">
+    <link rel="stylesheet" href="assets/css/landing.css?v=24">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -55,10 +55,10 @@
                 </nav>
                 <div class="landing-header-actions items-center gap-3">
                     <button
-                        class="nav-login-btn px-4 py-2 text-sm font-semibold text-ink whitespace-nowrap hover:text-ink transition-colors border border-rule hover:bg-paperRaised rounded-lg">Sign
+                        class="nav-login-btn px-4 py-2 text-sm font-semibold text-ink whitespace-nowrap hover:text-ink transition-colors border border-rule hover:bg-paperRaised rounded-lg" data-auth-modal="login">Sign
                         In</button>
                     <button
-                        class="nav-signup-btn px-4 py-2 text-sm font-semibold text-white whitespace-nowrap bg-forest hover:bg-forest-hover rounded-lg transition-colors duration-150">Get
+                        class="nav-signup-btn px-4 py-2 text-sm font-semibold text-white whitespace-nowrap bg-forest hover:bg-forest-hover rounded-lg transition-colors duration-150" data-auth-modal="signup">Get
                         Started</button>
                 </div>
                 <!-- Mobile Navigation Toggle -->
@@ -86,8 +86,8 @@
                     <a href="#faq" class="landing-drawer-link">FAQ</a>
                 </div>
                 <div class="landing-mobile-drawer-actions">
-                    <button class="nav-login-btn">Sign In</button>
-                    <button class="nav-signup-btn">Get Started</button>
+                    <button class="nav-login-btn" data-auth-modal="login">Sign In</button>
+                    <button class="nav-signup-btn" data-auth-modal="signup">Get Started</button>
                 </div>
             </div>
         </div>
@@ -97,13 +97,10 @@
             class="relative min-h-[100dvh] pt-32 pb-20 flex items-center justify-center bg-paper overflow-hidden">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
                 <div class="text-left space-y-6">
-                    <div class="hero-kicker-badge">
-                        <span class="hero-kicker-dot"></span>
-                        <span>EDITORIAL INTELLIGENCE PLATFORM</span>
-                    </div>
-
-                    <h1 class="hero-headline text-4xl sm:text-5xl lg:text-6xl font-extrabold text-ink leading-normal pt-1">
-                        AI Resume Screening & Analytical Candidate Ranking
+                    <h1 class="hero-headline text-4xl sm:text-5xl lg:text-6xl font-extrabold text-ink leading-normal">
+                        <span class="headline-line">AI Resume Screening</span>
+                        <span class="headline-line">&amp; Analytical</span>
+                        <span class="headline-line">Candidate Ranking</span>
                     </h1>
 
                     <p class="hero-subtitle text-base sm:text-lg text-inkSecondary max-w-xl">
@@ -112,7 +109,7 @@
 
                     <div class="hero-cta-group pt-2">
                         <button
-                            class="nav-signup-btn hero-cta-primary px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150 flex items-center gap-2">
+                            class="nav-signup-btn hero-cta-primary px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150 flex items-center gap-2" data-auth-modal="signup">
                             <span>Start Screening Free</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
@@ -209,20 +206,20 @@
 
         <!-- Problem Story Section -->
         <section id="story" class="relative w-full bg-paper min-h-[100dvh] flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
-            <div class="story-container max-w-3xl w-full mx-auto text-center flex flex-col items-center justify-center my-auto">
+            <div class="story-container max-w-3xl w-full mx-auto px-6 text-center flex flex-col items-center justify-center my-auto">
                 <span class="section-kicker">THE SCREENING DILEMMA</span>
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink mb-12 tracking-tight">Why Keyword Filters Break Modern Technical Hiring</h2>
                 <div class="story-list w-full space-y-8 sm:space-y-10">
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-inkSecondary font-medium transition-colors duration-300">
-                        <span class="num text-forest font-bold font-mono">1,000+</span> resumes flood technical job openings every month.
+                    <div class="story-element is-active text-xl sm:text-2xl md:text-3xl font-medium transition-colors duration-300">
+                        <span class="num font-bold font-mono">1,000+</span> resumes flood technical job openings every month.
                     </div>
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-inkSecondary font-medium transition-colors duration-300">
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl font-medium transition-colors duration-300">
                         Hours consumed manually cross-referencing keyword variations.
                     </div>
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-inkSecondary font-medium transition-colors duration-300">
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl font-medium transition-colors duration-300">
                         Qualified applicants eliminated by rigid string-match filters.
                     </div>
-                    <div class="story-element text-xl sm:text-2xl md:text-3xl text-forest font-bold transition-colors duration-300">
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl story-highlight font-bold transition-colors duration-300">
                         Nipun evaluates semantic relevance, candidate experience, and role alignment.
                     </div>
                 </div>
@@ -397,27 +394,29 @@
         <!-- Product Walkthrough Sticky Section -->
         <section id="walkthrough" class="py-24 bg-paper relative">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                <div class="sticky top-32 space-y-6">
-                    <span class="section-kicker">WORKFLOW ARCHITECTURE</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">How the Evaluation Engine Works</h2>
-                    <p class="text-inkSecondary max-w-md">Follow the automated pipeline from the initial document upload up
-                        to explainable recruiter insights.</p>
+                <div class="walkthrough-steps-col space-y-8">
+                    <div class="walkthrough-header space-y-4">
+                        <span class="section-kicker">WORKFLOW ARCHITECTURE</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">How the Evaluation Engine Works</h2>
+                        <p class="text-inkSecondary max-w-md">Follow the automated pipeline from the initial document upload up
+                            to explainable recruiter insights.</p>
+                    </div>
 
-                    <div class="space-y-8 pt-4">
-                        <div class="walkthrough-text-block border-l-2 border-forest pl-4 cursor-pointer"
-                            data-visual-target="visual-upload">
+                    <div class="walkthrough-steps-list space-y-12 lg:space-y-20 pt-2 pb-20">
+                        <div class="walkthrough-text-block is-active border-l-2 border-forest pl-6 cursor-pointer"
+                            data-step-index="0" data-visual-target="visual-upload">
                             <h3 class="text-lg font-bold text-ink">Step 1: Document Ingestion</h3>
                             <p class="text-inkSecondary text-sm">Candidates or recruiters upload PDF or Word documents
                                 directly into the screening zone.</p>
                         </div>
-                        <div class="walkthrough-text-block border-l-2 border-rule pl-4 cursor-pointer"
-                            data-visual-target="visual-match">
+                        <div class="walkthrough-text-block border-l-2 border-rule pl-6 cursor-pointer"
+                            data-step-index="1" data-visual-target="visual-match">
                             <h3 class="text-lg font-bold text-ink">Step 2: Semantic Matching</h3>
                             <p class="text-inkSecondary text-sm">Our parsing algorithms resolve abbreviations, synonyms,
                                 and context matches against job descriptions.</p>
                         </div>
-                        <div class="walkthrough-text-block border-l-2 border-rule pl-4 cursor-pointer"
-                            data-visual-target="visual-analytics">
+                        <div class="walkthrough-text-block border-l-2 border-rule pl-6 cursor-pointer"
+                            data-step-index="2" data-visual-target="visual-analytics">
                             <h3 class="text-lg font-bold text-ink">Step 3: Analytical Calibration & XAI</h3>
                             <p class="text-inkSecondary text-sm">Dynamic match score timelines, xai breakdowns, and
                                 prioritized improvements appear instantly on the dashboard.</p>
@@ -425,42 +424,121 @@
                     </div>
                 </div>
 
-                <div
-                    class="walkthrough-visual-container relative">
-                    <div id="visual-upload"
-                        class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0">
-                        <div class="p-6 border border-dashed border-forest/30 bg-forest/5 rounded-xl">
-                            <i data-lucide="upload-cloud"
-                                class="w-12 h-12 text-forest mx-auto mb-2"></i>
-                            <p class="text-sm font-semibold text-ink">candidate_resume.pdf</p>
-                            <p class="text-xs text-muted font-mono">Ready to parse (7.2 yrs tenure)</p>
+                <div class="walkthrough-visual-col">
+                    <div
+                        class="walkthrough-visual-container relative" data-active-step="0">
+                    <!-- Top Telemetry Header -->
+                    <div class="workflow-grid-telemetry-header">
+                        <div class="flex items-center gap-2">
+                            <span class="workflow-telemetry-tag">PIPELINE MONITOR</span>
+                            <span class="workflow-telemetry-sub font-mono text-[11px] text-inkSecondary">7-LAYER EVALUATION MATRIX</span>
+                        </div>
+                        <div class="workflow-telemetry-status flex items-center gap-1.5 font-mono text-[11px] text-forest font-semibold">
+                            <span class="workflow-pulse-dot"></span>
+                            <span>ACTIVE · 384-DIM PARITY</span>
                         </div>
                     </div>
-                    <div id="visual-match"
-                        class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0"
-                        style="display: none;">
-                        <div class="p-6 border border-forest/20 bg-forest/5 rounded-xl">
-                            <div class="flex justify-between items-center text-xs text-inkSecondary font-medium font-mono mb-2">
-                                <span>Kubernetes</span>
-                                <span class="text-muted">↔</span>
-                                <span>K8s Cluster Ops</span>
+
+                    <!-- Centered Workflow Grid Canvas & Animation -->
+                    <div class="workflow-grid-canvas">
+                        <!-- Subtle Background Precision Grid -->
+                        <svg class="workflow-grid-svg" aria-hidden="true" width="100%" height="100%">
+                            <defs>
+                                <pattern id="wf-grid-pattern" width="28" height="28" patternUnits="userSpaceOnUse">
+                                    <path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(30, 58, 47, 0.05)" stroke-width="1" />
+                                    <circle cx="28" cy="0" r="1" fill="rgba(30, 58, 47, 0.15)" />
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#wf-grid-pattern)" />
+                        </svg>
+
+                        <!-- Evaluation Pipeline Stage Indicators with Flowing Data Stream -->
+                        <div class="workflow-pipeline-nodes" role="group" aria-label="Evaluation pipeline stages">
+                            <div class="workflow-grid-node is-active" data-step-node="0">
+                                <span class="wf-node-index font-mono">01</span>
+                                <span class="wf-node-label">Ingest</span>
+                                <span class="wf-node-meta font-mono">OCR / Parse</span>
                             </div>
-                            <p class="text-sm font-semibold text-ink">Concept Parity Match</p>
-                            <p class="text-xs text-forest font-medium">Semantic concept alignment</p>
+                            <div class="workflow-node-connector" aria-hidden="true">
+                                <div class="wf-connector-line">
+                                    <div class="wf-pulse-particle"></div>
+                                </div>
+                            </div>
+                            <div class="workflow-grid-node" data-step-node="1">
+                                <span class="wf-node-index font-mono">02</span>
+                                <span class="wf-node-label">Semantic</span>
+                                <span class="wf-node-meta font-mono">Concept Fit</span>
+                            </div>
+                            <div class="workflow-node-connector" aria-hidden="true">
+                                <div class="wf-connector-line">
+                                    <div class="wf-pulse-particle"></div>
+                                </div>
+                            </div>
+                            <div class="workflow-grid-node" data-step-node="2">
+                                <span class="wf-node-index font-mono">03</span>
+                                <span class="wf-node-label">XAI Score</span>
+                                <span class="wf-node-meta font-mono">Calibrated</span>
+                            </div>
+                        </div>
+
+                        <!-- Active Step Interactive Panels Centered Within Grid -->
+                        <div class="workflow-panels-stage relative">
+                            <div id="visual-upload"
+                                class="walkthrough-visual-panel w-full max-w-[340px] text-center pointer-events-none opacity-0">
+                                <div class="workflow-step-card space-y-2">
+                                    <div class="workflow-step-icon">
+                                        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                                    </div>
+                                    <p class="text-sm font-bold text-ink">candidate_resume.pdf</p>
+                                    <p class="text-xs text-inkSecondary font-mono">Ready to parse · 7.2 yrs tenure</p>
+                                    <div class="pt-2 flex items-center justify-center gap-1.5 text-[11px] font-mono text-forest">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-forest animate-pulse"></span>
+                                        <span>Multi-layer structural tokenization</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="visual-match"
+                                class="walkthrough-visual-panel w-full max-w-[340px] text-center pointer-events-none opacity-0"
+                                style="display: none;">
+                                <div class="workflow-step-card space-y-2">
+                                    <div class="workflow-step-parity-badge">
+                                        <span class="text-ink font-semibold">Kubernetes</span>
+                                        <span class="text-forest font-bold">↔</span>
+                                        <span class="text-ink font-semibold">K8s Cluster Ops</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-ink">Concept Parity Match</p>
+                                    <p class="text-xs text-forest font-medium">Semantic concept alignment · 0.88 Cosine Fit</p>
+                                    <div class="pt-2 flex items-center justify-center gap-1.5 text-[11px] font-mono text-muted">
+                                        <span>Resolved via 384-dimensional domain embeddings</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="visual-analytics"
+                                class="walkthrough-visual-panel w-full max-w-[340px] text-center pointer-events-none opacity-0"
+                                style="display: none;">
+                                <div class="workflow-step-card space-y-2">
+                                    <div class="text-3xl font-extrabold text-forest mb-1 num font-mono">82.5%</div>
+                                    <p class="text-sm font-bold text-ink">High Fit Candidate</p>
+                                    <p class="text-xs text-inkSecondary">Evaluated under Backend Engineer Profile</p>
+                                    <div class="pt-2 flex items-center justify-center gap-1.5 text-[11px] font-mono text-forest">
+                                        <span>Skills (45%) + Exp (30%) + Projects (20%) + Edu (5%)</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div id="visual-analytics"
-                        class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0"
-                        style="display: none;">
-                        <div class="p-6 border border-forest/20 bg-forest/5 rounded-xl">
-                            <div class="text-2xl font-bold text-forest mb-1 num font-mono">82.5%</div>
-                            <p class="text-xs font-semibold text-ink">High Fit Candidate</p>
-                            <p class="text-xs text-muted">Evaluated under Backend Profile</p>
-                        </div>
+
+                    <!-- Bottom Telemetry Status Footer -->
+                    <div class="workflow-grid-telemetry-footer">
+                        <span class="font-mono text-[10px] text-muted tracking-wider uppercase">INPUT: MULTI-FORMAT (PDF/DOCX)</span>
+                        <span class="font-mono text-[10px] text-muted tracking-wider uppercase">AUDITABLE EXPLAINABILITY LOGS</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
         <!-- FAQ Section -->
         <section id="faq" class="py-24 bg-paper relative">
@@ -519,16 +597,16 @@
         </section>
 
         <!-- Final Closing CTA Section -->
-        <section class="closing-cta-section py-24 bg-ivory relative border-t border-rule overflow-hidden text-center">
+        <section class="closing-cta-section py-24 bg-paper relative border-t border-rule overflow-hidden text-center w-full">
             <div class="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
                 <span class="section-kicker">START SCREENING ACCURATELY</span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-ink leading-tight">Calibrate Candidate Evaluation Today</h2>
                 <p class="text-inkSecondary max-w-md mx-auto text-base">Scale your candidate evaluations with high-precision semantic filters and more consistent, explainable candidate evaluation.</p>
                 <div class="flex flex-wrap justify-center items-center gap-4">
                     <button
-                        class="nav-signup-btn px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150">Start Free Screening</button>
+                        class="closing-cta-btn nav-signup-btn px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150" data-auth-modal="signup">Start Free Screening</button>
                     <button
-                        class="nav-login-btn px-6 py-3 font-semibold text-ink bg-white border border-rule hover:bg-paperRaised rounded-xl transition-colors">Candidate Portal</button>
+                        class="closing-cta-btn nav-login-btn px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150" data-auth-modal="login">Candidate Portal</button>
                 </div>
             </div>
         </section>
@@ -683,7 +761,6 @@
     <!-- Auth Modal -->
     <div id="auth-modal" class="auth-modal-overlay hidden">
         <div class="glass-card auth-card">
-            <button type="button" class="auth-close-btn" id="auth-close-btn" aria-label="Close modal">&times;</button>
             <div class="auth-tabs" id="auth-tabs-container">
                 <button class="auth-tab active" id="tab-login">Login</button>
                 <button class="auth-tab" id="tab-signup">Sign Up</button>
@@ -888,8 +965,182 @@
     </div>
 
 
-    <script type="module" src="assets/js/app.js?v=19"></script>
-    <script type="module" src="assets/js/landing.js?v=19"></script>
+    <!-- Immediate Resilient Auth Modal Controller (Zero Dependencies, Instant Load, File/HTTP Resilient) -->
+    <script>
+    (function () {
+        function openAuthModal(mode) {
+            mode = mode || 'login';
+            var authModal = document.getElementById('auth-modal');
+            if (!authModal) return;
+
+            authModal.classList.remove('hidden');
+            authModal.setAttribute('aria-hidden', 'false');
+
+            var mobileDrawer = document.getElementById('landing-mobile-drawer');
+            if (mobileDrawer) {
+                mobileDrawer.classList.add('hidden');
+                var menuBtn = document.getElementById('landing-mobile-menu-btn');
+                if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+            }
+
+            var tabLogin = document.getElementById('tab-login');
+            var tabSignup = document.getElementById('tab-signup');
+            var loginPlane = document.getElementById('login-plane');
+            var signupPlane = document.getElementById('signup-plane');
+            var forgotPlane = document.getElementById('forgot-password-plane');
+            var resetPlane = document.getElementById('reset-password-plane');
+            var tabsContainer = document.getElementById('auth-tabs-container');
+            var divider = document.getElementById('auth-modal-divider');
+            var googleBtn = document.getElementById('google-login-btn');
+            var authErrorMsg = document.getElementById('auth-error');
+
+            if (authErrorMsg) {
+                authErrorMsg.classList.add('hidden');
+                authErrorMsg.textContent = '';
+            }
+
+            if (mode === 'signup') {
+                if (tabsContainer) tabsContainer.classList.remove('hidden');
+                if (divider) divider.classList.remove('hidden');
+                if (googleBtn) googleBtn.classList.remove('hidden');
+                if (tabLogin) tabLogin.classList.remove('active');
+                if (tabSignup) tabSignup.classList.add('active');
+                if (loginPlane) { loginPlane.classList.add('hidden'); loginPlane.classList.remove('active-plane'); }
+                if (signupPlane) { signupPlane.classList.remove('hidden'); signupPlane.classList.add('active-plane'); }
+                if (forgotPlane) forgotPlane.classList.add('hidden');
+                if (resetPlane) resetPlane.classList.add('hidden');
+            } else if (mode === 'forgot-password') {
+                if (tabsContainer) tabsContainer.classList.add('hidden');
+                if (divider) divider.classList.add('hidden');
+                if (googleBtn) googleBtn.classList.add('hidden');
+                if (loginPlane) loginPlane.classList.add('hidden');
+                if (signupPlane) signupPlane.classList.add('hidden');
+                if (resetPlane) resetPlane.classList.add('hidden');
+                if (forgotPlane) { forgotPlane.classList.remove('hidden'); forgotPlane.classList.add('active-plane'); }
+            } else {
+                // Default to login
+                mode = 'login';
+                if (tabsContainer) tabsContainer.classList.remove('hidden');
+                if (divider) divider.classList.remove('hidden');
+                if (googleBtn) googleBtn.classList.remove('hidden');
+                if (tabLogin) tabLogin.classList.add('active');
+                if (tabSignup) tabSignup.classList.remove('active');
+                if (loginPlane) { loginPlane.classList.remove('hidden'); loginPlane.classList.add('active-plane'); }
+                if (signupPlane) { signupPlane.classList.add('hidden'); signupPlane.classList.remove('active-plane'); }
+                if (forgotPlane) forgotPlane.classList.add('hidden');
+                if (resetPlane) resetPlane.classList.add('hidden');
+            }
+
+            try {
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, '', '#/' + mode);
+                }
+            } catch (err) {}
+        }
+
+        function closeAuthModal() {
+            var authModal = document.getElementById('auth-modal');
+            if (authModal) {
+                authModal.classList.add('hidden');
+                authModal.setAttribute('aria-hidden', 'true');
+            }
+            try {
+                var hash = window.location.hash;
+                if (hash === '#/login' || hash === '#/signup' || hash === '#/forgot-password' || hash.indexOf('#/reset-password') === 0) {
+                    if (window.history && window.history.replaceState) {
+                        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+                    } else {
+                        window.location.hash = '';
+                    }
+                }
+            } catch (err) {}
+        }
+
+        window.openAuthModal = openAuthModal;
+        window.closeAuthModal = closeAuthModal;
+
+        // Global capture-phase click handler: intercepts all auth triggers across DOM immediately
+        document.addEventListener('click', function (e) {
+            var authModal = document.getElementById('auth-modal');
+
+            // Backdrop click dismissal
+            if (authModal && e.target === authModal) {
+                closeAuthModal();
+                return;
+            }
+
+            // Close button if present
+            var closeBtn = e.target.closest('#auth-close-btn');
+            if (closeBtn) {
+                e.preventDefault();
+                closeAuthModal();
+                return;
+            }
+
+            // Tabs inside auth modal
+            var tabBtn = e.target.closest('#tab-login, #tab-signup');
+            if (tabBtn) {
+                e.preventDefault();
+                openAuthModal(tabBtn.id === 'tab-signup' ? 'signup' : 'login');
+                return;
+            }
+
+            // Forgot password link inside auth modal
+            var forgotLink = e.target.closest('a[href="#/forgot-password"], #forgot-password-link');
+            if (forgotLink) {
+                e.preventDefault();
+                openAuthModal('forgot-password');
+                return;
+            }
+
+            // Back to login links
+            var backToLogin = e.target.closest('#back-to-login-link, #reset-back-to-login-link');
+            if (backToLogin) {
+                e.preventDefault();
+                openAuthModal('login');
+                return;
+            }
+
+            // All auth trigger buttons and links
+            var trigger = e.target.closest('[data-auth-modal], .nav-login-btn, .nav-signup-btn, a[href="#/login"], a[href="#/signup"]');
+            if (!trigger) return;
+
+            // Don't intercept form inputs/buttons inside the active modal forms
+            if (trigger.closest('#auth-modal .auth-card') && !trigger.hasAttribute('data-auth-modal')) {
+                return;
+            }
+
+            if (trigger.tagName === 'A' || trigger.tagName === 'BUTTON') {
+                e.preventDefault();
+            }
+
+            var mode = trigger.getAttribute('data-auth-modal');
+            if (!mode) {
+                var href = trigger.getAttribute('href') || '';
+                if (trigger.classList.contains('nav-signup-btn') || href === '#/signup') {
+                    mode = 'signup';
+                } else {
+                    mode = 'login';
+                }
+            }
+
+            openAuthModal(mode);
+        }, true);
+
+        // Escape key dismissal
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                var authModal = document.getElementById('auth-modal');
+                if (authModal && !authModal.classList.contains('hidden')) {
+                    closeAuthModal();
+                }
+            }
+        });
+    })();
+    </script>
+
+    <script type="module" src="assets/js/app.js?v=27"></script>
+    <script type="module" src="assets/js/landing.js?v=27"></script>
 </body>
 
 </html>

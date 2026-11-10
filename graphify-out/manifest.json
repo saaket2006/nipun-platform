@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/animations.js": {
-    "mtime": 1794221887.119768,
-    "ast_hash": "62f2c465ce709df53740570e29bf90a5",
+    "mtime": 1794312635.0195894,
+    "ast_hash": "b86b6874d48ceafdf8da2df7602f7e8a",
     "semantic_hash": ""
   },
   "frontend/assets/js/api.js": {
@@ -340,12 +340,12 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/app.js": {
-    "mtime": 1794293252.5346594,
-    "ast_hash": "eafba02f3d9c1baac7e27b6ce3318714",
+    "mtime": 1794321448.8880885,
+    "ast_hash": "696f075987ab27e81004afa1416fd52c",
     "semantic_hash": ""
   },
   "frontend/assets/js/auth.js": {
-    "mtime": 1794291441.5070052,
+    "mtime": 1794316319.9155393,
     "ast_hash": "a752335fa7a310447bda2ce4658e0a1b",
     "semantic_hash": ""
   },
@@ -365,12 +365,12 @@
     "semantic_hash": "36fcb463784fd5c1bda2d681e8bbb93c"
   },
   "frontend/assets/js/components/modal.js": {
-    "mtime": 1794230206.2676258,
-    "ast_hash": "9947533932b761d256e67466d5ee244f",
+    "mtime": 1794318902.7680056,
+    "ast_hash": "447abb11b333e67cea877810f4a73e44",
     "semantic_hash": ""
   },
   "frontend/assets/js/components/navbar.js": {
-    "mtime": 1794222666.8091443,
+    "mtime": 1794316319.996082,
     "ast_hash": "1bf50f50eca5653c7229af6b014efca7",
     "semantic_hash": ""
   },
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/landing.js": {
-    "mtime": 1794291441.6627336,
-    "ast_hash": "153438dcd0ddb053d673d85b5d0a7f19",
+    "mtime": 1794318903.0321558,
+    "ast_hash": "187a2ac1fb29d29651b631b850961dc8",
     "semantic_hash": ""
   },
   "frontend/assets/js/loadingOverlay.js": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/candidate.js": {
-    "mtime": 1794243165.5566475,
-    "ast_hash": "be2a3f0044ca3ff1e908879b347009e7",
+    "mtime": 1794314002.4537878,
+    "ast_hash": "59bec816656e47e5599e593a1ddf34ce",
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/login.js": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/recruiter.js": {
-    "mtime": 1794230206.5422618,
-    "ast_hash": "01f25eb554c187f43125a1a78a7f1276",
+    "mtime": 1794314002.6065743,
+    "ast_hash": "8ce5db56cc95408d19f0010d42c33873",
     "semantic_hash": ""
   },
   "frontend/assets/js/pages/signup.js": {
@@ -430,8 +430,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/router.js": {
-    "mtime": 1794293252.923719,
-    "ast_hash": "d1bbe7dd7ed147121114c46103e6f57c",
+    "mtime": 1794321449.3025885,
+    "ast_hash": "992e8982309698c821d10f66d101da14",
     "semantic_hash": ""
   },
   "frontend/assets/js/state.js": {
@@ -610,8 +610,8 @@
     "semantic_hash": ""
   },
   "frontend/index.html": {
-    "mtime": 1794296583.603912,
-    "ast_hash": "cd5b11aa797a521935193ec39e3d52ed",
+    "mtime": 1794325364.362499,
+    "ast_hash": "a5bae3d6e8b29b9d159551aa413aa7fa",
     "semantic_hash": ""
   },
   "frontend/onboarding.html": {
@@ -1087,6 +1087,11 @@
   "frontend/assets/fonts/OFL.txt": {
     "mtime": 1794219784.7426295,
     "ast_hash": "53a2fca503edf3efe5cd22eca1940dd9",
+    "semantic_hash": ""
+  },
+  "tests/test_auth_modal_regression.py": {
+    "mtime": 1794318230.7893996,
+    "ast_hash": "de4320981b8e21e7b1704850896766b9",
     "semantic_hash": ""
   }
 }

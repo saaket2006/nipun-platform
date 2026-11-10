@@ -1,11 +1,11 @@
 import { checkAuthStatus, initAuthListener } from './auth.js';
-import { initLoginPage, initializeLoginPage } from './pages/login.js?v=19';
+import { initLoginPage, initializeLoginPage } from './pages/login.js';
 import { initSignupPage, initializeSignupPage } from './pages/signup.js';
 import { initOnboarding, showOnboardingWizard } from './pages/onboarding.js';
 import { initRecruiterPage } from './pages/recruiter.js';
 import { initCandidatePage } from './pages/candidate.js';
 import { initRouter, handleRouting } from './router.js';
-import { initModals } from './components/modal.js';
+import { initModals, openAuthModal } from './components/modal.js?v=27';
 import { initNavbar } from './components/navbar.js';
 import { initSidebar } from './components/sidebar.js';
 import * as api from './api.js';
@@ -15,13 +15,24 @@ import { MESSAGES } from './constants.js';
 
 let uploadedFiles = [];
 
-document.addEventListener('DOMContentLoaded', () => {
+function onReady(fn) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fn);
+    } else {
+        fn();
+    }
+}
+
+onReady(() => {
     const pathname = window.location.pathname.toLowerCase();
 
     const isLandingPage = pathname === '/' || pathname.endsWith('index.html') || pathname === '';
     const isOnboardingPage = pathname.includes('onboarding');
     const isRecruiterPage = pathname.includes('recruiter');
     const isCandidatePage = pathname.includes('candidate');
+
+    // Always initialize resilient modal handlers and event delegation first
+    initModals();
 
     // Initialize modules conditionally based on page
     if (isLandingPage) {
@@ -33,18 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
         initNavbar();
         handleRouting();
 
-        // Bind navbar and landing buttons to navigate to auth hashes
+        // Direct and resilient auth modal opening for landing buttons
         const loginBtns = document.querySelectorAll('.nav-login-btn');
         loginBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                window.location.hash = '#/login';
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openAuthModal('login');
             });
         });
 
         const signupBtns = document.querySelectorAll('.nav-signup-btn');
         signupBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                window.location.hash = '#/signup';
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openAuthModal('signup');
             });
         });
     } else if (isOnboardingPage) {

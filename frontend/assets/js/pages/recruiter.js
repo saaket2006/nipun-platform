@@ -1590,8 +1590,6 @@ export function renderXaiContent(xaiData) {
     html += `</div>`;
     return html;
 }
-    return html;
-}
 
 window.toggleRecCard = (headerEl) => {
     const item = headerEl.closest('.rec-card');

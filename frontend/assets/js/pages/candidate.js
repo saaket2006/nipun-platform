@@ -1399,9 +1399,3 @@ function renderCandidateAnalysisResults(cand) {
     resultsContainer.classList.remove('hidden');
     resultsContainer.scrollIntoView({ behavior: 'smooth' });
 }
-        </div>
-    `;
-
-    resultsContainer.classList.remove('hidden');
-    resultsContainer.scrollIntoView({ behavior: 'smooth' });
-}

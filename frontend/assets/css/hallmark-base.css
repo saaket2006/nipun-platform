@@ -14,7 +14,8 @@ html, body {
 }
 
 html {
-  scrollbar-color: var(--color-muted) var(--color-paper);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-muted) transparent;
   scroll-padding-top: var(--space-3xl);
   background-color: var(--color-paper);
   color: var(--color-ink);

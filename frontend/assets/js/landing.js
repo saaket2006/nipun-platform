@@ -5,7 +5,7 @@ import {
     initWalkthrough,
     initCounters,
     initNavbarEffects
-} from './animations.js?v=17';
+} from './animations.js';
 
 // Prevent browser scroll restoration from skewing initial ScrollTrigger layout calculations
 if ('scrollRestoration' in history) {
@@ -208,6 +208,13 @@ function initLandingMobileNav() {
 
     drawerLinks.forEach(link => {
         link.addEventListener('click', () => {
+            closeDrawer();
+        });
+    });
+
+    const drawerAuthBtns = drawer.querySelectorAll('[data-auth-modal], .nav-login-btn, .nav-signup-btn');
+    drawerAuthBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
             closeDrawer();
         });
     });

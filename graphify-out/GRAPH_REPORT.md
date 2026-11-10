@@ -1,16 +1,16 @@
 # Graph Report - nipun-platform  (2026-11-10)
 
 ## Corpus Check
-- 197 files · ~291,751 words
+- 198 files · ~293,652 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2184 nodes · 3810 edges · 129 communities (122 shown, 7 thin omitted)
+- 2204 nodes · 3836 edges · 138 communities (132 shown, 6 thin omitted)
 - Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 315 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fb40f48b`
+- Built from commit: `aaf97de1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,7 +21,7 @@
 - Skill
 - app.js
 - onboarding.js
-- test_candidate_xai_dashboard.py
+- routers/test_auth.py
 - gsap.min.js
 - Core Principles
 - tests/test_info_extractor.py
@@ -30,7 +30,7 @@
 - Expo Animation Recipes
 - api.js
 - UserRole
-- firebaseConfig
+- candidate.js
 - s
 - recruiter.js
 - Tween
@@ -49,7 +49,7 @@
 - Oa
 - bf
 - skill_expander.py
-- User
+- process_candidate_resume
 - Landing Index HTML
 - Nipun AI Resume Screener & Ranking System — High-Level Architecture
 - loadingOverlay.js
@@ -64,13 +64,13 @@
 - AI Resume Screener Overview
 - Capabilities
 - Python Dependencies
-- backend/tests/test_recruiter.py
-- recruiter.py
-- test_candidate_patch_rejects_forbidden_fields
+- Session
+- User
+- test_firebase_auth.py
 - Core Principles
 - Capabilities
-- env.py
-- router.js
+- backend/tests/test_recruiter.py
+- navbar.js
 - API Design Principles Implementation Playbook
 - Core Principles
 - API Design Principles
@@ -82,17 +82,19 @@
 - The Fixes
 - Chapter: Semantic Matching Evaluation & Knowledge Base Verification
 - Prototyping Variants
+- test_auth_modal_regression.py
 - Delight Techniques
 - Implement Animations
 - generate_grounded_xai_insights
-- test_user
+- test_custom_scoring.py
 - Glossary
 - Introduce Color Strategically
 - Design Critique
 - Animation Performance
 - Finding Animation Opportunities
 - Polish Systematically
-- candidate.js
+- router.js
+- process_resumes
 - Implement Adaptations
 - Improve Copy Systematically
 - Simplify the Design
@@ -120,7 +122,14 @@
 - Core Philosophy
 - Debugging Animations
 - normalize.md
-- test_custom_scoring.py
+- seed_default_profiles
+- update_job_description
+- legacy_process_resumes
+- get_screening_task_detail
+- policy/__init__.py
+- fixture
+- backend/config.py
+- firebase-init.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `User` - 67 edges
@@ -147,9 +156,9 @@
   backend/models/models.py → backend/models/enums.py
 
 ## Import Cycles
-- None detected.
+- 3-file cycle: `frontend/assets/js/auth.js -> frontend/assets/js/router.js -> frontend/assets/js/pages/login.js -> frontend/assets/js/auth.js`
 
-## Communities (129 total, 7 thin omitted)
+## Communities (138 total, 6 thin omitted)
 
 ### Community 0 - "stages.py"
 Cohesion: 0.08
@@ -168,16 +177,16 @@ Cohesion: 0.06
 Nodes (40): get_weight(), Returns the matching weight for the given match type., MatchReason, MatchResult, BaseModel, Universal domain object representing a semantic match between a required skill…, Evaluates relationship type, confidence, and matches between two Skill objects.…, resolve_relationship() (+32 more)
 
 ### Community 4 - "app.js"
-Cohesion: 0.14
-Nodes (27): clearCandidateState(), handleFiles(), renderFileList(), updateResumeCountDisplay(), uploadedFiles, checkAuthStatus(), _doCheckAuthStatus(), hideEmailVerificationModal() (+19 more)
+Cohesion: 0.17
+Nodes (24): clearCandidateState(), handleFiles(), renderFileList(), updateResumeCountDisplay(), uploadedFiles, checkAuthStatus(), _doCheckAuthStatus(), hideEmailVerificationModal() (+16 more)
 
 ### Community 5 - "onboarding.js"
-Cohesion: 0.23
-Nodes (14): API_BASE, API_ENDPOINTS, CANDIDATE_STATUS_VALUES, COMPANY_TYPES, MESSAGES, getStepsForRole(), hideObError(), initializeOnboardingPage (+6 more)
+Cohesion: 0.20
+Nodes (15): API_BASE, API_ENDPOINTS, CANDIDATE_STATUS_VALUES, COMPANY_TYPES, MESSAGES, ROLES, ROUTES, getStepsForRole() (+7 more)
 
-### Community 6 - "test_candidate_xai_dashboard.py"
-Cohesion: 0.08
-Nodes (28): get_password_hash(), Hashes a plain text password using bcrypt., CandidateProfile, fetch_google_certs(), post, Session, Creates a user profile based on the role and marks onboarding as completed., submit_onboarding() (+20 more)
+### Community 6 - "routers/test_auth.py"
+Cohesion: 0.24
+Nodes (7): fetch_google_certs(), test_fetch_google_certs_error(), test_fetch_google_certs_success(), test_fetch_google_certs_timeout(), Verifies that after screening, stats and history return fresh authoritative…, test_candidate_dashboard_stats_and_history_lifecycle(), Exception
 
 ### Community 7 - "gsap.min.js"
 Cohesion: 0.06
@@ -208,8 +217,12 @@ Cohesion: 0.11
 Nodes (34): archiveJob(), createJob(), deleteCandidateResume(), deleteJob(), _executeRequest(), forgotPassword(), getCandidateResumeDetails(), getCandidateResumes() (+26 more)
 
 ### Community 14 - "UserRole"
+Cohesion: 0.19
+Nodes (32): CompanyType, UserRole, GoogleLoginRequest, BaseModel, CandidateProfileResponse, CandidateProfileUpdate, Config, ForgotPasswordRequest (+24 more)
+
+### Community 15 - "candidate.js"
 Cohesion: 0.21
-Nodes (30): CompanyType, UserRole, GoogleLoginRequest, BaseModel, CandidateProfileResponse, CandidateProfileUpdate, Config, ForgotPasswordRequest (+22 more)
+Nodes (11): getEmptyStateHTML(), toggleButtonLoading(), populateCandidateProfileUI(), populateRecruiterProfileUI(), closeCandidateAnalysisModal(), initCandidatePage(), renderCandidateAnalysisResults(), renderFileList() (+3 more)
 
 ### Community 16 - "s"
 Cohesion: 0.15
@@ -217,7 +230,7 @@ Nodes (20): _a(), ac(), Bo(), db(), ea(), eb(), ga(), gb() (+12 more)
 
 ### Community 17 - "recruiter.js"
 Cohesion: 0.13
-Nodes (33): renderResults(), getCandidateDetailRowHTML(), getCandidateRowHTML(), getRecruiterCandidateCardHTML(), toggleButtonLoading(), updateStatisticCard(), applyJdSelection(), autoBalanceActiveWeights() (+25 more)
+Nodes (31): renderResults(), getCandidateDetailRowHTML(), getCandidateRowHTML(), getRecruiterCandidateCardHTML(), updateStatisticCard(), applyJdSelection(), autoBalanceActiveWeights(), getCustomScoringPayload() (+23 more)
 
 ### Community 18 - "Tween"
 Cohesion: 0.15
@@ -256,7 +269,7 @@ Cohesion: 0.22
 Nodes (9): Ab(), J(), jc(), kb(), lc(), Ra(), rb(), Sa() (+1 more)
 
 ### Community 27 - "landing.js"
-Cohesion: 0.42
+Cohesion: 0.44
 Nodes (9): initCounters(), initFeatureStack(), initHeroAnimation(), initNavbarEffects(), initStoryAnimation(), initWalkthrough(), initAllLandingAnimations(), initLandingMobileNav() (+1 more)
 
 ### Community 28 - "Animation Standards Reference"
@@ -268,8 +281,8 @@ Cohesion: 0.29
 Nodes (7): Ab(), Bb(), cb(), Context(), Ew(), fb(), zb()
 
 ### Community 30 - "test_profile_editing.py"
-Cohesion: 0.05
-Nodes (43): RecruiterProfile, patch, Update recruiter's profile information and display name. Strictly scoped to…, update_recruiter_profile(), candidate_user(), disable_rate_limiting(), fixture, Temporarily disables SlowAPI rate limiting for unit tests. (+35 more)
+Cohesion: 0.04
+Nodes (61): get_password_hash(), Hashes a plain text password using bcrypt., CandidateProfile, Creates a test user in the database., test_user(), candidate_a(), candidate_b(), disable_rate_limiting() (+53 more)
 
 ### Community 31 - "Oa"
 Cohesion: 0.53
@@ -283,9 +296,9 @@ Nodes (10): bf(), cf(), df(), ef(), kf(), lf(), M(), mf() (+2 more)
 Cohesion: 0.40
 Nodes (4): get_related_skills(), is_skill_in_text(), Checks if an explicit skill contains a broad conceptual keyword. For example,…, Checks if a skill or any of its known aliases exists in the given text. Handles…
 
-### Community 34 - "User"
-Cohesion: 0.06
-Nodes (44): get_profile(), get, Retrieves the full profile details of the authenticated user., read_root(), User, candidate_status(), delete_candidate_resume(), get_candidate_resume_details() (+36 more)
+### Community 34 - "process_candidate_resume"
+Cohesion: 0.10
+Nodes (23): candidate_status(), delete_candidate_resume(), get_candidate_resume_details(), get_candidate_resumes(), get_candidate_stats(), process_candidate_resume(), delete, get (+15 more)
 
 ### Community 35 - "Landing Index HTML"
 Cohesion: 0.40
@@ -308,8 +321,8 @@ Cohesion: 0.50
 Nodes (4): mc(), O(), P(), r()
 
 ### Community 48 - "google_login"
-Cohesion: 0.14
-Nodes (23): create_access_token(), Generates a secure JSON Web Token., forgot_password(), get_me(), google_login(), login(), get, limit (+15 more)
+Cohesion: 0.18
+Nodes (21): create_access_token(), Generates a secure JSON Web Token., forgot_password(), get_me(), google_login(), login(), get, limit (+13 more)
 
 ### Community 49 - "validate_skill_name"
 Cohesion: 0.33
@@ -319,17 +332,17 @@ Nodes (9): Validates that a skill name contains reasonable characters and isn't 
 Cohesion: 0.06
 Nodes (31): API Contract & Documentation, API Design & Patterns, API Gateway & Load Balancing, Asynchronous Processing, Authentication & Authorization, Backend Architect, Behavioral Traits, Caching Strategies (+23 more)
 
-### Community 66 - "backend/tests/test_recruiter.py"
-Cohesion: 0.06
-Nodes (54): JobDescription, ScreeningTask, archive_job_description(), create_job_description(), delete_job_description(), get_scoring_profiles(), get_screening_history(), get_screening_task_detail() (+46 more)
+### Community 66 - "Session"
+Cohesion: 0.12
+Nodes (19): archive_job_description(), delete_job_description(), get_scoring_profiles(), get_screening_history(), list_job_descriptions(), delete, get, Session (+11 more)
 
-### Community 68 - "recruiter.py"
-Cohesion: 0.05
-Nodes (59): api_route, App, Settings, get_firebase_admin_app(), Any, Verifies a Firebase ID token using the Firebase Admin SDK. Extracts trusted…, Lazily initializes and returns the singleton Firebase Admin App. Supports: 1.…, verify_firebase_id_token() (+51 more)
+### Community 68 - "User"
+Cohesion: 0.08
+Nodes (46): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online(), api_route, get_db(), FastAPI Dependency to yield a database session., Restricts route access to users registered with the RECRUITER role in… (+38 more)
 
-### Community 69 - "test_candidate_patch_rejects_forbidden_fields"
-Cohesion: 0.40
-Nodes (5): PATCH endpoint rejects unknown/forbidden fields with 422 Unprocessable Entity., PATCH endpoint rejects unknown/forbidden fields with 422 Unprocessable Entity., test_candidate_patch_rejects_forbidden_fields(), test_recruiter_patch_rejects_forbidden_fields(), parametrize
+### Community 69 - "test_firebase_auth.py"
+Cohesion: 0.07
+Nodes (39): App, get_firebase_admin_app(), Any, Verifies a Firebase ID token using the Firebase Admin SDK. Extracts trusted…, Lazily initializes and returns the singleton Firebase Admin App. Supports: 1.…, verify_firebase_id_token(), get_current_user(), Session (+31 more)
 
 ### Community 71 - "Core Principles"
 Cohesion: 0.08
@@ -339,13 +352,13 @@ Nodes (24): 1. Start with requirements, 2. Prefer simplicity, 3. Evaluate techno
 Cohesion: 0.09
 Nodes (22): Application Security Testing, Behavioral Traits, Capabilities, Cloud Security, Compliance & Governance, DevSecOps & Security Automation, Do not use this skill when, Emerging Security Technologies (+14 more)
 
-### Community 74 - "env.py"
-Cohesion: 0.40
-Nodes (4): Run migrations in 'offline' mode., Run migrations in 'online' mode., run_migrations_offline(), run_migrations_online()
+### Community 74 - "backend/tests/test_recruiter.py"
+Cohesion: 0.14
+Nodes (19): create_job_description(), Adds a new job description to the recruiter's library or promotes an ad-hoc JD.…, Verify that JobDescription.name is an active synonym for JobDescription.title., Verify create_job_description correctly accepts 'name' instead of 'title'., Inspects live database schema to verify the table and name/title column…, Verify get_recruiter_stats returns empty top_recommended_improvements even if…, Verify get_candidate_resume_details still returns recommendations for candidate…, test_candidate_resume_details_preserves_recommendations() (+11 more)
 
-### Community 75 - "router.js"
-Cohesion: 0.17
-Nodes (23): handleLogoNavigation(), handleLogout(), initNavbar(), collapseSidebar(), expandSidebar(), handleKeyDown(), initSidebar(), isSidebarCollapsed() (+15 more)
+### Community 75 - "navbar.js"
+Cohesion: 0.28
+Nodes (13): handleLogoNavigation(), handleLogout(), initNavbar(), collapseSidebar(), expandSidebar(), handleKeyDown(), initSidebar(), isSidebarCollapsed() (+5 more)
 
 ### Community 76 - "API Design Principles Implementation Playbook"
 Cohesion: 0.10
@@ -391,6 +404,10 @@ Nodes (26): 1. Executive Summary & Evaluation Scope, 2.1 Canonical Knowledge Bas
 Cohesion: 0.10
 Nodes (19): Behavior contract, Markup, Reference wiring, Rules, Styles, The Picker, Hard Rules, Initial Response (+11 more)
 
+### Community 89 - "test_auth_modal_regression.py"
+Cohesion: 0.12
+Nodes (16): Verify app.js handles readyState interactive/complete so module execution never…, Verify router.js integrates with modal.js for auth routing., Verify index.html contains exactly one #auth-modal element., Verify #auth-modal has login and signup tabs and planes., Verify all key CTA buttons in index.html possess resilient data-auth-modal…, Verify modal.js exports explicit openAuthModal and closeAuthModal functions., Verify modal.js attaches event delegation on document to handle auth triggers…, Verify app.js actively calls initModals() during page initialization. (+8 more)
+
 ### Community 90 - "Delight Techniques"
 Cohesion: 0.10
 Nodes (20): Appropriate to Context, Assess Delight Opportunities, Celebration Moments, Compound Over Time, Context Gathering (Do This First), Delight Amplifies, Never Blocks, Delight Principles, Delight Techniques (+12 more)
@@ -403,9 +420,9 @@ Nodes (19): Accessibility, Assess Animation Opportunities, Context Gathering (Do
 Cohesion: 0.20
 Nodes (17): _build_deterministic_fallback(), _call_gemini_content(), generate_grounded_xai_insights(), Any, Makes HTTP request to Gemini API and parses JSON response., Safely extracts and parses JSON even if wrapped in markdown code fences or…, Constructs a deterministic, grounded rule-based summary when Gemini is…, Invokes the Google Gemini API to generate grounded, explainable AI insights for… (+9 more)
 
-### Community 93 - "test_user"
-Cohesion: 0.25
-Nodes (8): anyio_backend(), client(), db_session(), fixture, Create a new database session for a test., Create a test client using the test database., Creates a test user in the database., test_user()
+### Community 93 - "test_custom_scoring.py"
+Cohesion: 0.27
+Nodes (11): Any, Validates, sanitizes, and normalizes optional recruiter custom scoring…, validate_and_normalize_scoring_config(), test_validation_normalizes_percentages_to_decimal_sum_one(), test_validation_redistributes_when_criterion_is_disabled(), test_validation_rejects_all_zero_or_disabled_weights(), test_validation_rejects_invalid_json(), test_validation_rejects_missing_weights() (+3 more)
 
 ### Community 94 - "Glossary"
 Cohesion: 0.11
@@ -431,9 +448,13 @@ Nodes (16): 1. Frequency — how often will a user see this?, 2. Purpose — why
 Cohesion: 0.12
 Nodes (16): Code Quality, Color & Contrast, Content & Copy, Edge Cases & Error States, Final Verification, Forms & Inputs, Icons & Images, Interaction States (+8 more)
 
-### Community 100 - "candidate.js"
-Cohesion: 0.10
-Nodes (26): getEmptyStateHTML(), populateCandidateProfileUI(), populateRecruiterProfileUI(), closeCandidateAnalysisModal(), initCandidatePage(), initializeCandidateDashboard(), initializeCandidateProfile(), renderCandidateAnalysisResults() (+18 more)
+### Community 100 - "router.js"
+Cohesion: 0.11
+Nodes (29): closeAuthModal(), initModals(), openAuthModal(), updateSidebarActiveLink(), initializeCandidateDashboard(), initializeCandidateProfile(), initializeCandidateScreen(), renderTimelineList() (+21 more)
+
+### Community 101 - "process_resumes"
+Cohesion: 0.20
+Nodes (10): process_resumes(), limit, post, Request, UploadFile, Screens uploaded resume files against a job description. Enforces…, test_process_resumes_rejects_invalid_custom_scoring(), anyio (+2 more)
 
 ### Community 102 - "Implement Adaptations"
 Cohesion: 0.13
@@ -543,24 +564,52 @@ Nodes (4): Debugging Animations, Frame-by-frame inspection, Slow motion testing,
 Cohesion: 0.50
 Nodes (3): Clean Up, Execute, Plan
 
-### Community 133 - "test_custom_scoring.py"
-Cohesion: 0.06
-Nodes (36): legacy_process_resumes(), limit, post, Request, Session, UploadFile, Legacy endpoint delegating to recruiter process_resumes. Requires Recruiter…, process_resumes() (+28 more)
+### Community 129 - "seed_default_profiles"
+Cohesion: 0.22
+Nodes (8): check_db_connection(), Tests connection to the configured database on demand (e.g. startup or health…, Startup event handler: verify database connectivity and seed default profiles., startup_event(), Session, Checks if scoring profiles exist in the database; if not, seeds missing default…, seed_default_profiles(), on_event
+
+### Community 130 - "update_job_description"
+Cohesion: 0.25
+Nodes (8): put, Edits an existing job description in the recruiter's library. Accepts updated…, update_job_description(), Verify update_job_description correctly accepts 'name' instead of 'title'., test_update_job_description_success(), test_update_job_description_unauthorized(), test_update_job_description_validation(), test_update_job_description_with_name_parameter()
+
+### Community 131 - "legacy_process_resumes"
+Cohesion: 0.29
+Nodes (7): legacy_process_resumes(), limit, post, Request, Session, UploadFile, Legacy endpoint delegating to recruiter process_resumes. Requires Recruiter…
+
+### Community 132 - "get_screening_task_detail"
+Cohesion: 0.33
+Nodes (6): get_screening_task_detail(), Retrieves complete details for a specific screening task owned by the…, Verify get_screening_task_detail strips recommendations from candidate…, test_get_screening_task_detail_omits_candidate_recommendations(), test_get_screening_task_detail_owner_success(), test_get_screening_task_detail_unauthorized_or_missing()
+
+### Community 133 - "policy/__init__.py"
+Cohesion: 0.16
+Nodes (8): Defines thresholds and priorities for AI Resume Improvement Engine…, RecommendationPolicy, Defines recruiter-specific configurations and security permissions., RecruiterPolicy, Defines policy configurations for ATS scoring and weights. Removes magic…, ScoringPolicy, Defines policy configurations and fallback weights for adaptive scoring…, ScoringProfilePolicy
+
+### Community 134 - "fixture"
+Cohesion: 0.33
+Nodes (6): anyio_backend(), client(), db_session(), fixture, Create a new database session for a test., Create a test client using the test database.
+
+### Community 135 - "backend/config.py"
+Cohesion: 0.40
+Nodes (3): Settings, Dispatches a secure password reset email to the specified recipient. Security…, send_password_reset_email()
+
+### Community 136 - "firebase-init.js"
+Cohesion: 0.40
+Nodes (3): app, googleProvider, firebaseConfig
 
 ## Knowledge Gaps
 - **737 isolated node(s):** `Settings`, `inflightGetRequests`, `uploadedFiles`, `sidebarLinkIds`, `COMPANY_TYPES` (+732 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `s()` connect `s` to `bf`, `gsap.min.js`, `recruiter.js`, `Tween`, `cb`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `User` connect `User` to `stages.py`, `backend/tests/test_recruiter.py`, `recruiter.py`, `test_custom_scoring.py`, `test_candidate_xai_dashboard.py`, `env.py`, `test_password_reset.py`, `UserRole`, `google_login`, `test_user`, `test_profile_editing.py`?**
+- **Why does `User` connect `User` to `stages.py`, `process_candidate_resume`, `legacy_process_resumes`, `Session`, `test_firebase_auth.py`, `get_screening_task_detail`, `process_resumes`, `update_job_description`, `routers/test_auth.py`, `backend/tests/test_recruiter.py`, `test_password_reset.py`, `UserRole`, `google_login`, `test_custom_scoring.py`, `test_profile_editing.py`?**
   _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **Why does `XaiEngine` connect `stages.py` to `xai/builder.py`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
+- **Why does `getCandidateDetailRowHTML()` connect `recruiter.js` to `s`, `app.js`?**
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **Are the 5 inferred relationships involving `User` (e.g. with `CompanyType` and `ResumeStatus`) actually correct?**
   _`User` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 32 inferred relationships involving `UserRole` (e.g. with `CandidateProfile` and `JobDescription`) actually correct?**

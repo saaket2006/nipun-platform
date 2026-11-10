@@ -16,7 +16,8 @@ import {
     showForgotPasswordView,
     showResetPasswordView,
     resetAuthModalToTabs
-} from './pages/login.js?v=19';
+} from './pages/login.js';
+import { openAuthModal, closeAuthModal } from './components/modal.js?v=27';
 
 /**
  * Handles recruiter workspace routing sub-views.
@@ -183,49 +184,24 @@ export function handleRouting(force = false) {
     const oobCode = params.get('oobCode') || params.get('code') || params.get('token') || '';
 
     if (mode === 'resetPassword' || route === ROUTES.RESET_PASSWORD || oobCode) {
-        const authModal = document.getElementById('auth-modal');
-        if (authModal) {
-            authModal.classList.remove('hidden');
-            showResetPasswordView(oobCode);
-        }
+        openAuthModal('reset-password', oobCode);
+        showResetPasswordView(oobCode);
         return;
     }
 
     // 2. Forgot Password: #/forgot-password
     if (route === ROUTES.FORGOT_PASSWORD) {
-        const authModal = document.getElementById('auth-modal');
-        if (authModal) {
-            authModal.classList.remove('hidden');
-            showForgotPasswordView();
-        }
+        openAuthModal('forgot-password');
+        showForgotPasswordView();
         return;
     }
 
     // 3. Unauthenticated User Routes (Login / Sign Up)
     if (!user) {
-        if (route === ROUTES.LOGIN || route === ROUTES.SIGNUP || route === '') {
-            const authModal = document.getElementById('auth-modal');
-            if (authModal) {
-                if (route === ROUTES.LOGIN || route === ROUTES.SIGNUP) {
-                    authModal.classList.remove('hidden');
-                }
-                resetAuthModalToTabs();
-                const isLogin = route === ROUTES.LOGIN;
-                const tabLogin = document.getElementById('tab-login');
-                const tabSignup = document.getElementById('tab-signup');
-                const loginPlane = document.getElementById('login-plane');
-                const signupPlane = document.getElementById('signup-plane');
-                if (tabLogin) tabLogin.classList.toggle('active', isLogin);
-                if (tabSignup) tabSignup.classList.toggle('active', !isLogin);
-                if (loginPlane) {
-                    loginPlane.classList.toggle('hidden', !isLogin);
-                    loginPlane.classList.toggle('active-plane', isLogin);
-                }
-                if (signupPlane) {
-                    signupPlane.classList.toggle('hidden', isLogin);
-                    signupPlane.classList.toggle('active-plane', !isLogin);
-                }
-            }
+        if (route === ROUTES.LOGIN) {
+            openAuthModal('login');
+        } else if (route === ROUTES.SIGNUP) {
+            openAuthModal('signup');
         }
         return;
     }
