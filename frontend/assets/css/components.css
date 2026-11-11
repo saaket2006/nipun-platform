@@ -32,14 +32,8 @@
     }
 
     /* File Upload UI */
-    .file-upload-box {padding: var(--space-xl) var(--space-md);
-    }
-    
-    .file-upload-box p::after {
-        content: " (Tap to upload)";
-        display: block;margin-top: var(--space-xs);
-        font-weight: 600;
-        color: var(--color-accent);
+    .file-upload-box {
+        padding: 2rem 1.25rem;
     }
     
     /* Avoid hover-only interactions visually */

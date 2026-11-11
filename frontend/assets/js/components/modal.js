@@ -1,4 +1,4 @@
-import { initializeSignupPage } from '../pages/signup.js?v=29';
+import { initializeSignupPage } from '../pages/signup.js?v=35';
 
 let modalsInitialized = false;
 

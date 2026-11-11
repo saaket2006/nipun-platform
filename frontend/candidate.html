@@ -12,18 +12,18 @@
     <link rel="preload" href="assets/fonts/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/Newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Self-hosted font declarations (Newsreader, DM Sans, IBM Plex Mono) -->
-    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/fonts.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/tokens.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/design-tokens.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/base.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/ats.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/auth.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/onboarding.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/components.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/recruiter.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/landing.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/ats.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/auth.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/onboarding.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/components.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/recruiter.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/landing.css?v=3.5">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -193,10 +193,20 @@
 
                             <div class="form-group file-upload-wrapper" style="margin-bottom: 1.25rem;">
                                 <label for="cand-resumes" style="display: block; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 0.4rem;">Upload Your Resume (PDF or DOCX)</label>
-                                <div class="file-upload-box" id="cand-drop-zone" style="cursor: pointer;">
-                                    <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-forest);"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.9375rem; color: var(--color-ink); font-weight: 500;">Drag and drop your resume here, or click to browse</p>
-                                    <span style="font-size: 0.8125rem; color: var(--color-muted);">Supported formats: PDF, DOCX (Max 10MB)</span>
+                                <div class="file-upload-box" id="cand-drop-zone" tabindex="0" role="button" aria-label="Upload Resume: drag and drop your resume here, or browse files">
+                                    <div class="drop-zone-content">
+                                        <div class="drop-zone-icon-wrap" aria-hidden="true">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+                                                <path d="M12 12v9"/>
+                                                <path d="m16 16-4-4-4 4"/>
+                                            </svg>
+                                        </div>
+                                        <p class="drop-zone-primary">
+                                            Drag and drop your resume here, or <span class="drop-zone-browse">browse files</span>
+                                        </p>
+                                        <p class="drop-zone-secondary">Supported formats: PDF, DOCX (Max 10MB)</p>
+                                    </div>
                                     <input type="file" id="cand-resumes" accept=".pdf,.docx" hidden>
 
                                     <div id="cand-resumes-header" class="resumes-dropdown-header hidden" style="margin-top: 0.75rem;">
@@ -391,7 +401,7 @@
                 </div>
 
                 <div class="qv-section" id="cav-xai-section">
-                    <h4>Explainable AI (XAI) Breakdown</h4>
+                    <h4>Evaluation Breakdown &amp; Match Scoring Rationale</h4>
                     <div id="cav-xai-container"></div>
                 </div>
 
@@ -442,8 +452,8 @@
     </div>
 
 
-    <script type="module" src="assets/js/app.js?v=2.1"></script>
-    <script type="module" src="assets/js/landing.js?v=2.1"></script>
+    <script type="module" src="assets/js/app.js?v=3.5"></script>
+    <script type="module" src="assets/js/landing.js?v=3.5"></script>
 </body>
 
 </html>

@@ -2,7 +2,7 @@ import * as state from '../state.js';
 import { checkAuthStatus } from '../auth.js';
 import { showError, hideError, validatePassword } from '../utils.js';
 import { MESSAGES } from '../constants.js';
-import { initializeSignupPage } from './signup.js?v=29';
+import { initializeSignupPage } from './signup.js?v=35';
 import { 
     auth, 
     googleProvider, 

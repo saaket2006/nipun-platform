@@ -12,18 +12,18 @@
     <link rel="preload" href="assets/fonts/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/Newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Self-hosted font declarations (Newsreader, DM Sans, IBM Plex Mono) -->
-    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/fonts.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/tokens.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/design-tokens.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/base.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/ats.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/auth.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/onboarding.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/components.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/recruiter.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/landing.css?v=2.1">
+    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/ats.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/auth.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/onboarding.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/components.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/recruiter.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/landing.css?v=3.5">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -179,17 +179,17 @@
                         <div class="stat-card">
                             <div class="stat-header">
                                 <span class="stat-title">Top Education Level</span>
-                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" style="color: var(--color-accent);"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
                             </div>
                             <div class="stat-value" id="stat-common-education">N/A</div>
                             <p class="stat-description">Most frequent academic qualification</p>
                         </div>
-                        <div class="stat-card span-two" style="grid-column: span 2; background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 1.5rem; border-radius: 12px;">
+                        <div class="stat-card span-two">
                             <div class="stat-header">
                                 <span class="stat-title" style="font-weight: 600; color: var(--color-ink);">Workspace Intelligence Summary</span>
-                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" style="color: var(--color-forest);"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
                             </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                            <div class="stat-summary-grid">
                                 <div>
                                     <h2 style="margin: 0 0 0.6rem; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-clay); font-weight: 600;">Common Missing Skills</h2>
                                     <ul id="stat-missing-skills-list" style="margin: 0; padding-left: 0; font-size: 0.85rem; line-height: 1.4; color: var(--color-ink-2); list-style: none;"></ul>
@@ -366,9 +366,20 @@
 
                             <div class="form-group file-upload-wrapper">
                                 <label for="rec-resumes">Upload Resumes (PDF/DOCX)</label>
-                                <div class="file-upload-box" id="rec-drop-zone">
-                                    <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-muted);"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
-                                    <p>Drag and drop resumes here, or click to browse</p>
+                                <div class="file-upload-box" id="rec-drop-zone" tabindex="0" role="button" aria-label="Upload Resumes: drag and drop resumes here, or browse files">
+                                    <div class="drop-zone-content">
+                                        <div class="drop-zone-icon-wrap" aria-hidden="true">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+                                                <path d="M12 12v9"/>
+                                                <path d="m16 16-4-4-4 4"/>
+                                            </svg>
+                                        </div>
+                                        <p class="drop-zone-primary">
+                                            Drag and drop resumes here, or <span class="drop-zone-browse">browse files</span>
+                                        </p>
+                                        <p class="drop-zone-secondary">Supported formats: PDF, DOCX (Max 10MB per file)</p>
+                                    </div>
                                     <input type="file" id="rec-resumes" accept=".pdf,.docx" multiple hidden>
 
                                     <div id="rec-resumes-header" class="resumes-dropdown-header hidden">
@@ -526,27 +537,27 @@
                         </div>
 
                         <!-- Loading State -->
-                        <div id="rec-history-loading" class="hidden" style="text-align: center; padding: 3rem 1rem;">
-                            <div class="spinner" style="margin: 0 auto 0.75rem auto;"></div>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Loading screening history…</p>
+                        <div id="rec-history-loading" class="editorial-loading-state hidden">
+                            <div class="spinner"></div>
+                            <p>Loading screening history…</p>
                         </div>
 
                         <!-- Error State -->
-                        <div id="rec-history-error" class="hidden" style="text-align: center; padding: 2rem 1.5rem; background: var(--color-error); border: 1px solid var(--color-error); border-radius: 8px;">
-                            <p id="rec-history-error-msg" style="color: var(--color-error); font-size: 0.9rem; margin-bottom: 0.75rem;">Failed to load screening history.</p>
-                            <button id="rec-history-retry-btn" class="glow-btn secondary" style="padding: 0.4rem 1.2rem; font-size: 0.85rem;">Retry</button>
+                        <div id="rec-history-error" class="editorial-error-state hidden">
+                            <p id="rec-history-error-msg">Failed to load screening history.</p>
+                            <button id="rec-history-retry-btn" class="editorial-retry-btn glow-btn secondary" type="button">Retry</button>
                         </div>
 
                         <!-- Empty State -->
-                        <div id="rec-history-empty" class="hidden" style="text-align: center; padding: 3.5rem 1rem;">
-                            <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 0.75rem auto; color: var(--color-muted);"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-                            <h4 style="color: var(--color-ink); font-size: 1.05rem; font-weight: 600; margin: 0 0 0.35rem 0;">No Screening History Yet</h4>
-                            <p style="color: var(--text-secondary); font-size: 0.85rem; max-width: 420px; margin: 0 auto 1.25rem auto;">Screen candidate resumes against a job description in Resume Screening to view saved screening tasks here.</p>
-                            <a href="#/recruiter/screen" class="glow-btn" style="display: inline-block; padding: 0.5rem 1.25rem; font-size: 0.85rem; text-decoration: none;">Go to Resume Screening</a>
+                        <div id="rec-history-empty" class="editorial-empty-state hidden">
+                            <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="empty-state-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <h4>No Screening History Yet</h4>
+                            <p>Screen candidate resumes against a job description in Resume Screening to view saved screening tasks here.</p>
+                            <a href="#/recruiter/screen" class="glow-btn" style="display: inline-flex; width: auto; padding: 0.5rem 1.25rem; font-size: 0.85rem; text-decoration: none;">Go to Resume Screening</a>
                         </div>
 
                         <!-- History List Container -->
-                        <div id="rec-history-list" class="screening-history-list" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                        <div id="rec-history-list" class="screening-history-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
                             <!-- Injected dynamically -->
                         </div>
                     </div>
@@ -554,39 +565,40 @@
 
                 <!-- VIEW 4: SCREENING TASK DETAILS -->
                 <section id="rec-view-history-detail" class="rec-view hidden">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-                        <button id="btn-back-to-profile" class="glow-btn secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.2rem; font-size: 0.9rem;">
-                            <span>←</span> Back to Profile
+                    <div class="task-detail-nav-bar">
+                        <button id="btn-back-to-profile" class="task-back-btn glow-btn secondary" type="button" aria-label="Back to Profile">
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                            <span>Back to Profile</span>
                         </button>
                     </div>
 
                     <!-- Task Detail Loading State -->
-                    <div id="rec-task-detail-loading" class="glass-card hidden" style="text-align: center; padding: 3.5rem 1rem;">
-                        <div class="spinner" style="margin: 0 auto 0.75rem auto;"></div>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Loading screening task details…</p>
+                    <div id="rec-task-detail-loading" class="glass-card editorial-loading-state hidden">
+                        <div class="spinner"></div>
+                        <p>Loading screening task details…</p>
                     </div>
 
                     <!-- Task Detail Error State -->
-                    <div id="rec-task-detail-error" class="glass-card hidden" style="text-align: center; padding: 2.5rem 1.5rem; background: var(--color-error); border: 1px solid var(--color-error);">
-                        <p id="rec-task-detail-error-msg" style="color: var(--color-error); font-size: 0.95rem; margin-bottom: 1rem;">Failed to load task details.</p>
-                        <button id="rec-task-detail-retry-btn" class="glow-btn secondary" style="padding: 0.45rem 1.25rem; font-size: 0.85rem;">Retry</button>
+                    <div id="rec-task-detail-error" class="glass-card editorial-error-state hidden">
+                        <p id="rec-task-detail-error-msg">Failed to load task details.</p>
+                        <button id="rec-task-detail-retry-btn" class="editorial-retry-btn glow-btn secondary" type="button">Retry</button>
                     </div>
 
                     <!-- Task Detail Content Wrapper -->
-                    <div id="rec-task-detail-content" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div id="rec-task-detail-content" class="hidden" style="display: flex; flex-direction: column; gap: 1.25rem;">
                         <!-- Task Overview Card -->
-                        <div class="glass-card">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
-                                <div>
-                                    <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-forest); display: block; margin-bottom: 0.35rem; font-family: var(--font-mono);">Screening Task</span>
-                                    <h2 id="task-detail-role" style="font-size: 1.5rem; font-weight: 600; color: var(--color-ink); margin: 0; font-family: var(--font-display); letter-spacing: -0.015em;">Job Role</h2>
+                        <div class="glass-card task-overview-card">
+                            <div class="task-overview-header">
+                                <div class="task-title-group">
+                                    <span class="task-badge-label">Screening Task</span>
+                                    <h2 id="task-detail-role">Job Role</h2>
                                 </div>
-                                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                                    <div style="background: var(--color-paper-3); border: 1px solid var(--color-rule); border-radius: 8px; padding: 0.4rem 0.85rem; font-size: 0.8125rem; color: var(--color-ink-2); display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono);">
+                                <div class="task-meta-pills">
+                                    <div class="task-meta-pill date-pill">
                                         <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
                                         <span id="task-detail-date">-</span>
                                     </div>
-                                    <div style="background: var(--color-forest-light); border: 1px solid var(--color-forest-border); border-radius: 8px; padding: 0.4rem 0.85rem; font-size: 0.8125rem; color: var(--color-forest); display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-weight: 600;">
+                                    <div class="task-meta-pill count-pill">
                                         <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
                                         <span id="task-detail-resumes">- Resumes Scanned</span>
                                     </div>
@@ -595,8 +607,8 @@
 
                             <!-- Complete Job Description Section -->
                             <div style="margin-top: 1rem;">
-                                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">Complete Job Description</label>
-                                <div id="task-detail-jd" class="custom-scrollbar" style="max-height: 220px; overflow-y: auto; background: var(--color-paper); border: 1px solid var(--color-rule); border-radius: 8px; padding: 1rem; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; color: var(--color-ink-2);"></div>
+                                <label class="task-section-label">Complete Job Description</label>
+                                <div id="task-detail-jd" class="custom-scrollbar task-jd-box"></div>
                             </div>
                         </div>
 
@@ -604,10 +616,10 @@
                         <div class="glass-card">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                                 <div>
-                                    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin: 0;">Final Ranked Candidates</h3>
+                                    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin: 0; font-family: var(--font-display);">Final Ranked Candidates</h3>
                                     <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.25rem 0 0 0;">Candidates ranked by matching score for this screening task</p>
                                 </div>
-                                <span id="task-detail-candidate-count" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">0 candidates</span>
+                                <span id="task-detail-candidate-count" class="task-cand-count-badge">0 candidates</span>
                             </div>
 
                             <div id="task-detail-candidates-list" class="results-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -649,6 +661,7 @@
                     </div>
                 </div>
 
+                <!-- Contact Info -->
                 <div class="qv-section">
                     <h4>Contact Info</h4>
                     <div class="qv-info-grid">
@@ -659,29 +672,44 @@
                     </div>
                 </div>
 
+                <!-- 1. Overall Score & ATS Overview -->
+                <div class="qv-section" id="qv-score-overview-section">
+                    <h4>Overall Match &amp; Scoring Dimensions</h4>
+                    <div id="qv-score-overview-container"></div>
+                </div>
+
+                <!-- 2. Consolidated Technical Skills Overview -->
+                <div class="qv-section" id="qv-skills-overview-section">
+                    <h4>Technical Skills Overview</h4>
+                    <div id="qv-skills-overview-container" class="skills-overview-container">
+                        <div class="skills-overview-grid">
+                            <div class="skills-overview-card matched">
+                                <div class="skills-overview-header">
+                                    <span class="skills-overview-title">Matched Skills</span>
+                                    <span id="qv-matched-skills-count" class="skills-badge-count matched">0</span>
+                                </div>
+                                <div id="qv-cand-matched-skills" class="skills-tags-container">…</div>
+                            </div>
+                            <div class="skills-overview-card missing">
+                                <div class="skills-overview-header">
+                                    <span class="skills-overview-title">Missing Skills</span>
+                                    <span id="qv-missing-skills-count" class="skills-badge-count missing">0</span>
+                                </div>
+                                <div id="qv-cand-missing-skills" class="skills-tags-container">…</div>
+                            </div>
+                        </div>
+                        <div id="qv-cand-extracted-skills" class="skills-tags-container hidden" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- 3. Explainable AI (XAI) Scoring Rationale -->
                 <div class="qv-section" id="qv-xai-section">
-                    <h4>Explainable AI (XAI) Breakdown</h4>
+                    <h4>Explainable AI (XAI) Scoring Rationale</h4>
                     <div id="qv-xai-container"></div>
                 </div>
 
                 <div class="qv-section hidden" id="qv-recommendations-section" style="display: none;">
                     <div id="qv-recommendations-container"></div>
-                </div>
-
-                <div class="qv-section">
-                    <h4>Skills Overview</h4>
-                    <div class="skills-block">
-                        <h5>Extracted Skills</h5>
-                        <div id="qv-cand-extracted-skills" class="skills-tags-container">…</div>
-                    </div>
-                    <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>Matched Skills</h5>
-                        <div id="qv-cand-matched-skills" class="skills-tags-container">…</div>
-                    </div>
-                    <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>Missing Skills</h5>
-                        <div id="qv-cand-missing-skills" class="skills-tags-container">…</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -799,8 +827,8 @@
     </div>
 
 
-    <script type="module" src="assets/js/app.js?v=2.1"></script>
-    <script type="module" src="assets/js/landing.js?v=2.1"></script>
+    <script type="module" src="assets/js/app.js?v=3.5"></script>
+    <script type="module" src="assets/js/landing.js?v=3.5"></script>
 </body>
 
 </html>

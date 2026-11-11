@@ -154,18 +154,22 @@ class XaiEngine:
         for lvl in levels:
             why_awarded, why_deducted = formatter_func(comp.raw_score, lvl)
             
-            # Serialize evidence list as dictionaries
-            evidence_dicts = [
-                {
-                    "type": ev.type,
-                    "category": ev.category,
-                    "title": ev.title,
-                    "description": ev.description,
-                    "importance": ev.importance,
-                    "related_skill": ev.related_skill,
-                    "confidence": ev.confidence
-                } for ev in comp.evidence
-            ]
+            # Serialize evidence list as dictionaries (suppress per-skill evidence for Technical Skills,
+            # as the consolidated Technical Skills Overview provides Matched and Missing skills)
+            if "skill" in name.lower() or "skill" in comp.name.lower():
+                evidence_dicts = []
+            else:
+                evidence_dicts = [
+                    {
+                        "type": ev.type,
+                        "category": ev.category,
+                        "title": ev.title,
+                        "description": ev.description,
+                        "importance": ev.importance,
+                        "related_skill": ev.related_skill,
+                        "confidence": ev.confidence
+                    } for ev in comp.evidence
+                ]
             
             result[lvl.lower()] = {
                 "why_awarded": why_awarded,

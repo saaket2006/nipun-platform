@@ -276,7 +276,7 @@ def test_recruiter_recommendations_restricted_and_hidden():
     # Recruiter HTML: qv-recommendations-section must be hidden
     assert 'id="qv-recommendations-section" style="display: none;"' in rec_html or 'class="qv-section hidden" id="qv-recommendations-section"' in rec_html
     # Recruiter Dashboard: Top recommendations list header removed from 2-column grid
-    assert '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">' in rec_html
+    assert 'class="stat-summary-grid"' in rec_html or '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">' in rec_html
 
     # Candidate HTML: retains recommendations section
     with open(candidate_html, "r", encoding="utf-8") as f:
@@ -466,11 +466,11 @@ def test_candidate_xai_and_dashboard_frontend_lifecycle():
     assert 'renderXaiContent(xaiData)' in cand_js
     assert 'renderRecommendations(recsData' in cand_js
 
-    # 7. Grounded AI vs Rule Fallback badges and strengths/gaps cards in renderXaiContent
-    assert "Grounded AI Insights (Gemini" in cand_js
-    assert "Deterministic Matching (Rule-Based Fallback)" in cand_js
+    # 7. Unbranded evaluation insights and strengths/gaps cards in renderXaiContent
     assert "Key Strengths" in cand_js
     assert "Skill Gaps &amp; Missing Qualifications" in cand_js
+    assert "Grounded AI Insights (Gemini" not in cand_js
+    assert "Deterministic Matching (Rule-Based Fallback)" not in cand_js
 
 
 def test_candidate_analysis_snapshot_jd_display_and_wrapping():

@@ -27,7 +27,8 @@ def build_score_components(
     # 1. Technical Skills Component
     skills_raw = scoring_event.skill_score
     skills_weight = weights.get("skills", 0.50)
-    skills_evidence = generate_skills_evidence(match_results)
+    # Per-skill evidence items are suppressed at the source in favor of the consolidated
+    # Technical Skills Overview (Matched Skills & Missing Skills)
     components.append(ScoreComponent(
         name="Technical Skills",
         raw_score=skills_raw,
@@ -36,7 +37,7 @@ def build_score_components(
         max_score=100.0,
         status=_resolve_status(skills_raw, 80.0, 40.0),
         details="Evaluates matches of candidate technical skills against the job description.",
-        evidence=skills_evidence
+        evidence=[]
     ))
     
     # 2. Work Experience Component
@@ -106,8 +107,8 @@ def build_score_components(
     # 6. Overall Score Component
     overall_raw = scoring_event.similarity_score
     overall_weight = 1.00
-    # Combine all evidence for overall score reference
-    overall_evidence = skills_evidence + exp_evidence + edu_evidence + proj_evidence + sim_evidence
+    # Consolidate non-skill evidence; technical skills are represented via structured overview and scoring breakdown
+    overall_evidence = exp_evidence + edu_evidence + proj_evidence + sim_evidence
     components.append(ScoreComponent(
         name="Overall Score",
         raw_score=overall_raw,

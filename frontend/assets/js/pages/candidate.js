@@ -4,6 +4,7 @@ import { getEmptyStateHTML } from '../components/emptyState.js';
 import { toggleButtonLoading } from '../components/loadingSpinner.js';
 import { populateCandidateProfileUI } from '../components/profileSection.js';
 import { MESSAGES, ROUTES } from '../constants.js';
+import { escapeHTML, sanitizeUrl } from '../utils.js';
 
 let candUploadedFile = null;
 let initialized = false;
@@ -245,17 +246,17 @@ export async function initializeCandidateDashboard() {
     if (dashCandDomain && (dashCandDomain.textContent === "..." || !dashCandDomain.textContent)) dashCandDomain.textContent = "Loading...";
 
     statsContainer.innerHTML = `
-        <div class="dashboard-loading" style="text-align: center; padding: 2.5rem; color: var(--color-muted); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">
+        <div class="dashboard-loading" style="width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; padding: 1.5rem; text-align: center; color: var(--color-muted); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px;">
             <div class="loader" style="margin: 0 auto 0.75rem;"></div>
-            Loading your dashboard data...
+            <span style="font-size: 0.875rem; font-family: var(--font-body); color: var(--color-ink-2);">Loading your dashboard data...</span>
         </div>
     `;
 
     if (timelineContainer) {
         timelineContainer.innerHTML = `
-            <div class="timeline-loading" style="text-align: center; padding: 2rem; color: var(--color-muted); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">
+            <div class="timeline-loading" style="width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; padding: 1.5rem; text-align: center; color: var(--color-muted); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px;">
                 <div class="loader" style="margin: 0 auto 0.75rem;"></div>
-                Loading analysis history...
+                <span style="font-size: 0.875rem; font-family: var(--font-body); color: var(--color-ink-2);">Loading analysis history...</span>
             </div>
         `;
     }
@@ -304,111 +305,150 @@ export async function initializeCandidateDashboard() {
                 });
             }
             
-            // Generate Career Progress Timeline
+            // Generate Career Progress Timeline strictly based on actual recorded history per target role
             const safeHistoryList = Array.isArray(historyList) ? historyList : [];
-            const chronologicalList = [...safeHistoryList].reverse();
+            
+            // Group safeHistoryList by normalized target role:
+            const roleGroups = {};
+            safeHistoryList.forEach(item => {
+                const rawRole = (item.job_description_title || "").trim();
+                const roleKey = rawRole.toLowerCase() || "unspecified";
+                if (!roleGroups[roleKey]) {
+                    roleGroups[roleKey] = {
+                        roleTitle: rawRole || "General Evaluation",
+                        items: []
+                    };
+                }
+                roleGroups[roleKey].items.push(item);
+            });
+
+            // Find eligible group with >= 2 versions:
+            let activeGroup = null;
+            const latestRoleKey = safeHistoryList.length > 0 ? (safeHistoryList[0].job_description_title || "").trim().toLowerCase() : "";
+            if (latestRoleKey && roleGroups[latestRoleKey] && roleGroups[latestRoleKey].items.length >= 2) {
+                activeGroup = roleGroups[latestRoleKey];
+            } else {
+                for (const key of Object.keys(roleGroups)) {
+                    if (roleGroups[key].items.length >= 2) {
+                        if (!activeGroup || roleGroups[key].items.length > activeGroup.items.length) {
+                            activeGroup = roleGroups[key];
+                        }
+                    }
+                }
+            }
+
             let progressTimelineHTML = "";
-            if (chronologicalList.length > 0) {
-                const timelineSteps = chronologicalList.map(item => `
+
+            const renderNode = (item) => {
+                const dateStr = new Date(item.uploaded_at).toLocaleDateString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                const rawScore = Math.round(Number(item.ats_score) || 0);
+                let circleClass = 'score-low';
+                if (rawScore >= 70) circleClass = 'score-high';
+                else if (rawScore >= 40) circleClass = 'score-med';
+
+                return `
                     <div class="career-node">
                         <span class="career-node-version">V${item.version}</span>
-                        <div class="career-node-circle">
-                            ${item.ats_score}%
+                        <div class="career-node-circle ${circleClass}">
+                            ${rawScore}%
                         </div>
-                        <span class="career-node-label" title="${item.label}">${item.label}</span>
+                        <span class="career-node-date">${dateStr}</span>
                     </div>
-                `).join(`
-                    <div class="career-node-connector"></div>
-                `);
+                `;
+            };
 
-                const oldest = chronologicalList[0];
-                const newest = chronologicalList[chronologicalList.length - 1];
-                const scoreDiff = newest.ats_score - oldest.ats_score;
-                
-                const timeDiffMs = new Date(newest.uploaded_at) - new Date(oldest.uploaded_at);
-                const weeks = Math.round(timeDiffMs / (1000 * 60 * 60 * 24 * 7));
-                const days = Math.round(timeDiffMs / (1000 * 60 * 60 * 24));
-                let timeText = "";
-                if (weeks > 0) {
-                    timeText = `${weeks} week${weeks > 1 ? 's' : ''}`;
-                } else {
-                    timeText = `${days} day${days !== 1 ? 's' : ''}`;
+            const renderConnector = (delta) => {
+                let deltaClass = 'delta-zero';
+                let deltaText = '0 pts';
+                if (delta > 0) {
+                    deltaClass = 'delta-pos';
+                    deltaText = `+${delta} pts`;
+                } else if (delta < 0) {
+                    deltaClass = 'delta-neg';
+                    deltaText = `${delta} pts`;
                 }
 
-                let progressStatsHTML = "";
-                if (chronologicalList.length > 1) {
-                    const oldestJD = oldest.job_description_title || "Unknown JD";
-                    const newestJD = newest.job_description_title || "Unknown JD";
-                    const oldestProfile = oldest.analysis_metadata?.profile_name || "General Software Engineer";
-                    const newestProfile = newest.analysis_metadata?.profile_name || "General Software Engineer";
-                    const oldestEngine = oldest.analysis_metadata?.engine_version || "v1.0.0";
-                    const newestEngine = newest.analysis_metadata?.engine_version || "v1.0.0";
-                    
-                    const sameJD = (oldestJD === newestJD);
-                    const sameProfile = (oldestProfile === newestProfile);
-                    const sameEngine = (oldestEngine === newestEngine);
-                    const isReliable = sameJD && sameProfile && sameEngine;
-
-                    let reliabilityDetailsHTML = `
-                        <div style="font-size: 0.75rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem;">
-                            <div style="color: ${sameJD ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 500;">
-                                ${sameJD ? '✓ Same Job Description' : '✗ Different Job Description'}
-                            </div>
-                            <div style="color: ${sameProfile ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 500;">
-                                ${sameProfile ? '✓ Same Profile' : '✗ Different Profile'}
-                            </div>
-                            <div style="color: ${sameEngine ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 500;">
-                                ${sameEngine ? '✓ Same Engine Version' : '✗ Different Engine Version'}
-                            </div>
+                return `
+                    <div class="career-node-connector" aria-label="Score change: ${deltaText}">
+                        <div class="career-connector-track"></div>
+                        <div class="career-connector-badge ${deltaClass}">
+                            <span>${deltaText}</span>
+                            <span class="career-connector-arrow" aria-hidden="true">→</span>
                         </div>
-                    `;
+                    </div>
+                `;
+            };
 
-                    if (scoreDiff > 0) {
-                        progressStatsHTML = `
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.25rem;">
-                                <div style="background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.6rem 0.9rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-ink); font-weight: 600; font-size: 0.875rem; width: fit-content;">
-                                    <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                                        Resume Improved:
-                                    </span>
-                                    <span style="font-size: 1.05rem; font-family: var(--font-mono); color: var(--color-forest); font-weight: 700;">+${scoreDiff.toFixed(1)} points</span>
-                                    <span style="font-weight: normal; color: var(--color-muted); font-size: 0.8rem;">in ${timeText}</span>
-                                </div>
-                                <div style="font-size: 0.8rem; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 600; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
-                                    <span>Comparison Reliability:</span>
-                                    <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.1rem 0.45rem; border-radius: 4px; background: ${isReliable ? 'rgba(30, 58, 47, 0.1)' : 'rgba(156, 75, 51, 0.1)'}; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; border: 1px solid ${isReliable ? 'rgba(30, 58, 47, 0.25)' : 'rgba(156, 75, 51, 0.25)'};">${isReliable ? 'HIGH' : 'LOW'}</span>
-                                </div>
-                                ${reliabilityDetailsHTML}
-                            </div>
-                        `;
-                    } else {
-                        progressStatsHTML = `
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
-                                <div style="font-size: 0.8rem; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
-                                    <span>Comparison Reliability:</span>
-                                    <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.1rem 0.45rem; border-radius: 4px; background: ${isReliable ? 'rgba(30, 58, 47, 0.1)' : 'rgba(156, 75, 51, 0.1)'}; color: ${isReliable ? 'var(--color-forest)' : 'var(--color-clay)'}; border: 1px solid ${isReliable ? 'rgba(30, 58, 47, 0.25)' : 'rgba(156, 75, 51, 0.25)'};">${isReliable ? 'HIGH' : 'LOW'}</span>
-                                </div>
-                                ${reliabilityDetailsHTML}
-                            </div>
-                        `;
+            if (activeGroup && activeGroup.items.length >= 2) {
+                const chronologicalList = [...activeGroup.items].sort((a, b) => new Date(a.uploaded_at) - new Date(b.uploaded_at));
+                const oldest = chronologicalList[0];
+                const newest = chronologicalList[chronologicalList.length - 1];
+                const scoreDiff = Number((newest.ats_score - oldest.ats_score).toFixed(1));
+
+                let deltaBadge = "";
+                if (scoreDiff > 0) {
+                    deltaBadge = `<span style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--color-forest); font-weight: 700; background: var(--color-forest-light); border: 1px solid var(--color-forest-border); padding: 0.2rem 0.6rem; border-radius: 4px;">+${scoreDiff} pts</span>`;
+                } else if (scoreDiff < 0) {
+                    deltaBadge = `<span style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--color-clay); font-weight: 700; background: var(--color-clay-light); border: 1px solid var(--color-clay-border); padding: 0.2rem 0.6rem; border-radius: 4px;">${scoreDiff} pts</span>`;
+                } else {
+                    deltaBadge = `<span style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--color-muted); font-weight: 600; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.2rem 0.6rem; border-radius: 4px;">0 pts change</span>`;
+                }
+
+                let timelineStepsHtml = '';
+                for (let i = 0; i < chronologicalList.length; i++) {
+                    timelineStepsHtml += renderNode(chronologicalList[i]);
+                    if (i < chronologicalList.length - 1) {
+                        const currScore = Number(chronologicalList[i].ats_score) || 0;
+                        const nextScore = Number(chronologicalList[i + 1].ats_score) || 0;
+                        const stepDelta = Number((nextScore - currScore).toFixed(1));
+                        timelineStepsHtml += renderConnector(stepDelta);
                     }
                 }
 
                 progressTimelineHTML = `
-                    <div class="stat-card span-two" style="grid-column: span 2; background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 1.5rem; border-radius: 12px;">
-                        <div class="stat-header" style="margin-bottom: 1rem;">
-                            <span class="stat-title" style="font-weight: 600; color: var(--color-ink); font-size: 0.9375rem; display: inline-flex; align-items: center; gap: 0.5rem;">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                                Career Progress Timeline
-                            </span>
+                    <div class="stat-card span-two" style="grid-column: span 2;">
+                        <div class="stat-header" style="margin-bottom: 0.85rem;">
+                            <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+                                <span class="stat-title" style="font-weight: 600; color: var(--color-ink); font-size: 0.9375rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                                    <span>Career Progress Timeline</span>
+                                </span>
+                                ${deltaBadge}
+                            </div>
                             <span class="stat-icon" style="color: var(--color-forest); display: inline-flex;">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             </span>
                         </div>
                         <div class="career-ribbon-container">
-                            ${timelineSteps}
+                            ${timelineStepsHtml}
                         </div>
-                        ${progressStatsHTML}
+                    </div>
+                `;
+            } else if (safeHistoryList.length > 0) {
+                // When only one version exists for a target role, show just one circular indicator with its version and match percentage.
+                // Below it, display a short, clean message explaining that another version must be analysed to track progress.
+                const singleItem = safeHistoryList[0];
+                progressTimelineHTML = `
+                    <div class="stat-card span-two" style="grid-column: span 2;">
+                        <div class="stat-header" style="margin-bottom: 0.85rem;">
+                            <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+                                <span class="stat-title" style="font-weight: 600; color: var(--color-ink); font-size: 0.9375rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                                    <span>Career Progress Timeline</span>
+                                </span>
+                            </div>
+                            <span class="stat-icon" style="color: var(--color-forest); display: inline-flex;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </span>
+                        </div>
+                        <div class="career-ribbon-container">
+                            ${renderNode(singleItem)}
+                        </div>
+                        <p class="career-timeline-hint">Another version must be analysed to track progress.</p>
                     </div>
                 `;
             }
@@ -417,13 +457,13 @@ export async function initializeCandidateDashboard() {
                 <div class="rec-grid">
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-title">Latest Resume Match Score</span>
+                            <span class="stat-title">Latest Account Benchmark</span>
                             <span class="stat-icon" style="color: var(--color-forest); display: inline-flex;">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                             </span>
                         </div>
                         <div class="stat-value" id="cand-stat-latest-score">${stats.latest_ats_score}%</div>
-                        <p class="stat-description">Most recent semantic relevance match</p>
+                        <p class="stat-description">Most recent evaluation match across target roles</p>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
@@ -432,14 +472,25 @@ export async function initializeCandidateDashboard() {
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </span>
                         </div>
-                        <div class="stat-value" style="font-size: 1.5rem; margin-top: 0.5rem;" id="cand-stat-last-date">${formattedDate}</div>
+                        <div class="stat-value" id="cand-stat-last-date">${formattedDate}</div>
                         <p class="stat-description">Timestamp of the last run</p>
                     </div>
                     ${progressTimelineHTML}
                 </div>
             `;
         } else {
-            statsContainer.innerHTML = getEmptyStateHTML("You have not analyzed any resumes yet. Go to Resume Analysis to evaluate your resume!");
+            statsContainer.innerHTML = `
+                <div class="empty-state-card" style="width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; padding: 2.5rem 1.5rem; text-align: center; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--color-paper-3); border: 1px solid var(--color-rule-2); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: var(--color-muted);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <p style="margin: 0 0 0.35rem 0; font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; color: var(--color-ink);">No Resumes Analyzed Yet</p>
+                    <p style="margin: 0 0 1.25rem 0; font-size: 0.875rem; color: var(--color-muted); max-width: 420px; line-height: 1.5;">Upload a resume and evaluate it against target job descriptions to unlock match scoring, skill gap detection, and personalized recommendations.</p>
+                    <a href="#/candidate/screen" class="glow-btn" style="text-decoration: none; font-size: 0.8125rem; padding: 0.55rem 1.2rem; background: var(--color-forest); color: #fff; border-radius: 6px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        <span>+ Analyze Your First Resume</span>
+                    </a>
+                </div>
+            `;
         }
 
         renderTimelineList(historyList);
@@ -486,7 +537,15 @@ function renderTimelineList(historyList) {
     if (!container) return;
 
     if (!historyList || historyList.length === 0) {
-        container.innerHTML = `<p style="color: var(--color-muted); text-align: center; padding: 2rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px;">No analysis history yet.</p>`;
+        container.innerHTML = `
+            <div class="empty-state-card" style="width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; padding: 2.25rem 1.5rem; text-align: center; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px;">
+                <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--color-paper-3); border: 1px solid var(--color-rule-2); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; color: var(--color-muted);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <p style="margin: 0 0 0.25rem 0; font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--color-ink);">No Analysis History</p>
+                <p style="margin: 0; font-size: 0.8125rem; color: var(--color-muted); max-width: 380px; line-height: 1.45;">Past resume versions evaluated against job descriptions will appear here with version tracking and match score history.</p>
+            </div>
+        `;
         return;
     }
 
@@ -507,14 +566,22 @@ function renderTimelineList(historyList) {
             scoreClass = 'med-score';
         }
 
+        const jdTitle = item.job_description_title || "General Evaluation";
+        const jdSummary = item.job_description_summary || "";
+
         return `
             <div class="glass-card timeline-card ${isNewest ? 'is-newest' : ''}">
-                ${isNewest ? `<span class="newest-badge">Newest Version</span>` : ''}
+                ${isNewest ? `
+                    <div class="latest-version-badge" title="Latest version" aria-label="Latest version">
+                        <span class="latest-version-dot" aria-hidden="true"></span>
+                        <span>Latest version</span>
+                    </div>
+                ` : ''}
                 <div class="timeline-content-grid">
                     <div class="timeline-main-info">
                         <div class="timeline-title-row">
                             <h3 class="timeline-title">
-                                <span>${item.label}</span>
+                                <span>${escapeHTML(item.label)}</span>
                                 <span class="timeline-version-tag">V${item.version}</span>
                             </h3>
                             <button onclick="renameCandidateAnalysis(${item.id}, '${item.label.replace(/'/g, "\\'")}')" class="timeline-rename-btn" title="Rename Label" aria-label="Rename Label">✎</button>
@@ -522,7 +589,7 @@ function renderTimelineList(historyList) {
                         <p class="timeline-meta-text">
                             <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                                ${item.original_filename}
+                                ${escapeHTML(item.original_filename)}
                             </span>
                             <span>•</span>
                             <span style="display: inline-flex; align-items: center; gap: 0.35rem;">
@@ -530,17 +597,36 @@ function renderTimelineList(historyList) {
                                 ${uploadDate}
                             </span>
                         </p>
-                        <p class="timeline-jd-summary">
-                            <strong>Target JD:</strong> ${item.job_description_title} — ${item.job_description_summary}
-                        </p>
+                        
+                        <div class="timeline-jd-box">
+                            <div class="timeline-jd-header">
+                                <span class="timeline-jd-role-label">Target Role:</span>
+                                <span class="timeline-jd-role-title">${escapeHTML(jdTitle)}</span>
+                                ${jdSummary ? `
+                                    <button type="button" class="timeline-jd-toggle-btn" onclick="toggleJdSummary(${item.id})" aria-expanded="false" id="jd-toggle-${item.id}">
+                                        <span class="toggle-text">Show full description</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="toggle-icon"><path d="m6 9 6 6 6-6"/></svg>
+                                    </button>
+                                ` : ''}
+                            </div>
+                            ${jdSummary ? `
+                                <div class="timeline-jd-body collapsed" id="jd-body-${item.id}">
+                                    ${escapeHTML(jdSummary)}
+                                </div>
+                            ` : ''}
+                        </div>
                     </div>
+                    
                     <div class="timeline-actions-group">
-                        <span class="score-badge ${scoreClass}" style="font-size: 1.05rem; font-family: var(--font-mono); font-weight: 700; padding: 0.4rem 0.8rem;">${item.ats_score}% Match</span>
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                            <button onclick="viewCandidateAnalysis(${item.id})" class="glow-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                        <div class="timeline-score-block">
+                            <span class="timeline-score-label">Version Match:</span>
+                            <span class="score-badge ${scoreClass}" style="font-size: 0.9375rem; font-family: var(--font-mono); font-weight: 700; padding: 0.3rem 0.65rem; border-radius: 6px;">${item.ats_score}%</span>
+                        </div>
+                        <div class="timeline-btn-group" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                            <button onclick="viewCandidateAnalysis(${item.id})" class="glow-btn timeline-btn-view" style="font-size: 0.8125rem; height: 34px; padding: 0 0.85rem; background: var(--color-forest); border: 1px solid var(--color-forest); color: #FFFFFF; font-weight: 600; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;">
                                 <span>View Analysis</span>
                             </button>
-                            <button onclick="deleteCandidateAnalysis(${item.id})" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; border-color: var(--color-rule-2); color: var(--color-clay);">
+                            <button onclick="deleteCandidateAnalysis(${item.id})" class="glow-btn secondary timeline-btn-delete" style="font-size: 0.8125rem; height: 34px; padding: 0 0.85rem; background: var(--color-paper-2); border: 1px solid var(--color-rule-2); color: var(--color-clay); font-weight: 500; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;">
                                 <span>Delete</span>
                             </button>
                         </div>
@@ -550,6 +636,28 @@ function renderTimelineList(historyList) {
         `;
     }).join('');
 }
+
+window.toggleJdSummary = function(id) {
+    const body = document.getElementById(`jd-body-${id}`);
+    const btn = document.getElementById(`jd-toggle-${id}`);
+    if (!body || !btn) return;
+    const isCollapsed = body.classList.contains('collapsed');
+    if (isCollapsed) {
+        body.classList.remove('collapsed');
+        body.classList.add('expanded');
+        btn.classList.add('expanded');
+        btn.setAttribute('aria-expanded', 'true');
+        const textSpan = btn.querySelector('.toggle-text');
+        if (textSpan) textSpan.textContent = 'Show less';
+    } else {
+        body.classList.remove('expanded');
+        body.classList.add('collapsed');
+        btn.classList.remove('expanded');
+        btn.setAttribute('aria-expanded', 'false');
+        const textSpan = btn.querySelector('.toggle-text');
+        if (textSpan) textSpan.textContent = 'Show full description';
+    }
+};
 
 export function formatContactLink(containerId, type, rawValue) {
     const el = document.getElementById(containerId);
@@ -889,40 +997,6 @@ window.toggleXaiAccordion = (headerEl) => {
     }
 };
 
-window.toggleXaiLevel = (level) => {
-    const summaryBtns = document.querySelectorAll('.xai-level-btn');
-    summaryBtns.forEach(btn => {
-        if (btn.getAttribute('onclick').includes(level)) {
-            btn.classList.add('active');
-            btn.style.background = 'var(--color-forest)';
-            btn.style.color = '#FFFFFF';
-            btn.style.borderColor = 'transparent';
-        } else {
-            btn.classList.remove('active');
-            btn.style.background = 'var(--color-paper-3)';
-            btn.style.color = 'var(--color-ink-2)';
-            btn.style.border = '1px solid var(--color-rule-2)';
-        }
-    });
-
-    const summaryAw = document.querySelectorAll('.xai-text-awarded-summary');
-    const detailedAw = document.querySelectorAll('.xai-text-awarded-detailed');
-    const summaryDe = document.querySelectorAll('.xai-text-deducted-summary');
-    const detailedDe = document.querySelectorAll('.xai-text-deducted-detailed');
-
-    if (level === 'summary') {
-        summaryAw.forEach(el => el.style.display = 'block');
-        detailedAw.forEach(el => el.style.display = 'none');
-        summaryDe.forEach(el => el.style.display = 'block');
-        detailedDe.forEach(el => el.style.display = 'none');
-    } else {
-        summaryAw.forEach(el => el.style.display = 'none');
-        detailedAw.forEach(el => el.style.display = 'block');
-        summaryDe.forEach(el => el.style.display = 'none');
-        detailedDe.forEach(el => el.style.display = 'block');
-    }
-};
-
 export function renderXaiContent(xaiData) {
     if (!xaiData || !xaiData.enabled) {
         return `
@@ -936,36 +1010,6 @@ export function renderXaiContent(xaiData) {
     const explanations = xaiData.explanations || {};
     const strengths = xaiData.strengths || [];
     const skillGaps = xaiData.skill_gaps || [];
-    const isAiSuccess = xaiData.status === "SUCCESS" && xaiData.source === "GEMINI";
-
-    // AI Status / Provider indicator
-    let statusHeaderHTML = "";
-    if (isAiSuccess) {
-        statusHeaderHTML = `
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.65rem 1rem; border-radius: 8px;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="color: var(--color-forest); display: inline-flex;">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
-                    </span>
-                    <strong style="color: var(--color-forest); font-size: 0.85rem;">Grounded AI Insights (Gemini${xaiData.model ? ` • ${xaiData.model}` : ''})</strong>
-                </div>
-                <span style="font-size: 0.75rem; background: rgba(30, 58, 47, 0.1); color: var(--color-forest); font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase; font-family: var(--font-mono);">Active</span>
-            </div>
-        `;
-    } else {
-        const fallbackMsg = xaiData.status_message || "AI-generated insights are temporarily unavailable. Displaying deterministic keyword and experience matching.";
-        statusHeaderHTML = `
-            <div style="margin-bottom: 1rem; background: var(--color-paper-3); border-left: 4px solid var(--color-ochre); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--color-rule); border-left-width: 4px; border-left-color: var(--color-ochre);">
-                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-                    <span style="color: var(--color-ochre); display: inline-flex;">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    </span>
-                    <strong style="color: var(--color-ochre); font-size: 0.85rem;">Deterministic Matching (Rule-Based Fallback)</strong>
-                </div>
-                <p style="margin: 0; font-size: 0.8rem; color: var(--color-ink-2); line-height: 1.4;">${fallbackMsg}</p>
-            </div>
-        `;
-    }
 
     // Strengths and Gaps section
     let strengthsGapsHTML = "";
@@ -973,14 +1017,14 @@ export function renderXaiContent(xaiData) {
         const strengthsList = strengths.map(s => `
             <li style="margin-bottom: 0.4rem; display: flex; align-items: flex-start; gap: 0.5rem;">
                 <span style="color: var(--color-forest); font-weight: bold;">✓</span>
-                <span style="color: var(--color-ink); font-size: 0.85rem; line-height: 1.4;">${s}</span>
+                <span style="color: var(--color-ink); font-size: 0.85rem; line-height: 1.4;">${escapeHTML(s)}</span>
             </li>
         `).join('') || '<li style="color: var(--color-muted); font-size: 0.85rem;">None identified.</li>';
 
         const gapsList = skillGaps.map(g => `
             <li style="margin-bottom: 0.4rem; display: flex; align-items: flex-start; gap: 0.5rem;">
                 <span style="color: var(--color-clay); font-weight: bold;">✗</span>
-                <span style="color: var(--color-ink); font-size: 0.85rem; line-height: 1.4;">${g}</span>
+                <span style="color: var(--color-ink); font-size: 0.85rem; line-height: 1.4;">${escapeHTML(g)}</span>
             </li>
         `).join('') || '<li style="color: var(--color-muted); font-size: 0.85rem;">None identified.</li>';
 
@@ -1003,22 +1047,12 @@ export function renderXaiContent(xaiData) {
     }
 
     let html = `
-        ${statusHeaderHTML}
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.5rem 1rem; border-radius: 8px;">
-            <span style="font-size: 0.85rem; color: var(--color-ink-2); font-weight: 600;">Explanation Level:</span>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="xai-level-btn active" onclick="toggleXaiLevel('summary')" style="font-size: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 6px; background: var(--color-forest); border: none; color: #FFFFFF; font-weight: 600; cursor: pointer;">Summary</button>
-                <button class="xai-level-btn" onclick="toggleXaiLevel('detailed')" style="font-size: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 6px; background: var(--color-paper-3); border: 1px solid var(--color-rule-2); color: var(--color-ink-2); cursor: pointer;">Detailed</button>
-            </div>
-        </div>
-
         <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-left: 4px solid var(--color-forest); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
             <h4 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; font-family: var(--font-display); color: var(--color-ink); font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 Overall Alignment Summary
             </h4>
-            <p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; color: var(--color-ink-2);">${xaiData.overall_summary}</p>
+            <p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; color: var(--color-ink-2);">${escapeHTML(xaiData.overall_summary || 'Evaluation summary generated based on target criteria.')}</p>
         </div>
 
         ${strengthsGapsHTML}
@@ -1032,8 +1066,10 @@ export function renderXaiContent(xaiData) {
         if (key === "work_experience") key = "experience";
         
         const compExpl = explanations[key] || {};
-        const summaryExpl = compExpl.summary || { why_awarded: "No summary explanation.", why_deducted: "" };
-        const detailedExpl = compExpl.detailed || { why_awarded: "No detailed explanation.", why_deducted: "" };
+        const summaryExpl = compExpl.summary || {};
+        const detailedExpl = compExpl.detailed || {};
+        const whyAwarded = summaryExpl.why_awarded || detailedExpl.why_awarded || 'Full criteria alignment evaluated.';
+        const whyDeducted = summaryExpl.why_deducted || detailedExpl.why_deducted || 'No deductions applied.';
         
         let statusBg = "var(--color-paper-3)";
         let statusColor = "var(--color-clay)";
@@ -1055,8 +1091,8 @@ export function renderXaiContent(xaiData) {
                 <div class="xai-accordion-header" onclick="toggleXaiAccordion(this)" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; cursor: pointer; transition: background 0.15s ease; user-select: none;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         <span class="xai-chevron" style="font-size: 0.75rem; color: var(--color-muted); transition: transform 0.2s; display: inline-block;">▶</span>
-                        <strong style="color: var(--color-ink); font-size: 0.95rem; font-weight: 600;">${comp.name}</strong>
-                        <span style="font-size: 0.8125rem; color: var(--color-muted); font-family: var(--font-mono);">(${comp.weight * 100}% weight)</span>
+                        <strong style="color: var(--color-ink); font-size: 0.95rem; font-weight: 600;">${escapeHTML(comp.name)}</strong>
+                        <span style="font-size: 0.8125rem; color: var(--color-muted); font-family: var(--font-mono);">(${Math.round(comp.weight * 100)}% weight)</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         ${statusBadge}
@@ -1069,41 +1105,64 @@ export function renderXaiContent(xaiData) {
                         <h5 style="margin: 0 0 0.35rem 0; font-size: 0.75rem; color: var(--color-forest); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.35rem;">
                             <span>✓</span> Points Awarded
                         </h5>
-                        <p class="xai-text-awarded-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink);">${summaryExpl.why_awarded}</p>
-                        <p class="xai-text-awarded-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink); display: none;">${detailedExpl.why_awarded}</p>
+                        <p class="xai-text-awarded" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink);">${escapeHTML(whyAwarded)}</p>
                     </div>
                     
                     <div style="margin-bottom: 1rem;">
                         <h5 style="margin: 0 0 0.35rem 0; font-size: 0.75rem; color: var(--color-clay); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.35rem;">
                             <span>✗</span> Deductions &amp; Gaps
                         </h5>
-                        <p class="xai-text-deducted-summary" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink-2);">${summaryExpl.why_deducted || 'No deductions applied.'}</p>
-                        <p class="xai-text-deducted-detailed" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink-2); display: none;">${detailedExpl.why_deducted || 'No deductions applied.'}</p>
+                        <p class="xai-text-deducted" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--color-ink-2);">${escapeHTML(whyDeducted)}</p>
                     </div>
 
-                    <div>
-                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.75rem; color: var(--color-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.4rem;">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                            Supporting Evidence
-                        </h5>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            ${comp.evidence.map(ev => {
-                                let impColor = "var(--color-forest)";
-                                if (ev.importance === "medium") impColor = "var(--color-ochre)";
-                                else if (ev.importance === "high") impColor = "var(--color-clay)";
-                                
-                                return `
-                                    <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                            <strong style="font-size: 0.85rem; color: var(--color-ink); font-weight: 600;">${ev.title}</strong>
-                                            <span style="font-size: 0.7rem; color: ${impColor}; font-weight: bold; background: var(--color-paper-3); padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase; font-family: var(--font-mono);">${ev.importance}</span>
-                                        </div>
-                                        <p style="margin: 0; font-size: 0.8125rem; color: var(--color-ink-2); line-height: 1.4;">${ev.description}</p>
-                                    </div>
-                                `;
-                            }).join('') || '<p style="margin:0; font-size:0.8rem; color:var(--color-muted);">No evidence items identified.</p>'}
-                        </div>
-                    </div>
+                    ${(() => {
+                        const rawEvidence = Array.isArray(comp.evidence) ? comp.evidence : [];
+                        const isSkillComp = comp.name && comp.name.toLowerCase().includes("skill");
+                        if (isSkillComp) return '';
+                        
+                        const evidenceItems = rawEvidence.filter(ev => {
+                            if (!ev) return false;
+                            const cat = String(ev.category || '').toLowerCase();
+                            if (cat.includes("skill")) return false;
+                            const title = typeof ev === 'string' ? ev : (ev?.title || ev?.feature || '');
+                            const t = title.toLowerCase();
+                            return !t.startsWith("exact match:") && 
+                                   !t.startsWith("missing skill:") && 
+                                   !t.startsWith("alias match:") && 
+                                   !t.startsWith("abbreviation match:") && 
+                                   !t.startsWith("technology family:") && 
+                                   !t.startsWith("hierarchical subtitle:") && 
+                                   !t.startsWith("partial match:");
+                        });
+                        
+                        if (evidenceItems.length === 0) return '';
+                        
+                        return `
+                            <div>
+                                <h5 style="margin: 0 0 0.5rem 0; font-size: 0.75rem; color: var(--color-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); display: flex; align-items: center; gap: 0.4rem;">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                    Supporting Evidence
+                                </h5>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    ${evidenceItems.map(ev => {
+                                        let impColor = "var(--color-forest)";
+                                        if (ev.importance === "medium") impColor = "var(--color-ochre)";
+                                        else if (ev.importance === "high") impColor = "var(--color-clay)";
+                                        
+                                        return `
+                                            <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                                    <strong style="font-size: 0.85rem; color: var(--color-ink); font-weight: 600;">${ev.title}</strong>
+                                                    <span style="font-size: 0.7rem; color: ${impColor}; font-weight: bold; background: var(--color-paper-3); padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase; font-family: var(--font-mono);">${ev.importance}</span>
+                                                </div>
+                                                <p style="margin: 0; font-size: 0.8125rem; color: var(--color-ink-2); line-height: 1.4;">${ev.description}</p>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    })()}
                 </div>
             </div>
         `;

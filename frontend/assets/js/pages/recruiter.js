@@ -86,7 +86,22 @@ export function initRecruiterPage() {
     const recJobDescription = document.getElementById('rec-job-description');
 
     if (recDropZone && recResumesInput) {
-        recDropZone.addEventListener('click', () => recResumesInput.click());
+        recDropZone.addEventListener('click', (e) => {
+            if (e.target.closest('#rec-resumes-header') || e.target.closest('.rec-file-item')) {
+                return;
+            }
+            recResumesInput.click();
+        });
+
+        recDropZone.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (e.target.closest('#rec-resumes-header') || e.target.closest('.rec-file-item')) {
+                    return;
+                }
+                e.preventDefault();
+                recResumesInput.click();
+            }
+        });
 
         recDropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -1416,6 +1431,12 @@ export function showCandidateQuickView(cand) {
         }
     }
     
+    // Render Overall Match & Dimension Breakdown Overview
+    const scoreOverviewContainer = document.getElementById('qv-score-overview-container');
+    if (scoreOverviewContainer) {
+        scoreOverviewContainer.innerHTML = renderScoreOverview(cand);
+    }
+
     // Render XAI details
     const xaiContainer = document.getElementById('qv-xai-container');
     if (xaiContainer) {
@@ -1437,27 +1458,146 @@ export function showCandidateQuickView(cand) {
     const missingSkills = Array.isArray(cand.missing_skills) ? cand.missing_skills : [];
     const extractedSkills = Array.isArray(cand.extracted_skills) ? cand.extracted_skills : matchedSkills.concat(missingSkills);
 
-    // Sanitize skills via textContent assignment by creating elements
-    const createSkillTags = (skills, className) => {
-        if (!skills || skills.length === 0) return '<span style="color: var(--color-muted); font-size: 0.8125rem; font-family: var(--font-body);">None</span>';
-        const container = document.createElement('div');
-        skills.forEach(s => {
-            const span = document.createElement('span');
-            span.className = className;
-            span.textContent = s;
-            container.appendChild(span);
-        });
-        return container.innerHTML; // Safe because we just set textContent
-    };
+    const matchedCountEl = document.getElementById('qv-matched-skills-count');
+    if (matchedCountEl) matchedCountEl.textContent = matchedSkills.length;
+    const missingCountEl = document.getElementById('qv-missing-skills-count');
+    if (missingCountEl) missingCountEl.textContent = missingSkills.length;
 
-    if (qvCandExtractedSkills) qvCandExtractedSkills.innerHTML = createSkillTags(extractedSkills, 'skill-tag');
-    if (qvCandMatchedSkills) qvCandMatchedSkills.innerHTML = createSkillTags(matchedSkills, 'skill-tag matched');
-    if (qvCandMissingSkills) qvCandMissingSkills.innerHTML = createSkillTags(missingSkills, 'skill-tag missing');
+    // Render structured skill chips with clear status indicators for Matched Skills and Missing Skills
+    const { matchedHtml, missingHtml } = renderTechnicalSkillsOverview(matchedSkills, missingSkills);
+
+    if (qvCandExtractedSkills) qvCandExtractedSkills.innerHTML = extractedSkills.map(s => `<span class="skill-tag">${escapeHTML(s)}</span>`).join('');
+    if (qvCandMatchedSkills) qvCandMatchedSkills.innerHTML = matchedHtml;
+    if (qvCandMissingSkills) qvCandMissingSkills.innerHTML = missingHtml;
     
     recQuickViewModal.classList.remove('hidden');
 }
 
 window.showCandidateQuickView = showCandidateQuickView;
+
+/**
+ * Renders the consolidated Technical Skills Overview with distinct Matched Skills and Missing Skills groups.
+ */
+export function renderTechnicalSkillsOverview(matchedSkills, missingSkills) {
+    const renderChips = (skills, type) => {
+        if (!skills || skills.length === 0) {
+            return `<span style="color: var(--color-muted); font-size: 0.8125rem; font-family: var(--font-body); font-style: italic;">None recorded</span>`;
+        }
+        return skills.map(s => {
+            const prefix = type === 'matched' ? '✓ ' : '✕ ';
+            return `<span class="skill-chip ${type} skill-tag ${type}">${prefix}${escapeHTML(s)}</span>`;
+        }).join('');
+    };
+
+    return {
+        matchedHtml: renderChips(matchedSkills, 'matched'),
+        missingHtml: renderChips(missingSkills, 'missing')
+    };
+}
+
+/**
+ * Builds the consolidated Overall Score & ATS Overview with dimension breakdown.
+ */
+export function renderScoreOverview(cand) {
+    if (!cand) return '';
+    const score = typeof cand.similarity_score === 'number' ? Math.round(cand.similarity_score) : 0;
+    let scoreClass = 'low-score';
+    if (score >= 70) {
+        scoreClass = 'high-score';
+    } else if (score >= 40) {
+        scoreClass = 'med-score';
+    }
+
+    // Distinct ATS Resume Score (only when valid, positive, and genuinely distinct from similarity score)
+    const hasValidAts = typeof cand.ats_score === 'number' && cand.ats_score > 0 && Math.round(cand.ats_score) !== score;
+    let atsBadgeHtml = '';
+    if (hasValidAts) {
+        atsBadgeHtml = `
+            <div class="ats-score-pill" title="ATS formatting and keyword compliance score">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span>ATS Score: <strong style="color: var(--color-ink);">${Math.round(cand.ats_score)}%</strong></span>
+            </div>
+        `;
+    }
+
+    // Extract dimension breakdown from XAI components or direct candidate scores
+    const xaiComponents = Array.isArray(cand.analysis_metadata?.xai?.components) ? cand.analysis_metadata.xai.components : [];
+    
+    const getCompInfo = (matchKey, fallbackScore, fallbackWeight) => {
+        const found = xaiComponents.find(c => {
+            const n = String(c?.name || '').toLowerCase();
+            return n.includes(matchKey);
+        });
+        const rawScore = found && typeof found.raw_score === 'number' ? Math.round(found.raw_score) : 
+                        (typeof fallbackScore === 'number' ? Math.round(fallbackScore) : 0);
+        const weight = found && typeof found.weight === 'number' ? Math.round(found.weight * 100) : fallbackWeight;
+        const status = found?.status ? String(found.status).replace(/_/g, ' ') : (rawScore >= 70 ? 'met' : (rawScore >= 40 ? 'partial' : 'unmet'));
+        return { score: rawScore, weight, status };
+    };
+
+    const dimensions = [
+        { name: "Technical Skills", ...getCompInfo("skill", cand.skill_score, 50) },
+        { name: "Work Experience", ...getCompInfo("experience", cand.experience_score, 25) },
+        { name: "Education", ...getCompInfo("education", cand.education_score, 15) },
+        { name: "Projects", ...getCompInfo("project", cand.projects_score, 10) }
+    ];
+
+    return `
+        <div class="score-overview-panel">
+            <div class="score-overview-top">
+                <div class="score-overview-metric-group">
+                    <span class="score-overview-main-val ${scoreClass}">${score}%</span>
+                    <span class="score-overview-main-label">Overall Match Score</span>
+                </div>
+                ${atsBadgeHtml}
+            </div>
+
+            <div class="scoring-breakdown-wrapper">
+                <div style="font-family: var(--font-body); font-size: 0.8125rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.5rem;">
+                    Scoring Breakdown by Dimension
+                </div>
+                <table class="scoring-breakdown-table" aria-label="Scoring Breakdown">
+                    <thead>
+                        <tr>
+                            <th>Dimension</th>
+                            <th style="text-align: center;">Score</th>
+                            <th style="text-align: center;">Weight</th>
+                            <th style="text-align: right;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${dimensions.map(d => {
+                            let statusBg = "var(--color-clay-light)";
+                            let statusColor = "var(--color-clay)";
+                            let statusBorder = "var(--color-clay-border)";
+                            if (d.status === "met" || d.status === "exceeded") {
+                                statusBg = "var(--color-forest-light)";
+                                statusColor = "var(--color-forest)";
+                                statusBorder = "var(--color-forest-border)";
+                            } else if (d.status === "partially met" || d.status === "partial") {
+                                statusBg = "#FEF6EB";
+                                statusColor = "#8C5B14";
+                                statusBorder = "#F2DEC0";
+                            }
+                            return `
+                                <tr>
+                                    <td style="font-weight: 500; color: var(--color-ink);">${escapeHTML(d.name)}</td>
+                                    <td style="text-align: center; font-family: var(--font-mono); font-weight: 600; font-variant-numeric: tabular-nums;">${d.score}%</td>
+                                    <td style="text-align: center; font-family: var(--font-mono); color: var(--color-muted); font-variant-numeric: tabular-nums;">${d.weight}%</td>
+                                    <td style="text-align: right;">
+                                        <span style="display: inline-block; background: ${statusBg}; color: ${statusColor}; border: 1px solid ${statusBorder}; font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 600; padding: 0.1rem 0.45rem; border-radius: 4px; text-transform: uppercase;">
+                                            ${escapeHTML(d.status)}
+                                        </span>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
 
 export function renderXaiContent(xaiData) {
     if (!xaiData || !xaiData.enabled) {
@@ -1473,14 +1613,6 @@ export function renderXaiContent(xaiData) {
     const overallSummary = xaiData.overall_summary || 'Overall alignment evaluated across candidate profile and job requirements.';
     
     let html = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.5rem 0.85rem; border-radius: 8px;">
-            <span style="font-size: 0.8125rem; color: var(--color-ink-2); font-weight: 600; font-family: var(--font-body);">Explanation Level:</span>
-            <div style="display: flex; gap: 0.4rem;">
-                <button class="xai-level-btn active" onclick="toggleXaiLevel('summary')" style="font-size: 0.8125rem; padding: 0.25rem 0.65rem; border-radius: 6px; background: var(--color-forest); border: 1px solid var(--color-forest); color: #ffffff; font-family: var(--font-body); font-weight: 600; cursor: pointer;">Summary</button>
-                <button class="xai-level-btn" onclick="toggleXaiLevel('detailed')" style="font-size: 0.8125rem; padding: 0.25rem 0.65rem; border-radius: 6px; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink-2); font-family: var(--font-body); font-weight: 500; cursor: pointer;">Detailed</button>
-            </div>
-        </div>
-
         <div style="background: var(--color-forest-light); border: 1px solid var(--color-forest-border); border-left: 3px solid var(--color-forest); padding: 1.1rem 1.25rem; border-radius: 8px; margin-bottom: 1.25rem;">
             <h4 style="margin-top: 0; margin-bottom: 0.35rem; font-size: 0.9375rem; color: var(--color-forest); font-family: var(--font-body); font-weight: 700;">Overall Alignment Summary</h4>
             <p style="margin: 0; font-size: 0.875rem; line-height: 1.6; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(overallSummary)}</p>
@@ -1492,14 +1624,25 @@ export function renderXaiContent(xaiData) {
     components.forEach((comp) => {
         if (!comp) return;
         const compName = comp.name || "Evaluation Component";
-        let key = compName.toLowerCase().replace(/\s+/g, "_");
+        const lowerCompName = compName.toLowerCase();
+
+        // Skip "Overall Score" component accordion: the top-level Overview already prominently presents it
+        if (lowerCompName.includes("overall score") || lowerCompName === "overall") {
+            return;
+        }
+
+        let key = lowerCompName.replace(/\s+/g, "_");
         if (key === "technical_skills") key = "skills";
         if (key === "work_experience") key = "experience";
         
         const compExpl = explanations[key] || {};
-        const summaryExpl = compExpl.summary || { why_awarded: "Full criteria alignment evaluated.", why_deducted: "" };
-        const detailedExpl = compExpl.detailed || { why_awarded: summaryExpl.why_awarded || "Full criteria alignment evaluated.", why_deducted: summaryExpl.why_deducted || "" };
+        const summaryExpl = compExpl.summary || {};
+        const detailedExpl = compExpl.detailed || {};
         
+        // Single concise, useful explanation: Points Awarded & Deductions/Gaps
+        const whyAwarded = summaryExpl.why_awarded || detailedExpl.why_awarded || 'Full criteria alignment evaluated.';
+        const whyDeducted = summaryExpl.why_deducted || detailedExpl.why_deducted || 'No deductions applied.';
+
         const statusVal = String(comp.status || "evaluated").toLowerCase();
         let statusBg = "var(--color-clay-light)";
         let statusColor = "var(--color-clay)";
@@ -1519,7 +1662,29 @@ export function renderXaiContent(xaiData) {
         const rawScore = Math.round(typeof comp.raw_score === 'number' ? comp.raw_score : (typeof comp.score === 'number' ? comp.score : 0));
         const weightPct = Math.round((typeof comp.weight === 'number' ? comp.weight : 0) * 100);
 
-        const evidenceItems = Array.isArray(comp.evidence) ? comp.evidence : [];
+        const rawEvidence = Array.isArray(comp.evidence) ? comp.evidence : [];
+
+        // For Technical Skills: Suppress the Supporting Evidence section entirely.
+        // The consolidated Technical Skills Overview card directly above displays Matched Skills and Missing Skills cleanly.
+        // XAI remains strictly focused on scoring: Points Awarded, Deductions, and genuine skill gaps.
+        let evidenceItems = [];
+        const isSkillRelated = lowerCompName.includes("skill") || lowerCompName.includes("competenc");
+        if (!isSkillRelated) {
+            evidenceItems = rawEvidence.filter(ev => {
+                if (!ev) return false;
+                const cat = String(ev.category || '').toLowerCase();
+                if (cat.includes("skill") || cat.includes("competenc")) return false;
+                const title = typeof ev === 'string' ? ev : (ev?.title || ev?.feature || '');
+                const t = title.toLowerCase();
+                return !t.startsWith("exact match:") && 
+                       !t.startsWith("missing skill:") && 
+                       !t.startsWith("alias match:") && 
+                       !t.startsWith("abbreviation match:") && 
+                       !t.startsWith("technology family:") && 
+                       !t.startsWith("hierarchical subtitle:") && 
+                       !t.startsWith("partial match:");
+            });
+        }
 
         html += `
             <div class="xai-accordion-item" style="border: 1px solid var(--color-rule); border-radius: 8px; overflow: hidden; background: var(--color-paper-2);">
@@ -1538,50 +1703,50 @@ export function renderXaiContent(xaiData) {
                 <div class="xai-accordion-content hidden" style="padding: 1.15rem; border-top: 1px solid var(--color-rule); background: var(--color-paper); display: none;">
                     <div style="margin-bottom: 0.85rem;">
                         <h5 style="margin: 0 0 0.25rem 0; font-size: 0.75rem; color: var(--color-forest); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Points Awarded</h5>
-                        <p class="xai-text-awarded-summary" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(summaryExpl.why_awarded || 'Full criteria alignment evaluated.')}</p>
-                        <p class="xai-text-awarded-detailed" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body); display: none;">${escapeHTML(detailedExpl.why_awarded || summaryExpl.why_awarded || 'Full criteria alignment evaluated.')}</p>
+                        <p class="xai-text-awarded" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(whyAwarded)}</p>
                     </div>
                     
-                    <div style="margin-bottom: 1rem;">
+                    <div style="margin-bottom: ${evidenceItems.length > 0 ? '1rem' : '0.25rem'};">
                         <h5 style="margin: 0 0 0.25rem 0; font-size: 0.75rem; color: var(--color-clay); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Deductions &amp; Gaps</h5>
-                        <p class="xai-text-deducted-summary" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(summaryExpl.why_deducted || 'No deductions applied.')}</p>
-                        <p class="xai-text-deducted-detailed" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body); display: none;">${escapeHTML(detailedExpl.why_deducted || summaryExpl.why_deducted || 'No deductions applied.')}</p>
+                        <p class="xai-text-deducted" style="margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--color-ink-2); font-family: var(--font-body);">${escapeHTML(whyDeducted)}</p>
                     </div>
 
-                    <div>
-                        <h5 style="margin: 0 0 0.5rem 0; font-size: 0.75rem; color: var(--color-forest); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Supporting Evidence</h5>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            ${evidenceItems.map(ev => {
-                                if (!ev) return '';
-                                const evTitle = typeof ev === 'string' ? ev : (ev.title || ev.feature || 'Supporting Signal');
-                                const evDesc = typeof ev === 'string' ? '' : (ev.description || ev.comment || '');
-                                const evImp = (typeof ev === 'object' && ev.importance) ? String(ev.importance).toLowerCase() : 'info';
-                                
-                                let impBg = "var(--color-forest-light)";
-                                let impColor = "var(--color-forest)";
-                                let impBorder = "var(--color-forest-border)";
-                                if (evImp === "medium") {
-                                    impBg = "#FEF6EB";
-                                    impColor = "#8C5B14";
-                                    impBorder = "#F2DEC0";
-                                } else if (evImp === "high") {
-                                    impBg = "var(--color-clay-light)";
-                                    impColor = "var(--color-clay)";
-                                    impBorder = "var(--color-clay-border)";
-                                }
-                                
-                                return `
-                                    <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                            <strong style="font-size: 0.85rem; color: var(--color-ink); font-family: var(--font-body);">${escapeHTML(evTitle)}</strong>
-                                            <span style="font-size: 0.6875rem; color: ${impColor}; background: ${impBg}; border: 1px solid ${impBorder}; font-family: var(--font-mono); font-weight: 600; padding: 0.1rem 0.4rem; border-radius: 3px; text-transform: uppercase;">${escapeHTML(evImp)}</span>
+                    ${evidenceItems.length > 0 ? `
+                        <div>
+                            <h5 style="margin: 0 0 0.5rem 0; font-size: 0.75rem; color: var(--color-forest); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Supporting Evidence</h5>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                ${evidenceItems.map(ev => {
+                                    if (!ev) return '';
+                                    const evTitle = typeof ev === 'string' ? ev : (ev.title || ev.feature || 'Supporting Signal');
+                                    const evDesc = typeof ev === 'string' ? '' : (ev.description || ev.comment || '');
+                                    const evImp = (typeof ev === 'object' && ev.importance) ? String(ev.importance).toLowerCase() : 'info';
+                                    
+                                    let impBg = "var(--color-forest-light)";
+                                    let impColor = "var(--color-forest)";
+                                    let impBorder = "var(--color-forest-border)";
+                                    if (evImp === "medium") {
+                                        impBg = "#FEF6EB";
+                                        impColor = "#8C5B14";
+                                        impBorder = "#F2DEC0";
+                                    } else if (evImp === "high") {
+                                        impBg = "var(--color-clay-light)";
+                                        impColor = "var(--color-clay)";
+                                        impBorder = "var(--color-clay-border)";
+                                    }
+                                    
+                                    return `
+                                        <div style="background: var(--color-paper-2); border: 1px solid var(--color-rule); padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                                <strong style="font-size: 0.85rem; color: var(--color-ink); font-family: var(--font-body);">${escapeHTML(evTitle)}</strong>
+                                                <span style="font-size: 0.6875rem; color: ${impColor}; background: ${impBg}; border: 1px solid ${impBorder}; font-family: var(--font-mono); font-weight: 600; padding: 0.1rem 0.4rem; border-radius: 3px; text-transform: uppercase;">${escapeHTML(evImp)}</span>
+                                            </div>
+                                            ${evDesc ? `<p style="margin: 0; font-size: 0.8125rem; color: var(--color-ink-2); line-height: 1.45; font-family: var(--font-body);">${escapeHTML(evDesc)}</p>` : ''}
                                         </div>
-                                        ${evDesc ? `<p style="margin: 0; font-size: 0.8125rem; color: var(--color-ink-2); line-height: 1.45; font-family: var(--font-body);">${escapeHTML(evDesc)}</p>` : ''}
-                                    </div>
-                                `;
-                            }).join('') || '<p style="margin:0; font-size:0.8125rem; color:var(--color-muted); font-family:var(--font-body);">No evidence items recorded for this criteria.</p>'}
+                                    `;
+                                }).join('')}
+                            </div>
                         </div>
-                    </div>
+                    ` : ''}
                 </div>
             </div>
         `;
@@ -1590,6 +1755,27 @@ export function renderXaiContent(xaiData) {
     html += `</div>`;
     return html;
 }
+
+window.toggleXaiAccordion = (headerEl) => {
+    if (!headerEl) return;
+    const item = headerEl.closest('.xai-accordion-item');
+    if (!item) return;
+    const content = item.querySelector('.xai-accordion-content');
+    const chevron = item.querySelector('.xai-chevron');
+    if (!content) return;
+    
+    if (content.style.display === 'none' || content.classList.contains('hidden')) {
+        content.style.display = 'block';
+        content.classList.remove('hidden');
+        if (chevron) chevron.style.transform = 'rotate(90deg)';
+        headerEl.style.background = 'var(--color-paper-3)';
+    } else {
+        content.style.display = 'none';
+        content.classList.add('hidden');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+        headerEl.style.background = 'var(--color-paper-2)';
+    }
+};
 
 window.toggleRecCard = (headerEl) => {
     const item = headerEl.closest('.rec-card');

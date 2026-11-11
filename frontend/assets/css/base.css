@@ -114,23 +114,85 @@ input[type="password"]::-ms-clear {
 }
 
 .file-upload-box {
-    border: 2px dashed var(--color-rule-2);
-    border-radius: var(--radius-md);padding: 3rem var(--space-md);
+    border: 1.5px dashed var(--color-rule-2);
+    border-radius: var(--radius-md);
+    padding: 2.25rem 1.5rem;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     cursor: pointer;
-    background: var(--color-paper);
-    transition: border-color var(--dur-micro), background-color var(--dur-micro);
+    background: var(--color-paper-3);
+    transition: border-color var(--dur-micro), background-color var(--dur-micro), box-shadow var(--dur-micro);
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .file-upload-box:hover,
 .file-upload-box.drag-over {
-    border-color: var(--color-accent);
-    background: var(--color-accent-dim);
+    border-color: var(--color-forest);
+    background: var(--color-paper-2);
 }
 
-.upload-icon {
-    font-size: 3rem;
-    display: block;margin-bottom: var(--space-md);
+.file-upload-box:focus-visible {
+    border-color: var(--color-forest);
+    box-shadow: 0 0 0 3px var(--color-forest-light);
+    outline: none;
+}
+
+.drop-zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.35rem;
+    width: 100%;
+    pointer-events: none;
+}
+
+.drop-zone-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-forest-light);
+    border: 1px solid var(--color-forest-border);
+    color: var(--color-forest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.35rem auto;
+    transition: transform 0.2s ease;
+}
+
+.file-upload-box:hover .drop-zone-icon-wrap {
+    transform: translateY(-2px);
+}
+
+.drop-zone-primary {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    line-height: 1.4;
+}
+
+.drop-zone-browse {
+    color: var(--color-forest);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.drop-zone-secondary {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    line-height: 1.4;
 }
 
 .resumes-dropdown-header {
@@ -224,13 +286,29 @@ input[type="password"]::-ms-clear {
     transform: scale(0.98);
 }
 
-.loader {
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-rule);
+.glow-btn.secondary {
+    width: auto;
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-rule);
+    color: var(--color-ink-2);
+}
+
+.glow-btn.secondary:hover {
+    background: var(--color-paper-3);
+    border-color: var(--color-forest);
+    color: var(--color-forest);
+}
+
+.loader,
+.spinner {
+    width: 22px;
+    height: 22px;
+    border: 2.5px solid var(--color-rule);
     border-radius: 50%;
-    border-top-color: var(--color-ink);
-    animation: spin 1s linear infinite;
+    border-top-color: var(--color-forest);
+    animation: spin 0.85s linear infinite;
+    display: inline-block;
+    box-sizing: border-box;
 }
 
 @keyframes spin {
