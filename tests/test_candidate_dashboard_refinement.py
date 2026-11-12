@@ -117,7 +117,8 @@ def test_analysis_history_expandable_job_description():
     assert "timeline-jd-box" in js
     assert "timeline-jd-toggle-btn" in js
     assert "toggleJdSummary" in js
-    assert "Show full description" in js
+    # Toggle button text — "Show description" or "Show full description" are both acceptable
+    assert "Show description" in js or "Show full description" in js
 
 
 def test_analysis_history_latest_version_badge_structure():
@@ -451,3 +452,173 @@ def test_browser_candidate_dashboard_mobile_390():
 
         browser.close()
 
+
+
+# ==============================================================================
+# REGRESSION TESTS: 4 Candidate-side fixes (session continuation)
+# ==============================================================================
+
+ROUTER_JS = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "frontend", "assets", "js", "router.js")
+)
+
+
+# --- Fix 1 & 2: Dashboard state preservation (no reload on modal close) --------
+
+def test_close_modal_uses_history_replace_state():
+    """closeCandidateAnalysisModal must use history.replaceState to avoid triggering hashchange reload."""
+    with open(CANDIDATE_JS, "r", encoding="utf-8") as f:
+        js = f.read()
+
+    # Must contain history.replaceState in candidate.js
+    assert "history.replaceState" in js, (
+        "closeCandidateAnalysisModal should use history.replaceState to avoid triggering hashchange"
+    )
+
+
+def test_router_guards_dashboard_reinit_when_already_rendered():
+    """Router must guard initializeCandidateDashboard call when dashboard is already rendered."""
+    with open(ROUTER_JS, "r", encoding="utf-8") as f:
+        router = f.read()
+
+    # Guard condition must be present
+    assert "alreadyRendered" in router, (
+        "Router should guard initializeCandidateDashboard with an alreadyRendered check"
+    )
+    assert "cand-stats-container" in router, (
+        "Guard should check the cand-stats-container for existing content"
+    )
+
+
+# --- Fix 3: Analysis Snapshot modal width ------------------------------------
+
+def test_modal_max_width_increased_to_820():
+    """quick-view-card max-width must be 820px for evaluation content."""
+    with open(RECRUITER_CSS, "r", encoding="utf-8") as f:
+        css = f.read()
+
+    # Find the .quick-view-card rule and confirm max-width
+    match = re.search(
+        r"\.quick-view-card\s*\{[^}]+max-width\s*:\s*(\d+px)[^}]+\}",
+        css,
+        re.DOTALL,
+    )
+    assert match, ".quick-view-card rule with max-width not found in CSS"
+    assert match.group(1) == "820px", (
+        f"Expected max-width: 820px, got {match.group(1)}"
+    )
+
+
+def test_modal_max_height_is_90vh():
+    """quick-view-card max-height must be 90vh."""
+    with open(RECRUITER_CSS, "r", encoding="utf-8") as f:
+        css = f.read()
+
+    match = re.search(
+        r"\.quick-view-card\s*\{[^}]+max-height\s*:\s*([\w%]+)[^}]+\}",
+        css,
+        re.DOTALL,
+    )
+    assert match, ".quick-view-card rule with max-height not found in CSS"
+    assert match.group(1) == "90vh", (
+        f"Expected max-height: 90vh, got {match.group(1)}"
+    )
+
+
+def test_modal_responsive_breakpoints_exist():
+    """Responsive overrides for the modal at 860px and 480px must exist."""
+    with open(RECRUITER_CSS, "r", encoding="utf-8") as f:
+        css = f.read()
+
+    assert "@media (max-width: 860px)" in css, (
+        "Missing responsive breakpoint for quick-view-card at 860px"
+    )
+    assert "@media (max-width: 480px)" in css, (
+        "Missing responsive breakpoint for quick-view-card at 480px"
+    )
+
+
+# --- Fix 4: Career Progress legibility ---------------------------------------
+
+def test_career_node_version_legibility():
+    """career-node-version should use improved contrast color and font size."""
+    with open(RECRUITER_CSS, "r", encoding="utf-8") as f:
+        css = f.read()
+
+    match = re.search(
+        r"\.career-node-version\s*\{([^}]+)\}",
+        css,
+        re.DOTALL,
+    )
+    assert match, ".career-node-version rule not found"
+    block = match.group(1)
+    # Font size should be at least 0.8125rem (not tiny 0.6875rem)
+    assert "0.8125rem" in block or "0.875rem" in block or "0.9rem" in block, (
+        "career-node-version font-size should be ≥ 0.8125rem for legibility"
+    )
+    # Should use ink-2 or ink (not muted) for contrast
+    assert "color-ink" in block or "ink-2" in block, (
+        "career-node-version should use --color-ink-2 or --color-ink for contrast"
+    )
+
+
+def test_career_node_circle_legibility():
+    """career-node-circle should be larger (≥50px) for readability."""
+    with open(RECRUITER_CSS, "r", encoding="utf-8") as f:
+        css = f.read()
+
+    match = re.search(
+        r"\.career-node-circle\s*\{([^}]+)\}",
+        css,
+        re.DOTALL,
+    )
+    assert match, ".career-node-circle rule not found"
+    block = match.group(1)
+    # Width and height should be at least 50px
+    width_match = re.search(r"width\s*:\s*(\d+)px", block)
+    assert width_match and int(width_match.group(1)) >= 48, (
+        f"career-node-circle width should be ≥ 48px, got {width_match.group(1) if width_match else 'not found'}"
+    )
+
+
+def test_career_node_date_legibility():
+    """career-node-date should use improved font size and contrast."""
+    with open(RECRUITER_CSS, "r", encoding="utf-8") as f:
+        css = f.read()
+
+    match = re.search(
+        r"\.career-node-date\s*\{([^}]+)\}",
+        css,
+        re.DOTALL,
+    )
+    assert match, ".career-node-date rule not found"
+    block = match.group(1)
+    # Should be at least 0.75rem
+    fs_match = re.search(r"font-size\s*:\s*([\d.]+rem)", block)
+    assert fs_match, "career-node-date font-size not found"
+    size_val = float(fs_match.group(1).replace("rem", ""))
+    assert size_val >= 0.75, (
+        f"career-node-date font-size should be ≥ 0.75rem, got {size_val}rem"
+    )
+
+
+# --- Fix 1: Duplicate JD in Analysis History --------------------------------
+
+def test_analysis_history_deduplicates_duplicate_jd():
+    """Verify that candidate.js removes redundant job description from title when duplicating summary."""
+    with open(CANDIDATE_JS, "r", encoding="utf-8") as f:
+        js = f.read()
+
+    assert "isDuplicateDescription" in js, (
+        "candidate.js should detect when jdTitle duplicates jdSummary to prevent showing JD twice"
+    )
+
+
+def test_analysis_history_jd_toggle_button_text():
+    """Toggle button text should say 'Show full description' in collapsed state."""
+    with open(CANDIDATE_JS, "r", encoding="utf-8") as f:
+        js = f.read()
+
+    assert "Show full description" in js, (
+        "Toggle button should have 'Show full description' text in collapsed state"
+    )

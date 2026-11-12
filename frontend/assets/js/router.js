@@ -114,7 +114,16 @@ export function handleCandidateRouting(hash, params = null) {
                 candAnalysisModal.classList.add('hidden');
             }
         }
-        initializeCandidateDashboard();
+        // Only re-initialize if dashboard content is not already rendered.
+        // This prevents a full reload when closeCandidateAnalysisModal uses
+        // history.replaceState; a genuine navigation still triggers a full init
+        // because the hash event fires, but guard against double init on the
+        // same route when the dashboard is already populated.
+        const statsContainer = document.getElementById('cand-stats-container');
+        const alreadyRendered = statsContainer && statsContainer.querySelector('.rec-grid, .cand-stats-grid, [class*="stats"]');
+        if (!alreadyRendered) {
+            initializeCandidateDashboard();
+        }
     } else {
         candPageTitle.textContent = "";
         candPageTitle.classList.add('hidden');

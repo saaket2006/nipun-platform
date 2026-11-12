@@ -174,9 +174,14 @@ export function closeCandidateAnalysisModal() {
     if (modal) {
         modal.classList.add('hidden');
     }
-    // Navigate back to the candidate dashboard via existing hash router
+    // Use history.replaceState to update URL without firing hashchange,
+    // preserving the already-rendered dashboard state and avoiding refetches.
     if (window.location.hash !== ROUTES.CANDIDATE_DASHBOARD) {
-        window.location.hash = ROUTES.CANDIDATE_DASHBOARD;
+        if (window.history && window.history.replaceState) {
+            history.replaceState(null, '', ROUTES.CANDIDATE_DASHBOARD);
+        } else {
+            window.location.hash = ROUTES.CANDIDATE_DASHBOARD;
+        }
     }
 }
 window.closeCandidateAnalysisModal = closeCandidateAnalysisModal;
@@ -566,8 +571,25 @@ function renderTimelineList(historyList) {
             scoreClass = 'med-score';
         }
 
-        const jdTitle = item.job_description_title || "General Evaluation";
-        const jdSummary = item.job_description_summary || "";
+        let jdTitle = (item.job_description_title || "").trim();
+        const jdSummary = (item.job_description_summary || "").trim();
+
+        // Prevent displaying the target job description twice when jdTitle duplicates jdSummary
+        const isDuplicateDescription = jdTitle && jdSummary && (
+            jdTitle.toLowerCase() === jdSummary.toLowerCase() ||
+            jdTitle.length > 60 ||
+            jdSummary.toLowerCase().startsWith(jdTitle.toLowerCase())
+        );
+
+        if (isDuplicateDescription) {
+            const roleMatch = jdTitle.match(/^(?:Looking for a?|Seeking a?|Hiring a?|We are looking for a?|Senior|Lead|Staff|Principal|Junior|Frontend|Backend|Full\s*Stack|Software|Engineer|Developer|Data|Product|DevOps)[^.,;:\n-]+/i);
+            if (roleMatch && roleMatch[0].length < 45) {
+                jdTitle = roleMatch[0].replace(/^(Looking for a?|Seeking a?|Hiring a?|We are looking for a?)\s+/i, '').trim();
+            } else {
+                jdTitle = "General Evaluation";
+            }
+        }
+        if (!jdTitle) jdTitle = "General Evaluation";
 
         return `
             <div class="glass-card timeline-card ${isNewest ? 'is-newest' : ''}">

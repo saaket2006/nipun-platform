@@ -473,7 +473,7 @@
       "_origin": "ast",
       "id": "backend_config",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "backend/config.py"
     },
     {
@@ -484,7 +484,7 @@
       "_origin": "ast",
       "id": "backend_config_settings",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "settings"
     },
     {
@@ -495,7 +495,7 @@
       "_origin": "ast",
       "id": "backend_config_settings_init",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": ".__init__()"
     },
     {
@@ -659,8 +659,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_get_current_user",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "get_current_user()"
     },
     {
@@ -670,8 +670,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_py_session",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "session"
     },
     {
@@ -703,8 +703,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "backend_dependencies_auth_deps_rationale_21",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "validates the incoming firebase id token using firebase admin sdk, extracts the..."
     },
     {
@@ -736,8 +736,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_dependencies_auth_utils",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "auth_utils.py"
     },
     {
@@ -758,8 +758,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "backend_dependencies_auth_utils_get_password_hash",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "get_password_hash()"
     },
     {
@@ -802,8 +802,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "backend_dependencies_auth_utils_rationale_22",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "hashes a plain text password using bcrypt."
     },
     {
@@ -824,8 +824,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_limiter",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "limiter.py"
     },
     {
@@ -1364,7 +1364,7 @@
       "_origin": "ast",
       "id": "backend_routers_auth_fetch_google_certs",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "fetch_google_certs()"
     },
     {
@@ -1660,8 +1660,8 @@
       "source_location": "L369",
       "_origin": "ast",
       "id": "backend_routers_candidate_update_recommendation_status",
-      "community": 8,
-      "community_name": "recruiter.py",
+      "community": 34,
+      "community_name": "User",
       "norm_label": "update_recommendation_status()"
     },
     {
@@ -1770,8 +1770,8 @@
       "source_location": "L376",
       "_origin": "ast",
       "id": "backend_routers_candidate_rationale_376",
-      "community": 8,
-      "community_name": "recruiter.py",
+      "community": 34,
+      "community_name": "User",
       "norm_label": "updates the lifecycle status and history flags of a specific recommendation..."
     },
     {
@@ -2629,7 +2629,7 @@
       "_origin": "ast",
       "id": "backend_services_email_service",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "email_service.py"
     },
     {
@@ -2640,7 +2640,7 @@
       "_origin": "ast",
       "id": "backend_services_email_service_send_password_reset_email",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "send_password_reset_email()"
     },
     {
@@ -2651,7 +2651,7 @@
       "_origin": "ast",
       "id": "backend_services_email_service_rationale_9",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "dispatches a secure password reset email to the specified recipient. security..."
     },
     {
@@ -3410,7 +3410,7 @@
       "_origin": "ast",
       "id": "exception",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "exception"
     },
     {
@@ -5851,8 +5851,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_conftest",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "conftest.py"
     },
     {
@@ -5862,8 +5862,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_tests_conftest_py_fixture",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "fixture"
     },
     {
@@ -5873,8 +5873,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "backend_tests_conftest_anyio_backend",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "anyio_backend()"
     },
     {
@@ -5884,8 +5884,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "backend_tests_conftest_db_session",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "db_session()"
     },
     {
@@ -5895,8 +5895,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "backend_tests_conftest_client",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "client()"
     },
     {
@@ -5906,8 +5906,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "backend_tests_conftest_test_user",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "test_user()"
     },
     {
@@ -5917,8 +5917,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "backend_tests_conftest_rationale_30",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "create a new database session for a test."
     },
     {
@@ -5928,8 +5928,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "backend_tests_conftest_rationale_41",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "create a test client using the test database."
     },
     {
@@ -5939,8 +5939,8 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "backend_tests_conftest_rationale_55",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 90,
+      "community_name": "test_user",
       "norm_label": "creates a test user in the database."
     },
     {
@@ -5962,7 +5962,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "routers/test_auth.py"
     },
     {
@@ -5973,7 +5973,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_login_success",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_login_success()"
     },
     {
@@ -5984,7 +5984,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_login_invalid_password",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_login_invalid_password()"
     },
     {
@@ -5995,7 +5995,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_login_nonexistent_user",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_login_nonexistent_user()"
     },
     {
@@ -6006,7 +6006,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_fetch_google_certs_error",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_fetch_google_certs_error()"
     },
     {
@@ -6017,7 +6017,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_fetch_google_certs_timeout",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_fetch_google_certs_timeout()"
     },
     {
@@ -6028,7 +6028,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_auth_test_fetch_google_certs_success",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_fetch_google_certs_success()"
     },
     {
@@ -6038,8 +6038,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "test_candidate_xai_dashboard.py"
     },
     {
@@ -6049,8 +6049,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_py_fixture",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "fixture"
     },
     {
@@ -6060,8 +6060,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_disable_rate_limiting",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "disable_rate_limiting()"
     },
     {
@@ -6071,8 +6071,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_candidate_a",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "candidate_a()"
     },
     {
@@ -6082,8 +6082,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_candidate_b",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "candidate_b()"
     },
     {
@@ -6093,8 +6093,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_test_candidate_stats_empty_dashboard",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "test_candidate_stats_empty_dashboard()"
     },
     {
@@ -6104,8 +6104,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_test_candidate_process_resume_with_grounded_xai_and_persistence",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "test_candidate_process_resume_with_grounded_xai_and_persistence()"
     },
     {
@@ -6116,7 +6116,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_test_candidate_dashboard_stats_and_history_lifecycle",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "test_candidate_dashboard_stats_and_history_lifecycle()"
     },
     {
@@ -6126,8 +6126,8 @@
       "source_location": "L288",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_test_candidate_job_description_title_non_truncation_and_legacy_healing",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "test_candidate_job_description_title_non_truncation_and_legacy_healing()"
     },
     {
@@ -6137,8 +6137,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_rationale_13",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "temporarily disables slowapi rate limiting for unit tests."
     },
     {
@@ -6148,8 +6148,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_rationale_21",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "creates candidate a in the test database."
     },
     {
@@ -6159,8 +6159,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_rationale_47",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "creates candidate b in the test database for cross-user isolation tests."
     },
     {
@@ -6170,8 +6170,8 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_rationale_72",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "candidate with no previous analyses receives latest_ats_score: none."
     },
     {
@@ -6181,8 +6181,8 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_rationale_85",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "candidate submitting resume and jd generates grounded xai insights, persists..."
     },
     {
@@ -6193,7 +6193,7 @@
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_rationale_179",
       "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community_name": "routers/test_auth.py",
       "norm_label": "verifies that after screening, stats and history return fresh authoritative..."
     },
     {
@@ -6203,8 +6203,8 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "backend_tests_routers_test_candidate_xai_dashboard_rationale_289",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 8,
+      "community_name": "recruiter.py",
       "norm_label": "verify that candidate jd titles are not unnecessarily truncated to 50..."
     },
     {
@@ -7831,8 +7831,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_test_auth",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "tests/test_auth.py"
     },
     {
@@ -7842,8 +7842,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "backend_tests_test_auth_test_signup_success",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "test_signup_success()"
     },
     {
@@ -7853,8 +7853,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_tests_test_auth_test_signup_existing_email",
-      "community": 72,
-      "community_name": "test_candidate_xai_dashboard.py",
+      "community": 30,
+      "community_name": "test_profile_editing.py",
       "norm_label": "test_signup_existing_email()"
     },
     {
@@ -8139,8 +8139,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_existing_firebase_uid",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "test_get_current_user_existing_firebase_uid()"
     },
     {
@@ -8150,8 +8150,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_dev_transition_linking",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "test_get_current_user_dev_transition_linking()"
     },
     {
@@ -8161,8 +8161,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_test_get_current_user_no_email_claim_does_not_link",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "test_get_current_user_no_email_claim_does_not_link()"
     },
     {
@@ -8326,8 +8326,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_13",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "verifies that a user with an existing firebase_uid is resolved directly."
     },
     {
@@ -8337,8 +8337,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_35",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "verifies that an existing dev user matching email is linked to the firebase uid."
     },
     {
@@ -8348,8 +8348,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "backend_tests_test_firebase_auth_rationale_57",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "verifies that if the token lacks an email claim, it does not link to existing..."
     },
     {
@@ -8997,8 +8997,8 @@
       "source_location": "L524",
       "_origin": "ast",
       "id": "backend_tests_test_recruiter_test_job_description_response_schema_serialization",
-      "community": 8,
-      "community_name": "recruiter.py",
+      "community": 11,
+      "community_name": "UserRole",
       "norm_label": "test_job_description_response_schema_serialization()"
     },
     {
@@ -9118,8 +9118,8 @@
       "source_location": "L525",
       "_origin": "ast",
       "id": "backend_tests_test_recruiter_rationale_525",
-      "community": 8,
-      "community_name": "recruiter.py",
+      "community": 11,
+      "community_name": "UserRole",
       "norm_label": "verify that jobdescriptionresponse correctly maps both title and name from an..."
     },
     {
@@ -9899,8 +9899,8 @@
       "source_location": "L205",
       "_origin": "ast",
       "id": "frontend_assets_js_app_renderresults",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 4,
+      "community_name": "app.js",
       "norm_label": "renderresults()"
     },
     {
@@ -9921,8 +9921,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_auth",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "auth.js"
     },
     {
@@ -9932,8 +9932,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "frontend_assets_js_auth_showemailverificationmodal",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "showemailverificationmodal()"
     },
     {
@@ -9943,8 +9943,8 @@
       "source_location": "L150",
       "_origin": "ast",
       "id": "frontend_assets_js_auth_hideemailverificationmodal",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "hideemailverificationmodal()"
     },
     {
@@ -9954,8 +9954,8 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "frontend_assets_js_auth_waitforauthstate",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "waitforauthstate()"
     },
     {
@@ -9965,8 +9965,8 @@
       "source_location": "L182",
       "_origin": "ast",
       "id": "frontend_assets_js_auth_checkauthstatus",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "checkauthstatus()"
     },
     {
@@ -9976,8 +9976,8 @@
       "source_location": "L196",
       "_origin": "ast",
       "id": "frontend_assets_js_auth_docheckauthstatus",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "_docheckauthstatus()"
     },
     {
@@ -9987,8 +9987,8 @@
       "source_location": "L326",
       "_origin": "ast",
       "id": "frontend_assets_js_auth_initauthlistener",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "initauthlistener()"
     },
     {
@@ -9998,8 +9998,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_components_candidatecard",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 4,
+      "community_name": "app.js",
       "norm_label": "candidatecard.js"
     },
     {
@@ -10009,8 +10009,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "frontend_assets_js_components_candidatecard_getcandidaterowhtml",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 4,
+      "community_name": "app.js",
       "norm_label": "getcandidaterowhtml()"
     },
     {
@@ -10020,8 +10020,8 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "frontend_assets_js_components_candidatecard_getcandidatedetailrowhtml",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 4,
+      "community_name": "app.js",
       "norm_label": "getcandidatedetailrowhtml()"
     },
     {
@@ -10064,8 +10064,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_components_loadingspinner",
-      "community": 4,
-      "community_name": "app.js",
+      "community": 17,
+      "community_name": "recruiter.js",
       "norm_label": "loadingspinner.js"
     },
     {
@@ -10075,8 +10075,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "frontend_assets_js_components_loadingspinner_togglebuttonloading",
-      "community": 4,
-      "community_name": "app.js",
+      "community": 17,
+      "community_name": "recruiter.js",
       "norm_label": "togglebuttonloading()"
     },
     {
@@ -10130,8 +10130,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_components_navbar",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 48,
+      "community_name": "navbar.js",
       "norm_label": "navbar.js"
     },
     {
@@ -10141,8 +10141,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "frontend_assets_js_components_navbar_handlelogonavigation",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 48,
+      "community_name": "navbar.js",
       "norm_label": "handlelogonavigation()"
     },
     {
@@ -10152,8 +10152,8 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "frontend_assets_js_components_navbar_handlelogout",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 48,
+      "community_name": "navbar.js",
       "norm_label": "handlelogout()"
     },
     {
@@ -10163,8 +10163,8 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "frontend_assets_js_components_navbar_initnavbar",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 48,
+      "community_name": "navbar.js",
       "norm_label": "initnavbar()"
     },
     {
@@ -10174,8 +10174,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_components_profilesection",
-      "community": 83,
-      "community_name": "router.js",
+      "community": 6,
+      "community_name": "candidate.js",
       "norm_label": "profilesection.js"
     },
     {
@@ -10196,8 +10196,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "frontend_assets_js_components_profilesection_populatecandidateprofileui",
-      "community": 83,
-      "community_name": "router.js",
+      "community": 6,
+      "community_name": "candidate.js",
       "norm_label": "populatecandidateprofileui()"
     },
     {
@@ -10208,7 +10208,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "sidebar.js"
     },
     {
@@ -10219,7 +10219,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_sidebarlinkids",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "sidebarlinkids"
     },
     {
@@ -10230,7 +10230,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_issidebarcollapsed",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "issidebarcollapsed()"
     },
     {
@@ -10241,7 +10241,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_expandsidebar",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "expandsidebar()"
     },
     {
@@ -10252,7 +10252,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_collapsesidebar",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "collapsesidebar()"
     },
     {
@@ -10263,7 +10263,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_setsidebarcollapsed",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "setsidebarcollapsed()"
     },
     {
@@ -10274,7 +10274,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_togglesidebar",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "togglesidebar()"
     },
     {
@@ -10285,7 +10285,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_handlekeydown",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "handlekeydown()"
     },
     {
@@ -10296,7 +10296,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_components_sidebar_initsidebar",
       "community": 48,
-      "community_name": "sidebar.js",
+      "community_name": "navbar.js",
       "norm_label": "initsidebar()"
     },
     {
@@ -10339,8 +10339,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_constants",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "constants.js"
     },
     {
@@ -10350,8 +10350,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_constants_api_base",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "api_base"
     },
     {
@@ -10361,8 +10361,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "frontend_assets_js_constants_roles",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "roles"
     },
     {
@@ -10372,8 +10372,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "frontend_assets_js_constants_routes",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "routes"
     },
     {
@@ -10383,8 +10383,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "frontend_assets_js_constants_api_endpoints",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "api_endpoints"
     },
     {
@@ -10394,8 +10394,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "frontend_assets_js_constants_company_types",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "company_types"
     },
     {
@@ -10405,8 +10405,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "frontend_assets_js_constants_candidate_status_values",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "candidate_status_values"
     },
     {
@@ -10416,8 +10416,8 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "frontend_assets_js_constants_messages",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "messages"
     },
     {
@@ -10427,8 +10427,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_firebase_config",
-      "community": 90,
-      "community_name": "firebaseConfig",
+      "community": 5,
+      "community_name": "login.js",
       "norm_label": "js/firebase-config.js"
     },
     {
@@ -10600,7 +10600,7 @@
       "label": "updateResumeCountDisplay()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L184",
+      "source_location": "L189",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_updateresumecountdisplay",
       "community": 6,
@@ -10611,7 +10611,7 @@
       "label": "renderFileList()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L191",
+      "source_location": "L196",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_renderfilelist",
       "community": 6,
@@ -10622,18 +10622,18 @@
       "label": "clearCandidateWorkspaceState()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L205",
+      "source_location": "L210",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_clearcandidateworkspacestate",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 48,
+      "community_name": "navbar.js",
       "norm_label": "clearcandidateworkspacestate()"
     },
     {
       "label": "initializeCandidateDashboard()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L228",
+      "source_location": "L233",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
       "community": 83,
@@ -10644,7 +10644,7 @@
       "label": "renderTimelineList()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L535",
+      "source_location": "L540",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_rendertimelinelist",
       "community": 6,
@@ -10655,7 +10655,7 @@
       "label": "formatContactLink()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L662",
+      "source_location": "L684",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_formatcontactlink",
       "community": 6,
@@ -10666,7 +10666,7 @@
       "label": "renderRecommendations()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L863",
+      "source_location": "L885",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_renderrecommendations",
       "community": 6,
@@ -10677,18 +10677,18 @@
       "label": "renderXaiContent()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1000",
+      "source_location": "L1022",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_renderxaicontent",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 6,
+      "community_name": "candidate.js",
       "norm_label": "renderxaicontent()"
     },
     {
       "label": "initializeCandidateScreen()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1209",
+      "source_location": "L1231",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_initializecandidatescreen",
       "community": 83,
@@ -10699,7 +10699,7 @@
       "label": "initializeCandidateProfile()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1219",
+      "source_location": "L1241",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_initializecandidateprofile",
       "community": 83,
@@ -10710,7 +10710,7 @@
       "label": "showCandidateProfileFeedback()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1341",
+      "source_location": "L1363",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_showcandidateprofilefeedback",
       "community": 6,
@@ -10721,7 +10721,7 @@
       "label": "renderCandidateAnalysisResults()",
       "file_type": "code",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1354",
+      "source_location": "L1376",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_candidate_rendercandidateanalysisresults",
       "community": 6,
@@ -10801,8 +10801,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "onboarding.js"
     },
     {
@@ -10812,8 +10812,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_getstepsforrole",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "getstepsforrole()"
     },
     {
@@ -10823,8 +10823,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_hideoberror",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "hideoberror()"
     },
     {
@@ -10834,8 +10834,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_showoberror",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "showoberror()"
     },
     {
@@ -10845,8 +10845,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_updateonboardingui",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "updateonboardingui()"
     },
     {
@@ -10856,8 +10856,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_validatecurrentstep",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "validatecurrentstep()"
     },
     {
@@ -10867,8 +10867,8 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_submitonboarding",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "submitonboarding()"
     },
     {
@@ -10878,8 +10878,8 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_showonboardingwizard",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "showonboardingwizard()"
     },
     {
@@ -10889,8 +10889,8 @@
       "source_location": "L239",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_initializeonboardingpage",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "initializeonboardingpage"
     },
     {
@@ -10900,8 +10900,8 @@
       "source_location": "L244",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_onboarding_initonboarding",
-      "community": 100,
-      "community_name": "state.js",
+      "community": 86,
+      "community_name": "constants.js",
       "norm_label": "initonboarding()"
     },
     {
@@ -11021,8 +11021,8 @@
       "source_location": "L785",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_recruiter_clearrecruiterworkspacestate",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 48,
+      "community_name": "navbar.js",
       "norm_label": "clearrecruiterworkspacestate()"
     },
     {
@@ -11076,8 +11076,8 @@
       "source_location": "L1030",
       "_origin": "ast",
       "id": "frontend_assets_js_pages_recruiter_showrecruiterprofilefeedback",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 83,
+      "community_name": "router.js",
       "norm_label": "showrecruiterprofilefeedback()"
     },
     {
@@ -11348,7 +11348,7 @@
       "label": "parseHash()",
       "file_type": "code",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L140",
+      "source_location": "L149",
       "_origin": "ast",
       "id": "frontend_assets_js_router_parsehash",
       "community": 83,
@@ -11359,7 +11359,7 @@
       "label": "handleRouting()",
       "file_type": "code",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L170",
+      "source_location": "L179",
       "_origin": "ast",
       "id": "frontend_assets_js_router_handlerouting",
       "community": 83,
@@ -11370,7 +11370,7 @@
       "label": "initRouter()",
       "file_type": "code",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L230",
+      "source_location": "L239",
       "_origin": "ast",
       "id": "frontend_assets_js_router_initrouter",
       "community": 83,
@@ -11516,8 +11516,8 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "frontend_assets_js_state_settoken",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "settoken()"
     },
     {
@@ -11538,8 +11538,8 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "frontend_assets_js_state_clearstate",
-      "community": 5,
-      "community_name": "login.js",
+      "community": 100,
+      "community_name": "state.js",
       "norm_label": "clearstate()"
     },
     {
@@ -11648,8 +11648,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "frontend_assets_js_utils_sanitizeurl",
-      "community": 6,
-      "community_name": "candidate.js",
+      "community": 5,
+      "community_name": "login.js",
       "norm_label": "sanitizeurl()"
     },
     {
@@ -12275,8 +12275,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_scrolltrigger_min_wb",
-      "community": 18,
-      "community_name": "Tween",
+      "community": 39,
+      "community_name": "r",
       "norm_label": "wb()"
     },
     {
@@ -12551,7 +12551,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_r",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "r()"
     },
     {
@@ -12561,8 +12561,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_s",
-      "community": 17,
-      "community_name": "recruiter.js",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "s()"
     },
     {
@@ -12584,7 +12584,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_u",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "u()"
     },
     {
@@ -12594,8 +12594,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_v",
-      "community": 93,
-      "community_name": "v",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "v()"
     },
     {
@@ -12628,7 +12628,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_y",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "y()"
     },
     {
@@ -12660,8 +12660,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ea",
-      "community": 22,
-      "community_name": "_d",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "ea()"
     },
     {
@@ -12683,7 +12683,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ga",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "ga()"
     },
     {
@@ -12726,8 +12726,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ka",
-      "community": 94,
-      "community_name": "ka",
+      "community": 18,
+      "community_name": "Tween",
       "norm_label": "ka()"
     },
     {
@@ -12771,7 +12771,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_oa",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "oa()"
     },
     {
@@ -12803,8 +12803,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ta",
-      "community": 93,
-      "community_name": "v",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "ta()"
     },
     {
@@ -12836,8 +12836,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_xa",
-      "community": 94,
-      "community_name": "ka",
+      "community": 18,
+      "community_name": "Tween",
       "norm_label": "xa()"
     },
     {
@@ -12848,7 +12848,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ya",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "ya()"
     },
     {
@@ -12858,8 +12858,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_za",
-      "community": 94,
-      "community_name": "ka",
+      "community": 18,
+      "community_name": "Tween",
       "norm_label": "za()"
     },
     {
@@ -12914,7 +12914,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_wa",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "wa()"
     },
     {
@@ -12924,8 +12924,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_a",
-      "community": 93,
-      "community_name": "v",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "_a()"
     },
     {
@@ -12946,8 +12946,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_db",
-      "community": 93,
-      "community_name": "v",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "db()"
     },
     {
@@ -12957,8 +12957,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_eb",
-      "community": 93,
-      "community_name": "v",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "eb()"
     },
     {
@@ -12980,7 +12980,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_gb",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "gb()"
     },
     {
@@ -12991,7 +12991,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_hb",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "hb()"
     },
     {
@@ -13002,7 +13002,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_lb",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "lb()"
     },
     {
@@ -13013,7 +13013,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ob",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "ob()"
     },
     {
@@ -13034,8 +13034,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_tb",
-      "community": 94,
-      "community_name": "ka",
+      "community": 18,
+      "community_name": "Tween",
       "norm_label": "tb()"
     },
     {
@@ -13156,7 +13156,7 @@
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_bo",
       "community": 16,
-      "community_name": "r",
+      "community_name": "s",
       "norm_label": "bo()"
     },
     {
@@ -13188,8 +13188,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ac",
-      "community": 93,
-      "community_name": "v",
+      "community": 16,
+      "community_name": "s",
       "norm_label": "ac()"
     },
     {
@@ -13320,8 +13320,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_jc",
-      "community": 16,
-      "community_name": "r",
+      "community": 25,
+      "community_name": "ja",
       "norm_label": "jc()"
     },
     {
@@ -13331,8 +13331,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_lc",
-      "community": 16,
-      "community_name": "r",
+      "community": 25,
+      "community_name": "ja",
       "norm_label": "lc()"
     },
     {
@@ -13353,8 +13353,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_wd",
-      "community": 16,
-      "community_name": "r",
+      "community": 7,
+      "community_name": "gsap.min.js",
       "norm_label": "wd()"
     },
     {
@@ -13672,8 +13672,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_assets_js_vendor_gsap_min_ve",
-      "community": 16,
-      "community_name": "r",
+      "community": 7,
+      "community_name": "gsap.min.js",
       "norm_label": "ve()"
     },
     {
@@ -13738,8 +13738,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_firebase_config",
-      "community": 90,
-      "community_name": "firebaseConfig",
+      "community": 5,
+      "community_name": "login.js",
       "norm_label": "frontend/firebase-config.js"
     },
     {
@@ -13749,8 +13749,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_firebase_config_firebaseconfig",
-      "community": 90,
-      "community_name": "firebaseConfig",
+      "community": 5,
+      "community_name": "login.js",
       "norm_label": "firebaseconfig"
     },
     {
@@ -14145,8 +14145,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_candidate_loading_states_centering_and_dimensions",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 99,
+      "community_name": "test_candidate_loading_states_centering_and_dimensions",
       "norm_label": "test_candidate_loading_states_centering_and_dimensions()"
     },
     {
@@ -14156,8 +14156,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_candidate_empty_states_centering_and_width",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 103,
+      "community_name": "test_candidate_empty_states_centering_and_width",
       "norm_label": "test_candidate_empty_states_centering_and_width()"
     },
     {
@@ -14167,8 +14167,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_analysis_history_newest_indicator_is_green_dot",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 111,
+      "community_name": "test_analysis_history_newest_indicator_is_green_dot",
       "norm_label": "test_analysis_history_newest_indicator_is_green_dot()"
     },
     {
@@ -14178,8 +14178,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_analysis_history_action_buttons_alignment",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 114,
+      "community_name": "test_analysis_history_action_buttons_alignment",
       "norm_label": "test_analysis_history_action_buttons_alignment()"
     },
     {
@@ -14189,8 +14189,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_career_timeline_clean_starter_state_for_single_version",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 115,
+      "community_name": "test_career_timeline_clean_starter_state_for_single_version",
       "norm_label": "test_career_timeline_clean_starter_state_for_single_version()"
     },
     {
@@ -14211,37 +14211,37 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_analysis_history_expandable_job_description",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 94,
+      "community_name": "test_analysis_history_expandable_job_description",
       "norm_label": "test_analysis_history_expandable_job_description()"
     },
     {
       "label": "test_analysis_history_latest_version_badge_structure()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L123",
+      "source_location": "L124",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_analysis_history_latest_version_badge_structure",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 96,
+      "community_name": "test_analysis_history_latest_version_badge_structure",
       "norm_label": "test_analysis_history_latest_version_badge_structure()"
     },
     {
       "label": "test_career_timeline_no_speculative_or_invented_claims()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L141",
+      "source_location": "L142",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_career_timeline_no_speculative_or_invented_claims",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 97,
+      "community_name": "test_career_timeline_no_speculative_or_invented_claims",
       "norm_label": "test_career_timeline_no_speculative_or_invented_claims()"
     },
     {
       "label": "test_candidate_xai_no_summary_detailed_toggle()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L156",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_candidate_xai_no_summary_detailed_toggle",
       "community": 76,
@@ -14252,67 +14252,177 @@
       "label": "test_candidate_xai_no_ai_provider_or_model_branding()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L166",
+      "source_location": "L167",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_candidate_xai_no_ai_provider_or_model_branding",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 98,
+      "community_name": "test_candidate_xai_no_ai_provider_or_model_branding",
       "norm_label": "test_candidate_xai_no_ai_provider_or_model_branding()"
     },
     {
       "label": "test_candidate_xai_modal_scrolling()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L176",
+      "source_location": "L177",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_candidate_xai_modal_scrolling",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 102,
+      "community_name": "test_candidate_xai_modal_scrolling",
       "norm_label": "test_candidate_xai_modal_scrolling()"
     },
     {
       "label": "setup_candidate_mock()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L268",
+      "source_location": "L269",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_setup_candidate_mock",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 93,
+      "community_name": "setup_candidate_mock",
       "norm_label": "setup_candidate_mock()"
     },
     {
       "label": "test_browser_candidate_dashboard_same_role_timeline()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L302",
+      "source_location": "L303",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_same_role_timeline",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 93,
+      "community_name": "setup_candidate_mock",
       "norm_label": "test_browser_candidate_dashboard_same_role_timeline()"
     },
     {
       "label": "test_browser_candidate_dashboard_different_roles_compact_state()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L388",
+      "source_location": "L389",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_different_roles_compact_state",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 93,
+      "community_name": "setup_candidate_mock",
       "norm_label": "test_browser_candidate_dashboard_different_roles_compact_state()"
     },
     {
       "label": "test_browser_candidate_dashboard_mobile_390()",
       "file_type": "code",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L425",
+      "source_location": "L426",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_mobile_390",
+      "community": 93,
+      "community_name": "setup_candidate_mock",
+      "norm_label": "test_browser_candidate_dashboard_mobile_390()"
+    },
+    {
+      "label": "test_close_modal_uses_history_replace_state()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L468",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_close_modal_uses_history_replace_state",
+      "community": 104,
+      "community_name": "test_close_modal_uses_history_replace_state",
+      "norm_label": "test_close_modal_uses_history_replace_state()"
+    },
+    {
+      "label": "test_router_guards_dashboard_reinit_when_already_rendered()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L479",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_router_guards_dashboard_reinit_when_already_rendered",
       "community": 76,
       "community_name": "test_candidate_dashboard_refinement.py",
-      "norm_label": "test_browser_candidate_dashboard_mobile_390()"
+      "norm_label": "test_router_guards_dashboard_reinit_when_already_rendered()"
+    },
+    {
+      "label": "test_modal_max_width_increased_to_820()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L495",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_modal_max_width_increased_to_820",
+      "community": 106,
+      "community_name": "test_modal_max_width_increased_to_820",
+      "norm_label": "test_modal_max_width_increased_to_820()"
+    },
+    {
+      "label": "test_modal_max_height_is_90vh()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L512",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_modal_max_height_is_90vh",
+      "community": 107,
+      "community_name": "test_modal_max_height_is_90vh",
+      "norm_label": "test_modal_max_height_is_90vh()"
+    },
+    {
+      "label": "test_modal_responsive_breakpoints_exist()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L528",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_modal_responsive_breakpoints_exist",
+      "community": 108,
+      "community_name": "test_modal_responsive_breakpoints_exist",
+      "norm_label": "test_modal_responsive_breakpoints_exist()"
+    },
+    {
+      "label": "test_career_node_version_legibility()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L543",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_career_node_version_legibility",
+      "community": 109,
+      "community_name": "test_career_node_version_legibility",
+      "norm_label": "test_career_node_version_legibility()"
+    },
+    {
+      "label": "test_career_node_circle_legibility()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L565",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_career_node_circle_legibility",
+      "community": 110,
+      "community_name": "test_career_node_circle_legibility",
+      "norm_label": "test_career_node_circle_legibility()"
+    },
+    {
+      "label": "test_career_node_date_legibility()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L584",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_career_node_date_legibility",
+      "community": 112,
+      "community_name": "test_career_node_date_legibility",
+      "norm_label": "test_career_node_date_legibility()"
+    },
+    {
+      "label": "test_analysis_history_deduplicates_duplicate_jd()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L607",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_analysis_history_deduplicates_duplicate_jd",
+      "community": 76,
+      "community_name": "test_candidate_dashboard_refinement.py",
+      "norm_label": "test_analysis_history_deduplicates_duplicate_jd()"
+    },
+    {
+      "label": "test_analysis_history_jd_toggle_button_text()",
+      "file_type": "code",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L617",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_test_analysis_history_jd_toggle_button_text",
+      "community": 113,
+      "community_name": "test_analysis_history_jd_toggle_button_text",
+      "norm_label": "test_analysis_history_jd_toggle_button_text()"
     },
     {
       "label": "Verify that both dashboard and timeline loading containers are compact and\u2026",
@@ -14321,8 +14431,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_rationale_17",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 99,
+      "community_name": "test_candidate_loading_states_centering_and_dimensions",
       "norm_label": "verify that both dashboard and timeline loading containers are compact and..."
     },
     {
@@ -14332,8 +14442,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_rationale_35",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 103,
+      "community_name": "test_candidate_empty_states_centering_and_width",
       "norm_label": "verify that empty states have centered icons and analysis history uses full..."
     },
     {
@@ -14343,8 +14453,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_rationale_57",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 111,
+      "community_name": "test_analysis_history_newest_indicator_is_green_dot",
       "norm_label": "verify that 'newest version' text badge is replaced with an accessible green..."
     },
     {
@@ -14354,8 +14464,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_rationale_78",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 114,
+      "community_name": "test_analysis_history_action_buttons_alignment",
       "norm_label": "verify uniform alignment and styling for view analysis and delete buttons."
     },
     {
@@ -14365,8 +14475,8 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_rationale_94",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 115,
+      "community_name": "test_career_timeline_clean_starter_state_for_single_version",
       "norm_label": "verify that when only 1 version exists or analyses target different roles, a..."
     },
     {
@@ -14387,39 +14497,39 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "tests_test_candidate_dashboard_refinement_rationale_113",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "community": 94,
+      "community_name": "test_analysis_history_expandable_job_description",
       "norm_label": "verify expandable job description toggle button and collapsed/expanded state."
     },
     {
       "label": "Verify that latest version badge contains independent green dot and accessible\u2026",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L124",
+      "source_location": "L125",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_124",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_125",
+      "community": 96,
+      "community_name": "test_analysis_history_latest_version_badge_structure",
       "norm_label": "verify that latest version badge contains independent green dot and accessible..."
     },
     {
       "label": "Verify complete removal of artificial metrics like 'Comparison Reliability:\u2026",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L142",
+      "source_location": "L143",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_142",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_143",
+      "community": 97,
+      "community_name": "test_career_timeline_no_speculative_or_invented_claims",
       "norm_label": "verify complete removal of artificial metrics like 'comparison reliability:..."
     },
     {
       "label": "Verify that Summary/Detailed toggle buttons and handler are completely removed.",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L157",
+      "source_location": "L158",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_157",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_158",
       "community": 76,
       "community_name": "test_candidate_dashboard_refinement.py",
       "norm_label": "verify that summary/detailed toggle buttons and handler are completely removed."
@@ -14428,56 +14538,166 @@
       "label": "Verify removal of 'Grounded AI Insights (Gemini)' and 'Deterministic Matching\u2026",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L167",
+      "source_location": "L168",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_167",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_168",
+      "community": 98,
+      "community_name": "test_candidate_xai_no_ai_provider_or_model_branding",
       "norm_label": "verify removal of 'grounded ai insights (gemini)' and 'deterministic matching..."
     },
     {
       "label": "Verify smooth scrolling and absence of scroll locking in quick-view-body.",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L177",
+      "source_location": "L178",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_177",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_178",
+      "community": 102,
+      "community_name": "test_candidate_xai_modal_scrolling",
       "norm_label": "verify smooth scrolling and absence of scroll locking in quick-view-body."
     },
     {
       "label": "Verify that multiple analyses for the same target role render target-role\u2026",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L303",
+      "source_location": "L304",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_303",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_304",
+      "community": 93,
+      "community_name": "setup_candidate_mock",
       "norm_label": "verify that multiple analyses for the same target role render target-role..."
     },
     {
       "label": "Verify that when only one version exists for a target role, exactly one\u2026",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L389",
+      "source_location": "L390",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_389",
-      "community": 76,
-      "community_name": "test_candidate_dashboard_refinement.py",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_390",
+      "community": 93,
+      "community_name": "setup_candidate_mock",
       "norm_label": "verify that when only one version exists for a target role, exactly one..."
     },
     {
       "label": "Verify responsive 390px mobile behavior: stacked layout without clipping or\u2026",
       "file_type": "rationale",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L426",
+      "source_location": "L427",
       "_origin": "ast",
-      "id": "tests_test_candidate_dashboard_refinement_rationale_426",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_427",
+      "community": 93,
+      "community_name": "setup_candidate_mock",
+      "norm_label": "verify responsive 390px mobile behavior: stacked layout without clipping or..."
+    },
+    {
+      "label": "closeCandidateAnalysisModal must use history.replaceState to avoid triggering\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L469",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_469",
+      "community": 104,
+      "community_name": "test_close_modal_uses_history_replace_state",
+      "norm_label": "closecandidateanalysismodal must use history.replacestate to avoid triggering..."
+    },
+    {
+      "label": "Router must guard initializeCandidateDashboard call when dashboard is already\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L480",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_480",
       "community": 76,
       "community_name": "test_candidate_dashboard_refinement.py",
-      "norm_label": "verify responsive 390px mobile behavior: stacked layout without clipping or..."
+      "norm_label": "router must guard initializecandidatedashboard call when dashboard is already..."
+    },
+    {
+      "label": "quick-view-card max-width must be 820px for evaluation content.",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L496",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_496",
+      "community": 106,
+      "community_name": "test_modal_max_width_increased_to_820",
+      "norm_label": "quick-view-card max-width must be 820px for evaluation content."
+    },
+    {
+      "label": "quick-view-card max-height must be 90vh.",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L513",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_513",
+      "community": 107,
+      "community_name": "test_modal_max_height_is_90vh",
+      "norm_label": "quick-view-card max-height must be 90vh."
+    },
+    {
+      "label": "Responsive overrides for the modal at 860px and 480px must exist.",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L529",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_529",
+      "community": 108,
+      "community_name": "test_modal_responsive_breakpoints_exist",
+      "norm_label": "responsive overrides for the modal at 860px and 480px must exist."
+    },
+    {
+      "label": "career-node-version should use improved contrast color and font size.",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L544",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_544",
+      "community": 109,
+      "community_name": "test_career_node_version_legibility",
+      "norm_label": "career-node-version should use improved contrast color and font size."
+    },
+    {
+      "label": "career-node-circle should be larger (\u226550px) for readability.",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L566",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_566",
+      "community": 110,
+      "community_name": "test_career_node_circle_legibility",
+      "norm_label": "career-node-circle should be larger (\u226550px) for readability."
+    },
+    {
+      "label": "career-node-date should use improved font size and contrast.",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L585",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_585",
+      "community": 112,
+      "community_name": "test_career_node_date_legibility",
+      "norm_label": "career-node-date should use improved font size and contrast."
+    },
+    {
+      "label": "Verify that candidate.js removes redundant job description from title when\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L608",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_608",
+      "community": 76,
+      "community_name": "test_candidate_dashboard_refinement.py",
+      "norm_label": "verify that candidate.js removes redundant job description from title when..."
+    },
+    {
+      "label": "Toggle button text should say 'Show full description' in collapsed state.",
+      "file_type": "rationale",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L618",
+      "_origin": "ast",
+      "id": "tests_test_candidate_dashboard_refinement_rationale_618",
+      "community": 113,
+      "community_name": "test_analysis_history_jd_toggle_button_text",
+      "norm_label": "toggle button text should say 'show full description' in collapsed state."
     },
     {
       "label": "test_confirm_password.py",
@@ -14652,7 +14872,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "test_cors_configuration.py"
     },
     {
@@ -14663,7 +14883,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_test_settings_allowed_origins_dev_mode",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "test_settings_allowed_origins_dev_mode()"
     },
     {
@@ -14674,7 +14894,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_test_settings_allowed_origins_prod_mode",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "test_settings_allowed_origins_prod_mode()"
     },
     {
@@ -14685,7 +14905,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_test_explicit_env_override_allowed_origins",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "test_explicit_env_override_allowed_origins()"
     },
     {
@@ -14718,7 +14938,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_test_preflight_options_disallowed_origin",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "test_preflight_options_disallowed_origin()"
     },
     {
@@ -14729,7 +14949,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_test_actual_unauthenticated_request_cors_headers_on_localhost_3000",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "test_actual_unauthenticated_request_cors_headers_on_localhost_3000()"
     },
     {
@@ -14739,8 +14959,8 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "tests_test_cors_configuration_test_actual_authenticated_request_cors_headers_on_localhost_3000",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "test_actual_authenticated_request_cors_headers_on_localhost_3000()"
     },
     {
@@ -14751,7 +14971,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_rationale_32",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "verify that in development mode (debug=true), allowed origins include both dev..."
     },
     {
@@ -14762,7 +14982,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_rationale_43",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "verify that in production mode (debug=false), dev origins are excluded and prod..."
     },
     {
@@ -14773,7 +14993,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_rationale_54",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "verify that when allowed_origins env var is provided, it is parsed and honored..."
     },
     {
@@ -14795,7 +15015,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_rationale_100",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "verify that untrusted origins do not receive cors permission."
     },
     {
@@ -14806,7 +15026,7 @@
       "_origin": "ast",
       "id": "tests_test_cors_configuration_rationale_115",
       "community": 78,
-      "community_name": "get_current_user",
+      "community_name": "test_cors_configuration.py",
       "norm_label": "verify that an unauthenticated get request from http://localhost:3000 includes..."
     },
     {
@@ -14816,8 +15036,8 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "tests_test_cors_configuration_rationale_127",
-      "community": 78,
-      "community_name": "get_current_user",
+      "community": 69,
+      "community_name": "test_firebase_auth.py",
       "norm_label": "verify that an authenticated get request from http://localhost:3000 succeeds..."
     },
     {
@@ -41351,7 +41571,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L268",
+      "source_location": "L273",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -41363,7 +41583,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1230",
+      "source_location": "L1252",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidateprofile",
@@ -41399,7 +41619,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1298",
+      "source_location": "L1320",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidateprofile",
@@ -41447,7 +41667,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L287",
+      "source_location": "L292",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -41471,7 +41691,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L288",
+      "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -42770,7 +42990,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L187",
+      "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlerouting",
@@ -43197,7 +43417,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1234",
+      "source_location": "L1256",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidateprofile",
@@ -43962,7 +44182,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L205",
+      "source_location": "L210",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -43984,7 +44204,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L662",
+      "source_location": "L684",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44006,7 +44226,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L228",
+      "source_location": "L233",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44017,7 +44237,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1219",
+      "source_location": "L1241",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44028,7 +44248,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1209",
+      "source_location": "L1231",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44039,7 +44259,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1354",
+      "source_location": "L1376",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44050,7 +44270,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L191",
+      "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44061,7 +44281,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L863",
+      "source_location": "L885",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44072,7 +44292,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L535",
+      "source_location": "L540",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44083,7 +44303,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1000",
+      "source_location": "L1022",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44094,7 +44314,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1341",
+      "source_location": "L1363",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44105,7 +44325,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L184",
+      "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate",
@@ -44249,7 +44469,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L215",
+      "source_location": "L220",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_clearcandidateworkspacestate",
@@ -44261,7 +44481,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L496",
+      "source_location": "L501",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -44274,7 +44494,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L266",
+      "source_location": "L271",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -44286,7 +44506,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L501",
+      "source_location": "L506",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -44298,7 +44518,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L295",
+      "source_location": "L300",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -44310,7 +44530,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L294",
+      "source_location": "L299",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -44322,7 +44542,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L269",
+      "source_location": "L274",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidatedashboard",
@@ -44346,7 +44566,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L117",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlecandidaterouting",
@@ -44357,7 +44577,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L584",
+      "source_location": "L606",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_rendertimelinelist",
@@ -44369,7 +44589,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1446",
+      "source_location": "L1468",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_rendercandidateanalysisresults",
@@ -44381,7 +44601,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1437",
+      "source_location": "L1459",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_rendercandidateanalysisresults",
@@ -44394,7 +44614,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1020",
+      "source_location": "L1042",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_renderxaicontent",
@@ -44406,7 +44626,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1020",
+      "source_location": "L1042",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_renderxaicontent",
@@ -44430,7 +44650,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L128",
+      "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlecandidaterouting",
@@ -44441,7 +44661,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1280",
+      "source_location": "L1302",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidateprofile",
@@ -44454,7 +44674,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1228",
+      "source_location": "L1250",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidateprofile",
@@ -44466,7 +44686,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/pages/candidate.js",
-      "source_location": "L1231",
+      "source_location": "L1253",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_pages_candidate_initializecandidateprofile",
@@ -44490,7 +44710,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L131",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlecandidaterouting",
@@ -44713,7 +44933,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L195",
+      "source_location": "L204",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlerouting",
@@ -44761,7 +44981,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L188",
+      "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlerouting",
@@ -46525,7 +46745,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L170",
+      "source_location": "L179",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router",
@@ -46536,7 +46756,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L230",
+      "source_location": "L239",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router",
@@ -46547,7 +46767,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L140",
+      "source_location": "L149",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router",
@@ -46571,7 +46791,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L216",
+      "source_location": "L225",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlerouting",
@@ -46583,7 +46803,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L223",
+      "source_location": "L232",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlerouting",
@@ -46595,7 +46815,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L172",
+      "source_location": "L181",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlerouting",
@@ -46608,7 +46828,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L171",
+      "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_handlerouting",
@@ -46619,7 +46839,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/router.js",
-      "source_location": "L235",
+      "source_location": "L244",
       "weight": 1.0,
       "_origin": "ast",
       "source": "frontend_assets_js_router_initrouter",
@@ -51447,7 +51667,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L268",
+      "source_location": "L269",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51469,6 +51689,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L607",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_analysis_history_deduplicates_duplicate_jd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
       "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
@@ -51480,7 +51711,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L123",
+      "source_location": "L617",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_analysis_history_jd_toggle_button_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51502,7 +51744,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L388",
+      "source_location": "L389",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51513,7 +51755,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L425",
+      "source_location": "L426",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51524,7 +51766,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L302",
+      "source_location": "L303",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51557,7 +51799,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L176",
+      "source_location": "L177",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51568,7 +51810,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L166",
+      "source_location": "L167",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51579,11 +51821,44 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L156",
+      "source_location": "L157",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
       "target": "tests_test_candidate_dashboard_refinement_test_candidate_xai_no_summary_detailed_toggle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L565",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_career_node_circle_legibility",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L584",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_career_node_date_legibility",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L543",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_career_node_version_legibility",
       "confidence_score": 1.0
     },
     {
@@ -51601,7 +51876,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L141",
+      "source_location": "L142",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
@@ -51617,6 +51892,61 @@
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement",
       "target": "tests_test_candidate_dashboard_refinement_test_career_timeline_role_grouping_logic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L468",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_close_modal_uses_history_replace_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L512",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_modal_max_height_is_90vh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L495",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_modal_max_width_increased_to_820",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L528",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_modal_responsive_breakpoints_exist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L479",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement",
+      "target": "tests_test_candidate_dashboard_refinement_test_router_guards_dashboard_reinit_when_already_rendered",
       "confidence_score": 1.0
     },
     {
@@ -51700,10 +52030,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L124",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_124",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_125",
       "target": "tests_test_candidate_dashboard_refinement_test_analysis_history_latest_version_badge_structure",
       "confidence_score": 1.0
     },
@@ -51711,10 +52041,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L142",
+      "source_location": "L143",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_142",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_143",
       "target": "tests_test_candidate_dashboard_refinement_test_career_timeline_no_speculative_or_invented_claims",
       "confidence_score": 1.0
     },
@@ -51722,10 +52052,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L157",
+      "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_157",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_158",
       "target": "tests_test_candidate_dashboard_refinement_test_candidate_xai_no_summary_detailed_toggle",
       "confidence_score": 1.0
     },
@@ -51733,10 +52063,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L167",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_167",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_168",
       "target": "tests_test_candidate_dashboard_refinement_test_candidate_xai_no_ai_provider_or_model_branding",
       "confidence_score": 1.0
     },
@@ -51744,10 +52074,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L177",
+      "source_location": "L178",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_177",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_178",
       "target": "tests_test_candidate_dashboard_refinement_test_candidate_xai_modal_scrolling",
       "confidence_score": 1.0
     },
@@ -51756,7 +52086,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L395",
+      "source_location": "L396",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_different_roles_compact_state",
@@ -51768,7 +52098,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L432",
+      "source_location": "L433",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_mobile_390",
@@ -51780,7 +52110,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L309",
+      "source_location": "L310",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_same_role_timeline",
@@ -51791,10 +52121,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L303",
+      "source_location": "L304",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_303",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_304",
       "target": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_same_role_timeline",
       "confidence_score": 1.0
     },
@@ -51802,10 +52132,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L389",
+      "source_location": "L390",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_389",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_390",
       "target": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_different_roles_compact_state",
       "confidence_score": 1.0
     },
@@ -51813,11 +52143,121 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_candidate_dashboard_refinement.py",
-      "source_location": "L426",
+      "source_location": "L427",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "tests_test_candidate_dashboard_refinement_rationale_426",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_427",
       "target": "tests_test_candidate_dashboard_refinement_test_browser_candidate_dashboard_mobile_390",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L469",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_469",
+      "target": "tests_test_candidate_dashboard_refinement_test_close_modal_uses_history_replace_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L480",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_480",
+      "target": "tests_test_candidate_dashboard_refinement_test_router_guards_dashboard_reinit_when_already_rendered",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L496",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_496",
+      "target": "tests_test_candidate_dashboard_refinement_test_modal_max_width_increased_to_820",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L513",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_513",
+      "target": "tests_test_candidate_dashboard_refinement_test_modal_max_height_is_90vh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L529",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_529",
+      "target": "tests_test_candidate_dashboard_refinement_test_modal_responsive_breakpoints_exist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L544",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_544",
+      "target": "tests_test_candidate_dashboard_refinement_test_career_node_version_legibility",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L566",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_566",
+      "target": "tests_test_candidate_dashboard_refinement_test_career_node_circle_legibility",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L585",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_585",
+      "target": "tests_test_candidate_dashboard_refinement_test_career_node_date_legibility",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L608",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_608",
+      "target": "tests_test_candidate_dashboard_refinement_test_analysis_history_deduplicates_duplicate_jd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_candidate_dashboard_refinement.py",
+      "source_location": "L618",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_candidate_dashboard_refinement_rationale_618",
+      "target": "tests_test_candidate_dashboard_refinement_test_analysis_history_jd_toggle_button_text",
       "confidence_score": 1.0
     },
     {
@@ -54099,5 +54539,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f4f81c179b5af36ba895d84a438bc8e4c71e6b71"
+  "built_at_commit": "de275cceb9f42c81cb8553864d1f436e122144c2"
 }
