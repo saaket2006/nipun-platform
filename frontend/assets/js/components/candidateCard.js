@@ -32,7 +32,7 @@ export function getCandidateRowHTML(cand) {
         }
     }
     const linkedin = cand.linkedin !== 'Not Provided' 
-        ? `<a href="${escapeHTML(linkedinUrl)}" target="_blank" style="color: #6366f1; text-decoration: none;">${escapeHTML(cand.linkedin)}</a>`
+        ? `<a href="${escapeHTML(linkedinUrl)}" target="_blank" class="contact-link" style="color: var(--color-forest); font-weight: 500; text-decoration: none;">${escapeHTML(cand.linkedin)}</a>`
         : '<span style="opacity:0.6">LinkedIn Not Provided</span>';
 
     let githubUrl = cand.github;
@@ -42,7 +42,7 @@ export function getCandidateRowHTML(cand) {
         }
     }
     const github = cand.github !== 'Not Provided' 
-        ? `<a href="${escapeHTML(githubUrl)}" target="_blank" style="color: #6366f1; text-decoration: none;">${escapeHTML(cand.github)}</a>`
+        ? `<a href="${escapeHTML(githubUrl)}" target="_blank" class="contact-link" style="color: var(--color-forest); font-weight: 500; text-decoration: none;">${escapeHTML(cand.github)}</a>`
         : '<span style="opacity:0.6">GitHub Not Provided</span>';
 
     return `
@@ -132,10 +132,15 @@ export function getCandidateDetailRowHTML(cand) {
  */
 export function getRecruiterCandidateCardHTML(cand, index = null) {
     if (!cand) return '';
-    const isTopRank = (cand.rank && cand.rank <= 3) ? 'top-rank' : '';
+    const rankNum = cand.rank !== undefined && cand.rank !== null ? cand.rank : (index !== null && index !== undefined ? index + 1 : '');
+    const isTopRank = (rankNum && Number(rankNum) <= 3) ? 'top-rank' : '';
     
     let scoreClass = 'low-score';
-    const score = typeof cand.similarity_score === 'number' ? cand.similarity_score : 0;
+    const rawScoreVal = typeof cand.similarity_score === 'number' ? cand.similarity_score 
+        : (typeof cand.match_score === 'number' ? cand.match_score 
+        : (typeof cand.score === 'number' ? cand.score 
+        : parseFloat(cand.similarity_score || cand.match_score || cand.score || 0)));
+    const score = isNaN(rawScoreVal) ? 0 : (Math.round(rawScoreVal * 10) / 10);
     if (score >= 70) {
         scoreClass = 'high-score';
     } else if (score >= 40) {
@@ -152,17 +157,17 @@ export function getRecruiterCandidateCardHTML(cand, index = null) {
 
     return `
         <div class="cand-left">
-            <div class="cand-rank ${isTopRank}">#${cand.rank || ''}</div>
+            <div class="cand-rank ${isTopRank}">#${rankNum}</div>
             <div class="cand-info">
                 <h4 class="cand-name">${escapeHTML(cand.name || 'Unnamed Candidate')}</h4>
                 <div class="cand-skills-summary">
                     <div class="skills-row">
                         <span class="skills-row-label matched">Matched:</span>
-                        ${matchedTags || '<span style="color:#666; font-size:0.8rem;">None</span>'}
+                        ${matchedTags || '<span style="color: var(--color-muted); font-size: 0.8125rem;">None</span>'}
                     </div>
                     <div class="skills-row" style="margin-top: 0.25rem;">
                         <span class="skills-row-label missing">Missing:</span>
-                        ${missingTags || '<span style="color:#666; font-size:0.8rem;">None</span>'}
+                        ${missingTags || '<span style="color: var(--color-muted); font-size: 0.8125rem;">None</span>'}
                     </div>
                 </div>
             </div>

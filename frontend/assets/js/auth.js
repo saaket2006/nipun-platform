@@ -18,25 +18,27 @@ export function showEmailVerificationModal(user) {
         modal.id = 'email-verification-modal';
         modal.className = 'auth-modal-overlay';
         modal.innerHTML = `
-            <div class="glass-card auth-card" style="text-align: center; max-width: 440px;">
-                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">✉️</div>
-                <h2 style="margin-bottom: 0.5rem;">Verify Your Email</h2>
-                <p style="font-size: 0.95rem; color: #94a3b8; line-height: 1.5; margin-bottom: 1.25rem;">
-                    We've sent a verification link to <strong id="verification-user-email" style="color: #10b981;"></strong>.
+            <div class="glass-card auth-card verification-modal-card" style="text-align: center; max-width: 440px;">
+                <div class="verification-badge-icon" style="margin: 0 auto 1rem; width: 48px; height: 48px; border-radius: 50%; background: var(--color-forest-light); display: flex; align-items: center; justify-content: center; color: var(--color-forest); border: 1px solid var(--color-forest-border);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </div>
+                <h2 style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.5rem; letter-spacing: -0.015em;">Verify Your Email</h2>
+                <p style="font-size: 0.875rem; color: var(--color-ink-2); line-height: 1.5; margin-bottom: 1.25rem;">
+                    We've sent a verification link to <strong id="verification-user-email" style="color: var(--color-forest); font-family: var(--font-mono); font-weight: 600;"></strong>.
                     Please confirm your email address to access Nipun.
                 </p>
-                <div id="verification-feedback" class="auth-success-message hidden" style="margin-bottom: 1rem; text-align: center;"></div>
-                <div id="verification-error" class="auth-error-message hidden" style="margin-bottom: 1rem; text-align: center;"></div>
+                <div id="verification-feedback" class="auth-success-message hidden" style="margin-bottom: 1rem; text-align: left;"></div>
+                <div id="verification-error" class="auth-error-message hidden" style="margin-bottom: 1rem; text-align: left;"></div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
-                    <button type="button" id="check-verification-btn" class="glow-btn">
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem;">
+                    <button type="button" id="check-verification-btn" class="glow-btn" style="min-height: 44px;">
                         <span>I've verified my email — Check again</span>
                     </button>
-                    <button type="button" id="resend-verification-btn" class="google-btn" style="justify-content: center;">
+                    <button type="button" id="resend-verification-btn" class="google-btn" style="justify-content: center; min-height: 44px;">
                         <span>Resend verification email</span>
                     </button>
-                    <button type="button" id="verification-logout-btn" class="secondary-link" style="background: none; border: none; cursor: pointer; padding: 8px; color: #ef4444;">
-                        Log Out
+                    <button type="button" id="verification-logout-btn" class="secondary-link" style="background: none; border: none; cursor: pointer; padding: 8px; color: var(--color-muted); font-size: 0.8125rem; transition: color var(--dur-micro);">
+                        Sign Out
                     </button>
                 </div>
             </div>

@@ -4,25 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nipun is an explainable AI resume screening and candidate ranking platform with semantic skill matching for modern recruitment teams.">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
-    <!-- Preload critical font weight so the browser loads it immediately without FOUT -->
-    <link rel="preload" href="assets/fonts/Outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <!-- Self-hosted Outfit font declarations with font-display: block -->
+    <!-- Preload critical self-hosted fonts for Editorial Intelligence without FOUT -->
+    <link rel="preload" href="assets/fonts/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/Newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Self-hosted font declarations (Newsreader, DM Sans, IBM Plex Mono) -->
     <link rel="stylesheet" href="assets/css/tailwind.min.css?v=7">
     <link rel="stylesheet" href="assets/css/fonts.css?v=7">
-    <link rel="stylesheet" href="assets/css/design-tokens.css?v=7">
-    <link rel="stylesheet" href="assets/css/base.css?v=7">
+    <link rel="stylesheet" href="assets/css/tokens.css?v=7">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=8">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=8">
+    <link rel="stylesheet" href="assets/css/base.css?v=8">
     <link rel="stylesheet" href="assets/css/ats.css?v=7">
-    <link rel="stylesheet" href="assets/css/auth.css?v=7">
+    <link rel="stylesheet" href="assets/css/auth.css?v=22">
     <link rel="stylesheet" href="assets/css/onboarding.css?v=7">
-    <link rel="stylesheet" href="assets/css/components.css?v=7">
-    <link rel="stylesheet" href="assets/css/recruiter.css?v=7">
-    <link rel="stylesheet" href="assets/css/landing.css?v=13">
+    <link rel="stylesheet" href="assets/css/components.css?v=35">
+    <link rel="stylesheet" href="assets/css/recruiter.css?v=35">
+    <link rel="stylesheet" href="assets/css/landing.css?v=35">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -33,171 +37,218 @@
 
 <body>
     <!-- Public Landing Page Container -->
-    <div id="landing-container" class="bg-[#070a13] min-h-screen text-white relative">
-        <!-- Sticky glass navbar -->
+    <div id="landing-container" class="bg-paper min-h-[100dvh] text-ink relative">
+        <!-- Sticky Editorial Navbar -->
         <header id="navbar-landing"
-            class="fixed top-0 left-0 right-0 z-50 py-5 transition-all duration-300 bg-transparent border-transparent">
+            class="fixed top-0 left-0 right-0 z-50 py-4 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <a href="index.html" id="landing-logo"
-                    class="flex items-center gap-2 font-bold text-white text-lg hover:opacity-80 transition-opacity cursor-pointer">
+                    class="flex items-center gap-2 font-bold text-ink text-lg hover:opacity-85 transition-opacity cursor-pointer no-underline">
                     <img src="assets/nipun_logo.svg" alt="Nipun Logo" style="height: 32px; width: auto;">
-                    <span class="text-white">Nipun</span>
+                    <span class="text-ink font-bold tracking-tight">Nipun</span>
                 </a>
-                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-                    <a href="#features" class="hover:text-white transition-colors">Features</a>
-                    <a href="#story" class="hover:text-white transition-colors">Platform Story</a>
-                    <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+                <nav class="landing-desktop-nav items-center gap-8 text-sm font-medium text-inkSecondary">
+                    <a href="#features" class="hover:text-forest transition-colors no-underline">Features</a>
+                    <a href="#story" class="hover:text-forest transition-colors no-underline">Platform Story</a>
+                    <a href="#walkthrough" class="hover:text-forest transition-colors no-underline">How it Works</a>
+                    <a href="#faq" class="hover:text-forest transition-colors no-underline">FAQ</a>
                 </nav>
-                <div class="flex items-center gap-4">
+                <div class="landing-header-actions items-center gap-3">
                     <button
-                        class="nav-login-btn px-4 py-2 text-sm font-semibold text-slate-300 whitespace-nowrap hover:text-white transition-colors border border-slate-700 hover:bg-slate-800 rounded-lg">Sign
+                        class="nav-login-btn px-4 py-2 text-sm font-semibold text-ink whitespace-nowrap hover:text-ink transition-colors border border-rule hover:bg-paperRaised rounded-lg" data-auth-modal="login">Sign
                         In</button>
                     <button
-                        class="nav-signup-btn glow-btn px-4 py-2 text-sm font-semibold text-white whitespace-nowrap bg-emerald-500 hover:bg-emerald-600 rounded-lg transition-all duration-150">Get
+                        class="nav-signup-btn px-4 py-2 text-sm font-semibold text-white whitespace-nowrap bg-forest hover:bg-forest-hover rounded-lg transition-colors duration-150" data-auth-modal="signup">Get
                         Started</button>
                 </div>
+                <!-- Mobile Navigation Toggle -->
+                <button id="landing-mobile-menu-btn" class="landing-mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="landing-mobile-drawer">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
             </div>
         </header>
 
+        <!-- Mobile Drawer Navigation -->
+        <div id="landing-mobile-drawer" class="landing-mobile-drawer hidden" aria-hidden="true">
+            <div id="landing-mobile-backdrop" class="landing-mobile-backdrop"></div>
+            <div class="landing-mobile-drawer-content">
+                <div class="landing-mobile-drawer-header">
+                    <div class="flex items-center gap-2 font-bold text-ink text-lg">
+                        <img src="assets/nipun_logo.svg" alt="Nipun Logo" style="height: 28px; width: auto;">
+                        <span>Nipun</span>
+                    </div>
+                    <button id="landing-mobile-close-btn" class="close-modal-btn" aria-label="Close navigation menu">✕</button>
+                </div>
+                <div class="landing-mobile-drawer-nav">
+                    <a href="#features" class="landing-drawer-link">Features</a>
+                    <a href="#story" class="landing-drawer-link">Platform Story</a>
+                    <a href="#walkthrough" class="landing-drawer-link">How it Works</a>
+                    <a href="#faq" class="landing-drawer-link">FAQ</a>
+                </div>
+                <div class="landing-mobile-drawer-actions">
+                    <button class="nav-login-btn" data-auth-modal="login">Sign In</button>
+                    <button class="nav-signup-btn" data-auth-modal="signup">Get Started</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Hero Section -->
         <section id="hero"
-            class="relative min-h-screen pt-32 pb-20 flex items-center justify-center bg-[#070a13] overflow-hidden">
-            <div
-                class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none">
-            </div>
-
-            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            class="relative min-h-[100dvh] pt-32 pb-20 flex items-center justify-center bg-paper overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
                 <div class="text-left space-y-6">
-                    <h1
-                        class="hero-headline text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-normal pt-2">
-                        Next-Gen AI Hiring Intelligence Platform
+                    <h1 class="hero-headline text-4xl sm:text-5xl lg:text-6xl font-extrabold text-ink leading-normal">
+                        <span class="headline-line">AI Resume Screening</span>
+                        <span class="headline-line">&amp; Analytical</span>
+                        <span class="headline-line">Candidate Ranking</span>
                     </h1>
 
-                    <p class="text-base sm:text-lg text-slate-400 max-w-xl">
-                        Automate resume screening, calculate spatial semantic matches, and reveal candidate potentials
-                        with dynamic explainable scoring engines.
+                    <p class="hero-subtitle text-base sm:text-lg text-inkSecondary max-w-xl">
+                        Screen resumes with semantic skill parity, transparent match scoring, and explainable AI insights — calibrated for hiring teams and ambitious talent.
                     </p>
 
-                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <div class="hero-cta-group pt-2">
                         <button
-                            class="nav-signup-btn glow-btn px-6 py-3 font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-all duration-150 flex items-center gap-2">
-                            <span>Start Screening</span>
+                            class="nav-signup-btn hero-cta-primary px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150 flex items-center gap-2" data-auth-modal="signup">
+                            <span>Start Screening Free</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
+                        <a href="#walkthrough" class="hero-cta-secondary px-6 py-3 font-semibold text-ink bg-white border border-rule hover:bg-paperRaised rounded-xl transition-colors flex items-center gap-2">
+                            <span>See How it Works</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-forest"></i>
+                        </a>
+                    </div>
+
+                    <div class="hero-trust-strip">
+                        <div class="hero-trust-item">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                            <span>7 Parsing Layers</span>
+                        </div>
+                        <div class="hero-trust-item">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                            <span>Semantic Parity Matching</span>
+                        </div>
+                        <div class="hero-trust-item">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                            <span>Auditable Explainable AI</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="hero-mockup-container relative flex justify-center lg:justify-end">
                     <div
-                        class="hero-mockup-wrapper w-full max-w-[460px] bg-[#0b0f19]/70 border border-slate-800 rounded-2xl p-6 shadow-premium backdrop-blur-md relative [transform-style:preserve-3d]">
+                        class="hero-mockup-wrapper w-full max-w-[460px] bg-paperRaised border border-rule rounded-2xl p-6 shadow-premium relative [transform-style:preserve-3d]">
                         <div
-                            class="terminal-bar border-b border-slate-800/60 pb-3 mb-4 flex justify-between items-center">
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-                                <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-                                <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
-                            </div>
-                            <span class="text-xs font-mono text-slate-500">screening_workspace.py</span>
+                            class="eval-header border-b border-rule pb-3 mb-4 flex justify-between items-center">
+                            <span class="text-xs font-semibold text-ink">Semantic Evaluation Matrix</span>
+                            <span class="text-xs text-forest font-mono">Product Preview</span>
                         </div>
 
                         <div class="space-y-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-sm font-semibold text-white">Senior Backend Engineer</span>
+                                <span class="text-sm font-semibold text-ink">Senior Backend Engineer</span>
                                 <span
-                                    class="text-xs px-2 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 font-mono">Backend
-                                    Profile</span>
+                                    class="text-xs px-2 py-0.5 rounded border border-forest/20 bg-forest/5 text-forest font-medium">Sample Benchmark</span>
                             </div>
 
                             <div class="space-y-2">
-                                <div class="flex justify-between text-xs text-slate-400">
-                                    <span>Python (FastAPI) Match</span>
-                                    <span class="font-semibold text-emerald-400">95%</span>
+                                <div class="flex justify-between text-xs text-inkSecondary">
+                                    <span>Python (FastAPI & AsyncIO)</span>
+                                    <span class="font-semibold text-forest font-mono num">95%</span>
                                 </div>
-                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-emerald-500 w-[95%]"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs text-slate-400">
-                                    <span>Docker & Kubernetes Match</span>
-                                    <span class="font-semibold text-emerald-400">82%</span>
-                                </div>
-                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-emerald-500 w-[82%]"></div>
+                                <div class="w-full bg-ivory border border-rule h-1.5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-forest w-[95%]"></div>
                                 </div>
                             </div>
                             <div class="space-y-2">
-                                <div class="flex justify-between text-xs text-slate-400">
-                                    <span>Database Tenure (PostgreSQL)</span>
-                                    <span class="font-semibold text-emerald-400">76%</span>
+                                <div class="flex justify-between text-xs text-inkSecondary">
+                                    <span>Cloud & Distributed Systems (K8s)</span>
+                                    <span class="font-semibold text-forest font-mono num">88%</span>
                                 </div>
-                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-emerald-500 w-[76%]"></div>
+                                <div class="w-full bg-ivory border border-rule h-1.5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-forest w-[88%]"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-xs text-inkSecondary">
+                                    <span>Database Architecture (PostgreSQL)</span>
+                                    <span class="font-semibold text-forest font-mono num">82%</span>
+                                </div>
+                                <div class="w-full bg-ivory border border-rule h-1.5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-forest w-[82%]"></div>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="hero-mockup-xai">
+                            <span class="hero-xai-tag">ILLUSTRATIVE XAI BREAKDOWN</span>
+                            <span>Awarded 45/45 skills points: evaluated 6+ yrs production experience matching target backend architecture criteria.</span>
+                        </div>
+
                         <div
-                            class="floating-badge-1 absolute -top-6 -left-6 bg-[#0f172a]/95 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-premium text-xs text-slate-300 backdrop-blur-sm pointer-events-none">
-                            <span class="text-emerald-500 font-bold">✓</span> Semantic Match
+                            class="floating-badge-1 absolute -top-6 -left-6 bg-paperRaised border border-rule px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-card text-xs text-ink pointer-events-none">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-forest"></i>
+                            <span>Semantic Parity</span>
                         </div>
                         <div
-                            class="floating-badge-2 absolute -bottom-6 -right-6 bg-[#0f172a]/95 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-premium text-xs text-slate-300 backdrop-blur-sm pointer-events-none">
-                            <span class="text-emerald-500 font-bold">✓</span> AI Verified
+                            class="floating-badge-2 absolute -bottom-6 -right-6 bg-paperRaised border border-rule px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-card text-xs text-ink pointer-events-none">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-forest"></i>
+                            <span>Explainable AI</span>
                         </div>
                         <div
-                            class="floating-badge-3 absolute top-1/2 -right-8 bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-full shadow-glow text-xs pointer-events-none">
-                            92% Match
+                            class="floating-badge-3 absolute top-1/2 -right-8 bg-forest text-white font-bold px-3 py-1.5 rounded-full shadow-card text-xs pointer-events-none font-mono num">
+                            92% Fit
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-
-
         <!-- Problem Story Section -->
-        <section id="story" class="py-24 bg-[#070a13] text-center max-w-4xl mx-auto px-6 space-y-16">
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">The Screening Dilemma</h2>
-            <div class="space-y-12">
-                <div class="story-element text-xl sm:text-2xl text-slate-400 font-medium transition-all duration-300">
-                    📁 1000+ Resumes submitted per job opening.
-                </div>
-                <div class="story-element text-xl sm:text-2xl text-slate-400 font-medium transition-all duration-300">
-                    ⏳ Hours spent manually scanning keywords.
-                </div>
-                <div class="story-element text-xl sm:text-2xl text-slate-400 font-medium transition-all duration-300">
-                    🧠 Human bias filtering out perfect matches.
-                </div>
-                <div class="story-element text-xl sm:text-2xl text-emerald-400 font-bold transition-all duration-300">
-                    🚀 Introducing a smarter, unified semantic methodology.
+        <section id="story" class="relative w-full bg-paper min-h-[100dvh] flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
+            <div class="story-container max-w-3xl w-full mx-auto px-6 text-center flex flex-col items-center justify-center my-auto">
+                <span class="section-kicker">THE SCREENING DILEMMA</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink mb-12 tracking-tight">Why Keyword Filters Break Modern Technical Hiring</h2>
+                <div class="story-list w-full space-y-8 sm:space-y-10">
+                    <div class="story-element is-active text-xl sm:text-2xl md:text-3xl font-medium transition-colors duration-300">
+                        <span class="num font-bold font-mono">1,000+</span> resumes flood technical job openings every month.
+                    </div>
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl font-medium transition-colors duration-300">
+                        Hours consumed manually cross-referencing keyword variations.
+                    </div>
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl font-medium transition-colors duration-300">
+                        Qualified applicants eliminated by rigid string-match filters.
+                    </div>
+                    <div class="story-element text-xl sm:text-2xl md:text-3xl story-highlight font-bold transition-colors duration-300">
+                        Nipun evaluates semantic relevance, candidate experience, and role alignment.
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Features Sticky Stacking Section -->
-        <section id="features" class="pt-12 pb-24 bg-[#070a13]/60 relative">
+        <section id="features" class="pt-12 pb-36 sm:pb-48 bg-paper relative">
             <div class="max-w-4xl mx-auto px-6 text-center mb-8 features-header">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Platform Intelligence Highlights</h2>
-                <p class="text-slate-400">Seven core layers engineered to streamline recruitment and eliminate bias.</p>
+                <span class="section-kicker">SYSTEM CAPABILITIES</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink mb-4">Seven Analytical Layers of Hiring Intelligence</h2>
+                <p class="text-inkSecondary">From multi-format resume ingestion to explainable candidate score breakdowns, Nipun brings consistency and transparency to technical screening.</p>
             </div>
 
             <div class="max-w-3xl mx-auto px-6 features-container">
                 <!-- Card 1 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="w-full h-full bg-[#0b0f19]/90 border border-slate-800 rounded-2xl p-6 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="brain-circuit" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">1. AI Resume Intelligence</h3>
-                            <p class="text-slate-400 text-sm">Deep textual structure analysis mapping entities,
-                                achievements, and chronologies.</p>
+                            <div class="text-forest mb-4"><i data-lucide="brain-circuit" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">1. AI Resume Intelligence</h3>
+                            <p class="text-inkSecondary text-sm">Deep structural text parsing that maps candidate technical competencies, career tenure, and verified achievements from PDF or DOCX.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 font-mono text-xs text-slate-500 overflow-hidden">
-                            <span class="text-emerald-500">> parsing resume...</span><br>
-                            <span>Found: 7 years engineering tenure</span><br>
-                            <span>Found: React, Postgres, Python, Docker</span>
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 font-mono text-xs text-inkSecondary overflow-hidden card-preview-well">
+                            <span class="text-forest font-semibold">> parsing resume structure…</span><br>
+                            <span>Detected: 7.2 years engineering tenure</span><br>
+                            <span>Extracted: Python, FastAPI, Docker, Kubernetes, PostgreSQL</span>
                         </div>
                     </div>
                 </div>
@@ -205,23 +256,22 @@
                 <!-- Card 2 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="w-full h-full bg-[#0b0f19]/90 border border-slate-800 rounded-2xl p-6 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="git-branch" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">2. Semantic Skill Mapping</h3>
-                            <p class="text-slate-400 text-sm">Translates extracted skills into a multi-dimensional
-                                semantic space comparing aliases and abbreviations.</p>
+                            <div class="text-forest mb-4"><i data-lucide="git-branch" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">2. Semantic Skill Mapping</h3>
+                            <p class="text-inkSecondary text-sm">Translates extracted competencies into a multi-dimensional semantic space comparing technical aliases, acronyms, and conceptual equivalents.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex gap-4 items-center justify-center">
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex gap-4 items-center justify-center card-preview-well">
                             <div
-                                class="flex-1 bg-emerald-500/5 border border-emerald-500/20 p-2.5 rounded-lg text-center">
-                                <span class="text-xs text-emerald-400 font-mono">JS / ES6</span>
+                                class="flex-1 bg-paperRaised border border-forest/30 p-2.5 rounded-lg text-center">
+                                <span class="text-xs text-forest font-medium font-mono">JS / ES6 / ECMAScript</span>
                             </div>
-                            <div class="text-slate-600">↔</div>
+                            <div class="text-muted">↔</div>
                             <div
-                                class="flex-1 bg-emerald-500/5 border border-emerald-500/20 p-2.5 rounded-lg text-center">
-                                <span class="text-xs text-emerald-400 font-mono">JavaScript</span>
+                                class="flex-1 bg-paperRaised border border-forest/30 p-2.5 rounded-lg text-center">
+                                <span class="text-xs text-forest font-medium font-mono">JavaScript (Semantic Concept Match)</span>
                             </div>
                         </div>
                     </div>
@@ -230,30 +280,29 @@
                 <!-- Card 3 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="w-full h-full bg-[#0b0f19]/90 border border-slate-800 rounded-2xl p-6 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="sliders" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">3. Adaptive Candidate Scoring</h3>
-                            <p class="text-slate-400 text-sm">Allows recruiters to customize weights dynamically based
-                                on role profiles like Backend, DevOps, or Fresh Graduates.</p>
+                            <div class="text-forest mb-4"><i data-lucide="sliders" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">3. Adaptive Candidate Scoring</h3>
+                            <p class="text-inkSecondary text-sm">Allows hiring teams to calibrate component coefficients dynamically across role profiles like Backend, DevOps, or Fresh Graduates.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 grid grid-cols-4 gap-2 text-center items-center">
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 grid grid-cols-4 gap-2 text-center items-center card-preview-well">
                             <div>
-                                <div class="text-[10px] text-slate-500">Skills</div>
-                                <div class="text-xs font-bold text-white">45%</div>
+                                <div class="text-[10px] text-muted font-mono uppercase">Skills</div>
+                                <div class="text-xs font-bold text-ink font-mono">45%</div>
                             </div>
                             <div>
-                                <div class="text-[10px] text-slate-500">Exp</div>
-                                <div class="text-xs font-bold text-white">30%</div>
+                                <div class="text-[10px] text-muted font-mono uppercase">Exp</div>
+                                <div class="text-xs font-bold text-ink font-mono">30%</div>
                             </div>
                             <div>
-                                <div class="text-[10px] text-slate-500">Edu</div>
-                                <div class="text-xs font-bold text-white">5%</div>
+                                <div class="text-[10px] text-muted font-mono uppercase">Edu</div>
+                                <div class="text-xs font-bold text-ink font-mono">5%</div>
                             </div>
                             <div>
-                                <div class="text-[10px] text-slate-500">Projects</div>
-                                <div class="text-xs font-bold text-white">20%</div>
+                                <div class="text-[10px] text-muted font-mono uppercase">Projects</div>
+                                <div class="text-xs font-bold text-ink font-mono">20%</div>
                             </div>
                         </div>
                     </div>
@@ -262,19 +311,16 @@
                 <!-- Card 4 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="w-full h-full bg-[#0b0f19]/90 border border-slate-800 rounded-2xl p-6 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="help-circle" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">4. Explainable AI</h3>
-                            <p class="text-slate-400 text-sm">Detailed scoring explanations telling recruiters exactly
-                                why a candidate matching score was awarded.</p>
+                            <div class="text-forest mb-4"><i data-lucide="help-circle" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">4. Explainable AI Insights</h3>
+                            <p class="text-inkSecondary text-sm">Detailed scoring explanations telling hiring teams exactly why a candidate matching score was awarded — with auditable evidence.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 text-xs text-slate-400 space-y-1 overflow-y-auto">
-                            <span class="text-emerald-400">✓ Awarded 45/45 skills points</span>: Matched Python, Docker,
-                            Postgres.<br>
-                            <span class="text-yellow-400">⚠ Reduced 5 points for experience</span>: Required 5 years,
-                            candidate has 4.2 years.
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 text-xs text-inkSecondary space-y-1 overflow-y-auto card-preview-well">
+                            <span class="text-forest font-semibold">✓ Awarded 45/45 skills points</span>: Matched Python, Docker, Kubernetes, PostgreSQL.<br>
+                            <span class="text-warning font-semibold">⚠ Reduced 5 points for experience</span>: Required 5 years, candidate verified with 4.2 years.
                         </div>
                     </div>
                 </div>
@@ -282,26 +328,25 @@
                 <!-- Card 5 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="w-full h-full bg-[#0b0f19]/90 border border-slate-800 rounded-2xl p-6 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="bar-chart-3" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">5. Recruiter Analytics</h3>
-                            <p class="text-slate-400 text-sm">Dashboard metrics summarizing matched talents, common
-                                missing skills, and overall matching efficiency.</p>
+                            <div class="text-forest mb-4"><i data-lucide="bar-chart-3" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">5. Recruiter Analytics</h3>
+                            <p class="text-inkSecondary text-sm">Dashboard metrics summarizing talent pools, average match scores, common missing requirements, and pipeline efficiency.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex justify-around items-center">
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex justify-around items-center card-preview-well">
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-white">24</div>
-                                <div class="text-[9px] text-slate-500">Screened</div>
+                                <div class="text-2xl font-bold text-ink font-mono">24</div>
+                                <div class="text-[10px] text-muted font-mono uppercase">Screened</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-emerald-400">82%</div>
-                                <div class="text-[9px] text-slate-500">Avg Match</div>
+                                <div class="text-2xl font-bold text-forest font-mono">82%</div>
+                                <div class="text-[10px] text-muted font-mono uppercase">Avg Match</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-white">8.4</div>
-                                <div class="text-[9px] text-slate-500">Avg Exp</div>
+                                <div class="text-2xl font-bold text-ink font-mono">8.4</div>
+                                <div class="text-[10px] text-muted font-mono uppercase">Avg Exp (Yrs)</div>
                             </div>
                         </div>
                     </div>
@@ -310,20 +355,19 @@
                 <!-- Card 6 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="w-full h-full bg-[#0b0f19]/90 border border-slate-800 rounded-2xl p-6 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="history" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">6. Resume Version Comparison</h3>
-                            <p class="text-slate-400 text-sm">Tracks career progress across resume versions with
-                                built-in Comparison Reliability and score timeline indicators.</p>
+                            <div class="text-forest mb-4"><i data-lucide="history" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">6. Resume Version Tracking</h3>
+                            <p class="text-inkSecondary text-sm">Tracks candidate career progression across resume revisions with score timeline comparisons and improvement indicators.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex gap-2 justify-center items-center">
-                            <div class="px-3 py-1.5 rounded bg-slate-800 text-[10px] text-slate-400">V1 (62%)</div>
-                            <div class="text-slate-600">→</div>
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex gap-2 justify-center items-center card-preview-well">
+                            <div class="px-3 py-1.5 rounded bg-paperRaised border border-rule text-[11px] text-inkSecondary font-mono">Version 1 (62% Fit)</div>
+                            <div class="text-muted">→</div>
                             <div
-                                class="px-3 py-1.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-400 font-bold">
-                                V2 (78%)</div>
+                                class="px-3 py-1.5 rounded bg-forest/10 border border-forest/30 text-[11px] text-forest font-bold font-mono">
+                                Version 2 (82.5% Fit)</div>
                         </div>
                     </div>
                 </div>
@@ -331,17 +375,16 @@
                 <!-- Card 7 -->
                 <div class="feature-card-wrapper">
                     <div
-                        class="w-full h-full bg-[#0b0f19]/90 border border-slate-800 rounded-2xl p-6 flex flex-col shadow-premium">
+                        class="feature-card w-full h-full rounded-2xl p-6 sm:p-8 flex flex-col bg-paperRaised border border-rule shadow-card">
                         <div>
-                            <div class="text-emerald-400 mb-4"><i data-lucide="git-merge" class="w-8 h-8"></i></div>
-                            <h3 class="text-xl font-bold text-white mb-2">7. Multi-Agent Pipeline</h3>
-                            <p class="text-slate-400 text-sm">Sequential orchestration pipeline carrying request
-                                contexts across semantic, xai, and mapping layers.</p>
+                            <div class="text-forest mb-4"><i data-lucide="git-merge" class="w-8 h-8"></i></div>
+                            <h3 class="text-xl font-bold text-ink mb-2">7. Multi-Agent Sequential Pipeline</h3>
+                            <p class="text-inkSecondary text-sm">Sequential orchestration pipeline carrying request contexts across semantic, xai, and mapping layers with auditable trace logs.</p>
                         </div>
                         <div
-                            class="bg-slate-900/50 rounded-xl mt-4 border border-slate-800/40 p-4 flex justify-between items-center text-[10px] font-mono text-slate-500">
-                            <span>Upload</span> → <span>Parse</span> → <span>Match</span> → <span>Score</span> →
-                            <span>Explain</span>
+                            class="bg-ivory rounded-xl mt-4 border border-rule p-4 flex justify-between items-center text-[10px] font-medium text-inkSecondary font-mono card-preview-well">
+                            <span>Ingest</span> <span class="text-muted">→</span> <span>Parse</span> <span class="text-muted">→</span> <span>Match</span> <span class="text-muted">→</span> <span>Score</span> <span class="text-muted">→</span>
+                            <span class="text-forest font-bold">Explain</span>
                         </div>
                     </div>
                 </div>
@@ -349,175 +392,286 @@
         </section>
 
         <!-- Product Walkthrough Sticky Section -->
-        <section id="walkthrough" class="py-24 bg-[#070a13] relative">
+        <section id="walkthrough" class="py-24 bg-paper relative">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                <div class="sticky top-32 space-y-6">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">How it Works</h2>
-                    <p class="text-slate-400 max-w-md">Follow the automated pipeline from the initial document upload up
-                        to explainable recruiter insights.</p>
+                <div class="walkthrough-steps-col space-y-8">
+                    <div class="walkthrough-header space-y-4">
+                        <span class="section-kicker">WORKFLOW ARCHITECTURE</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">How the Evaluation Engine Works</h2>
+                        <p class="text-inkSecondary max-w-md">Follow the automated pipeline from the initial document upload up
+                            to explainable recruiter insights.</p>
+                    </div>
 
-                    <div class="space-y-8 pt-4">
-                        <div class="walkthrough-text-block border-l-2 border-emerald-500 pl-4 cursor-pointer"
-                            data-visual-target="visual-upload">
-                            <h4 class="text-lg font-bold text-white">Step 1: Resume Upload</h4>
-                            <p class="text-slate-400 text-sm">Candidates or recruiters upload PDF or Word documents
+                    <div class="walkthrough-steps-list space-y-12 lg:space-y-20 pt-2 pb-20">
+                        <div class="walkthrough-text-block is-active border-l-2 border-forest pl-6 cursor-pointer"
+                            data-step-index="0" data-visual-target="visual-upload">
+                            <h3 class="text-lg font-bold text-ink">Step 1: Document Ingestion</h3>
+                            <p class="text-inkSecondary text-sm">Candidates or recruiters upload PDF or Word documents
                                 directly into the screening zone.</p>
                         </div>
-                        <div class="walkthrough-text-block border-l-2 border-slate-800 pl-4 cursor-pointer"
-                            data-visual-target="visual-match">
-                            <h4 class="text-lg font-bold text-white">Step 2: Semantic Matching</h4>
-                            <p class="text-slate-400 text-sm">Our parsing algorithms resolve abbreviations, synonyms,
+                        <div class="walkthrough-text-block border-l-2 border-rule pl-6 cursor-pointer"
+                            data-step-index="1" data-visual-target="visual-match">
+                            <h3 class="text-lg font-bold text-ink">Step 2: Semantic Matching</h3>
+                            <p class="text-inkSecondary text-sm">Our parsing algorithms resolve abbreviations, synonyms,
                                 and context matches against job descriptions.</p>
                         </div>
-                        <div class="walkthrough-text-block border-l-2 border-slate-800 pl-4 cursor-pointer"
-                            data-visual-target="visual-analytics">
-                            <h4 class="text-lg font-bold text-white">Step 3: Recruiter Analytics</h4>
-                            <p class="text-slate-400 text-sm">Dynamic match score timelines, xai breakdowns, and
+                        <div class="walkthrough-text-block border-l-2 border-rule pl-6 cursor-pointer"
+                            data-step-index="2" data-visual-target="visual-analytics">
+                            <h3 class="text-lg font-bold text-ink">Step 3: Analytical Calibration & XAI</h3>
+                            <p class="text-inkSecondary text-sm">Dynamic match score timelines, xai breakdowns, and
                                 prioritized improvements appear instantly on the dashboard.</p>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="relative min-h-[360px] flex items-center justify-center bg-[#0b0f19]/40 border border-slate-900 rounded-2xl p-8 backdrop-blur-md overflow-hidden">
-                    <div id="visual-upload"
-                        class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0">
-                        <div class="p-6 border border-dashed border-emerald-500/20 bg-emerald-500/5 rounded-xl">
-                            <i data-lucide="upload-cloud"
-                                class="w-12 h-12 text-emerald-400 mx-auto mb-2 animate-bounce"></i>
-                            <p class="text-sm font-semibold text-white">drag_and_drop_resume.pdf</p>
-                            <p class="text-xs text-slate-500">Ready to parse</p>
+                <div class="walkthrough-visual-col">
+                    <div
+                        class="walkthrough-visual-container relative" data-active-step="0">
+                    <!-- Top Telemetry Header -->
+                    <div class="workflow-grid-telemetry-header">
+                        <div class="flex items-center gap-2">
+                            <span class="workflow-telemetry-tag">PIPELINE MONITOR</span>
+                            <span class="workflow-telemetry-sub font-mono text-[11px] text-inkSecondary">7-LAYER EVALUATION MATRIX</span>
+                        </div>
+                        <div class="workflow-telemetry-status flex items-center gap-1.5 font-mono text-[11px] text-forest font-semibold">
+                            <span class="workflow-pulse-dot"></span>
+                            <span>ACTIVE · 384-DIM PARITY</span>
                         </div>
                     </div>
-                    <div id="visual-match"
-                        class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0"
-                        style="display: none;">
-                        <div class="p-6 border border-emerald-500/10 bg-emerald-500/5 rounded-xl">
-                            <div class="flex justify-between items-center text-xs text-slate-400 font-mono mb-2">
-                                <span>Kubernetes</span>
-                                <span>↔</span>
-                                <span>K8s</span>
+
+                    <!-- Centered Workflow Grid Canvas & Animation -->
+                    <div class="workflow-grid-canvas">
+                        <!-- Subtle Background Precision Grid -->
+                        <svg class="workflow-grid-svg" aria-hidden="true" width="100%" height="100%">
+                            <defs>
+                                <pattern id="wf-grid-pattern" width="28" height="28" patternUnits="userSpaceOnUse">
+                                    <path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(30, 58, 47, 0.05)" stroke-width="1" />
+                                    <circle cx="28" cy="0" r="1" fill="rgba(30, 58, 47, 0.15)" />
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#wf-grid-pattern)" />
+                        </svg>
+
+                        <!-- Evaluation Pipeline Stage Indicators with Flowing Data Stream -->
+                        <div class="workflow-pipeline-nodes" role="group" aria-label="Evaluation pipeline stages">
+                            <div class="workflow-grid-node is-active" data-step-node="0">
+                                <span class="wf-node-index font-mono">01</span>
+                                <span class="wf-node-label">Ingest</span>
+                                <span class="wf-node-meta font-mono">OCR / Parse</span>
                             </div>
-                            <p class="text-sm font-semibold text-white">100% Concept Equivalence</p>
-                            <p class="text-xs text-emerald-400">Semantic verification complete</p>
+                            <div class="workflow-node-connector" aria-hidden="true">
+                                <div class="wf-connector-line">
+                                    <div class="wf-pulse-particle"></div>
+                                </div>
+                            </div>
+                            <div class="workflow-grid-node" data-step-node="1">
+                                <span class="wf-node-index font-mono">02</span>
+                                <span class="wf-node-label">Semantic</span>
+                                <span class="wf-node-meta font-mono">Concept Fit</span>
+                            </div>
+                            <div class="workflow-node-connector" aria-hidden="true">
+                                <div class="wf-connector-line">
+                                    <div class="wf-pulse-particle"></div>
+                                </div>
+                            </div>
+                            <div class="workflow-grid-node" data-step-node="2">
+                                <span class="wf-node-index font-mono">03</span>
+                                <span class="wf-node-label">XAI Score</span>
+                                <span class="wf-node-meta font-mono">Calibrated</span>
+                            </div>
+                        </div>
+
+                        <!-- Active Step Interactive Panels Centered Within Grid -->
+                        <div class="workflow-panels-stage relative">
+                            <div id="visual-upload"
+                                class="walkthrough-visual-panel w-full max-w-[340px] text-center pointer-events-none opacity-0">
+                                <div class="workflow-step-card space-y-2">
+                                    <div class="workflow-step-icon">
+                                        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                                    </div>
+                                    <p class="text-sm font-bold text-ink">candidate_resume.pdf</p>
+                                    <p class="text-xs text-inkSecondary font-mono">Ready to parse · 7.2 yrs tenure</p>
+                                    <div class="pt-2 flex items-center justify-center gap-1.5 text-[11px] font-mono text-forest">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-forest animate-pulse"></span>
+                                        <span>Multi-layer structural tokenization</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="visual-match"
+                                class="walkthrough-visual-panel w-full max-w-[340px] text-center pointer-events-none opacity-0"
+                                style="display: none;">
+                                <div class="workflow-step-card space-y-2">
+                                    <div class="workflow-step-parity-badge">
+                                        <span class="text-ink font-semibold">Kubernetes</span>
+                                        <span class="text-forest font-bold">↔</span>
+                                        <span class="text-ink font-semibold">K8s Cluster Ops</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-ink">Concept Parity Match</p>
+                                    <p class="text-xs text-forest font-medium">Semantic concept alignment · 0.88 Cosine Fit</p>
+                                    <div class="pt-2 flex items-center justify-center gap-1.5 text-[11px] font-mono text-muted">
+                                        <span>Resolved via 384-dimensional domain embeddings</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="visual-analytics"
+                                class="walkthrough-visual-panel w-full max-w-[340px] text-center pointer-events-none opacity-0"
+                                style="display: none;">
+                                <div class="workflow-step-card space-y-2">
+                                    <div class="text-3xl font-extrabold text-forest mb-1 num font-mono">82.5%</div>
+                                    <p class="text-sm font-bold text-ink">High Fit Candidate</p>
+                                    <p class="text-xs text-inkSecondary">Evaluated under Backend Engineer Profile</p>
+                                    <div class="pt-2 flex items-center justify-center gap-1.5 text-[11px] font-mono text-forest">
+                                        <span>Skills (45%) + Exp (30%) + Projects (20%) + Edu (5%)</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div id="visual-analytics"
-                        class="walkthrough-visual-panel w-full max-w-[320px] text-center space-y-4 absolute pointer-events-none opacity-0"
-                        style="display: none;">
-                        <div class="p-6 border border-emerald-500/10 bg-emerald-500/5 rounded-xl">
-                            <div class="text-2xl font-bold text-emerald-400 mb-1">82.5%</div>
-                            <p class="text-xs font-semibold text-white">Excellent Match Score</p>
-                            <p class="text-xs text-slate-500">Calculated under Backend Profile</p>
-                        </div>
+
+                    <!-- Bottom Telemetry Status Footer -->
+                    <div class="workflow-grid-telemetry-footer">
+                        <span class="font-mono text-[10px] text-muted tracking-wider uppercase">INPUT: MULTI-FORMAT (PDF/DOCX)</span>
+                        <span class="font-mono text-[10px] text-muted tracking-wider uppercase">AUDITABLE EXPLAINABILITY LOGS</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
         <!-- FAQ Section -->
-        <section id="faq" class="py-24 bg-[#070a13]/60 relative">
+        <section id="faq" class="py-24 bg-paper relative">
             <div class="max-w-4xl mx-auto px-6 text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Frequently Asked Questions</h2>
+                <span class="section-kicker">FREQUENTLY ASKED QUESTIONS</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink mb-4">Everything You Need to Know About Nipun</h2>
+                <p class="text-inkSecondary max-w-xl mx-auto text-sm">Clear answers regarding semantic screening, explainability, role scoring weights, and applicant data security.</p>
             </div>
             <div class="max-w-2xl mx-auto px-6 space-y-4">
-                <div class="faq-card bg-[#0b0f19]/60 border border-slate-800 rounded-xl overflow-hidden">
+                <div class="faq-card bg-paperRaised border border-rule rounded-xl shadow-card overflow-hidden">
                     <div class="faq-header p-5 flex justify-between items-center cursor-pointer select-none">
-                        <span class="font-semibold text-white text-sm">How does the Resume Match Score differ from
-                            keyword match?</span>
-                        <span class="faq-icon text-slate-500 text-xs">▼</span>
+                        <span class="font-semibold text-ink text-sm">How does Semantic Matching differ from legacy keyword ATS filters?</span>
+                        <i data-lucide="chevron-down" class="faq-icon text-muted w-4 h-4"></i>
                     </div>
-                    <div class="faq-content px-5 pb-5 text-xs text-slate-400 hidden">
-                        Keyword matching requires exact text matching. Our Semantic Matching engine parses aliases (e.g.
-                        JavaScript ↔ JS) and understands structural connections in the JD context, ensuring highly
-                        qualified candidates aren't filtered out due to terminology differences.
+                    <div class="faq-content px-5 pb-5 text-sm text-inkSecondary leading-relaxed hidden">
+                        Keyword matchers require exact textual substring matches, rejecting qualified applicants who use synonyms (e.g., K8s vs. Kubernetes or JS vs. ECMAScript). Nipun parses candidate resumes into conceptual semantic vectors, understanding context, aliases, and seniority without rigid lexical brittleness.
                     </div>
                 </div>
-                <div class="faq-card bg-[#0b0f19]/60 border border-slate-800 rounded-xl overflow-hidden">
+                <div class="faq-card bg-paperRaised border border-rule rounded-xl shadow-card overflow-hidden">
                     <div class="faq-header p-5 flex justify-between items-center cursor-pointer select-none">
-                        <span class="font-semibold text-white text-sm">Can I customize the component weights?</span>
-                        <span class="faq-icon text-slate-500 text-xs">▼</span>
+                        <span class="font-semibold text-ink text-sm">How does Explainable AI (XAI) justify candidate match scores?</span>
+                        <i data-lucide="chevron-down" class="faq-icon text-muted w-4 h-4"></i>
                     </div>
-                    <div class="faq-content px-5 pb-5 text-xs text-slate-400 hidden">
-                        Yes! Recruiters can resolve different Scoring Profiles (e.g., DevOps Engineer, AI Engineer,
-                        Fresh Graduate) which adjusts the component coefficients for Skills, Experience, Education, and
-                        Projects dynamically.
+                    <div class="faq-content px-5 pb-5 text-sm text-inkSecondary leading-relaxed hidden">
+                        Instead of generating opaque, untraceable scores, Nipun breaks down every assessment into explicit component contributions: Skills, Experience Tenure, Education, and Projects. Each score includes natural-language justifications showing exactly which requirements were met or missed.
+                    </div>
+                </div>
+                <div class="faq-card bg-paperRaised border border-rule rounded-xl shadow-card overflow-hidden">
+                    <div class="faq-header p-5 flex justify-between items-center cursor-pointer select-none">
+                        <span class="font-semibold text-ink text-sm">Can hiring teams customize scoring coefficients for specialized engineering roles?</span>
+                        <i data-lucide="chevron-down" class="faq-icon text-muted w-4 h-4"></i>
+                    </div>
+                    <div class="faq-content px-5 pb-5 text-sm text-inkSecondary leading-relaxed hidden">
+                        Yes. Recruiters can configure dynamic Scoring Profiles (e.g., Senior Backend Engineer, Cloud DevOps, AI/ML Specialist, or Early Career). Each profile lets teams tune the relative weights of skills, years of verified experience, educational degrees, and production projects.
+                    </div>
+                </div>
+                <div class="faq-card bg-paperRaised border border-rule rounded-xl shadow-card overflow-hidden">
+                    <div class="faq-header p-5 flex justify-between items-center cursor-pointer select-none">
+                        <span class="font-semibold text-ink text-sm">How can candidates use Nipun to evaluate and improve their resumes?</span>
+                        <i data-lucide="chevron-down" class="faq-icon text-muted w-4 h-4"></i>
+                    </div>
+                    <div class="faq-content px-5 pb-5 text-sm text-inkSecondary leading-relaxed hidden">
+                        Candidates can upload their resumes against specific job descriptions to receive an objective, transparent fit assessment. Nipun highlights missing technical skills, tenure alignment, and version history comparisons to help applicants refine their profiles with confidence.
+                    </div>
+                </div>
+                <div class="faq-card bg-paperRaised border border-rule rounded-xl shadow-card overflow-hidden">
+                    <div class="faq-header p-5 flex justify-between items-center cursor-pointer select-none">
+                        <span class="font-semibold text-ink text-sm">How is applicant privacy, security, and data protection handled?</span>
+                        <i data-lucide="chevron-down" class="faq-icon text-muted w-4 h-4"></i>
+                    </div>
+                    <div class="faq-content px-5 pb-5 text-sm text-inkSecondary leading-relaxed hidden">
+                        All applicant records and documents are protected with role-based access controls (RBAC) and Firebase Authentication. Candidates maintain full privacy over their personal profile updates, and evaluation data is never shared across unauthorized tenant workspaces.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Final CTA Aurora Section -->
-        <section class="py-24 bg-[#070a13] relative border-t border-slate-900/60 overflow-hidden text-center aurora-bg">
+        <!-- Final Closing CTA Section -->
+        <section class="closing-cta-section py-24 bg-paper relative border-t border-rule overflow-hidden text-center w-full">
             <div class="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">Elevate Your Hiring Workflows
-                    Today</h2>
-                <p class="text-slate-400 max-w-md mx-auto text-sm">Scale your candidate evaluations dynamically with
-                    high-precision semantic filters and zero human bias.</p>
-                <button
-                    class="nav-signup-btn glow-btn px-6 py-3 font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-all duration-150">Get
-                    Started Now</button>
+                <span class="section-kicker">START SCREENING ACCURATELY</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink leading-tight">Calibrate Candidate Evaluation Today</h2>
+                <p class="text-inkSecondary max-w-md mx-auto text-base">Scale your candidate evaluations with high-precision semantic filters and more consistent, explainable candidate evaluation.</p>
+                <div class="flex flex-wrap justify-center items-center gap-4">
+                    <button
+                        class="closing-cta-btn nav-signup-btn px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150" data-auth-modal="signup">Start Free Screening</button>
+                    <button
+                        class="closing-cta-btn nav-login-btn px-6 py-3 font-semibold text-white bg-forest hover:bg-forest-hover rounded-xl transition-colors duration-150" data-auth-modal="login">Candidate Portal</button>
+                </div>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="border-t border-slate-900/85 bg-[#090d16]/95 backdrop-blur-lg pt-20 pb-10 text-slate-400">
+        <footer class="border-t border-rule bg-paper pt-20 pb-10 text-inkSecondary">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <!-- Column 1: Brand -->
                 <div class="space-y-4 text-left">
-                    <div class="flex items-center gap-2 font-bold text-white text-lg">
+                    <div class="flex items-center gap-2 font-bold text-ink text-lg">
                         <img src="assets/nipun_logo.svg" alt="Nipun Logo" style="height: 32px; width: auto;">
-                        <span>Nipun</span>
+                        <span class="text-ink font-bold tracking-tight">Nipun</span>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        Next-Gen AI Hiring Intelligence Platform. Automating resume screening, semantic matching, and
-                        explainable scoring for global recruitment pipelines.
+                    <p class="text-xs text-muted leading-relaxed">
+                        Next-Generation AI Hiring Intelligence Platform. Precision resume screening, semantic skill parity, and explainable scoring models for modern technical recruitment.
                     </p>
                 </div>
 
                 <!-- Column 2: Navigation -->
                 <div class="space-y-4 text-left">
-                    <h4 class="text-sm font-semibold text-white tracking-wider uppercase">Product</h4>
+                    <h3 class="text-sm font-semibold text-ink">Platform</h3>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="#features" class="hover:text-emerald-400 transition-colors">Features</a></li>
-                        <li><a href="#story" class="hover:text-emerald-400 transition-colors">Platform Story</a></li>
-                        <li><a href="#faq" class="hover:text-emerald-400 transition-colors">FAQ</a></li>
+                        <li><a href="#features" class="hover:text-forest transition-colors">Features</a></li>
+                        <li><a href="#story" class="hover:text-forest transition-colors">Platform Story</a></li>
+                        <li><a href="#walkthrough" class="hover:text-forest transition-colors">How it Works</a></li>
+                        <li><a href="#faq" class="hover:text-forest transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 3: Contact & Info -->
                 <div class="space-y-4 text-left">
-                    <h4 class="text-sm font-semibold text-white tracking-wider uppercase">Connect</h4>
+                    <h3 class="text-sm font-semibold text-ink">Connect</h3>
                     <ul class="space-y-2 text-xs">
                         <li class="flex items-center gap-2">
-                            <span class="text-emerald-500 font-mono">✉</span>
+                            <i data-lucide="mail" class="w-4 h-4 text-forest"></i>
                             <a href="mailto:nipun.platform@gmail.com"
-                                class="hover:text-white transition-colors">nipun.platform@gmail.com</a>
+                                class="hover:text-forest transition-colors">nipun.platform@gmail.com</a>
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="text-emerald-500 font-mono">📍</span>
+                            <i data-lucide="map-pin" class="w-4 h-4 text-forest"></i>
                             <span>Hyderabad, India</span>
+                        </li>
+                        <li class="pt-2">
+                            <button id="contact-trigger-btn" class="text-xs font-semibold text-forest hover:underline bg-transparent border-none p-0 cursor-pointer">Open Contact Dialog</button>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Column 4: Platform Showcase (nipun_main image) -->
                 <div class="space-y-4 text-left">
-                    <h4 class="text-sm font-semibold text-white tracking-wider uppercase">Platform Intelligence</h4>
+                    <h3 class="text-sm font-semibold text-ink">Platform Intelligence</h3>
                     <div
-                        class="relative group rounded-xl overflow-hidden border border-slate-800/80 bg-slate-950/40 p-2 shadow-premium transition-all duration-300 hover:border-emerald-500/30 w-full">
+                        class="relative group rounded-xl overflow-hidden border border-rule bg-paperRaised p-2 shadow-card transition-colors duration-300 hover:border-forest/30 w-full">
                         <img src="assets/nipun_main.png" alt="Nipun Core Platform"
-                            class="rounded-lg h-auto max-h-32 w-full object-contain opacity-75 group-hover:opacity-100 transition-opacity duration-300">
+                            class="rounded-lg h-auto max-h-32 w-full object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
             </div>
 
             <div
-                class="max-w-7xl mx-auto px-6 border-t border-slate-900/60 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
-                <p>&copy; 2026 Nipun - Saaket Baldawa. All rights reserved.</p>
+                class="max-w-7xl mx-auto px-6 border-t border-rule pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted">
+                <p>&copy; 2026 Nipun · Saaket Baldawa</p>
                 <div class="flex gap-6 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-forest transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-forest transition-colors">Terms of Service</a>
                 </div>
             </div>
         </footer>
@@ -533,13 +687,12 @@
 
                 <div class="user-profile-dropdown" id="user-profile-dropdown">
                     <div class="user-info-trigger" id="user-trigger">
-                        <span id="user-display-name">Loading...</span>
-                        <span class="dropdown-chevron">▼</span>
+                        <span id="user-display-name">Loading…</span>
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                     </div>
                     <div class="dropdown-content">
-                        <button id="change-name-btn">✒️ Change Display Name</button>
-                        <button id="sign-out-btn" class="sign-out-dropdown-btn"><span style="color: #ef4444;">⏻</span>
-                            Sign Out</button>
+                        <button id="change-name-btn">Change Display Name</button>
+                        <button id="sign-out-btn" class="sign-out-dropdown-btn">Sign Out</button>
                     </div>
                 </div>
             </div>
@@ -549,18 +702,18 @@
             <section class="glass-card input-section">
                 <div class="form-group">
                     <label for="job-description">Job Description</label>
-                    <textarea id="job-description" placeholder="Paste the full job description here..."></textarea>
+                    <textarea id="job-description" placeholder="Paste the full job description here…"></textarea>
                 </div>
 
                 <div class="form-group file-upload-wrapper">
                     <label for="resumes">Upload Candidates (PDF/DOCX)</label>
                     <div class="file-upload-box" id="drop-zone">
-                        <span class="upload-icon">📂</span>
+                        <i data-lucide="upload-cloud" class="w-12 h-12 text-slate-500 mx-auto mb-2"></i>
                         <p>Drag and drop files here, or click to browse</p>
                         <input type="file" id="resumes" name="resumes" accept=".pdf,.docx" multiple hidden>
                         <div id="resumes-dropdown-header" class="resumes-dropdown-header hidden">
                             <span id="resumes-count">Resumes (0)</span>
-                            <span class="dropdown-chevron">▼</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-500"></i>
                         </div>
                         <ul id="file-list" class="file-list"></ul>
                     </div>
@@ -594,7 +747,7 @@
 
         <footer class="app-footer">
             <div class="footer-content">
-                <p>&copy; 2026 Nipun - Saaket Baldawa. All rights reserved.</p>
+                <p>&copy; 2026 Nipun · Saaket Baldawa</p>
                 <div class="footer-links">
                     <button id="contact-trigger-btn" class="footer-link-btn">Contact</button>
                     <a href="https://github.com/saaket2006/nipun-platform" target="_blank"
@@ -608,7 +761,6 @@
     <!-- Auth Modal -->
     <div id="auth-modal" class="auth-modal-overlay hidden">
         <div class="glass-card auth-card">
-            <button type="button" class="auth-close-btn" id="auth-close-btn" aria-label="Close modal">&times;</button>
             <div class="auth-tabs" id="auth-tabs-container">
                 <button class="auth-tab active" id="tab-login">Login</button>
                 <button class="auth-tab" id="tab-signup">Sign Up</button>
@@ -627,10 +779,19 @@
                         <div class="password-input-wrapper">
                             <input type="password" id="login-password" name="password" autocomplete="current-password"
                                 required placeholder="Password" class="auth-input">
-                            <button type="button" class="toggle-password-btn" data-target="login-password">
-                                <span>👁️</span>
+                            <button type="button" class="toggle-password-btn" data-target="login-password" aria-label="Show password">
+                                <svg class="icon-eye w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off hidden w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
                             </button>
-                            <button type="button" class="clear-password-btn" data-target="login-password">
+                            <button type="button" class="clear-password-btn" data-target="login-password" aria-label="Clear password">
                                 <span>✕</span>
                             </button>
                         </div>
@@ -657,10 +818,19 @@
                         <div class="password-input-wrapper">
                             <input type="password" id="signup-password" name="password" autocomplete="new-password"
                                 required placeholder="Create Password" class="auth-input">
-                            <button type="button" class="toggle-password-btn" data-target="signup-password">
-                                <span>👁️</span>
+                            <button type="button" class="toggle-password-btn" data-target="signup-password" aria-label="Show password">
+                                <svg class="icon-eye w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off hidden w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
                             </button>
-                            <button type="button" class="clear-password-btn" data-target="signup-password">
+                            <button type="button" class="clear-password-btn" data-target="signup-password" aria-label="Clear password">
                                 <span>✕</span>
                             </button>
                         </div>
@@ -669,6 +839,29 @@
                             <p id="constraint-number">At least 1 number</p>
                             <p id="constraint-special">At least 1 special character (@$!%*?&)</p>
                         </div>
+                    </div>
+                    <!-- Conditional Confirm Password Field (revealed when password contains value) -->
+                    <div class="form-group confirm-password-group" id="signup-confirm-group" aria-hidden="true">
+                        <div class="password-input-wrapper">
+                            <input type="password" id="signup-confirm-password" name="confirm-password" autocomplete="new-password"
+                                placeholder="Confirm Password" class="auth-input" aria-label="Confirm Password">
+                            <button type="button" class="toggle-password-btn" data-target="signup-confirm-password" aria-label="Show password">
+                                <svg class="icon-eye w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off hidden w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
+                            </button>
+                            <button type="button" class="clear-password-btn" data-target="signup-confirm-password" aria-label="Clear password">
+                                <span>✕</span>
+                            </button>
+                        </div>
+                        <div class="password-match-feedback hidden" id="signup-password-match-feedback" aria-live="polite"></div>
                     </div>
                     <button type="submit" class="glow-btn" id="email-signup-btn">
                         <span>Sign Up</span>
@@ -679,7 +872,7 @@
             <!-- FORGOT PASSWORD CONTENT -->
             <div id="forgot-password-plane" class="auth-plane hidden">
                 <h2>Reset Password</h2>
-                <p>Enter your email and we'll send you a recovery link</p>
+                <p>Enter your email and we’ll send you a recovery link</p>
                 <form id="forgot-password-form">
                     <div class="form-group">
                         <input type="email" id="forgot-email" name="email" autocomplete="username" required
@@ -705,10 +898,19 @@
                         <div class="password-input-wrapper">
                             <input type="password" id="reset-new-password" name="new_password" autocomplete="new-password"
                                 required placeholder="New Password" class="auth-input">
-                            <button type="button" class="toggle-password-btn" data-target="reset-new-password">
-                                <span>👁️</span>
+                            <button type="button" class="toggle-password-btn" data-target="reset-new-password" aria-label="Show password">
+                                <svg class="icon-eye w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off hidden w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
                             </button>
-                            <button type="button" class="clear-password-btn" data-target="reset-new-password">
+                            <button type="button" class="clear-password-btn" data-target="reset-new-password" aria-label="Clear password">
                                 <span>✕</span>
                             </button>
                         </div>
@@ -722,10 +924,19 @@
                         <div class="password-input-wrapper">
                             <input type="password" id="reset-confirm-password" name="confirm_password" autocomplete="new-password"
                                 required placeholder="Confirm New Password" class="auth-input">
-                            <button type="button" class="toggle-password-btn" data-target="reset-confirm-password">
-                                <span>👁️</span>
+                            <button type="button" class="toggle-password-btn" data-target="reset-confirm-password" aria-label="Show password">
+                                <svg class="icon-eye w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off hidden w-4 h-4 text-inkSecondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                                </svg>
                             </button>
-                            <button type="button" class="clear-password-btn" data-target="reset-confirm-password">
+                            <button type="button" class="clear-password-btn" data-target="reset-confirm-password" aria-label="Clear password">
                                 <span>✕</span>
                             </button>
                         </div>
@@ -767,18 +978,457 @@
             </div>
             <p class="modal-subtitle">Got a question or found a bug? Reach out to us directly!</p>
 
-            <div class="contact-email-container" style="text-align: center; margin: 2rem 0;">
-                <p style="font-size: 1.1rem; color: var(--text-secondary);">Email:</p>
+            <div class="contact-email-container" style="text-align: center; margin: 1.5rem 0;">
+                <p style="font-size: 0.875rem; color: var(--color-ink-2); margin-bottom: 0.5rem;">Direct Inquiry Channel:</p>
                 <a href="mailto:nipun.platform@gmail.com"
-                    style="font-size: 1.3rem; color: #6366f1; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
+                    style="font-size: 1.125rem; color: var(--color-forest); font-family: var(--font-mono); font-weight: 600; text-decoration: none; display: inline-block;"
                     target="_blank">nipun.platform@gmail.com</a>
             </div>
         </div>
     </div>
 
 
-    <script type="module" src="assets/js/app.js?v=7"></script>
-    <script type="module" src="assets/js/landing.js?v=12"></script>
+    <!-- Immediate Resilient Auth Modal Controller (Zero Dependencies, Instant Load, File/HTTP Resilient) -->
+    <script>
+    (function () {
+        function openAuthModal(mode) {
+            mode = mode || 'login';
+            var authModal = document.getElementById('auth-modal');
+            if (!authModal) return;
+
+            authModal.classList.remove('hidden');
+            authModal.setAttribute('aria-hidden', 'false');
+
+            var mobileDrawer = document.getElementById('landing-mobile-drawer');
+            if (mobileDrawer) {
+                mobileDrawer.classList.add('hidden');
+                var menuBtn = document.getElementById('landing-mobile-menu-btn');
+                if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+            }
+
+            var tabLogin = document.getElementById('tab-login');
+            var tabSignup = document.getElementById('tab-signup');
+            var loginPlane = document.getElementById('login-plane');
+            var signupPlane = document.getElementById('signup-plane');
+            var forgotPlane = document.getElementById('forgot-password-plane');
+            var resetPlane = document.getElementById('reset-password-plane');
+            var tabsContainer = document.getElementById('auth-tabs-container');
+            var divider = document.getElementById('auth-modal-divider');
+            var googleBtn = document.getElementById('google-login-btn');
+            var authErrorMsg = document.getElementById('auth-error');
+
+            if (authErrorMsg) {
+                authErrorMsg.classList.add('hidden');
+                authErrorMsg.textContent = '';
+            }
+
+            // Reset forms, constraints, and confirm password state when opening or switching modes
+            var signupForm = document.getElementById('signup-form');
+            if (signupForm) signupForm.reset();
+            var confirmGroup = document.getElementById('signup-confirm-group');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            if (confirmGroup) {
+                confirmGroup.classList.remove('is-visible');
+                confirmGroup.setAttribute('aria-hidden', 'true');
+            }
+            if (confirmInput) {
+                confirmInput.value = '';
+                confirmInput.classList.remove('input-match-success', 'input-match-error');
+            }
+            if (matchFeedback) {
+                matchFeedback.textContent = '';
+                matchFeedback.className = 'password-match-feedback hidden';
+            }
+            var passInputs = document.querySelectorAll('#auth-modal input');
+            passInputs.forEach(function (inp) {
+                if (inp.id && inp.id.indexOf('password') !== -1) {
+                    inp.setAttribute('type', 'password');
+                }
+            });
+            var passToggles = document.querySelectorAll('#auth-modal .toggle-password-btn');
+            passToggles.forEach(function (btn) {
+                btn.setAttribute('aria-label', 'Show password');
+                var eye = btn.querySelector('.icon-eye');
+                var eyeOff = btn.querySelector('.icon-eye-off');
+                if (eye) eye.classList.remove('hidden');
+                if (eyeOff) eyeOff.classList.add('hidden');
+            });
+            var cLength = document.getElementById('constraint-length');
+            var cNumber = document.getElementById('constraint-number');
+            var cSpecial = document.getElementById('constraint-special');
+            if (cLength) cLength.className = '';
+            if (cNumber) cNumber.className = '';
+            if (cSpecial) cSpecial.className = '';
+
+            // Reset all password input types to 'password' and restore default eye toggle state
+            var passInputs = document.querySelectorAll('#auth-modal input');
+            passInputs.forEach(function (inp) {
+                if (inp.id && inp.id.indexOf('password') !== -1) {
+                    inp.setAttribute('type', 'password');
+                }
+            });
+            var passToggles = document.querySelectorAll('#auth-modal .toggle-password-btn');
+            passToggles.forEach(function (btn) {
+                btn.setAttribute('aria-label', 'Show password');
+                var eye = btn.querySelector('.icon-eye');
+                var eyeOff = btn.querySelector('.icon-eye-off');
+                if (eye) eye.classList.remove('hidden');
+                if (eyeOff) eyeOff.classList.add('hidden');
+            });
+
+            if (mode === 'signup') {
+                if (tabsContainer) tabsContainer.classList.remove('hidden');
+                if (divider) divider.classList.remove('hidden');
+                if (googleBtn) googleBtn.classList.remove('hidden');
+                if (tabLogin) tabLogin.classList.remove('active');
+                if (tabSignup) tabSignup.classList.add('active');
+                if (loginPlane) { loginPlane.classList.add('hidden'); loginPlane.classList.remove('active-plane'); }
+                if (signupPlane) { signupPlane.classList.remove('hidden'); signupPlane.classList.add('active-plane'); }
+                if (forgotPlane) forgotPlane.classList.add('hidden');
+                if (resetPlane) resetPlane.classList.add('hidden');
+            } else if (mode === 'forgot-password') {
+                if (tabsContainer) tabsContainer.classList.add('hidden');
+                if (divider) divider.classList.add('hidden');
+                if (googleBtn) googleBtn.classList.add('hidden');
+                if (loginPlane) loginPlane.classList.add('hidden');
+                if (signupPlane) signupPlane.classList.add('hidden');
+                if (resetPlane) resetPlane.classList.add('hidden');
+                if (forgotPlane) { forgotPlane.classList.remove('hidden'); forgotPlane.classList.add('active-plane'); }
+            } else {
+                // Default to login
+                mode = 'login';
+                if (tabsContainer) tabsContainer.classList.remove('hidden');
+                if (divider) divider.classList.remove('hidden');
+                if (googleBtn) googleBtn.classList.remove('hidden');
+                if (tabLogin) tabLogin.classList.add('active');
+                if (tabSignup) tabSignup.classList.remove('active');
+                if (loginPlane) { loginPlane.classList.remove('hidden'); loginPlane.classList.add('active-plane'); }
+                if (signupPlane) { signupPlane.classList.add('hidden'); signupPlane.classList.remove('active-plane'); }
+                if (forgotPlane) forgotPlane.classList.add('hidden');
+                if (resetPlane) resetPlane.classList.add('hidden');
+            }
+
+            try {
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, '', '#/' + mode);
+                }
+            } catch (err) {}
+        }
+
+        function closeAuthModal() {
+            var authModal = document.getElementById('auth-modal');
+            if (authModal) {
+                authModal.classList.add('hidden');
+                authModal.setAttribute('aria-hidden', 'true');
+            }
+            var signupForm = document.getElementById('signup-form');
+            if (signupForm) signupForm.reset();
+            var confirmGroup = document.getElementById('signup-confirm-group');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            if (confirmGroup) {
+                confirmGroup.classList.remove('is-visible');
+                confirmGroup.setAttribute('aria-hidden', 'true');
+            }
+            if (confirmInput) {
+                confirmInput.value = '';
+                confirmInput.classList.remove('input-match-success', 'input-match-error');
+            }
+            if (matchFeedback) {
+                matchFeedback.textContent = '';
+                matchFeedback.className = 'password-match-feedback hidden';
+            }
+            var passInputs = document.querySelectorAll('#auth-modal input');
+            passInputs.forEach(function (inp) {
+                if (inp.id && inp.id.indexOf('password') !== -1) {
+                    inp.setAttribute('type', 'password');
+                }
+            });
+            var passToggles = document.querySelectorAll('#auth-modal .toggle-password-btn');
+            passToggles.forEach(function (btn) {
+                btn.setAttribute('aria-label', 'Show password');
+                var eye = btn.querySelector('.icon-eye');
+                var eyeOff = btn.querySelector('.icon-eye-off');
+                if (eye) eye.classList.remove('hidden');
+                if (eyeOff) eyeOff.classList.add('hidden');
+            });
+            try {
+                var hash = window.location.hash;
+                if (hash === '#/login' || hash === '#/signup' || hash === '#/forgot-password' || hash.indexOf('#/reset-password') === 0) {
+                    if (window.history && window.history.replaceState) {
+                        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+                    } else {
+                        window.location.hash = '';
+                    }
+                }
+            } catch (err) {}
+        }
+
+        window.openAuthModal = openAuthModal;
+        window.closeAuthModal = closeAuthModal;
+
+        // Reactive Password & Confirm Password Matching Engine (Zero-delay, works offline & across all protocols)
+        function validatePasswordMatchResilient(passVal, confirmVal) {
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var authErrorMsg = document.getElementById('auth-error');
+
+            if (!confirmVal) {
+                if (matchFeedback) {
+                    matchFeedback.textContent = '';
+                    matchFeedback.className = 'password-match-feedback hidden';
+                }
+                if (confirmInput) {
+                    confirmInput.classList.remove('input-match-success', 'input-match-error');
+                }
+                return false;
+            }
+
+            if (passVal === confirmVal) {
+                if (matchFeedback) {
+                    matchFeedback.innerHTML = '<span>✓</span> <span>Passwords match.</span>';
+                    matchFeedback.className = 'password-match-feedback match-success';
+                }
+                if (confirmInput) {
+                    confirmInput.classList.remove('input-match-error');
+                    confirmInput.classList.add('input-match-success');
+                }
+                if (authErrorMsg && (authErrorMsg.textContent === 'Passwords do not match.' || authErrorMsg.textContent === 'Please confirm your password.')) {
+                    authErrorMsg.classList.add('hidden');
+                    authErrorMsg.textContent = '';
+                }
+                return true;
+            } else {
+                if (matchFeedback) {
+                    matchFeedback.innerHTML = '<span>✕</span> <span>Passwords do not match.</span>';
+                    matchFeedback.className = 'password-match-feedback match-error';
+                }
+                if (confirmInput) {
+                    confirmInput.classList.remove('input-match-success');
+                    confirmInput.classList.add('input-match-error');
+                }
+                return false;
+            }
+        }
+
+        function handlePasswordInput() {
+            var signupPass = document.getElementById('signup-password');
+            var confirmGroup = document.getElementById('signup-confirm-group');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            var matchFeedback = document.getElementById('signup-password-match-feedback');
+            if (!signupPass || !confirmGroup) return;
+
+            var passVal = signupPass.value;
+
+            // Password complexity constraint feedback
+            var cLength = document.getElementById('constraint-length');
+            var cNumber = document.getElementById('constraint-number');
+            var cSpecial = document.getElementById('constraint-special');
+            if (cLength) cLength.className = passVal.length >= 8 ? 'valid' : (passVal.length > 0 ? 'invalid' : '');
+            if (cNumber) cNumber.className = /\d/.test(passVal) ? 'valid' : (passVal.length > 0 ? 'invalid' : '');
+            if (cSpecial) cSpecial.className = /[@$!%*?&]/.test(passVal) ? 'valid' : (passVal.length > 0 ? 'invalid' : '');
+
+            if (passVal.length > 0) {
+                // Reveal Confirm Password smoothly directly below Password
+                if (!confirmGroup.classList.contains('is-visible')) {
+                    confirmGroup.classList.add('is-visible');
+                    confirmGroup.setAttribute('aria-hidden', 'false');
+                }
+                if (confirmInput && confirmInput.value.length > 0) {
+                    validatePasswordMatchResilient(passVal, confirmInput.value);
+                }
+            } else {
+                // Hide Confirm Password and reset values and feedback
+                confirmGroup.classList.remove('is-visible');
+                confirmGroup.setAttribute('aria-hidden', 'true');
+                if (confirmInput) {
+                    confirmInput.value = '';
+                    confirmInput.classList.remove('input-match-success', 'input-match-error');
+                }
+                if (matchFeedback) {
+                    matchFeedback.textContent = '';
+                    matchFeedback.className = 'password-match-feedback hidden';
+                }
+            }
+        }
+
+        function handleConfirmPasswordInput() {
+            var signupPass = document.getElementById('signup-password');
+            var confirmInput = document.getElementById('signup-confirm-password');
+            if (!signupPass || !confirmInput) return;
+            validatePasswordMatchResilient(signupPass.value, confirmInput.value);
+        }
+
+        // Delegated input & keyup listeners for password and confirm password
+        function onPasswordChange(e) {
+            if (!e.target) return;
+            if (e.target.id === 'signup-password') {
+                handlePasswordInput();
+            } else if (e.target.id === 'signup-confirm-password') {
+                handleConfirmPasswordInput();
+            }
+        }
+        document.addEventListener('input', onPasswordChange);
+        document.addEventListener('change', onPasswordChange);
+        document.addEventListener('keyup', onPasswordChange);
+        document.addEventListener('paste', function (e) {
+            setTimeout(function () { onPasswordChange(e); }, 10);
+        });
+
+        // Global capture-phase click handler: intercepts all auth triggers across DOM immediately
+        document.addEventListener('click', function (e) {
+            var authModal = document.getElementById('auth-modal');
+
+            // Backdrop click dismissal
+            if (authModal && e.target === authModal) {
+                closeAuthModal();
+                return;
+            }
+
+            // Close button if present
+            var closeBtn = e.target.closest('#auth-close-btn');
+            if (closeBtn) {
+                e.preventDefault();
+                closeAuthModal();
+                return;
+            }
+
+            // Toggle Password Visibility
+            var toggleBtn = e.target.closest('.toggle-password-btn');
+            if (toggleBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                var targetId = toggleBtn.getAttribute('data-target');
+                var inputElem = document.getElementById(targetId);
+                if (inputElem) {
+                    var isPass = inputElem.getAttribute('type') === 'password';
+                    inputElem.setAttribute('type', isPass ? 'text' : 'password');
+                    toggleBtn.setAttribute('aria-label', isPass ? 'Hide password' : 'Show password');
+                    var eyeIcon = toggleBtn.querySelector('.icon-eye');
+                    var eyeOffIcon = toggleBtn.querySelector('.icon-eye-off');
+                    if (eyeIcon && eyeOffIcon) {
+                        eyeIcon.classList.toggle('hidden', isPass);
+                        eyeOffIcon.classList.toggle('hidden', !isPass);
+                    }
+                }
+                return;
+            }
+
+            // Clear Password Text
+            var clearBtn = e.target.closest('.clear-password-btn');
+            if (clearBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                var clearTargetId = clearBtn.getAttribute('data-target');
+                var clearInputElem = document.getElementById(clearTargetId);
+                if (clearInputElem) {
+                    clearInputElem.value = '';
+                    clearInputElem.focus();
+                    clearInputElem.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                return;
+            }
+
+            // Tabs inside auth modal
+            var tabBtn = e.target.closest('#tab-login, #tab-signup');
+            if (tabBtn) {
+                e.preventDefault();
+                openAuthModal(tabBtn.id === 'tab-signup' ? 'signup' : 'login');
+                return;
+            }
+
+            // Forgot password link inside auth modal
+            var forgotLink = e.target.closest('a[href="#/forgot-password"], #forgot-password-link');
+            if (forgotLink) {
+                e.preventDefault();
+                openAuthModal('forgot-password');
+                return;
+            }
+
+            // Back to login links
+            var backToLogin = e.target.closest('#back-to-login-link, #reset-back-to-login-link');
+            if (backToLogin) {
+                e.preventDefault();
+                openAuthModal('login');
+                return;
+            }
+
+            // All auth trigger buttons and links
+            var trigger = e.target.closest('[data-auth-modal], .nav-login-btn, .nav-signup-btn, a[href="#/login"], a[href="#/signup"]');
+            if (!trigger) return;
+
+            // Don't intercept form inputs/buttons inside the active modal forms
+            if (trigger.closest('#auth-modal .auth-card') && !trigger.hasAttribute('data-auth-modal')) {
+                return;
+            }
+
+            if (trigger.tagName === 'A' || trigger.tagName === 'BUTTON') {
+                e.preventDefault();
+            }
+
+            var mode = trigger.getAttribute('data-auth-modal');
+            if (!mode) {
+                var href = trigger.getAttribute('href') || '';
+                if (trigger.classList.contains('nav-signup-btn') || href === '#/signup') {
+                    mode = 'signup';
+                } else {
+                    mode = 'login';
+                }
+            }
+
+            openAuthModal(mode);
+        }, true);
+
+        // Escape key dismissal
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                var authModal = document.getElementById('auth-modal');
+                if (authModal && !authModal.classList.contains('hidden')) {
+                    closeAuthModal();
+                }
+            }
+        });
+
+        // Form submit gating for Sign Up
+        document.addEventListener('submit', function (e) {
+            if (e.target && e.target.id === 'signup-form') {
+                var signupPass = document.getElementById('signup-password');
+                var confirmInput = document.getElementById('signup-confirm-password');
+                var authErrorMsg = document.getElementById('auth-error');
+                var passVal = signupPass ? signupPass.value : '';
+                var confirmVal = confirmInput ? confirmInput.value : '';
+
+                if (!confirmVal) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    if (authErrorMsg) {
+                        authErrorMsg.textContent = 'Please confirm your password.';
+                        authErrorMsg.classList.remove('hidden');
+                    }
+                    if (confirmInput) confirmInput.focus();
+                    return false;
+                }
+                if (passVal !== confirmVal) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    if (authErrorMsg) {
+                        authErrorMsg.textContent = 'Passwords do not match.';
+                        authErrorMsg.classList.remove('hidden');
+                    }
+                    validatePasswordMatchResilient(passVal, confirmVal);
+                    if (confirmInput) confirmInput.focus();
+                    return false;
+                }
+            }
+        }, true);
+    })();
+    </script>
+
+    <script type="module" src="assets/js/app.js?v=35"></script>
+    <script type="module" src="assets/js/landing.js?v=35"></script>
 </body>
 
 </html>

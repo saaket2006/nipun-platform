@@ -1,0 +1,142 @@
+/* Nipun Editorial Intelligence — Canonical Design System Tokens
+ * Theme: Editorial Intelligence (Warm Paper, Ivory, Deep Forest Green, Restrained Clay)
+ * Typography: Newsreader (Display/Serif), DM Sans (Interface/Body), IBM Plex Mono (Tabular Metrics)
+ * Posture: Human-centered analytical instrument with editorial precision.
+ */
+
+:root {
+  /* Spatial Scale (4px Rhythm) */
+  --space-3xs: 2px;
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Typography Scale */
+  --text-xs: 0.75rem;          /* 12px */
+  --text-sm: 0.8125rem;        /* 13px */
+  --text-base: 0.875rem;       /* 14px */
+  --text-md: 0.9375rem;        /* 15px */
+  --text-lg: 1.125rem;         /* 18px */
+  --text-xl: 1.375rem;         /* 22px */
+  --text-2xl: 1.75rem;         /* 28px */
+  --text-3xl: 2.25rem;         /* 36px */
+  --text-display-s: clamp(2rem, 3.2vw + 0.5rem, 3rem);
+  --text-display: clamp(2.5rem, 4.2vw + 0.5rem, 4.25rem);
+  --text-section: clamp(1.75rem, 2vw + 0.75rem, 2.5rem);
+  --text-title: clamp(1.2rem, 0.5vw + 0.85rem, 1.5rem);
+  --text-lead: clamp(1.05rem, 0.3vw + 0.95rem, 1.25rem);
+
+  /* Animation & Motion System */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 180ms;
+  --dur-long: 300ms;
+
+  /* Layout Containers */
+  --container: 1240px;
+  --gutter: 32px;
+  --gap-columns: 24px;
+  --section-gap-s: 48px;
+  --section-gap: 72px;
+  --section-gap-l: 96px;
+
+  /* Z-Index Hierarchy */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-sticky-nav: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+
+  /* Canonical Editorial Palette */
+  --color-paper: #FBF9F5;               /* Warm journal foundation */
+  --color-paper-2: #FFFFFF;             /* Raised card / dialog surface */
+  --color-paper-3: #F3EFE6;             /* Ivory tertiary surface & wells */
+  --color-paper-alpha: rgba(251, 249, 245, 0.92);
+
+  --color-ink: #1A1917;                 /* Pitch ink primary typography */
+  --color-ink-2: #4A463F;               /* Editorial secondary text */
+  --color-muted: #7A746B;               /* Muted captions & labels */
+  --color-muted-dim: #A8A196;           /* Faint text & placeholders */
+
+  --color-rule: #E7E1D4;                /* Hairline border */
+  --color-rule-2: #D4CBBC;              /* Stronger border / hover rule */
+  --color-rule-accent: rgba(30, 58, 47, 0.25);
+
+  /* Primary Accent: Forest Green */
+  --color-forest: #1E3A2F;
+  --color-forest-hover: #294D3F;
+  --color-forest-light: #EBF2EE;
+  --color-forest-border: #BCD2C7;
+
+  /* Secondary Accent: Restrained Clay */
+  --color-clay: #9C4B33;
+  --color-clay-hover: #B5583E;
+  --color-clay-light: #F9EFEB;
+  --color-clay-border: #E8C8BE;
+
+  /* Semantic Aliases */
+  --color-accent: var(--color-forest);
+  --color-accent-hover: var(--color-forest-hover);
+  --color-accent-ink: #FFFFFF;
+  --color-accent-glow: rgba(30, 58, 47, 0.08);
+  --color-accent-dim: var(--color-forest-light);
+  --color-focus: #2D5545;
+
+  /* Status Colors */
+  --color-error: #A32822;
+  --color-error-dim: #FDF0EF;
+  --color-warning: #8C5B14;
+  --color-warning-dim: #FBF3E6;
+  --color-success: #1B5E3C;
+  --color-success-dim: #EAF4EE;
+
+  /* Approved Typographic Families */
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-outlier: var(--font-display);
+
+  /* Shape & Elevation */
+  --radius-card: 8px;
+  --radius-md: 6px;
+  --radius-sm: 4px;
+  --radius-pill: 999px;
+  --rule-hair: 1px;
+  --shadow-card: 0 1px 3px rgba(26, 25, 23, 0.04), 0 1px 2px rgba(26, 25, 23, 0.02);
+  --shadow-elevated: 0 8px 24px -4px rgba(26, 25, 23, 0.08), 0 2px 6px rgba(26, 25, 23, 0.04);
+  --shadow-glow: 0 0 0 1px var(--color-forest-border);
+  --tracking-display: -0.015em;
+
+  /* Backward Compatibility Mappings for Project Styles */
+  --bg-primary: var(--color-paper);
+  --card-bg: var(--color-paper-2);
+  --card-border: var(--color-rule);
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-ink-2);
+  --accent: var(--color-accent);
+  --accent-hover: var(--color-accent-hover);
+  --success: var(--color-success);
+  --danger: var(--color-error);
+
+  --color-bg-dark: var(--color-paper);
+  --color-bg-slate: var(--color-paper-3);
+  --color-bg-card: var(--color-paper-2);
+  --color-primary: var(--color-accent);
+  --color-primary-hover: var(--color-accent-hover);
+  --color-primary-glow: var(--color-accent-glow);
+  --color-border: var(--color-rule);
+  --color-border-hover: var(--color-rule-2);
+  --color-text-primary: var(--color-ink);
+  --color-text-secondary: var(--color-ink-2);
+}

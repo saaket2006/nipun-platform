@@ -450,16 +450,19 @@ class ExplanationBuildingStage(PipelineStage):
             serialized_comps = []
             for comp in components:
                 ev_list = []
-                for ev in comp.evidence:
-                    ev_list.append({
-                        "type": ev.type,
-                        "category": ev.category,
-                        "title": ev.title,
-                        "description": ev.description,
-                        "importance": ev.importance,
-                        "related_skill": ev.related_skill,
-                        "confidence": ev.confidence
-                    })
+                # Suppress per-skill individual evidence items for Technical Skills;
+                # the consolidated Technical Skills Overview provides Matched and Missing skills cleanly
+                if "skill" not in comp.name.lower():
+                    for ev in comp.evidence:
+                        ev_list.append({
+                            "type": ev.type,
+                            "category": ev.category,
+                            "title": ev.title,
+                            "description": ev.description,
+                            "importance": ev.importance,
+                            "related_skill": ev.related_skill,
+                            "confidence": ev.confidence
+                        })
                 serialized_comps.append({
                     "name": comp.name,
                     "raw_score": comp.raw_score,

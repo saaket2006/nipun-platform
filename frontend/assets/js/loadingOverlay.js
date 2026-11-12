@@ -29,11 +29,11 @@ export const loadingOverlay = {
 
         const overlay = document.createElement('div');
         overlay.id = 'ai-processing-overlay';
-        overlay.className = 'fixed inset-0 bg-[#070a13]/95 backdrop-blur-md flex items-center justify-center z-[9999] opacity-0 transition-opacity duration-300';
+        overlay.className = 'fixed inset-0 bg-dark/95 backdrop-blur-md flex items-center justify-center z-[9999] opacity-0 transition-opacity duration-300';
         
         const stagesHTML = STAGES.map((stage, idx) => `
             <div class="flex items-center gap-4 py-1" id="overlay-stage-row-${idx}">
-                <div id="overlay-stage-circle-${idx}" class="w-6 h-6 rounded-full flex items-center justify-center border border-slate-800 text-[10px] font-bold text-slate-500 bg-[#070a13] transition-all duration-300">
+                <div id="overlay-stage-circle-${idx}" class="w-6 h-6 rounded-full flex items-center justify-center border border-slate-800 text-[10px] font-bold text-slate-500 bg-dark transition-colors duration-300">
                     ${idx + 1}
                 </div>
                 <span id="overlay-stage-label-${idx}" class="text-sm font-medium text-slate-500 transition-colors duration-300">${stage}</span>
@@ -42,7 +42,7 @@ export const loadingOverlay = {
 
         overlay.innerHTML = `
             <div class="speed-lines-bg"></div>
-            <div class="relative w-full max-w-md p-8 mx-4 bg-[#0b0f19]/80 border border-emerald-500/10 rounded-2xl shadow-glow text-center">
+            <div class="relative w-full max-w-md p-8 mx-4 bg-slateDark/80 border border-emerald-500/10 rounded-2xl shadow-glow text-center">
                 <div class="mb-4 flex justify-center">
                     <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 animate-pulse">
                         <i data-lucide="cpu" style="width: 20px; height: 20px;"></i>
@@ -124,12 +124,12 @@ export const loadingOverlay = {
             } else if (i === index) {
                 // Active
                 circle.innerHTML = '\u2B24';
-                circle.className = 'w-6 h-6 rounded-full flex items-center justify-center border-emerald-500/40 text-[8px] font-bold text-emerald-400 bg-emerald-500/10 animate-pulse transition-all duration-300';
+                circle.className = 'w-6 h-6 rounded-full flex items-center justify-center border-emerald-500/40 text-[8px] font-bold text-emerald-400 bg-emerald-500/10 animate-pulse transition-colors duration-300';
                 label.className = 'text-sm font-bold text-white transition-colors duration-300';
             } else {
                 // Pending
                 circle.innerHTML = `${i + 1}`;
-                circle.className = 'w-6 h-6 rounded-full flex items-center justify-center border border-slate-800 text-[10px] font-bold text-slate-600 bg-[#070a13] transition-all duration-300';
+                circle.className = 'w-6 h-6 rounded-full flex items-center justify-center border border-slate-800 text-[10px] font-bold text-slate-600 bg-dark transition-colors duration-300';
                 label.className = 'text-sm font-medium text-slate-600 transition-colors duration-300';
             }
         }

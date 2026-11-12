@@ -25,8 +25,8 @@ graph TD
 1. **Frontend Client Application**
    - Single Page Application (SPA) built using semantic HTML5, Vanilla JavaScript modules, and Tailwind CSS.
    - Distinct role-based interfaces:
-     - **Recruiter Workspace**: Resume screening, scoring profile selection, job description library management, candidate quick-view analysis, profile editing, and screening history runs.
-     - **Candidate Workspace**: Single-resume optimization against job descriptions, ATS scoring, and targeted remediation recommendations.
+     - **Recruiter Workspace**: Multi-resume batch screening, scoring profile selection, job description library management, candidate quick-view analysis, profile editing, and screening task history with sanitized candidate metrics.
+     - **Candidate Workspace**: Resume versioning (`V1`, `V2`...), target-role chronological progression tracking with circular score nodes and consecutive delta badges, single-resume optimization against job descriptions, ATS scoring, Explainable AI evaluation snapshot modal, and targeted remediation recommendations.
    - Hosted on Firebase Hosting.
 
 2. **Backend API Service**

@@ -5,7 +5,7 @@ import {
     initWalkthrough,
     initCounters,
     initNavbarEffects
-} from './animations.js?v=12';
+} from './animations.js';
 
 // Prevent browser scroll restoration from skewing initial ScrollTrigger layout calculations
 if ('scrollRestoration' in history) {
@@ -171,7 +171,59 @@ function initLandingPage() {
                 });
             }
         });
+
+        // 6. Mobile Drawer Navigation Logic
+        initLandingMobileNav();
     }
+}
+
+function initLandingMobileNav() {
+    const menuBtn = document.getElementById('landing-mobile-menu-btn');
+    const drawer = document.getElementById('landing-mobile-drawer');
+    const closeBtn = document.getElementById('landing-mobile-close-btn');
+    const backdrop = document.getElementById('landing-mobile-backdrop');
+    const drawerLinks = document.querySelectorAll('.landing-drawer-link');
+
+    if (!menuBtn || !drawer) return;
+
+    function openDrawer() {
+        drawer.classList.remove('hidden');
+        menuBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeDrawer() {
+        drawer.classList.add('hidden');
+        menuBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !drawer.classList.contains('hidden');
+        if (isOpen) closeDrawer();
+        else openDrawer();
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    drawerLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            closeDrawer();
+        });
+    });
+
+    const drawerAuthBtns = drawer.querySelectorAll('[data-auth-modal], .nav-login-btn, .nav-signup-btn');
+    drawerAuthBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            closeDrawer();
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !drawer.classList.contains('hidden')) {
+            closeDrawer();
+        }
+    });
 }
 
 if (document.readyState === 'loading') {

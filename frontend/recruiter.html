@@ -4,22 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nipun recruiter workspace for AI-powered resume screening, custom weight configuration, and candidate ranking.">
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
-    <!-- Preload critical font weight so the browser loads it immediately without FOUT -->
-    <link rel="preload" href="assets/fonts/Outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <!-- Self-hosted Outfit font declarations with font-display: block -->
-    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/fonts.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/design-tokens.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/base.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/ats.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/auth.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/onboarding.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/components.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/recruiter.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/landing.css?v=2.1">
+    <!-- Preload critical self-hosted fonts for Editorial Intelligence without FOUT -->
+    <link rel="preload" href="assets/fonts/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/Newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Self-hosted font declarations (Newsreader, DM Sans, IBM Plex Mono) -->
+    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/ats.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/auth.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/onboarding.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/components.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/recruiter.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/landing.css?v=3.5">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -37,74 +41,121 @@
 
 <body>
 <!-- Recruiter Workspace Container -->
-    <div class="rec-layout hidden" id="recruiter-container">
-        <!-- Sidebar -->
-        <aside class="rec-sidebar collapsed" id="rec-sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo flex items-center gap-2" id="recruiter-sidebar-logo" title="Nipun Workspace">
-                    <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="sidebar-logo-img">
-                    <span class="logo-text">Nipun</span>
+    <div class="rec-layout" id="recruiter-container">
+        <!-- Shared Horizontal Workspace Header -->
+        <header class="workspace-header rec-topbar" id="workspace-header">
+            <div class="workspace-header-inner">
+                <!-- Brand & Breadcrumb Hierarchy -->
+                <div class="workspace-brand-group">
+                    <a href="#/recruiter/dashboard" class="workspace-logo" id="recruiter-sidebar-logo" title="Nipun Workspace">
+                        <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="workspace-logo-img">
+                        <span class="workspace-brand-name">Nipun</span>
+                    </a>
+                    <span class="workspace-divider" aria-hidden="true">/</span>
+                    <span class="workspace-role-badge">Recruiter</span>
+                    <span class="workspace-divider hidden" id="rec-page-divider" aria-hidden="true">/</span>
+                    <h2 id="rec-page-title" class="workspace-current-page hidden"></h2>
                 </div>
-                <button type="button" class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle sidebar" title="Toggle sidebar" aria-expanded="true">
-                    <svg class="sidebar-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="18" height="18" x="3" y="3" rx="2"/>
-                        <path d="M9 3v18"/>
-                        <path d="m16 15-3-3 3-3" class="toggle-icon-collapse"/>
-                        <path d="m14 9 3 3-3 3" class="toggle-icon-expand"/>
-                    </svg>
-                </button>
+
+                <!-- Desktop Role-Specific Horizontal Navigation -->
+                <nav class="workspace-nav" aria-label="Recruiter Navigation">
+                    <a href="#/recruiter/dashboard" class="workspace-nav-link active" id="link-rec-dashboard" title="Dashboard" aria-label="Dashboard">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#/recruiter/screen" class="workspace-nav-link" id="link-rec-screen" title="Resume Screening" aria-label="Resume Screening">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <span>Resume Screening</span>
+                    </a>
+                    <a href="#/recruiter/profile" class="workspace-nav-link" id="link-rec-profile" title="My Profile" aria-label="My Profile">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>My Profile</span>
+                    </a>
+                </nav>
+
+                <!-- Workspace Actions -->
+                <div class="workspace-actions">
+                    <button type="button" id="rec-sign-out-btn" class="workspace-sign-out-btn" title="Logout" aria-label="Logout">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                        <span>Logout</span>
+                    </button>
+                    <!-- Mobile Hamburger Toggle Button -->
+                    <button type="button" class="mobile-nav-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle navigation menu" title="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+                        <svg aria-hidden="true" class="mobile-nav-icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="6" x2="20" y2="6"/>
+                            <line x1="4" y1="12" x2="20" y2="12"/>
+                            <line x1="4" y1="18" x2="20" y2="18"/>
+                        </svg>
+                        <svg aria-hidden="true" class="mobile-nav-icon-close hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <nav class="sidebar-nav">
-                <a href="#/recruiter/dashboard" class="sidebar-link active" id="link-rec-dashboard" title="Dashboard" aria-label="Dashboard">
-                    <span class="nav-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#/recruiter/screen" class="sidebar-link" id="link-rec-screen" title="Resume Screening" aria-label="Resume Screening">
-                    <span class="nav-icon">🔎</span>
-                    <span>Resume Screening</span>
-                </a>
-                <a href="#/recruiter/profile" class="sidebar-link" id="link-rec-profile" title="My Profile" aria-label="My Profile">
-                    <span class="nav-icon">👤</span>
-                    <span>My Profile</span>
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <button id="rec-sign-out-btn" class="sign-out-btn" title="Logout" aria-label="Logout">
-                    <span class="nav-icon">⏻</span>
-                    <span>Logout</span>
-                </button>
+        </header>
+
+        <!-- Responsive Mobile Drawer -->
+        <div class="mobile-nav-drawer hidden" id="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Recruiter Navigation">
+            <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+            <div class="mobile-nav-sheet">
+                <div class="mobile-nav-sheet-header">
+                    <div class="flex items-center gap-2">
+                        <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="workspace-logo-img">
+                        <span class="workspace-brand-name">Nipun</span>
+                        <span class="workspace-role-badge">Recruiter</span>
+                    </div>
+                    <button type="button" class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close navigation menu">
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <nav class="mobile-nav-links">
+                    <a href="#/recruiter/dashboard" class="mobile-nav-link active" data-nav-target="link-rec-dashboard">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#/recruiter/screen" class="mobile-nav-link" data-nav-target="link-rec-screen">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <span>Resume Screening</span>
+                    </a>
+                    <a href="#/recruiter/profile" class="mobile-nav-link" data-nav-target="link-rec-profile">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>My Profile</span>
+                    </a>
+                </nav>
+                <div class="mobile-nav-sheet-footer">
+                    <div class="mobile-nav-user-info">
+                        <span class="user-status-dot" aria-hidden="true"></span>
+                        <span id="rec-top-user-name" class="mobile-nav-user-text font-mono">Recruiter Workspace</span>
+                    </div>
+                    <button type="button" id="rec-mobile-sign-out-btn" class="mobile-nav-sign-out-btn" aria-label="Logout">
+                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
             </div>
-        </aside>
+        </div>
 
         <!-- Main Content Wrapper -->
         <div class="rec-main-wrapper">
-            <!-- Topbar -->
-            <header class="rec-topbar">
-                <div class="topbar-title-section">
-                    <h2 id="rec-page-title">Dashboard</h2>
-                </div>
-                <div class="topbar-profile">
-                    <span id="rec-top-user-name" class="topbar-username">Recruiter</span>
-                </div>
-            </header>
 
             <!-- Dynamic Views -->
             <main class="rec-content">
                 <!-- VIEW 1: DASHBOARD -->
                 <section id="rec-view-dashboard" class="rec-view active">
                     <div class="welcome-banner">
-                        <h1 class="welcome-title">Welcome back, <span id="dash-rec-name">...</span>!</h1>
-                        <p class="welcome-subtitle">Here is the latest overview of your workspace at <strong id="dash-comp-name">...</strong> (<span id="dash-comp-type">...</span>).</p>
+                        <h1 class="welcome-title">Welcome back, <span id="dash-rec-name">…</span>!</h1>
+                        <p class="welcome-subtitle">Here is the latest overview of your workspace at <strong id="dash-comp-name">…</strong> (<span id="dash-comp-type">…</span>).</p>
                         <div class="welcome-meta-badges">
-                            <span class="meta-badge"><span class="badge-dot"></span> Hiring Focus: <strong id="dash-hiring-domain" style="margin-left: 4px; color: #fff;">...</strong></span>
+                            <span class="meta-badge"><span class="badge-dot"></span> Hiring Focus: <strong id="dash-hiring-domain" style="margin-left: 4px; color: var(--color-ink);">…</strong></span>
                         </div>
                     </div>
 
-                    <div class="rec-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="rec-grid">
                         <div class="stat-card">
                             <div class="stat-header">
                                 <span class="stat-title">Total Candidates Screened</span>
-                                <span class="stat-icon">👥</span>
+                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" style="color: var(--color-accent);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                             </div>
                             <div class="stat-value" id="stat-total-screened">0</div>
                             <p class="stat-description">Cumulative resumes parsed & ranked</p>
@@ -112,7 +163,7 @@
                         <div class="stat-card">
                             <div class="stat-header">
                                 <span class="stat-title">Average Resume Match Score</span>
-                                <span class="stat-icon">📈</span>
+                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" style="color: var(--color-accent);"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                             </div>
                             <div class="stat-value" id="stat-avg-score">0.0%</div>
                             <p class="stat-description">Average spatial semantic relevance match</p>
@@ -120,7 +171,7 @@
                         <div class="stat-card">
                             <div class="stat-header">
                                 <span class="stat-title">Avg Candidate Experience</span>
-                                <span class="stat-icon">⏳</span>
+                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" style="color: var(--color-accent);"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                             </div>
                             <div class="stat-value" id="stat-avg-experience">0.0 yrs</div>
                             <p class="stat-description">Average candidate professional tenure</p>
@@ -128,24 +179,24 @@
                         <div class="stat-card">
                             <div class="stat-header">
                                 <span class="stat-title">Top Education Level</span>
-                                <span class="stat-icon">🎓</span>
+                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
                             </div>
                             <div class="stat-value" id="stat-common-education">N/A</div>
                             <p class="stat-description">Most frequent academic qualification</p>
                         </div>
-                        <div class="stat-card span-two" style="grid-column: span 2; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px;">
+                        <div class="stat-card span-two">
                             <div class="stat-header">
-                                <span class="stat-title" style="font-weight: 600; color: #fff;">Workspace Intelligence Summary</span>
-                                <span class="stat-icon">💡</span>
+                                <span class="stat-title" style="font-weight: 600; color: var(--color-ink);">Workspace Intelligence Summary</span>
+                                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
                             </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                            <div class="stat-summary-grid">
                                 <div>
-                                    <h4 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: #a5b4fc; font-weight: 600;">Common Missing Skills</h4>
-                                    <ul id="stat-missing-skills-list" style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.4; color: #cbd5e1;"></ul>
+                                    <h2 style="margin: 0 0 0.6rem; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-clay); font-weight: 600;">Common Missing Skills</h2>
+                                    <ul id="stat-missing-skills-list" style="margin: 0; padding-left: 0; font-size: 0.85rem; line-height: 1.4; color: var(--color-ink-2); list-style: none;"></ul>
                                 </div>
                                 <div>
-                                    <h4 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: #a5b4fc; font-weight: 600;">Common Matched Skills</h4>
-                                    <ul id="stat-matched-skills-list" style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.4; color: #cbd5e1;"></ul>
+                                    <h2 style="margin: 0 0 0.6rem; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-forest); font-weight: 600;">Common Matched Skills</h2>
+                                    <ul id="stat-matched-skills-list" style="margin: 0; padding-left: 0; font-size: 0.85rem; line-height: 1.4; color: var(--color-ink-2); list-style: none;"></ul>
                                 </div>
                                 <ul id="stat-improvements-list" style="display: none;"></ul>
                             </div>
@@ -157,11 +208,11 @@
                 <section id="rec-view-screen" class="rec-view hidden">
                      <div class="screening-workspace">
                         <div class="screening-inputs glass-card">
-                            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="form-group rec-selects-row">
                                 <div>
                                     <label for="rec-profile-select">Scoring Profile</label>
                                     <select id="rec-profile-select" class="rec-dropdown-select">
-                                        <option value="">Loading profiles...</option>
+                                        <option value="">Loading profiles…</option>
                                     </select>
                                 </div>
                                 <div>
@@ -173,36 +224,36 @@
                             </div>
 
                             <!-- ADVANCED SCORING SETTINGS (OPTIONAL) -->
-                            <div id="advanced-scoring-container" class="advanced-scoring-box" style="margin-bottom: 1.5rem; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden; transition: all 0.3s ease;">
+                            <div id="advanced-scoring-container" class="advanced-scoring-box" style="margin-bottom: 1.5rem; background: var(--color-paper); border: 1px solid var(--color-rule); border-radius: 10px; overflow: hidden; transition: all 0.3s ease;">
                                 <!-- Collapsible Header / Trigger -->
-                                <button type="button" id="btn-toggle-advanced-scoring" class="advanced-scoring-toggle" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.25rem; background: transparent; border: none; color: #f8fafc; cursor: pointer; text-align: left; font-size: 0.92rem; font-weight: 600;" aria-expanded="false" aria-controls="advanced-scoring-body">
+                                <button type="button" id="btn-toggle-advanced-scoring" class="advanced-scoring-toggle" style="width: 100%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.85rem 1.25rem; background: transparent; border: none; color: var(--color-ink); cursor: pointer; text-align: left; font-size: 0.92rem; font-weight: 600;" aria-expanded="false" aria-controls="advanced-scoring-body">
                                     <span style="display: flex; align-items: center; gap: 0.6rem;">
-                                        <span style="font-size: 1.1rem;">⚙️</span>
-                                        <span>Advanced Scoring Settings <span style="font-size: 0.78rem; font-weight: 500; color: #94a3b8; background: rgba(255, 255, 255, 0.07); padding: 2px 8px; border-radius: 9999px; margin-left: 0.35rem;">Optional</span></span>
+                                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent);"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                        <span>Scoring Configuration <span style="font-size: 0.75rem; font-weight: 500; color: var(--color-muted); background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 2px 8px; border-radius: 9999px; margin-left: 0.35rem; font-family: var(--font-mono);">Optional</span></span>
                                     </span>
                                     <span style="display: flex; align-items: center; gap: 0.75rem;">
-                                        <span id="custom-scoring-status-badge" style="font-size: 0.78rem; font-weight: 500; color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 2px 8px; border-radius: 4px;">Default Scoring Active</span>
-                                        <span id="advanced-scoring-icon" style="color: #94a3b8; transition: transform 0.2s ease;">▼</span>
+                                        <span id="custom-scoring-status-badge" style="font-size: 0.75rem; font-weight: 600; font-family: var(--font-mono); color: var(--color-forest); background: var(--color-forest-light); border: 1px solid var(--color-forest-border); padding: 2px 8px; border-radius: 4px;">Default Scoring Active</span>
+                                        <span id="advanced-scoring-icon" style="color: var(--color-muted); transition: transform 0.2s ease;">▼</span>
                                     </span>
                                 </button>
 
                                 <!-- Collapsible Body (collapsed by default) -->
-                                <div id="advanced-scoring-body" style="display: none; padding: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(11, 15, 25, 0.4);">
+                                <div id="advanced-scoring-body" style="display: none; padding: 1.25rem; border-top: 1px solid var(--color-rule); background: var(--color-paper);">
                                     <!-- Mode Switch: Use Profile Defaults vs Customize for This Run -->
-                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-rule);">
                                         <div style="display: flex; align-items: center; gap: 1.5rem;">
-                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem; color: #e2e8f0;">
-                                                <input type="radio" name="scoring-mode" id="scoring-mode-default" value="default" checked style="accent-color: #10b981; cursor: pointer;">
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem; color: var(--color-ink-2);">
+                                                <input type="radio" name="scoring-mode" id="scoring-mode-default" value="default" checked style="accent-color: var(--color-forest); cursor: pointer;">
                                                 <span>Use Profile Defaults</span>
                                             </label>
-                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem; color: #e2e8f0;">
-                                                <input type="radio" name="scoring-mode" id="scoring-mode-custom" value="custom" style="accent-color: #10b981; cursor: pointer;">
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem; color: var(--color-ink-2);">
+                                                <input type="radio" name="scoring-mode" id="scoring-mode-custom" value="custom" style="accent-color: var(--color-forest); cursor: pointer;">
                                                 <span>Customize for This Run</span>
                                             </label>
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                                            <button type="button" id="btn-reset-scoring-defaults" class="glow-btn secondary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;" title="Restore weights and thresholds from the selected scoring profile">🔄 Reset to Profile Defaults</button>
-                                            <button type="button" id="btn-autobalance-weights" class="glow-btn secondary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 6px; cursor: pointer; color: #a5b4fc;" title="Proportionally rebalance active weights to sum to exactly 100%">⚖️ Auto-Balance (100%)</button>
+                                            <button type="button" id="btn-reset-scoring-defaults" class="glow-btn secondary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 6px; cursor: pointer; color: var(--color-ink-2); font-weight: 500;" title="Restore weights and thresholds from the selected scoring profile">Reset Defaults</button>
+                                            <button type="button" id="btn-autobalance-weights" class="glow-btn secondary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; background: var(--color-forest-light); border: 1px solid var(--color-forest-border); border-radius: 6px; cursor: pointer; color: var(--color-forest); font-weight: 600;" title="Proportionally rebalance active weights to sum to exactly 100%">Auto-Balance (100%)</button>
                                         </div>
                                     </div>
 
@@ -211,64 +262,64 @@
                                         <!-- Criteria Weights -->
                                         <div style="margin-bottom: 1.25rem;">
                                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-                                                <span style="font-size: 0.85rem; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em;">Scoring Criteria Weights</span>
+                                                <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-ink-2); text-transform: uppercase; letter-spacing: 0.04em;">Scoring Criteria Weights</span>
                                                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                                    <span style="font-size: 0.82rem; color: #94a3b8;">Total Weight:</span>
-                                                    <span id="scoring-total-weight" style="font-size: 0.85rem; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px;">100%</span>
+                                                    <span style="font-size: 0.8125rem; color: var(--color-muted);">Total Weight:</span>
+                                                    <span id="scoring-total-weight" style="font-size: 0.8125rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-forest); background: var(--color-forest-light); border: 1px solid var(--color-forest-border); padding: 2px 8px; border-radius: 4px;">100%</span>
                                                 </div>
                                             </div>
 
                                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
                                                 <!-- Skills -->
-                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                <div class="scoring-item" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px; padding: 0.85rem;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
-                                                            <input type="checkbox" id="crit-skills-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--color-ink); cursor: pointer;">
+                                                            <input type="checkbox" id="crit-skills-enable" checked style="accent-color: var(--color-forest); cursor: pointer;">
                                                             <span>Technical Skills</span>
                                                         </label>
-                                                        <span id="crit-skills-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">50%</span>
+                                                        <span id="crit-skills-pct" style="font-size: 0.85rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-forest);">50%</span>
                                                     </div>
-                                                    <input type="range" id="crit-skills-weight" min="0" max="100" value="50" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
-                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">JD skill matches & semantic ontology overlap.</div>
+                                                    <input type="range" id="crit-skills-weight" min="0" max="100" value="50" step="1" style="width: 100%; accent-color: var(--color-forest); cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem;">JD skill matches & semantic ontology overlap.</div>
                                                 </div>
 
                                                 <!-- Experience -->
-                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                <div class="scoring-item" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px; padding: 0.85rem;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
-                                                            <input type="checkbox" id="crit-exp-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--color-ink); cursor: pointer;">
+                                                            <input type="checkbox" id="crit-exp-enable" checked style="accent-color: var(--color-forest); cursor: pointer;">
                                                             <span>Work Experience</span>
                                                         </label>
-                                                        <span id="crit-exp-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">25%</span>
+                                                        <span id="crit-exp-pct" style="font-size: 0.85rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-forest);">25%</span>
                                                     </div>
-                                                    <input type="range" id="crit-exp-weight" min="0" max="100" value="25" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
-                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Tenure years and relevant internships.</div>
+                                                    <input type="range" id="crit-exp-weight" min="0" max="100" value="25" step="1" style="width: 100%; accent-color: var(--color-forest); cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem;">Tenure years and relevant internships.</div>
                                                 </div>
 
                                                 <!-- Education -->
-                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                <div class="scoring-item" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px; padding: 0.85rem;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
-                                                            <input type="checkbox" id="crit-edu-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--color-ink); cursor: pointer;">
+                                                            <input type="checkbox" id="crit-edu-enable" checked style="accent-color: var(--color-forest); cursor: pointer;">
                                                             <span>Education Tier</span>
                                                         </label>
-                                                        <span id="crit-edu-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">15%</span>
+                                                        <span id="crit-edu-pct" style="font-size: 0.85rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-forest);">15%</span>
                                                     </div>
-                                                    <input type="range" id="crit-edu-weight" min="0" max="100" value="15" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
-                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Highest degree (PhD, Master, Bachelor).</div>
+                                                    <input type="range" id="crit-edu-weight" min="0" max="100" value="15" step="1" style="width: 100%; accent-color: var(--color-forest); cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem;">Highest degree (PhD, Master, Bachelor).</div>
                                                 </div>
 
                                                 <!-- Projects -->
-                                                <div class="scoring-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 0.85rem;">
+                                                <div class="scoring-item" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px; padding: 0.85rem;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #f8fafc; cursor: pointer;">
-                                                            <input type="checkbox" id="crit-proj-enable" checked style="accent-color: #10b981; cursor: pointer;">
+                                                        <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--color-ink); cursor: pointer;">
+                                                            <input type="checkbox" id="crit-proj-enable" checked style="accent-color: var(--color-forest); cursor: pointer;">
                                                             <span>Projects Count</span>
                                                         </label>
-                                                        <span id="crit-proj-pct" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">10%</span>
+                                                        <span id="crit-proj-pct" style="font-size: 0.85rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-forest);">10%</span>
                                                     </div>
-                                                    <input type="range" id="crit-proj-weight" min="0" max="100" value="10" step="1" style="width: 100%; accent-color: #10b981; cursor: pointer;">
-                                                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Scope of technical & academic projects.</div>
+                                                    <input type="range" id="crit-proj-weight" min="0" max="100" value="10" step="1" style="width: 100%; accent-color: var(--color-forest); cursor: pointer;">
+                                                    <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem;">Scope of technical & academic projects.</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -278,24 +329,24 @@
 
                                         <!-- Threshold Targets -->
                                         <div>
-                                            <span style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Experience & Project Targets</span>
+                                            <span style="display: block; font-size: 0.8125rem; font-weight: 600; color: var(--color-ink-2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem;">Experience & Project Targets</span>
                                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                                                 <div>
-                                                    <label for="thresh-exp-years" style="font-size: 0.85rem; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">Target Experience for 100% (Years)</label>
-                                                    <input type="number" id="thresh-exp-years" min="1" max="30" value="10" step="1" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: 8px; background: #0c101d; border: 1px solid rgba(255,255,255,0.12); color: #f8fafc; font-size: 0.9rem;">
-                                                    <span style="font-size: 0.75rem; color: #94a3b8;">Years of tenure to achieve maximum experience score. Default is 10.</span>
+                                                    <label for="thresh-exp-years" style="font-size: 0.85rem; color: var(--color-ink-2); display: block; margin-bottom: 0.35rem;">Target Experience for 100% (Years)</label>
+                                                    <input type="number" id="thresh-exp-years" min="1" max="30" value="10" step="1" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: 8px; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink); font-size: 0.9rem; font-family: var(--font-mono);">
+                                                    <span style="font-size: 0.75rem; color: var(--color-muted);">Years of tenure to achieve maximum experience score. Default is 10.</span>
                                                 </div>
                                                 <div>
-                                                    <label for="thresh-proj-count" style="font-size: 0.85rem; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">Target Project Count for 100%</label>
-                                                    <input type="number" id="thresh-proj-count" min="1" max="10" value="3" step="1" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: 8px; background: #0c101d; border: 1px solid rgba(255,255,255,0.12); color: #f8fafc; font-size: 0.9rem;">
-                                                    <span style="font-size: 0.75rem; color: #94a3b8;">Number of projects for maximum project score. Default is 3.</span>
+                                                    <label for="thresh-proj-count" style="font-size: 0.85rem; color: var(--color-ink-2); display: block; margin-bottom: 0.35rem;">Target Project Count for 100%</label>
+                                                    <input type="number" id="thresh-proj-count" min="1" max="10" value="3" step="1" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: 8px; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink); font-size: 0.9rem; font-family: var(--font-mono);">
+                                                    <span style="font-size: 0.75rem; color: var(--color-muted);">Number of projects for maximum project score. Default is 3.</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Engine Support Note (Transparency on Certifications) -->
-                                        <div style="margin-top: 1rem; padding: 0.6rem 0.85rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: 6px; font-size: 0.76rem; color: #93c5fd;">
-                                            ℹ️ <strong>Engine Transparency:</strong> The scoring engine directly evaluates Technical Skills, Experience, Education, and Projects. Certifications are not evaluated as a separate quantitative scoring variable by the parser.
+                                        <div style="margin-top: 1rem; padding: 0.65rem 0.85rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); border-radius: 6px; font-size: 0.78125rem; color: var(--color-ink-2); line-height: 1.45;">
+                                            <strong style="color: var(--color-ink);">Engine Transparency:</strong> The scoring engine directly evaluates Technical Skills, Experience, Education, and Projects. Certifications are not evaluated as a separate quantitative scoring variable by the parser.
                                         </div>
                                     </div>
                                 </div>
@@ -303,32 +354,43 @@
 
                             <div class="form-group">
                                 <label for="rec-job-description">Job Description</label>
-                                <textarea id="rec-job-description" placeholder="Paste target Job Description here..."></textarea>
+                                <textarea id="rec-job-description" placeholder="Paste target Job Description here…"></textarea>
                             </div>
 
                             <div class="form-group jd-library-actions" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: flex-end; flex-wrap: wrap;">
-                                <button type="button" id="btn-reset-screening" class="glow-btn secondary" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;" title="Clear current inputs and start a fresh screening run">🔄 Start Fresh Run</button>
-                                <button type="button" id="btn-save-jd" class="glow-btn" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: 6px; cursor: pointer; color: #a5b4fc;">💾 Save to Library</button>
-                                <button type="button" id="btn-update-jd" class="glow-btn hidden" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 6px; cursor: pointer; color: #6ee7b7;">🔄 Update Saved JD</button>
-                                <button type="button" id="btn-archive-jd" class="glow-btn hidden" style="font-size: 0.8rem; padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; cursor: pointer; color: #fca5a5;">🗑️ Archive Selected</button>
+                                <button type="button" id="btn-reset-screening" class="glow-btn secondary" style="font-size: 0.8125rem; padding: 0.5rem 1rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 6px; cursor: pointer; color: var(--color-ink-2); font-weight: 500;" title="Clear current inputs and start a fresh screening run">Start Fresh Run</button>
+                                <button type="button" id="btn-save-jd" class="glow-btn" style="font-size: 0.8125rem; padding: 0.5rem 1rem; background: var(--color-forest-light); border: 1px solid var(--color-forest-border); border-radius: 6px; cursor: pointer; color: var(--color-forest); font-weight: 600;">Save to Library</button>
+                                <button type="button" id="btn-update-jd" class="glow-btn hidden" style="font-size: 0.8125rem; padding: 0.5rem 1rem; background: var(--color-forest); border: 1px solid var(--color-forest); border-radius: 6px; cursor: pointer; color: #FFFFFF; font-weight: 600;">Update Saved JD</button>
+                                <button type="button" id="btn-archive-jd" class="glow-btn hidden" style="font-size: 0.8125rem; padding: 0.5rem 1rem; background: var(--color-clay-light); border: 1px solid var(--color-clay-border); border-radius: 6px; cursor: pointer; color: var(--color-clay); font-weight: 600;">Archive Selected</button>
                             </div>
 
                             <div class="form-group file-upload-wrapper">
-                                <label>Upload Resumes (PDF/DOCX)</label>
-                                <div class="file-upload-box" id="rec-drop-zone">
-                                    <span class="upload-icon">📂</span>
-                                    <p>Drag and drop resumes here, or click to browse</p>
+                                <label for="rec-resumes">Upload Resumes (PDF/DOCX)</label>
+                                <div class="file-upload-box" id="rec-drop-zone" tabindex="0" role="button" aria-label="Upload Resumes: drag and drop resumes here, or browse files">
+                                    <div class="drop-zone-content">
+                                        <div class="drop-zone-icon-wrap" aria-hidden="true">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+                                                <path d="M12 12v9"/>
+                                                <path d="m16 16-4-4-4 4"/>
+                                            </svg>
+                                        </div>
+                                        <p class="drop-zone-primary">
+                                            Drag and drop resumes here, or <span class="drop-zone-browse">browse files</span>
+                                        </p>
+                                        <p class="drop-zone-secondary">Supported formats: PDF, DOCX (Max 10MB per file)</p>
+                                    </div>
                                     <input type="file" id="rec-resumes" accept=".pdf,.docx" multiple hidden>
 
                                     <div id="rec-resumes-header" class="resumes-dropdown-header hidden">
                                         <span id="rec-resumes-count">Resumes (0)</span>
-                                        <span class="dropdown-chevron">▼</span>
+                                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
                                     </div>
                                     <ul id="rec-file-list" class="file-list"></ul>
                                 </div>
                             </div>
 
-                            <button id="rec-process-btn" class="glow-btn">
+                            <button id="rec-process-btn" class="glow-btn" style="background: var(--color-forest); border: 1px solid var(--color-forest); color: #FFFFFF; font-weight: 600; padding: 0.85rem 1.75rem; border-radius: 8px; font-size: 0.9375rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;">
                                 <span>Run Match Screening</span>
                                 <div class="loader hidden"></div>
                             </button>
@@ -337,17 +399,18 @@
                         <!-- Screening Results -->
                         <div class="results-section hidden" id="rec-results-container" style="margin-top: 2rem;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
-                                <h3 style="margin: 0;">Ranked Candidates</h3>
-                                <button type="button" id="btn-new-screening" class="glow-btn secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); color: #c7d2fe; border-radius: 6px;">
-                                    <span>✨ Start New Screening</span>
+                                <h3 style="margin: 0; font-family: var(--font-display); font-size: 1.5rem; color: var(--color-ink);">Ranked Candidates</h3>
+                                <button type="button" id="btn-new-screening" class="glow-btn secondary" style="font-size: 0.8125rem; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink-2); border-radius: 6px; font-weight: 500;">
+                                    <span>Start New Screening</span>
                                 </button>
                             </div>
-                            <div id="scoring-applied-banner" class="hidden" style="margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); color: #cbd5e1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                            <div id="scoring-applied-banner" class="hidden" style="margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.8125rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink-2); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
                                 <!-- Populated dynamically by renderRecruiterResults -->
                             </div>
                             <div class="rec-results-list" id="rec-results-list">
                                 <!-- Candidate Cards go here -->
                             </div>
+                    </div>
                     </div>
                 </section>
 
@@ -375,7 +438,9 @@
                         <div id="rec-profile-display" class="rec-profile-layout">
                             <!-- Left Section: Avatar, Display Name, Email -->
                             <div class="rec-profile-identity">
-                                <div class="profile-avatar rec-profile-avatar">👤</div>
+                                <div class="profile-avatar rec-profile-avatar">
+                                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
                                 <div class="profile-meta rec-profile-meta">
                                     <h3 id="profile-rec-name">Recruiter Name</h3>
                                     <p id="profile-rec-email">recruiter@company.com</p>
@@ -394,7 +459,7 @@
                                     </div>
                                     <div class="info-field">
                                         <span class="info-label">Company Name</span>
-                                        <span class="info-value" id="profile-comp-name">Acme Corp</span>
+                                        <span class="info-value" id="profile-comp-name">Apex Tech</span>
                                     </div>
                                     <div class="info-field">
                                         <span class="info-label">Company Type</span>
@@ -410,8 +475,8 @@
 
                         <!-- Profile Edit Form -->
                         <form id="rec-profile-edit-form" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.75rem;">
-                                <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Edit Profile</h3>
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-rule); padding-bottom: 0.75rem;">
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin: 0;">Edit Profile</h3>
                             </div>
                             <div class="profile-info-grid">
                                 <div class="info-field">
@@ -420,7 +485,7 @@
                                 </div>
                                 <div class="info-field">
                                     <label for="rec-edit-comp-name" class="info-label">Company Name</label>
-                                    <input type="text" id="rec-edit-comp-name" class="auth-input" placeholder="e.g. Acme Corp" required maxlength="255">
+                                    <input type="text" id="rec-edit-comp-name" class="auth-input" placeholder="e.g. Apex Tech" required maxlength="255">
                                 </div>
                                 <div class="info-field">
                                     <label for="rec-edit-comp-type" class="info-label">Company Type</label>
@@ -452,7 +517,7 @@
                     <div class="glass-card screening-history-card" style="margin-top: 1.5rem;">
                         <div class="screening-history-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                             <div>
-                                <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Screening History</h3>
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin: 0;">Screening History</h3>
                                 <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.25rem 0 0 0;">Past screening runs and candidate evaluations</p>
                             </div>
                             <button 
@@ -472,27 +537,27 @@
                         </div>
 
                         <!-- Loading State -->
-                        <div id="rec-history-loading" class="hidden" style="text-align: center; padding: 3rem 1rem;">
-                            <div class="spinner" style="margin: 0 auto 0.75rem auto;"></div>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Loading screening history...</p>
+                        <div id="rec-history-loading" class="editorial-loading-state hidden">
+                            <div class="spinner"></div>
+                            <p>Loading screening history…</p>
                         </div>
 
                         <!-- Error State -->
-                        <div id="rec-history-error" class="hidden" style="text-align: center; padding: 2rem 1.5rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px;">
-                            <p id="rec-history-error-msg" style="color: #fca5a5; font-size: 0.9rem; margin-bottom: 0.75rem;">Failed to load screening history.</p>
-                            <button id="rec-history-retry-btn" class="glow-btn secondary" style="padding: 0.4rem 1.2rem; font-size: 0.85rem;">Retry</button>
+                        <div id="rec-history-error" class="editorial-error-state hidden">
+                            <p id="rec-history-error-msg">Failed to load screening history.</p>
+                            <button id="rec-history-retry-btn" class="editorial-retry-btn glow-btn secondary" type="button">Retry</button>
                         </div>
 
                         <!-- Empty State -->
-                        <div id="rec-history-empty" class="hidden" style="text-align: center; padding: 3.5rem 1rem;">
-                            <span style="font-size: 2.5rem; display: block; margin-bottom: 0.75rem; opacity: 0.6;">📋</span>
-                            <h4 style="color: #fff; font-size: 1.05rem; font-weight: 600; margin: 0 0 0.35rem 0;">No Screening History Yet</h4>
-                            <p style="color: var(--text-secondary); font-size: 0.85rem; max-width: 420px; margin: 0 auto 1.25rem auto;">Screen candidate resumes against a job description in Resume Screening to view saved screening tasks here.</p>
-                            <a href="#/recruiter/screen" class="glow-btn" style="display: inline-block; padding: 0.5rem 1.25rem; font-size: 0.85rem; text-decoration: none;">Go to Resume Screening</a>
+                        <div id="rec-history-empty" class="editorial-empty-state hidden">
+                            <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="empty-state-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <h4>No Screening History Yet</h4>
+                            <p>Screen candidate resumes against a job description in Resume Screening to view saved screening tasks here.</p>
+                            <a href="#/recruiter/screen" class="glow-btn" style="display: inline-flex; width: auto; padding: 0.5rem 1.25rem; font-size: 0.85rem; text-decoration: none;">Go to Resume Screening</a>
                         </div>
 
                         <!-- History List Container -->
-                        <div id="rec-history-list" class="screening-history-list" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                        <div id="rec-history-list" class="screening-history-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
                             <!-- Injected dynamically -->
                         </div>
                     </div>
@@ -500,47 +565,50 @@
 
                 <!-- VIEW 4: SCREENING TASK DETAILS -->
                 <section id="rec-view-history-detail" class="rec-view hidden">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-                        <button id="btn-back-to-profile" class="glow-btn secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.2rem; font-size: 0.9rem;">
-                            <span>←</span> Back to Profile
+                    <div class="task-detail-nav-bar">
+                        <button id="btn-back-to-profile" class="task-back-btn glow-btn secondary" type="button" aria-label="Back to Profile">
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                            <span>Back to Profile</span>
                         </button>
                     </div>
 
                     <!-- Task Detail Loading State -->
-                    <div id="rec-task-detail-loading" class="glass-card hidden" style="text-align: center; padding: 3.5rem 1rem;">
-                        <div class="spinner" style="margin: 0 auto 0.75rem auto;"></div>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Loading screening task details...</p>
+                    <div id="rec-task-detail-loading" class="glass-card editorial-loading-state hidden">
+                        <div class="spinner"></div>
+                        <p>Loading screening task details…</p>
                     </div>
 
                     <!-- Task Detail Error State -->
-                    <div id="rec-task-detail-error" class="glass-card hidden" style="text-align: center; padding: 2.5rem 1.5rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);">
-                        <p id="rec-task-detail-error-msg" style="color: #fca5a5; font-size: 0.95rem; margin-bottom: 1rem;">Failed to load task details.</p>
-                        <button id="rec-task-detail-retry-btn" class="glow-btn secondary" style="padding: 0.45rem 1.25rem; font-size: 0.85rem;">Retry</button>
+                    <div id="rec-task-detail-error" class="glass-card editorial-error-state hidden">
+                        <p id="rec-task-detail-error-msg">Failed to load task details.</p>
+                        <button id="rec-task-detail-retry-btn" class="editorial-retry-btn glow-btn secondary" type="button">Retry</button>
                     </div>
 
                     <!-- Task Detail Content Wrapper -->
-                    <div id="rec-task-detail-content" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div id="rec-task-detail-content" class="hidden" style="display: flex; flex-direction: column; gap: 1.25rem;">
                         <!-- Task Overview Card -->
-                        <div class="glass-card">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
-                                <div>
-                                    <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-accent); display: block; margin-bottom: 0.35rem;">Screening Task</span>
-                                    <h2 id="task-detail-role" style="font-size: 1.5rem; font-weight: 700; color: #fff; margin: 0;">Job Role</h2>
+                        <div class="glass-card task-overview-card">
+                            <div class="task-overview-header">
+                                <div class="task-title-group">
+                                    <span class="task-badge-label">Screening Task</span>
+                                    <h2 id="task-detail-role">Job Role</h2>
                                 </div>
-                                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.4rem 0.85rem; font-size: 0.85rem; color: #cbd5e1; display: flex; align-items: center; gap: 0.4rem;">
-                                        <span>📅</span> <span id="task-detail-date">-</span>
+                                <div class="task-meta-pills">
+                                    <div class="task-meta-pill date-pill">
+                                        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                        <span id="task-detail-date">-</span>
                                     </div>
-                                    <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 8px; padding: 0.4rem 0.85rem; font-size: 0.85rem; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem;">
-                                        <span>📄</span> <span id="task-detail-resumes">- Resumes Scanned</span>
+                                    <div class="task-meta-pill count-pill">
+                                        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                        <span id="task-detail-resumes">- Resumes Scanned</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Complete Job Description Section -->
                             <div style="margin-top: 1rem;">
-                                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">Complete Job Description</label>
-                                <div id="task-detail-jd" class="custom-scrollbar" style="max-height: 220px; overflow-y: auto; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 1rem; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; color: #cbd5e1;"></div>
+                                <label class="task-section-label">Complete Job Description</label>
+                                <div id="task-detail-jd" class="custom-scrollbar task-jd-box"></div>
                             </div>
                         </div>
 
@@ -548,10 +616,10 @@
                         <div class="glass-card">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                                 <div>
-                                    <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Final Ranked Candidates</h3>
+                                    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin: 0; font-family: var(--font-display);">Final Ranked Candidates</h3>
                                     <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.25rem 0 0 0;">Candidates ranked by matching score for this screening task</p>
                                 </div>
-                                <span id="task-detail-candidate-count" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">0 candidates</span>
+                                <span id="task-detail-candidate-count" class="task-cand-count-badge">0 candidates</span>
                             </div>
 
                             <div id="task-detail-candidates-list" class="results-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -569,79 +637,97 @@
 
 
 <!-- Candidate Quick View Modal -->
-    <div id="rec-quick-view-modal" class="auth-modal-overlay hidden">
+    <div id="rec-quick-view-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quick-view-title">
         <div class="glass-card quick-view-card">
             <div class="quick-view-header">
-                <h2>Candidate Details</h2>
-                <button id="close-quick-view-btn" class="close-modal-btn">✕</button>
+                <h2 id="quick-view-title">Candidate Details</h2>
+                <button id="close-quick-view-btn" class="close-modal-btn" aria-label="Close candidate details">✕</button>
             </div>
 
             <div class="quick-view-body">
                 <div class="qv-profile-summary">
-                    <div class="qv-avatar">📄</div>
+                    <div class="qv-avatar">
+                        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
                     <div class="qv-meta">
                         <h3 id="qv-cand-name">Marcus Johnson</h3>
                         <p id="qv-cand-score-badge" class="score-badge">85.5% Match</p>
-                        <div id="qv-context-card" style="margin-top: 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4; text-align: left;">
+                        <div id="qv-context-card" style="margin-top: 0.5rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4; text-align: left;">
                             <span style="color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 0.25rem;">Scored Relative To:</span>
-                            <div style="color: #cbd5e1;">🎯 Profile: <strong id="qv-ctx-profile" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">📋 Job Description: <strong id="qv-ctx-jd" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">⚙️ Engine: <strong id="qv-ctx-engine" style="color: #fff;">Nipun Engine v1.0</strong></div>
+                            <div style="color: var(--color-ink-2);">Profile: <strong id="qv-ctx-profile" style="color: var(--color-ink);">-</strong></div>
+                            <div style="color: var(--color-ink-2);">Job Description: <strong id="qv-ctx-jd" style="color: var(--color-ink);">-</strong></div>
+                            <div style="color: var(--color-ink-2);">Engine: <strong id="qv-ctx-engine" style="color: var(--color-ink);">Nipun Engine v1.0</strong></div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Contact Info -->
                 <div class="qv-section">
                     <h4>Contact Info</h4>
                     <div class="qv-info-grid">
-                        <div>📧 <span id="qv-cand-email">...</span></div>
-                        <div>📞 <span id="qv-cand-phone">...</span></div>
-                        <div>🔗 <span id="qv-cand-linkedin">...</span></div>
-                        <div>💻 <span id="qv-cand-github">...</span></div>
+                        <div>Email: <span id="qv-cand-email">…</span></div>
+                        <div>Phone: <span id="qv-cand-phone">…</span></div>
+                        <div>LinkedIn: <span id="qv-cand-linkedin">…</span></div>
+                        <div>GitHub: <span id="qv-cand-github">…</span></div>
                     </div>
                 </div>
 
+                <!-- 1. Overall Score & ATS Overview -->
+                <div class="qv-section" id="qv-score-overview-section">
+                    <h4>Overall Match &amp; Scoring Dimensions</h4>
+                    <div id="qv-score-overview-container"></div>
+                </div>
+
+                <!-- 2. Consolidated Technical Skills Overview -->
+                <div class="qv-section" id="qv-skills-overview-section">
+                    <h4>Technical Skills Overview</h4>
+                    <div id="qv-skills-overview-container" class="skills-overview-container">
+                        <div class="skills-overview-grid">
+                            <div class="skills-overview-card matched">
+                                <div class="skills-overview-header">
+                                    <span class="skills-overview-title">Matched Skills</span>
+                                    <span id="qv-matched-skills-count" class="skills-badge-count matched">0</span>
+                                </div>
+                                <div id="qv-cand-matched-skills" class="skills-tags-container">…</div>
+                            </div>
+                            <div class="skills-overview-card missing">
+                                <div class="skills-overview-header">
+                                    <span class="skills-overview-title">Missing Skills</span>
+                                    <span id="qv-missing-skills-count" class="skills-badge-count missing">0</span>
+                                </div>
+                                <div id="qv-cand-missing-skills" class="skills-tags-container">…</div>
+                            </div>
+                        </div>
+                        <div id="qv-cand-extracted-skills" class="skills-tags-container hidden" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- 3. Explainable AI (XAI) Scoring Rationale -->
                 <div class="qv-section" id="qv-xai-section">
-                    <h4>Explainable AI (XAI) Breakdown</h4>
+                    <h4>Explainable AI (XAI) Scoring Rationale</h4>
                     <div id="qv-xai-container"></div>
                 </div>
 
                 <div class="qv-section hidden" id="qv-recommendations-section" style="display: none;">
                     <div id="qv-recommendations-container"></div>
                 </div>
-
-                <div class="qv-section">
-                    <h4>Skills Overview</h4>
-                    <div class="skills-block">
-                        <h5>Extracted Skills</h5>
-                        <div id="qv-cand-extracted-skills" class="skills-tags-container">...</div>
-                    </div>
-                    <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>✅ Matched Skills</h5>
-                        <div id="qv-cand-matched-skills" class="skills-tags-container">...</div>
-                    </div>
-                    <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>❌ Missing Skills</h5>
-                        <div id="qv-cand-missing-skills" class="skills-tags-container">...</div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
 <!-- Contact Modal -->
-    <div id="contact-modal" class="auth-modal-overlay hidden">
+    <div id="contact-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
         <div class="glass-card contact-card">
             <div class="modal-header">
-                <h2>Contact</h2>
-                <button id="close-contact-btn" class="close-modal-btn">✕</button>
+                <h2 id="contact-modal-title">Contact</h2>
+                <button id="close-contact-btn" class="close-modal-btn" aria-label="Close contact dialog">✕</button>
             </div>
             <p class="modal-subtitle">Got a question or found a bug? Reach out to us directly!</p>
 
             <div class="contact-email-container" style="text-align: center; margin: 2rem 0;">
                 <p style="font-size: 1.1rem; color: var(--text-secondary);">Email:</p>
                 <a href="mailto:nipun.platform@gmail.com"
-                    style="font-size: 1.3rem; color: #6366f1; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
+                    style="font-size: 1.3rem; color: var(--color-accent); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
                     target="_blank">nipun.platform@gmail.com</a>
             </div>
         </div>
@@ -651,35 +737,35 @@
     <div id="save-jd-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="save-jd-modal-title">
         <div class="glass-card" style="width: 90%; max-width: 480px; margin: 0; padding: 1.75rem; text-align: left; position: relative;">
             <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                <h3 id="save-jd-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
-                    <span>💾</span> Save Job Description
+                <h3 id="save-jd-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 600; color: var(--color-ink); display: flex; align-items: center; gap: 0.5rem;">
+                    Save Job Description
                 </h3>
                 <button type="button" id="close-save-jd-btn" class="close-modal-btn" aria-label="Close save dialog">✕</button>
             </div>
-            <p class="modal-subtitle" style="font-size: 0.85rem; color: #94a3b8; margin: 0 0 1.25rem 0; line-height: 1.4;">
+            <p class="modal-subtitle" style="font-size: 0.85rem; color: var(--color-muted); margin: 0 0 1.25rem 0; line-height: 1.4;">
                 Provide a recognizable name to easily identify, select, and reuse this job description from your library.
             </p>
 
             <form id="save-jd-form" onsubmit="return false;">
                 <div class="form-group" style="margin-bottom: 1rem;">
-                    <label for="save-jd-name-input" style="display: block; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; margin-bottom: 0.4rem;">
-                        Job Description Name <span style="color: #f87171;">*</span>
+                    <label for="save-jd-name-input" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--color-ink-2); margin-bottom: 0.4rem;">
+                        Job Description Name <span style="color: var(--color-error);">*</span>
                     </label>
-                    <input type="text" id="save-jd-name-input" class="auth-input" placeholder="e.g. Backend Software Engineer, Junior GenAI Developer" maxlength="100" autocomplete="off" style="width: 100%; padding: 0.65rem 0.85rem; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; font-size: 0.9rem;">
-                    <div id="save-jd-name-warning" class="hidden" style="font-size: 0.8rem; color: #fbbf24; margin-top: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
-                        <span>⚠️</span> <span>A saved JD with this name already exists. A separate entry with its own ID will be created.</span>
+                    <input type="text" id="save-jd-name-input" class="auth-input" placeholder="e.g. Backend Software Engineer, Junior GenAI Developer" maxlength="100" autocomplete="off" style="width: 100%; padding: 0.65rem 0.85rem; background: var(--color-paper); border: 1px solid var(--color-rule); border-radius: 6px; color: var(--color-ink); font-size: 0.9rem;">
+                    <div id="save-jd-name-warning" class="hidden" style="font-size: 0.8rem; color: var(--color-warning); margin-top: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+                        <span>A saved JD with this name already exists. A separate entry with its own ID will be created.</span>
                     </div>
-                    <div id="save-jd-name-error" class="hidden" style="font-size: 0.8rem; color: #f87171; margin-top: 0.4rem;"></div>
+                    <div id="save-jd-name-error" class="hidden" style="font-size: 0.8rem; color: var(--color-error); margin-top: 0.4rem;"></div>
                 </div>
 
-                <div style="margin-bottom: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 0.75rem;">
-                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; display: block; margin-bottom: 0.35rem;">JD Preview Snippet</span>
-                    <p id="save-jd-preview" style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.4; max-height: 4.2rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;"></p>
+                <div style="margin-bottom: 1.25rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); border-radius: 6px; padding: 0.75rem;">
+                    <span style="font-size: 0.75rem; color: var(--color-muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em; display: block; margin-bottom: 0.35rem;">JD Preview Snippet</span>
+                    <p id="save-jd-preview" style="font-size: 0.8125rem; color: var(--color-ink-2); margin: 0; line-height: 1.4; max-height: 4.2rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; line-clamp: 3; -webkit-line-clamp: 3; -webkit-box-orient: vertical;"></p>
                 </div>
 
                 <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-                    <button type="button" id="btn-cancel-save-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;">Cancel</button>
-                    <button type="button" id="btn-confirm-save-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.25rem; background: #6366f1; border: 1px solid #6366f1; border-radius: 6px; cursor: pointer; color: #fff; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <button type="button" id="btn-cancel-save-jd" class="glow-btn" style="font-size: 0.8125rem; padding: 0.55rem 1.1rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 6px; cursor: pointer; color: var(--color-ink-2); font-weight: 500;">Cancel</button>
+                    <button type="button" id="btn-confirm-save-jd" class="glow-btn" style="font-size: 0.8125rem; padding: 0.55rem 1.25rem; background: var(--color-forest); border: 1px solid var(--color-forest); border-radius: 6px; cursor: pointer; color: #FFFFFF; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
                         <span>Save JD</span>
                         <div class="loader hidden" style="width: 14px; height: 14px; border-width: 2px;"></div>
                     </button>
@@ -690,29 +776,29 @@
 
     <!-- Update JD Modal -->
     <div id="update-jd-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="update-jd-modal-title">
-        <div class="glass-card" style="width: 90%; max-width: 480px; margin: 0; padding: 1.75rem; text-align: left; position: relative;">
+        <div class="glass-card" style="width: 90%; max-width: 480px; margin: 0; padding: 1.75rem; text-align: left; position: relative; background: var(--color-paper-2); border: 1px solid var(--color-rule); box-shadow: 0 16px 48px rgba(26, 25, 23, 0.15);">
             <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                <h3 id="update-jd-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
-                    <span>🔄</span> Update Saved Job Description
+                <h3 id="update-jd-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 600; color: var(--color-ink); display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-display);">
+                    Update Saved Job Description
                 </h3>
                 <button type="button" id="close-update-jd-btn" class="close-modal-btn" aria-label="Close update dialog">✕</button>
             </div>
-            <p class="modal-subtitle" style="font-size: 0.85rem; color: #94a3b8; margin: 0 0 1.25rem 0; line-height: 1.4;">
+            <p class="modal-subtitle" style="font-size: 0.85rem; color: var(--color-muted); margin: 0 0 1.25rem 0; line-height: 1.4;">
                 This will overwrite the stored text for this library item with your current edits. Completed screening history records will remain unchanged.
             </p>
 
             <form id="update-jd-form" onsubmit="return false;">
                 <div class="form-group" style="margin-bottom: 1.25rem;">
-                    <label for="update-jd-name-input" style="display: block; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; margin-bottom: 0.4rem;">
-                        Job Description Name <span style="color: #f87171;">*</span>
+                    <label for="update-jd-name-input" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--color-ink-2); margin-bottom: 0.4rem;">
+                        Job Description Name <span style="color: var(--color-error);">*</span>
                     </label>
-                    <input type="text" id="update-jd-name-input" class="auth-input" placeholder="e.g. Backend Software Engineer" maxlength="100" autocomplete="off" style="width: 100%; padding: 0.65rem 0.85rem; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; font-size: 0.9rem;">
-                    <div id="update-jd-error" class="hidden" style="font-size: 0.8rem; color: #f87171; margin-top: 0.4rem;"></div>
+                    <input type="text" id="update-jd-name-input" class="auth-input" placeholder="e.g. Backend Software Engineer" maxlength="100" autocomplete="off" style="width: 100%; padding: 0.65rem 0.85rem; background: var(--color-paper); border: 1px solid var(--color-rule); border-radius: 6px; color: var(--color-ink); font-size: 0.9rem;">
+                    <div id="update-jd-error" class="hidden" style="font-size: 0.8rem; color: var(--color-error); margin-top: 0.4rem;"></div>
                 </div>
 
                 <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-                    <button type="button" id="btn-cancel-update-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;">Cancel</button>
-                    <button type="button" id="btn-confirm-update-jd" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.25rem; background: #10b981; border: 1px solid #10b981; border-radius: 6px; cursor: pointer; color: #fff; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <button type="button" id="btn-cancel-update-jd" class="glow-btn" style="font-size: 0.8125rem; padding: 0.55rem 1.1rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 6px; cursor: pointer; color: var(--color-ink-2); font-weight: 500;">Cancel</button>
+                    <button type="button" id="btn-confirm-update-jd" class="glow-btn" style="font-size: 0.8125rem; padding: 0.55rem 1.25rem; background: var(--color-forest); border: 1px solid var(--color-forest); border-radius: 6px; cursor: pointer; color: #FFFFFF; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
                         <span>Update JD</span>
                         <div class="loader hidden" style="width: 14px; height: 14px; border-width: 2px;"></div>
                     </button>
@@ -723,26 +809,26 @@
 
     <!-- Unsaved Changes Modal -->
     <div id="unsaved-changes-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="unsaved-changes-title">
-        <div class="glass-card" style="width: 90%; max-width: 440px; margin: 0; padding: 1.75rem; text-align: left; position: relative;">
+        <div class="glass-card" style="width: 90%; max-width: 440px; margin: 0; padding: 1.75rem; text-align: left; position: relative; background: var(--color-paper-2); border: 1px solid var(--color-rule); box-shadow: 0 16px 48px rgba(26, 25, 23, 0.15);">
             <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                <h3 id="unsaved-changes-title" style="margin: 0; font-size: 1.2rem; font-weight: 600; color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
-                    <span>⚠️</span> Unsaved Changes
+                <h3 id="unsaved-changes-title" style="margin: 0; font-size: 1.2rem; font-weight: 600; color: var(--color-clay); display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-display);">
+                    Unsaved Changes
                 </h3>
                 <button type="button" id="close-unsaved-changes-btn" class="close-modal-btn" aria-label="Cancel navigation">✕</button>
             </div>
-            <p style="font-size: 0.875rem; color: #cbd5e1; margin: 0 0 1.25rem 0; line-height: 1.5;">
+            <p style="font-size: 0.875rem; color: var(--color-ink-2); margin: 0 0 1.25rem 0; line-height: 1.5;">
                 You have modified the job description text. Switching will discard your unsaved edits. What would you like to do?
             </p>
             <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-                <button type="button" id="btn-keep-editing" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer; color: #cbd5e1;">Keep Editing</button>
-                <button type="button" id="btn-discard-changes" class="glow-btn" style="font-size: 0.85rem; padding: 0.55rem 1.1rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 6px; cursor: pointer; color: #fca5a5;">Discard Changes</button>
+                <button type="button" id="btn-keep-editing" class="glow-btn" style="font-size: 0.8125rem; padding: 0.55rem 1.1rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 6px; cursor: pointer; color: var(--color-ink-2); font-weight: 500;">Keep Editing</button>
+                <button type="button" id="btn-discard-changes" class="glow-btn" style="font-size: 0.8125rem; padding: 0.55rem 1.1rem; background: var(--color-clay); border: 1px solid var(--color-clay); border-radius: 6px; cursor: pointer; color: #FFFFFF; font-weight: 600;">Discard Changes</button>
             </div>
         </div>
     </div>
 
 
-    <script type="module" src="assets/js/app.js?v=2.1"></script>
-    <script type="module" src="assets/js/landing.js?v=2.1"></script>
+    <script type="module" src="assets/js/app.js?v=3.5"></script>
+    <script type="module" src="assets/js/landing.js?v=3.5"></script>
 </body>
 
 </html>

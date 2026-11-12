@@ -96,7 +96,11 @@ async function _executeRequest(endpoint, options = {}, isRetry = false) {
             throw new Error("Request timed out");
         }
         // Handle actual network/connection failure
-        showOfflineBanner("Cannot connect to server. The backend may be starting up (cold start) or your connection is offline.");
+        if (typeof navigator !== "undefined" && !navigator.onLine) {
+            showOfflineBanner("You appear to be offline. Please check your internet connection.");
+        } else {
+            showOfflineBanner("Unable to connect to the backend server. Please verify the service is running and origin access is permitted.");
+        }
         throw error;
     }
 

@@ -1,8 +1,6 @@
 # Nipun - AI Hiring Intelligence Platform
 
 ---
-⚠️ Update in progress 
----
 An end-to-end, high-performance AI Hiring Intelligence Platform designed to analyze, score, rank, and explain candidate resumes against target job descriptions. Built on top of FastAPI and a multi-agent semantic orchestration pipeline, Nipun transforms traditional keyword-parsing into a robust, context-aware visual screening experience.
 
 ---
@@ -13,11 +11,12 @@ An end-to-end, high-performance AI Hiring Intelligence Platform designed to anal
 
 ## ✨ Core Features & Platform Layers
 
-### 🎨 Modern SaaS Visual Experience
-* **Global Dark Emerald Theme**: Designed with custom slate background grids, glowing gradients, rounded layouts, glassmorphism card panels, and emerald (`#10b981`) accents governed by CSS custom variables.
-* **GSAP-Driven Animation Engine**: Features smooth letter-by-letter fade-and-blur headline reveals, scroll-driven storytelling timelines, and stacking sticky card decks outlining core features.
-* **HTML Dashboard Mockup**: An interactive hero visual mockup built from HTML elements featuring mouse coordinate tilts, progress metrics, and floating badge panels.
-* **Simulated Run Playground**: A simulated environment letting visitors test the PDF extraction, token classification, and semantic matching engines.
+### 🎨 Editorial Intelligence Architecture & Modern Visual Experience
+* **Warm Editorial Intelligence Design System**: Built with an elegant, restrained editorial aesthetic using custom design tokens (`--color-forest`, `--color-paper`, `--color-ink`, `--color-rule`, `--color-clay`), responsive card grids, and high-contrast accessible states.
+* **Self-Hosted Offline Typography**: Localized web fonts including Newsreader serif display, DM Sans interface text, and IBM Plex Mono for scores, metrics, and tags—eliminating external font CDN latencies.
+* **GSAP-Driven Animation Engine**: Features smooth letter-by-letter headline reveals, scroll-driven storytelling timelines, and interactive feature presentations on the landing page.
+* **Interactive HTML Dashboard Mockup**: A responsive hero visual preview mockup built with mouse-coordinate tilts, live metrics, and floating badge panels.
+* **Simulated Run Playground**: An interactive sandbox allowing visitors to test PDF extraction, token classification, and semantic matching live.
 * **AI Processing Pipeline Overlay**: Displays the live status of the active pipeline stage:
   `Resume Parsing` → `Skill Extraction` → `Semantic Matching` → `Profile Resolution` → `Scoring` → `Explainability (XAI)` → `Recommendations` → `Persistence`
   with states: Completed (✓), Active (⬤), and Pending (○).

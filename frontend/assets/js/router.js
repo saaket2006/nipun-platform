@@ -17,6 +17,7 @@ import {
     showResetPasswordView,
     resetAuthModalToTabs
 } from './pages/login.js';
+import { openAuthModal, closeAuthModal } from './components/modal.js?v=35';
 
 /**
  * Handles recruiter workspace routing sub-views.
@@ -37,10 +38,14 @@ export function handleRecruiterRouting(hash, params = null) {
     recViewProfile.classList.add('hidden');
     if (recViewHistoryDetail) recViewHistoryDetail.classList.add('hidden');
     
+    const recPageDivider = document.getElementById('rec-page-divider');
+    
     if (hash === ROUTES.HISTORY || hash.startsWith('#/recruiter/history')) {
         updateSidebarActiveLink(ROUTES.PROFILE);
         if (recViewHistoryDetail) recViewHistoryDetail.classList.remove('hidden');
         recPageTitle.textContent = "Screening Task Details";
+        recPageTitle.classList.remove('hidden');
+        if (recPageDivider) recPageDivider.classList.remove('hidden');
         let taskId = params ? params.get('id') : null;
         if (!taskId) {
             const taskIdMatch = window.location.hash.match(/(?:\?id=|\/)(\d+)/);
@@ -49,18 +54,18 @@ export function handleRecruiterRouting(hash, params = null) {
         initializeRecruiterHistoryDetail(taskId);
     } else {
         updateSidebarActiveLink(hash);
+        recPageTitle.textContent = "";
+        recPageTitle.classList.add('hidden');
+        if (recPageDivider) recPageDivider.classList.add('hidden');
         
         if (hash === ROUTES.DASHBOARD) {
             recViewDashboard.classList.remove('hidden');
-            recPageTitle.textContent = "Dashboard";
             initializeRecruiterDashboard();
         } else if (hash === ROUTES.SCREEN) {
             recViewScreen.classList.remove('hidden');
-            recPageTitle.textContent = "Resume Screening";
             initializeRecruiterScreen();
         } else if (hash === ROUTES.PROFILE) {
             recViewProfile.classList.remove('hidden');
-            recPageTitle.textContent = "My Profile";
             initializeRecruiterProfile();
         }
     }
@@ -74,6 +79,7 @@ export function handleCandidateRouting(hash, params = null) {
     const candViewScreen = document.getElementById('cand-view-screen');
     const candViewProfile = document.getElementById('cand-view-profile');
     const candPageTitle = document.getElementById('cand-page-title');
+    const candPageDivider = document.getElementById('cand-page-divider');
 
     if (!candViewDashboard || !candViewScreen || !candViewProfile || !candPageTitle) {
         return;
@@ -89,32 +95,48 @@ export function handleCandidateRouting(hash, params = null) {
 
     if (hash === ROUTES.CANDIDATE_DASHBOARD) {
         candViewDashboard.classList.remove('hidden');
-        candPageTitle.textContent = "Dashboard";
         
         const reportId = params ? (params.get('report') || params.get('id')) : null;
         if (reportId) {
+            candPageTitle.textContent = "Analysis Snapshot";
+            candPageTitle.classList.remove('hidden');
+            if (candPageDivider) candPageDivider.classList.remove('hidden');
             if (window.viewCandidateAnalysis) {
                 if (!candAnalysisModal || candAnalysisModal.classList.contains('hidden') || candAnalysisModal.dataset.currentReportId !== String(reportId)) {
                     window.viewCandidateAnalysis(reportId);
                 }
             }
         } else {
+            candPageTitle.textContent = "";
+            candPageTitle.classList.add('hidden');
+            if (candPageDivider) candPageDivider.classList.add('hidden');
             if (candAnalysisModal && !candAnalysisModal.classList.contains('hidden')) {
                 candAnalysisModal.classList.add('hidden');
             }
         }
-        initializeCandidateDashboard();
+        // Only re-initialize if dashboard content is not already rendered.
+        // This prevents a full reload when closeCandidateAnalysisModal uses
+        // history.replaceState; a genuine navigation still triggers a full init
+        // because the hash event fires, but guard against double init on the
+        // same route when the dashboard is already populated.
+        const statsContainer = document.getElementById('cand-stats-container');
+        const alreadyRendered = statsContainer && statsContainer.querySelector('.rec-grid, .cand-stats-grid, [class*="stats"]');
+        if (!alreadyRendered) {
+            initializeCandidateDashboard();
+        }
     } else {
+        candPageTitle.textContent = "";
+        candPageTitle.classList.add('hidden');
+        if (candPageDivider) candPageDivider.classList.add('hidden');
+
         if (candAnalysisModal && !candAnalysisModal.classList.contains('hidden')) {
             candAnalysisModal.classList.add('hidden');
         }
         if (hash === ROUTES.CANDIDATE_SCREEN) {
             candViewScreen.classList.remove('hidden');
-            candPageTitle.textContent = "Resume Analysis";
             initializeCandidateScreen();
         } else if (hash === ROUTES.CANDIDATE_PROFILE) {
             candViewProfile.classList.remove('hidden');
-            candPageTitle.textContent = "My Profile";
             initializeCandidateProfile();
         }
     }
@@ -171,49 +193,24 @@ export function handleRouting(force = false) {
     const oobCode = params.get('oobCode') || params.get('code') || params.get('token') || '';
 
     if (mode === 'resetPassword' || route === ROUTES.RESET_PASSWORD || oobCode) {
-        const authModal = document.getElementById('auth-modal');
-        if (authModal) {
-            authModal.classList.remove('hidden');
-            showResetPasswordView(oobCode);
-        }
+        openAuthModal('reset-password', oobCode);
+        showResetPasswordView(oobCode);
         return;
     }
 
     // 2. Forgot Password: #/forgot-password
     if (route === ROUTES.FORGOT_PASSWORD) {
-        const authModal = document.getElementById('auth-modal');
-        if (authModal) {
-            authModal.classList.remove('hidden');
-            showForgotPasswordView();
-        }
+        openAuthModal('forgot-password');
+        showForgotPasswordView();
         return;
     }
 
     // 3. Unauthenticated User Routes (Login / Sign Up)
     if (!user) {
-        if (route === ROUTES.LOGIN || route === ROUTES.SIGNUP || route === '') {
-            const authModal = document.getElementById('auth-modal');
-            if (authModal) {
-                if (route === ROUTES.LOGIN || route === ROUTES.SIGNUP) {
-                    authModal.classList.remove('hidden');
-                }
-                resetAuthModalToTabs();
-                const isLogin = route === ROUTES.LOGIN;
-                const tabLogin = document.getElementById('tab-login');
-                const tabSignup = document.getElementById('tab-signup');
-                const loginPlane = document.getElementById('login-plane');
-                const signupPlane = document.getElementById('signup-plane');
-                if (tabLogin) tabLogin.classList.toggle('active', isLogin);
-                if (tabSignup) tabSignup.classList.toggle('active', !isLogin);
-                if (loginPlane) {
-                    loginPlane.classList.toggle('hidden', !isLogin);
-                    loginPlane.classList.toggle('active-plane', isLogin);
-                }
-                if (signupPlane) {
-                    signupPlane.classList.toggle('hidden', isLogin);
-                    signupPlane.classList.toggle('active-plane', !isLogin);
-                }
-            }
+        if (route === ROUTES.LOGIN) {
+            openAuthModal('login');
+        } else if (route === ROUTES.SIGNUP) {
+            openAuthModal('signup');
         }
         return;
     }

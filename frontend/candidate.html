@@ -4,22 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nipun candidate portal for reviewing AI resume screening, skill matches, and explainable score analytics.">
     <title>Nipun - AI Resume Screener & Ranking System</title>
     <!-- App Icon / Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/nipun_logo.svg">
-    <!-- Preload critical font weight so the browser loads it immediately without FOUT -->
-    <link rel="preload" href="assets/fonts/Outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <!-- Self-hosted Outfit font declarations with font-display: block -->
-    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/fonts.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/design-tokens.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/base.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/ats.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/auth.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/onboarding.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/components.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/recruiter.css?v=2.1">
-    <link rel="stylesheet" href="assets/css/landing.css?v=2.1">
+    <!-- Preload critical self-hosted fonts for Editorial Intelligence without FOUT -->
+    <link rel="preload" href="assets/fonts/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/Newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Self-hosted font declarations (Newsreader, DM Sans, IBM Plex Mono) -->
+    <link rel="stylesheet" href="assets/css/tailwind.min.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/hallmark-base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/design-tokens.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/base.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/ats.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/auth.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/onboarding.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/components.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/recruiter.css?v=3.5">
+    <link rel="stylesheet" href="assets/css/landing.css?v=3.5">
 
     <!-- Lucide Icons -->
     <script src="assets/js/vendor/lucide.min.js"></script>
@@ -37,68 +41,118 @@
 
 <body>
 <!-- Candidate Workspace Container -->
-    <div class="rec-layout hidden" id="candidate-container">
-        <!-- Sidebar -->
-        <aside class="rec-sidebar collapsed" id="cand-sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo flex items-center gap-2" id="candidate-sidebar-logo" title="Nipun Workspace">
-                    <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="sidebar-logo-img">
-                    <span class="logo-text">Nipun</span>
+    <div class="rec-layout" id="candidate-container">
+        <!-- Shared Horizontal Workspace Header -->
+        <header class="workspace-header rec-topbar" id="workspace-header">
+            <div class="workspace-header-inner">
+                <!-- Brand & Breadcrumb Hierarchy -->
+                <div class="workspace-brand-group">
+                    <a href="#/candidate/dashboard" class="workspace-logo" id="candidate-sidebar-logo" title="Nipun Workspace">
+                        <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="workspace-logo-img">
+                        <span class="workspace-brand-name">Nipun</span>
+                    </a>
+                    <span class="workspace-divider" aria-hidden="true">/</span>
+                    <span class="workspace-role-badge">Candidate</span>
+                    <span class="workspace-divider hidden" id="cand-page-divider" aria-hidden="true">/</span>
+                    <h2 id="cand-page-title" class="workspace-current-page hidden"></h2>
                 </div>
-                <button type="button" class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle sidebar" title="Toggle sidebar" aria-expanded="true">
-                    <svg class="sidebar-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="18" height="18" x="3" y="3" rx="2"/>
-                        <path d="M9 3v18"/>
-                        <path d="m16 15-3-3 3-3" class="toggle-icon-collapse"/>
-                        <path d="m14 9 3 3-3 3" class="toggle-icon-expand"/>
-                    </svg>
-                </button>
+
+                <!-- Desktop Role-Specific Horizontal Navigation -->
+                <nav class="workspace-nav" aria-label="Candidate Navigation">
+                    <a href="#/candidate/dashboard" class="workspace-nav-link active" id="link-cand-dashboard" title="Dashboard" aria-label="Dashboard">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#/candidate/screen" class="workspace-nav-link" id="link-cand-screen" title="Resume Analysis" aria-label="Resume Analysis">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <span>Resume Analysis</span>
+                    </a>
+                    <a href="#/candidate/profile" class="workspace-nav-link" id="link-cand-profile" title="My Profile" aria-label="My Profile">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>My Profile</span>
+                    </a>
+                </nav>
+
+                <!-- Workspace Actions -->
+                <div class="workspace-actions">
+                    <button type="button" id="cand-sign-out-btn" class="workspace-sign-out-btn" title="Logout" aria-label="Logout">
+                        <svg aria-hidden="true" class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                        <span>Logout</span>
+                    </button>
+                    <!-- Mobile Hamburger Toggle Button -->
+                    <button type="button" class="mobile-nav-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle navigation menu" title="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+                        <svg aria-hidden="true" class="mobile-nav-icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="6" x2="20" y2="6"/>
+                            <line x1="4" y1="12" x2="20" y2="12"/>
+                            <line x1="4" y1="18" x2="20" y2="18"/>
+                        </svg>
+                        <svg aria-hidden="true" class="mobile-nav-icon-close hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <nav class="sidebar-nav">
-                <a href="#/candidate/dashboard" class="sidebar-link active" id="link-cand-dashboard" title="Dashboard" aria-label="Dashboard">
-                    <span class="nav-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#/candidate/screen" class="sidebar-link" id="link-cand-screen" title="Resume Analysis" aria-label="Resume Analysis">
-                    <span class="nav-icon">🔎</span>
-                    <span>Resume Analysis</span>
-                </a>
-                <a href="#/candidate/profile" class="sidebar-link" id="link-cand-profile" title="My Profile" aria-label="My Profile">
-                    <span class="nav-icon">👤</span>
-                    <span>My Profile</span>
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <button id="cand-sign-out-btn" class="sign-out-btn" title="Logout" aria-label="Logout">
-                    <span class="nav-icon">⏻</span>
-                    <span>Logout</span>
-                </button>
+        </header>
+
+        <!-- Responsive Mobile Drawer -->
+        <div class="mobile-nav-drawer hidden" id="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Candidate Navigation">
+            <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+            <div class="mobile-nav-sheet">
+                <div class="mobile-nav-sheet-header">
+                    <div class="flex items-center gap-2">
+                        <img src="assets/nipun_logo.svg" alt="Nipun Logo" class="workspace-logo-img">
+                        <span class="workspace-brand-name">Nipun</span>
+                        <span class="workspace-role-badge">Candidate</span>
+                    </div>
+                    <button type="button" class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close navigation menu">
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <nav class="mobile-nav-links">
+                    <a href="#/candidate/dashboard" class="mobile-nav-link active" data-nav-target="link-cand-dashboard">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#/candidate/screen" class="mobile-nav-link" data-nav-target="link-cand-screen">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <span>Resume Analysis</span>
+                    </a>
+                    <a href="#/candidate/profile" class="mobile-nav-link" data-nav-target="link-cand-profile">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>My Profile</span>
+                    </a>
+                </nav>
+                <div class="mobile-nav-sheet-footer">
+                    <div class="mobile-nav-user-info">
+                        <span class="user-status-dot" aria-hidden="true"></span>
+                        <span id="cand-top-user-name" class="mobile-nav-user-text font-mono">Candidate Workspace</span>
+                    </div>
+                    <button type="button" id="cand-mobile-sign-out-btn" class="mobile-nav-sign-out-btn" aria-label="Logout">
+                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
             </div>
-        </aside>
+        </div>
 
         <!-- Main Content Wrapper -->
         <div class="rec-main-wrapper">
-            <!-- Topbar -->
-            <header class="rec-topbar">
-                <div class="topbar-title-section">
-                    <h2 id="cand-page-title">Dashboard</h2>
-                </div>
-                <div class="topbar-profile">
-                    <span id="cand-top-user-name" class="topbar-username">Candidate</span>
-                </div>
-            </header>
 
             <!-- Dynamic Views -->
             <main class="rec-content">
                 <!-- VIEW 1: CANDIDATE DASHBOARD -->
                 <section id="cand-view-dashboard" class="rec-view active">
                     <div class="welcome-banner">
-                        <h1 class="welcome-title">Welcome back, <span id="dash-cand-name">...</span>!</h1>
+                        <h1 class="welcome-title">Welcome back, <span id="dash-cand-name">…</span>!</h1>
                         <p class="welcome-subtitle">
-                            Status: <strong id="dash-cand-status" style="color: #fff;">...</strong> |
-                            Field of Study: <strong id="dash-cand-field" style="color: #fff;">...</strong> |
-                            Domain: <strong id="dash-cand-domain" style="color: #fff;">...</strong>
+                            Track your resume match intelligence, view progression across version iterations, and align your qualifications with target roles.
                         </p>
+                        <div class="welcome-meta-badges">
+                            <span class="meta-badge"><span class="badge-dot"></span> Status: <strong id="dash-cand-status" style="margin-left: 4px; color: var(--color-ink);">…</strong></span>
+                            <span class="meta-badge"><span class="badge-dot" style="background: var(--color-forest);"></span> Field of Study: <strong id="dash-cand-field" style="margin-left: 4px; color: var(--color-ink);">…</strong></span>
+                            <span class="meta-badge"><span class="badge-dot" style="background: var(--color-clay);"></span> Focus Domain: <strong id="dash-cand-domain" style="margin-left: 4px; color: var(--color-ink);">…</strong></span>
+                        </div>
                     </div>
 
                     <div id="cand-stats-container">
@@ -106,7 +160,15 @@
                     </div>
 
                     <div class="analysis-history-section" style="margin-top: 2.5rem;">
-                        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #fff;">Analysis History</h2>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                            <div>
+                                <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--color-ink); margin: 0 0 0.25rem 0;">Analysis History</h2>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted);">Past resume versions evaluated against target job descriptions.</p>
+                            </div>
+                            <a href="#/candidate/screen" class="glow-btn" style="text-decoration: none; font-size: 0.8125rem; padding: 0.5rem 1.1rem; background: var(--color-forest); color: #fff; border-radius: 6px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                <span>+ Analyze New Resume</span>
+                            </a>
+                        </div>
                         <div id="candidate-timeline-list" class="timeline-container">
                             <!-- Populated dynamically via candidate.js -->
                         </div>
@@ -116,33 +178,54 @@
                 <!-- VIEW 2: RESUME ANALYSIS -->
                 <section id="cand-view-screen" class="rec-view hidden">
                     <div class="screening-workspace">
-                        <div class="screening-inputs glass-card">
-                            <div class="form-group">
-                                <label for="cand-job-description">Job Description</label>
-                                <textarea id="cand-job-description" placeholder="Paste target Job Description here..."></textarea>
+                        <div class="screening-inputs glass-card" style="background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px; padding: 2rem; box-shadow: 0 1px 3px rgba(26,25,23,0.03);">
+                            <div style="margin-bottom: 1.5rem;">
+                                <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--color-ink); margin: 0 0 0.4rem 0;">Resume Match Analysis</h2>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted); line-height: 1.5;">
+                                    Paste a job description and upload your resume to evaluate criteria alignment, uncover skill gaps, and receive actionable AI recommendations.
+                                </p>
                             </div>
 
-                            <div class="form-group file-upload-wrapper">
-                                <label>Upload Your Resume (PDF/DOCX)</label>
-                                <div class="file-upload-box" id="cand-drop-zone">
-                                    <span class="upload-icon">📂</span>
-                                    <p>Drag and drop your resume here, or click to browse</p>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label for="cand-job-description" style="display: block; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 0.4rem;">Target Job Description</label>
+                                <textarea id="cand-job-description" placeholder="Paste target job description requirements or responsibilities here…" style="width: 100%; min-height: 180px; padding: 1rem; border-radius: 8px; background: var(--color-paper); border: 1px solid var(--color-rule); color: var(--color-ink); font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.6; box-sizing: border-box; resize: vertical;"></textarea>
+                            </div>
+
+                            <div class="form-group file-upload-wrapper" style="margin-bottom: 1.25rem;">
+                                <label for="cand-resumes" style="display: block; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 0.4rem;">Upload Your Resume (PDF or DOCX)</label>
+                                <div class="file-upload-box" id="cand-drop-zone" tabindex="0" role="button" aria-label="Upload Resume: drag and drop your resume here, or browse files">
+                                    <div class="drop-zone-content">
+                                        <div class="drop-zone-icon-wrap" aria-hidden="true">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+                                                <path d="M12 12v9"/>
+                                                <path d="m16 16-4-4-4 4"/>
+                                            </svg>
+                                        </div>
+                                        <p class="drop-zone-primary">
+                                            Drag and drop your resume here, or <span class="drop-zone-browse">browse files</span>
+                                        </p>
+                                        <p class="drop-zone-secondary">Supported formats: PDF, DOCX (Max 10MB)</p>
+                                    </div>
                                     <input type="file" id="cand-resumes" accept=".pdf,.docx" hidden>
 
-                                    <div id="cand-resumes-header" class="resumes-dropdown-header hidden">
-                                        <span id="cand-resumes-count">Resume (0)</span>
-                                        <span class="dropdown-chevron">▼</span>
+                                    <div id="cand-resumes-header" class="resumes-dropdown-header hidden" style="margin-top: 0.75rem;">
+                                        <span id="cand-resumes-count" style="font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600; color: var(--color-forest);">Resume (0)</span>
+                                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
                                     </div>
-                                    <ul id="cand-file-list" class="file-list"></ul>
+                                    <ul id="cand-file-list" class="file-list" style="list-style: none; padding: 0; margin-top: 0.5rem;"></ul>
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-top: 1rem;">
-                                <label for="cand-resume-label">Version Label (Optional)</label>
-                                <input type="text" id="cand-resume-label" placeholder="e.g. Software Engineer Application, V1" class="auth-input" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box; color: white;">
+                            <div class="form-group" style="margin-bottom: 1.5rem;">
+                                <label for="cand-resume-label" style="display: block; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 0.4rem;">
+                                    Version Label <span style="font-size: 0.75rem; font-weight: 500; color: var(--color-muted); background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 2px 8px; border-radius: 9999px; margin-left: 0.35rem; font-family: var(--font-mono);">Optional</span>
+                                </label>
+                                <input type="text" id="cand-resume-label" placeholder="e.g. Senior Frontend Engineer - Stripe Application (V2)" class="auth-input" style="background: var(--color-paper); border: 1px solid var(--color-rule); width: 100%; box-sizing: border-box; color: var(--color-ink); font-size: 0.9rem; padding: 0.7rem 0.9rem; border-radius: 8px;">
+                                <span style="display: block; font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem;">Track progress across customized resume iterations in your career timeline.</span>
                             </div>
 
-                            <button id="cand-process-btn" class="glow-btn">
+                            <button id="cand-process-btn" class="glow-btn" style="background: var(--color-forest); border: 1px solid var(--color-forest); color: #FFFFFF; font-weight: 600; padding: 0.85rem 1.75rem; border-radius: 8px; font-size: 0.9375rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;">
                                 <span>Analyze Resume</span>
                                 <div class="loader hidden"></div>
                             </button>
@@ -150,8 +233,16 @@
 
                         <!-- Screening Results -->
                         <div class="results-section hidden" id="cand-results-container" style="margin-top: 2rem;">
-                            <h3>Analysis Results</h3>
-                            <div class="glass-card" id="cand-results-details" style="padding: 2rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+                                <div>
+                                    <h3 style="margin: 0; font-family: var(--font-display); font-size: 1.5rem; color: var(--color-ink);">Analysis Results</h3>
+                                    <p style="margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--color-muted);">Detailed qualification signals and tailored improvement advice.</p>
+                                </div>
+                                <a href="#/candidate/dashboard" class="glow-btn secondary" style="font-size: 0.8125rem; padding: 0.5rem 1rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); color: var(--color-ink-2); border-radius: 6px; font-weight: 500;">
+                                    <span>← Back to Dashboard</span>
+                                </a>
+                            </div>
+                            <div class="glass-card" id="cand-results-details" style="padding: 2rem; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px; box-shadow: 0 1px 3px rgba(26,25,23,0.03);">
                                 <!-- Dynamic results markup populated by JS -->
                             </div>
                         </div>
@@ -182,7 +273,9 @@
                         <div id="cand-profile-display" class="rec-profile-layout">
                             <!-- Left Section: Avatar, Display Name, Email -->
                             <div class="rec-profile-identity">
-                                <div class="profile-avatar rec-profile-avatar">👤</div>
+                                <div class="profile-avatar rec-profile-avatar">
+                                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
                                 <div class="profile-meta rec-profile-meta">
                                     <h3 id="profile-cand-name">Candidate Name</h3>
                                     <p id="profile-cand-email">candidate@email.com</p>
@@ -221,8 +314,8 @@
 
                         <!-- Profile Edit Form -->
                         <form id="cand-profile-edit-form" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.75rem;">
-                                <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin: 0;">Edit Profile</h3>
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-rule); padding-bottom: 0.75rem;">
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin: 0;">Edit Profile</h3>
                             </div>
                             <div class="profile-info-grid">
                                 <div class="info-field">
@@ -262,25 +355,27 @@
 
 
 <!-- Candidate Analysis View Modal -->
-    <div id="cand-analysis-view-modal" class="auth-modal-overlay hidden">
+    <div id="cand-analysis-view-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="cand-analysis-title">
         <div class="glass-card quick-view-card">
             <div class="quick-view-header">
-                <h2>Analysis Snapshot</h2>
-                <button id="close-cand-analysis-btn" class="close-modal-btn">✕</button>
+                <h2 id="cand-analysis-title" style="font-family: var(--font-display);">Analysis Snapshot</h2>
+                <button id="close-cand-analysis-btn" class="close-modal-btn" aria-label="Close analysis snapshot">✕</button>
             </div>
 
             <div class="quick-view-body">
                 <div class="qv-profile-summary">
-                    <div class="qv-avatar">📄</div>
+                    <div class="qv-avatar">
+                        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
                     <div class="qv-meta">
                         <h3 id="cav-label">Version 1</h3>
                         <p id="cav-filename" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.25rem;">resume.pdf</p>
                         <p id="cav-date" style="font-size: 0.8rem; color: var(--text-secondary);">Uploaded on: 2026-07-12</p>
-                        <div id="cav-context-card" style="margin-top: 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
+                        <div id="cav-context-card" style="margin-top: 0.5rem; background: var(--color-paper-3); border: 1px solid var(--color-rule); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
                             <span style="color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 0.25rem;">Scored Relative To:</span>
-                            <div style="color: #cbd5e1;">🎯 Profile: <strong id="cav-ctx-profile" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">📋 Job Description: <strong id="cav-ctx-jd" style="color: #fff;">-</strong></div>
-                            <div style="color: #cbd5e1;">⚙️ Engine: <strong id="cav-ctx-engine" style="color: #fff;">Nipun Engine v1.0</strong></div>
+                            <div style="color: var(--color-ink-2);">Profile: <strong id="cav-ctx-profile" style="color: var(--color-ink);">-</strong></div>
+                            <div style="color: var(--color-ink-2);">Job Description: <strong id="cav-ctx-jd" style="color: var(--color-ink);">-</strong></div>
+                            <div style="color: var(--color-ink-2);">Engine: <strong id="cav-ctx-engine" style="color: var(--color-ink);">Nipun Engine v1.0</strong></div>
                         </div>
                     </div>
                     <div style="margin-left: auto;">
@@ -290,21 +385,23 @@
 
                 <div class="qv-section cav-jd-section">
                     <h4>Target Job Description</h4>
-                    <div id="cav-jd-description" class="cav-jd-card cav-jd-body"></div>
+                    <div class="cav-jd-card">
+                        <div id="cav-jd-description" class="cav-jd-content cav-jd-body"></div>
+                    </div>
                 </div>
 
                 <div class="qv-section">
                     <h4>Contact Info in Resume</h4>
                     <div class="qv-info-grid">
-                        <div>📧 <span id="cav-cand-email">...</span></div>
-                        <div>📞 <span id="cav-cand-phone">...</span></div>
-                        <div>🔗 <span id="cav-cand-linkedin">...</span></div>
-                        <div>💻 <span id="cav-cand-github">...</span></div>
+                        <div>Email: <span id="cav-cand-email">…</span></div>
+                        <div>Phone: <span id="cav-cand-phone">…</span></div>
+                        <div>LinkedIn: <span id="cav-cand-linkedin">…</span></div>
+                        <div>GitHub: <span id="cav-cand-github">…</span></div>
                     </div>
                 </div>
 
                 <div class="qv-section" id="cav-xai-section">
-                    <h4>Explainable AI (XAI) Breakdown</h4>
+                    <h4>Evaluation Breakdown &amp; Match Scoring Rationale</h4>
                     <div id="cav-xai-container"></div>
                 </div>
 
@@ -317,15 +414,15 @@
                     <h4>Skills Overview</h4>
                     <div class="skills-block">
                         <h5>Extracted Skills</h5>
-                        <div id="cav-cand-extracted-skills" class="skills-tags-container">...</div>
+                        <div id="cav-cand-extracted-skills" class="skills-tags-container">…</div>
                     </div>
                     <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>&#x2705; Matched Skills</h5>
-                        <div id="cav-cand-matched-skills" class="skills-tags-container">...</div>
+                        <h5>Matched Skills</h5>
+                        <div id="cav-cand-matched-skills" class="skills-tags-container">…</div>
                     </div>
                     <div class="skills-block" style="margin-top: 1rem;">
-                        <h5>&#x274C; Missing Skills</h5>
-                        <div id="cav-cand-missing-skills" class="skills-tags-container">...</div>
+                        <h5>Missing Skills</h5>
+                        <div id="cav-cand-missing-skills" class="skills-tags-container">…</div>
                     </div>
                 </div>
             </div>
@@ -337,26 +434,26 @@
 
 
 <!-- Contact Modal -->
-    <div id="contact-modal" class="auth-modal-overlay hidden">
+    <div id="contact-modal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="cand-contact-title">
         <div class="glass-card contact-card">
             <div class="modal-header">
-                <h2>Contact</h2>
-                <button id="close-contact-btn" class="close-modal-btn">✕</button>
+                <h2 id="cand-contact-title" style="font-family: var(--font-display);">Contact</h2>
+                <button id="close-contact-btn" class="close-modal-btn" aria-label="Close contact dialog">✕</button>
             </div>
             <p class="modal-subtitle">Got a question or found a bug? Reach out to us directly!</p>
 
             <div class="contact-email-container" style="text-align: center; margin: 2rem 0;">
                 <p style="font-size: 1.1rem; color: var(--text-secondary);">Email:</p>
                 <a href="mailto:nipun.platform@gmail.com"
-                    style="font-size: 1.3rem; color: #6366f1; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
+                    style="font-size: 1.3rem; color: var(--color-accent); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 0.5rem;"
                     target="_blank">nipun.platform@gmail.com</a>
             </div>
         </div>
     </div>
 
 
-    <script type="module" src="assets/js/app.js?v=2.1"></script>
-    <script type="module" src="assets/js/landing.js?v=2.1"></script>
+    <script type="module" src="assets/js/app.js?v=3.5"></script>
+    <script type="module" src="assets/js/landing.js?v=3.5"></script>
 </body>
 
 </html>
